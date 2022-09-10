@@ -97,6 +97,13 @@ svn ci ./
 
 ## 2.2. Roll back
 
+```mermaid
+flowchart LR
+
+	121 --> 122 --> 123 --> 124
+	124 --> |Roll back|123
+```
+
 ```bash
 # Undo a committed change
 SVN_LAST=`svn info 2>/dev/null | grep 'Last Changed Rev' | cut -d':' -f2 | awk '{print $1}'`
@@ -107,13 +114,23 @@ svn ci ./
 
 ## 2.3. Merge
 
+```mermaid
+flowchart LR
+
+	M119 --> M121--> M122 --> M123 --> M124 --> M126
+	M119--> B120 --> B125 --> B???
+	M121 --> B???
+	M122 --> B???
+	M123 --> B???
+	M124 --> B???
+```
+
 ```bash
 # Merge a range of changes
-svn merge -r 191:199 http://trac-vbx/svnroot/trunk/xbox ./
-svn merge -r HEAD:199 ./
+svn merge -r 121:124 http://trac-vbx/svnroot/trunk/xbox ./
 
 # Merge one specific change
-svn merge -c 199 ./
+svn merge -c 122 ./
 
 svn ci ./
 ```
