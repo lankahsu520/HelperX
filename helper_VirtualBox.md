@@ -59,7 +59,22 @@ Ubuntu 22.04 already uses OpenSSL 3.0 and gcc is too brand new to compile.
 
 ![ubuntu0001](./images/ubuntu0001.jpg)
 
-## 3.2 apt-get
+## 3.2. System Configuration
+
+#### /etc/hostname
+
+```bash
+sudo vi /etc/hostname
+sudo hostname -F /etc/hostname
+```
+
+#### /etc/hosts
+
+```bash
+sudo vi /etc/hosts
+```
+
+## 3.3 apt-get
 
 ```bash
 sudo apt-get --yes update
@@ -151,11 +166,37 @@ TFTP_OPTIONS="--secure"
 
 ```
 
+# 4. VBoxManage modifyhd
 
+#### A. Client (Ubuntu 20.04)
+
+```bash
+#!/bin/sh
+
+telinit 1
+
+MOUNT_DISK="work"
+PURGE_DISK=`mount | grep $MOUNT_DISK | cut -d" " -f1`
+mount -o remount,ro $PURGE_DISK
+zerofree -v $PURGE_DISK
+
+```
+
+#### B. Host (Windows 10)
+
+```bash
+"C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" modifyhd work_curr.vdi --compact
+
+```
 
 # Appendix
 
 # I. Study
 
+- [OSBoxes - Virtual Machines for VirtualBox & VMware](http://www.osboxes.org/#)
+- [Android-x86](https://www.android-x86.org)
+
+
 # II. Debug
 
+# III. OSBoxes - Virtual Machines for VirtualBox & VMware
