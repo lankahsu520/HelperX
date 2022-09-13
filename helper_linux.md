@@ -220,11 +220,11 @@ alias find-type="find * -type f | xargs -n 1 file"
 function find-ex()
 {
 	HINT="Usage: ${FUNCNAME[0]} <path> <file>"
-	PATH=$1
-	FILE=$2
+	PATH1=$1
+	FILE1=$2
 
-	if [ ! -z "$PATH" ] && [ ! -z "$FILE" ]; then
-		find $PATH -name $FILE
+	if [ ! -z "$PATH1" ] && [ ! -z "$FILE1" ]; then
+		find $PATH1 -name $FILE1
 	else
 		echo $HINT
 	fi
