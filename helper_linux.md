@@ -223,8 +223,9 @@ function find-ex()
 	PATH1=$1
 	FILE1=$2
 
+	echo "[$1][$2]"
 	if [ ! -z "$PATH1" ] && [ ! -z "$FILE1" ]; then
-		find $PATH1 -name $FILE1
+		(cd $PATH1; find * -name $FILE1; cd - >/dev/null )
 	else
 		echo $HINT
 	fi
