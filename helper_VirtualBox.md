@@ -87,6 +87,8 @@ sudo chmod 777 /opt
 
 ```
 
+## 3.4. Service
+
 #### A. ssh
 
 ```bash
@@ -166,6 +168,23 @@ TFTP_OPTIONS="--secure"
 
 ```
 
+#### E. rsyslog
+
+```bash
+sudo nano /etc/rsyslog.conf
+
+sudo systemctl restart rsyslog
+```
+
+- /etc/rsyslog.conf
+
+```bash
+# add the below lines
+$EscapeControlCharactersOnReceive off
+```
+
+
+
 # 4. VBoxManage modifyhd
 
 #### A. Client (Ubuntu 20.04)
@@ -193,10 +212,8 @@ zerofree -v $PURGE_DISK
 
 # I. Study
 
-- [OSBoxes - Virtual Machines for VirtualBox & VMware](http://www.osboxes.org/#)
-- [Android-x86](https://www.android-x86.org)
-
-
 # II. Debug
 
-# III. OSBoxes - Virtual Machines for VirtualBox & VMware
+# III. Images
+- [OSBoxes - Virtual Machines for VirtualBox & VMware](http://www.osboxes.org/#)
+- [Android-x86](https://www.android-x86.org)
