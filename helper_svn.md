@@ -230,7 +230,7 @@ alias svn-st="svn status --no-ignore"
 
 alias svn-log="svn log | perl -l40pe 's/^-+/\n/'"
 
-alias svn-rev="svn info 2>/dev/null | grep Revision | cut -d' ' -f2"
+alias svn-revision="svn info 2>/dev/null | grep Revision | cut -d' ' -f2"
 
 function svn-rm()
 {
