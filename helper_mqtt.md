@@ -12,7 +12,10 @@ mosquitto -v
 
 ```
 
-## 1.2. Service
+## 1.2. Run
+
+### 1.2.1. Service
+
 ```bash
 sudo systemctl status mosquitto.service
 
@@ -21,11 +24,19 @@ sudo systemctl start mosquitto.service
 
 sudo systemctl restart mosquitto.service
 
-/usr/sbin/mosquitto -c /etc/mosquitto/mosquitto.conf
 journalctl -xe
 ```
 
+### 1.2.2. Daemon
+
+```bash
+/usr/sbin/mosquitto -c /etc/mosquitto/mosquitto.conf
+
+sudo cat /var/log/mosquitto/mosquitto.log
+```
+
 ## 1.3. Configuration
+
 ### 1.3.1. /etc/mosquitto/mosquitto.conf
 ```bash
 $ ps -aux | grep mosquitto
@@ -139,13 +150,13 @@ a/#
 a/b/#
 a/b/c/#
 +/b/c/#
-
-userid/methodid/macid/uuid/nodeid/epid
 ```
+
+##### userid/methodid/macid/uuid/nodeid/epid
 
 #### Subscriber
 
-##### - mqtt_sub.sh
+##### mqtt_sub.sh
 
 ```bash
 ./mqtt_sub.sh '+/080027A1F836/+/+/+/#'
@@ -153,7 +164,8 @@ userid/methodid/macid/uuid/nodeid/epid
 ```
 #### Publisher
 
-###### - mqtt_pub.sh
+##### mqtt_pub.sh
+
 ```bash
 ./mqtt_pub.sh "1/080027A1F836/CCC3F3BB/2/0/0001000C" '{"name":"Motion Sensor","val":"idle"}'
 ./mqtt_pub.sh "1/080027A1F836/CCC3F3BB/2/0/0001000C" ''{"name":"Motion Sensor","val":"idle"}'
@@ -177,6 +189,17 @@ userid/methodid/macid/uuid/nodeid/epid
 ./mqtt_pub.sh "2/080027A1F836/FDFD818A" '{}'
 
 ```
+# 3. Cert
+
+```bash
+openssl x509 -noout -modulus -in mqtt_beex.crt | openssl md5
+openssl rsa  -noout -modulus -in mqtt_beex.key | openssl md5
+openssl x509 -noout -modulus -in mqtt.ca | openssl md5
+
+```
+
+
+
 # Appendix
 
 ## I. Study
