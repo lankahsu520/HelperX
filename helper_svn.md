@@ -1,26 +1,5 @@
 # 1. svn copy between repositories with history
 
-```mermaid
-flowchart LR
-	subgraph svn
-			svn_xbox[trunk/xbox]
-			svn_beex[trunk/beex]
-			svn_utilx9[trunk/utilx9]
-	end
-
-	subgraph svnnew_include
-			svnnew_xbox[trunk/xbox]	
-	end
-
-	subgraph svnnew_exclude
-			svnnew_beex[trunk/beex]
-			svnnew_utilx9[trunk/utilx9]
-	end
-
-	svn --> |include|svnnew_include
-	svn --> |exclude|svnnew_exclude
-```
-
 ```bash
 $ ls -al 
 drwxrwxrwx 12 lanka    lanka            4096  八  22 13:18 ./
@@ -51,36 +30,107 @@ export SVN_DUMP_FILTER="$SVN_DUMP_FILTER trunk/xbox"
 #### C. include/exclude
 
 ```bash
-export SVN_DUMP_FILTER_FILE="./dump_svn_20220822include"
+export SVN_DUMP_FILTER_FILE_INCLUDE="./dump_svn_20220822include"
 
 ./svndumpsanitizer \
 	--infile $SVN_DUMP_SOURCE_FILE \
-	--outfile $SVN_DUMP_FILTER_FILE \
+	--outfile $SVN_DUMP_FILTER_FILE_INCLUDE \
 	--include $SVN_DUMP_FILTER \
 	--drop-empty
 
 ```
 
 ```bash
-export SVN_DUMP_FILTER_FILE="./dump_svn_20220822exclude"
+export SVN_DUMP_FILTER_FILE_EXCLUDE="./dump_svn_20220822exclude"
 
 ./svndumpsanitizer \
 	--infile $SVN_DUMP_SOURCE_FILE \
-	--outfile $SVN_DUMP_FILTER_FILE \
+	--outfile $SVN_DUMP_FILTER_FILE_EXCLUDE \
 	--exclude $SVN_DUMP_FILTER \
 	--drop-empty
 
 ```
 
-#### D. create new repository
+## 1.1. create new repository - include
+```mermaid
+flowchart LR
+	subgraph svn
+			svn_xbox[trunk/xbox]
+			svn_beex[trunk/beex]
+			svn_utilx9[trunk/utilx9]
+	end
 
+	subgraph svnnew-include
+			svnnew_xbox[trunk/xbox]	
+	end
+
+	svn --> |include|svnnew-include
+
+```
 ```bash
-export SVN_DUMP_FILTER_FILE="./dump_svn_20220822include"
-export SVN_NAME_DST=svnnew
+export SVN_DUMP_FILTER_FILE_INCLUDE="./dump_svn_20220822include"
+export SVN_NAME_DST=svnnew-include
 
 svnadmin create $SVN_NAME_DST
-svnadmin load --ignore-uuid $SVN_NAME_DST < $SVN_DUMP_FILTER_FILE
+svnadmin load --ignore-uuid $SVN_NAME_DST < $SVN_DUMP_FILTER_FILE_INCLUDE
 sudo chown -R www-data:www-data $SVN_NAME_DST
+
+sudo chmod -R 775 $SVN_NAME_DST
+sudo chmod -R 777 $SVN_NAME_DST/db
+
+```
+
+## 1.2. create new repository - exclude
+```mermaid
+flowchart LR
+	subgraph svn
+			svn_xbox[trunk/xbox]
+			svn_beex[trunk/beex]
+			svn_utilx9[trunk/utilx9]
+	end
+
+	subgraph svnnew-exclude
+			svnnew_beex[trunk/beex]
+			svnnew_utilx9[trunk/utilx9]
+	end
+
+	svn --> |exclude|svnnew-exclude
+```
+```bash
+export SVN_DUMP_FILTER_FILE_EXCLUDE="./dump_svn_20220822exclude"
+export SVN_NAME_DST=svnnew-exclude
+
+svnadmin create $SVN_NAME_DST
+svnadmin load --ignore-uuid $SVN_NAME_DST < $SVN_DUMP_FILTER_FILE_EXCLUDE
+sudo chown -R www-data:www-data $SVN_NAME_DST
+
+sudo chmod -R 775 $SVN_NAME_DST
+sudo chmod -R 777 $SVN_NAME_DST/db
+
+```
+## 1.3. ? Merge repository - include (main) + exclude
+```mermaid
+flowchart LR
+	subgraph svnnew-include-new
+			svn_xbox[trunk/xbox]
+			svn_beex[trunk/beex]
+			svn_utilx9[trunk/utilx9]
+	end
+
+	subgraph svnnew-include
+			svnnew_xbox[trunk/xbox]	
+	end
+
+	subgraph svnnew-exclude
+			svnnew_beex[trunk/beex]
+			svnnew_utilx9[trunk/utilx9]
+	end
+
+	svnnew-include --> svnnew-include-new
+	svnnew-exclude --> svnnew-include-new
+```
+```bash
+svnadmin load --parent-dir svnnew-include < $SVN_DUMP_FILTER_FILE_EXCLUDE
 
 ```
 
