@@ -156,37 +156,37 @@ a/b/c/#
 
 #### Subscriber
 
-##### mqtt_sub.sh
+##### mqttSub.sh
 
 ```bash
-./mqtt_sub.sh '+/080027A1F836/+/+/+/#'
+./mqttSub.sh '+/080027A1F836/+/+/+/#'
 
 ```
 #### Publisher
 
-##### mqtt_pub.sh
+##### mqttPub.sh
 
 ```bash
-./mqtt_pub.sh "1/080027A1F836/CCC3F3BB/2/0/0001000C" '{"name":"Motion Sensor","val":"idle"}'
-./mqtt_pub.sh "1/080027A1F836/CCC3F3BB/2/0/0001000C" ''{"name":"Motion Sensor","val":"idle"}'
+./mqttPub.sh "1/080027A1F836/CCC3F3BB/2/0/0001000C" '{"name":"Motion Sensor","val":"idle"}'
+./mqttPub.sh "1/080027A1F836/CCC3F3BB/2/0/0001000C" ''{"name":"Motion Sensor","val":"idle"}'
 
 #** adding ** 
-./mqtt_pub.sh "1/080027A1F836/FDFD818A/1/0/00000002" '{}'
+./mqttPub.sh "1/080027A1F836/FDFD818A/1/0/00000002" '{}'
 #** removing ** 
-./mqtt_pub.sh "1/080027A1F836/FDFD818A/1/0/00000003" '{}'
+./mqttPub.sh "1/080027A1F836/FDFD818A/1/0/00000003" '{}'
 #** aborting ** 
-./mqtt_pub.sh "1/080027A1F836/FDFD818A/1/0/00000004" '{}'
+./mqttPub.sh "1/080027A1F836/FDFD818A/1/0/00000004" '{}'
 #** reseting ** 
-./mqtt_pub.sh "1/080027A1F836/FDFD818A/1/0/00000008" '{}'
+./mqttPub.sh "1/080027A1F836/FDFD818A/1/0/00000008" '{}'
 #** switch ** 
-./mqtt_pub.sh "1/080027A1F836/FDFD818A/2/0/00092501" '{"tgt_val":255}'
-./mqtt_pub.sh "1/080027A1F836/FDFD818A/2/0/00092501"'{"toggle":1}'
+./mqttPub.sh "1/080027A1F836/FDFD818A/2/0/00092501" '{"tgt_val":255}'
+./mqttPub.sh "1/080027A1F836/FDFD818A/2/0/00092501"'{"toggle":1}'
 
 #** dimmer ** 
-./mqtt_pub.sh "1/080027A1F836/FDFD818A/3/0/00092601"'{"dur":5,"tgt_val":0}'
+./mqttPub.sh "1/080027A1F836/FDFD818A/3/0/00092601"'{"dur":5,"tgt_val":0}'
 {"toggle":1}
 
-./mqtt_pub.sh "2/080027A1F836/FDFD818A" '{}'
+./mqttPub.sh "2/080027A1F836/FDFD818A" '{}'
 
 ```
 # 3. Cert
