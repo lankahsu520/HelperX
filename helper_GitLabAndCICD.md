@@ -263,7 +263,7 @@ git clone https://gitlab-ci-token:${PJ_GITLAB_PERSONAL_TOKEN}@gitlab.com/lankahs
 
 #### A. .gitlab-ci.yml
 
-##### A.1. for specific runner
+##### ~~A.1. for specific runner~~
 
 ```mermaid
 flowchart LR
@@ -358,7 +358,7 @@ RUN apt-get autoremove --purge
 
 ```
 
-# 3. Specific Runners
+# ~~3. Specific Runners~~ (Don't use this !!! It is hard to debug when you run pipeline. )
 
 ```mermaid
 flowchart LR
@@ -374,7 +374,7 @@ flowchart LR
 
 ```
 
-## 3.1. Install
+## ~~3.1. Install~~
 
 ### ~~3.1.1. [Install GitLab Runner manually on GNU/Linux](https://docs.gitlab.com/runner/install/linux-manually.html#using-binary-file)~~
 
@@ -430,9 +430,9 @@ sudo userdel gitlab-runner
 sudo rm -rf /home/gitlab-runner/
 ```
 
-### 3.1.2. Install / Uninstall
+### ~~3.1.2. or apt-get install/remove~~
 
-#### A. Install
+#### ~~A. Install~~
 
 ```bash
 sudo apt install gitlab-runner
@@ -441,7 +441,7 @@ mkdir -p /work/gitlab-runner
 chmod 777 /work/gitlab-runner
 ```
 
-#### B. Uninstall
+#### ~~B. Uninstall~~
 
 ```bash
 sudo apt remove gitlab-runner
@@ -454,29 +454,29 @@ rm -rf /var/opt/gitlab
 
 ```
 
-## 3.2. Register runner - Settings / [CI/CD](https://gitlab.com/lankahsu/startup/-/settings/ci_cd)
+## ~~3.2. Register runner - Settings / [CI/CD](https://gitlab.com/lankahsu/startup/-/settings/ci_cd)~~
 
-### 3.2.1. Shared runners
-![Pipelinefailing](./images/GitLab_Pipelinefailing.png)
+### ~~3.2.1. Shared runners~~
+~~![Pipelinefailing](./images/GitLab_Pipelinefailing.png)~~
 
-#### A. 很重要！很重要！很重要！
+#### ~~A. 很重要！很重要！很重要！~~
 
-- 如果沒有完成 Validate account，就只能使用 Specific runners。
-- 就算之後於 Container Registry 有建立新的 container，也無法使用。
+- ~~如果沒有完成 Validate account，就只能使用 Specific runners。~~
+- ~~就算之後於 Container Registry 有建立新的 container，也無法使用。~~
 
-### 3.2.2. Specific runners / Registration token
+### ~~3.2.2. Specific runners / Registration token~~
 
-#### A. 很重要！很重要！很重要！
+#### ~~A. 很重要！很重要！很重要！~~
 
-- 於實際操作後，常發生 gitlab-runner 無法正常連結，卻沒有任何錯誤訊息。
+- ~~於實際操作後，常發生 gitlab-runner 無法正常連結，卻沒有任何錯誤訊息。~~
 
-- 就算連上線後，進行 CI/CD 時，常常看不到錯誤訊息。
+- ~~就算連上線後，進行 CI/CD 時，常常看不到錯誤訊息。~~
 
-#### B. Disable shared runners for this project
+#### ~~B. Disable shared runners for this project~~
 
-![Disable_shared_runners_for_this_project](./images/GitLab_Disable_shared_runners_for_this_project.png)
+~~![Disable_shared_runners_for_this_project](./images/GitLab_Disable_shared_runners_for_this_project.png)~~
 
-#### C. Register runner
+#### ~~C. Register runner~~
 
 ```bash
 export PJ_GITLAB_REGISTRATION_TOKEN="lanka520"
@@ -487,9 +487,9 @@ sudo gitlab-runner register \
 	--registration-token ${PJ_GITLAB_REGISTRATION_TOKEN}
 
 ```
-![Specific_runners](./images/GitLab_Specific_runners.png)
+~~![Specific_runners](./images/GitLab_Specific_runners.png)~~
 
-#### D. /etc/gitlab-runner/config.toml
+#### ~~D. /etc/gitlab-runner/config.toml~~
 
 ```toml
 # https://docs.gitlab.com/runner/configuration/advanced-configuration.html
@@ -516,7 +516,7 @@ log_format = "text"
 
 ## 4.1. Select Runner
 
-### 4.1.1. for specific runner
+### ~~4.1.1. for specific runner~~
 
 ```mermaid
 flowchart LR
@@ -531,7 +531,7 @@ flowchart LR
 	GitLab --> CICD --> |build_job| runner --> build--> push -->Container
 
 ```
-#### A. Assign user docker
+#### ~~A. Assign user docker~~
 
 ```bash
 sudo usermod -aG docker gitlab-runner
@@ -539,7 +539,7 @@ sudo usermod -aG docker gitlab-runner
 sudo -H -u gitlab-runner docker info
 
 ```
-### 4.1.2. for docker:dind
+### 4.1.2. for docker:dind (use DockerX to build a new docker)
 
 
 ```mermaid
