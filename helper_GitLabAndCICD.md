@@ -728,6 +728,8 @@ flowchart LR
 
 - [Gitlab-CI 入門實作 — 自動化部署篇](https://nick-chen.medium.com/教學-gitlab-ci-入門實作-自動化部署篇-ci-cd-系列分享文-cbb5100a73d4)
 
+- [Configuration of your builds with .gitlab-ci.yml](https://www.perforce.com/manuals/gitswarm/ci/yaml/README.html)
+
 # II. Debug
 
 # III. gitlab-runner Usage
