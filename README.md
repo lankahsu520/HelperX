@@ -9,6 +9,7 @@ docker is useful ? Please make sure that you aren't a low-level programmer or em
 ```bash
 CI/CD is useful ? Please make sure that you aren't a low-level programmer, system integration developer or embedded engineer.
 ```
+## - helper_GStreamer.md - GStreamer helper.
 ## - helper_linux.md - linux helper.
 ## - helper_RaspberryPi.md - Raspberry Pi helper.
 ## - helper_svn.md - svn helper.
