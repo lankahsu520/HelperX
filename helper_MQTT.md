@@ -135,8 +135,17 @@ protocol websockets
 ```
 
 # 2. Test
+```mermaid
+flowchart LR
+	mqttSub[mqttSub]
+	mqttPub[mqttPub]
+	Broker[Broker]
 
-#### Topic
+	mqttSub <-.-> |+/080027A1F836/+/+/+/#| Broker
+	mqttPub --> |+/080027A1F836/+/+/+/#| Broker
+```
+
+## 2.1. Topic
 
 ```
 a/b/c/d
@@ -152,19 +161,20 @@ a/b/c/#
 +/b/c/#
 ```
 
-##### userid/methodid/macid/uuid/nodeid/epid
+#### methodid/macid/uuid/nodeid/epid/issueid
 
-#### Subscriber
 
-##### mqttSub.sh
+## 2.2. Subscriber
+
+#### mqttSub.sh
 
 ```bash
 ./mqttSub.sh '+/080027A1F836/+/+/+/#'
 
 ```
-#### Publisher
+## 2.3. Publisher
 
-##### mqttPub.sh
+#### mqttPub.sh
 
 ```bash
 ./mqttPub.sh "1/080027A1F836/CCC3F3BB/2/0/0001000C" '{"name":"Motion Sensor","val":"idle"}'
@@ -180,11 +190,11 @@ a/b/c/#
 ./mqttPub.sh "1/080027A1F836/FDFD818A/1/0/00000008" '{}'
 #** switch ** 
 ./mqttPub.sh "1/080027A1F836/FDFD818A/2/0/00092501" '{"tgt_val":255}'
-./mqttPub.sh "1/080027A1F836/FDFD818A/2/0/00092501"'{"toggle":1}'
+./mqttPub.sh "1/080027A1F836/FDFD818A/2/0/00092501" '{"toggle":1}'
 
 #** dimmer ** 
-./mqttPub.sh "1/080027A1F836/FDFD818A/3/0/00092601"'{"dur":5,"tgt_val":0}'
-{"toggle":1}
+./mqttPub.sh "1/080027A1F836/FDFD818A/3/0/00092601" '{"dur":5,"tgt_val":0}'
+./mqttPub.sh "1/080027A1F836/FDFD818A/3/0/00092601" '{"toggle":1}'
 
 ./mqttPub.sh "2/080027A1F836/FDFD818A" '{}'
 
