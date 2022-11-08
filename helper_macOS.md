@@ -55,10 +55,10 @@ $ defaults delete com.apple.dock; killall Dock
 
 #### A. System Preferences/ Dock & Menu Bar
 
-# 3. Service
+# 3. System & Service
 ## 3.1. sshd
 
-#### A. System Preferences/ Sharing / Remote Login
+#### A. System Preferences / Sharing / Remote Login
 
 ```bash
 or
@@ -69,4 +69,80 @@ $ sudo systemsetup -setremotelogin on
 
 ## 3.2. smbd
 
-#### A. System Preferences/ Sharing / File Sharing
+#### A. System Preferences / Sharing / File Sharing
+
+## 3.3. zsh <-> bash
+
+#### A. System Preferences / Users & Groups / user ??? / Advanced Options / Login shell
+
+```zsh
+or
+
+$ chsh -s /bin/bash
+
+$ chsh -s /bin/zsh
+```
+
+```bash
+$ cat /etc/shells
+```
+
+## 3.3. .bash_profile
+
+```bash
+$ vi .bash_profile
+```
+
+
+
+# 4. Package Manager
+
+## 4.1. [Fink](https://www.finkproject.org/download/index.php?phpLang=en)（Prebuild binary code）
+
+## 4.2. [Homebrew](https://brew.sh/index_nl) (重編且引用系統libs，/usr/local)
+
+#### A. Installeer Homebrew
+
+```bash
+$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+#### B. [Homebrew Formulae](https://formulae.brew.sh/)
+
+## 4.3. [MacPorts](https://www.macports.org/install.php)(重編且引用私有libs，/opt/local)
+
+#### A. [Install Xcode](https://guide.macports.org/#installing.xcode)
+
+#### B. [Install and upgrade open source software on macOS.](https://ports.macports.org)
+
+# 5. Packages
+
+```bash
+
+echo "**************************************************"
+echo "** compiler **"
+echo "**************************************************"
+
+echo "==> subversion"; #read yn_reply;
+sudo port install subversion
+
+echo "**************************************************"
+echo "** network **"
+echo "**************************************************"
+
+echo "==> youtube-dl"; #read yn_reply;
+sudo port install youtube-dl
+```
+
+# 6. Hardware
+
+## 6.1. mac mini ssd upgrade
+
+#### A. [Hard Drive Upgrade SSD - Mac Mini 2014 - 2017 (A1347)](https://www.youtube.com/watch?v=LMGaZ9rdSeI)
+
+
+# Appendix
+
+# I. Study
+
+- ### [比较Fink, macports 和 homebrew](https://www.iteye.com/blog/tetsu-1507524)
