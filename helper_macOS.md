@@ -10,6 +10,8 @@ flowchart LR
 	usb_install[usb 32GB up - macOS 12 Monterey install]
 ```
 
+![macOS_12_Monterey](./images/macOS_12_Monterey.png)
+
 ## 1.1. create a usb (64GB up) with Big Sur
 
 #### A. [Mac無法開機了? 自行建立macOS Catalina或Big Sur緊急開機診斷碟!](https://www.osslab.com.tw/catalina-boot-diag-usb/)
@@ -93,7 +95,45 @@ $ cat /etc/shells
 $ vi .bash_profile
 ```
 
+#### A. ~/.profile
 
+```bash
+. ~/.profile
+```
+
+#### B. LANG
+
+```bash
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+```
+
+#### C. Terminal Color
+
+```bash
+export CLICOLOR=1
+export TERM=xterm-color
+
+```
+
+
+
+## 3.4. Launch Binary with command line arguments
+
+#### A. Opera
+
+```bash
+$ mv /Applications/Opera.app/Contents/MacOS/Opera /Applications/Opera.app/Contents/MacOS/Operabin
+$ vi /Applications/Opera.app/Contents/MacOS/Opera
+$ chmod 777 /Applications/Opera.app/Contents/MacOS/Opera
+```
+
+```sh
+#!/bin/bash
+
+#open -a
+/Applications/Opera.app/Contents/MacOS/OperaBin --private
+```
 
 # 4. Package Manager
 
@@ -133,6 +173,8 @@ echo "**************************************************"
 echo "==> youtube-dl"; #read yn_reply;
 sudo port install youtube-dl
 ```
+
+
 
 # 6. Hardware
 
