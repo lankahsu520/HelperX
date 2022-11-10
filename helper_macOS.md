@@ -4,6 +4,26 @@
 
 #### A. [Hard Drive Upgrade SSD - Mac Mini 2014 - 2017 (A1347)](https://www.youtube.com/watch?v=LMGaZ9rdSeI)
 
+#### B. Disassemble
+
+![MacMini0001](./images/MacMini0001.jpg)
+
+![MacMini0002](./images/MacMini0002.jpg)
+
+![MacMini0003](./images/MacMini0003.jpg)
+
+![MacMini0004](./images/MacMini0004.jpg)
+
+![MacMini0005](./images/MacMini0005.jpg)
+
+![MacMini0006](./images/MacMini0006.jpg)
+
+![MacMini0007](./images/MacMini0007.jpg)
+
+![MacMini0008](./images/MacMini0008.jpg)
+
+![MacMini0009](./images/MacMini0009.jpg)
+
 ## 1.2. Install macOS on a new disk
 
 ```mermaid
@@ -155,7 +175,7 @@ $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/
 
 #### B. [Homebrew Formulae](https://formulae.brew.sh/)
 
-## 4.3. [MacPorts](https://www.macports.org/install.php)(重編且引用私有libs，/opt/local)
+## 4.3. [MacPorts](https://www.macports.org/install.php) (重編且引用私有libs，/opt/local)
 
 #### A. [Install Xcode](https://guide.macports.org/#installing.xcode)
 
