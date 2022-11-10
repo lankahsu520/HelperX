@@ -24,6 +24,8 @@
 
 ![MacMini0009](./images/MacMini0009.jpg)
 
+![MacMini0009](./images/MacMini0010.jpg)
+
 ## 1.2. Install macOS on a new disk
 
 ```mermaid
