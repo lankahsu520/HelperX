@@ -1,4 +1,10 @@
-# 1. Install macOS on a new disk
+# 1. Upgrade [Mac Mini](https://www.apple.com/tw/mac-mini/)
+
+## 1.1. mac mini ssd upgrade
+
+#### A. [Hard Drive Upgrade SSD - Mac Mini 2014 - 2017 (A1347)](https://www.youtube.com/watch?v=LMGaZ9rdSeI)
+
+## 1.2. Install macOS on a new disk
 
 ```mermaid
 flowchart LR
@@ -12,7 +18,7 @@ flowchart LR
 
 ![macOS_12_Monterey](./images/macOS_12_Monterey.png)
 
-## 1.1. create a usb (64GB up) with Big Sur
+### 1.2.1 create a usb (64GB up) with Big Sur
 
 #### A. [Mac無法開機了? 自行建立macOS Catalina或Big Sur緊急開機診斷碟!](https://www.osslab.com.tw/catalina-boot-diag-usb/)
 
@@ -20,7 +26,7 @@ flowchart LR
 
 #### C. resize the partition 32GB to 64GB
 
-## 1.2. create a usb (32GB up) with macOS 12 Monterey install
+### 1.2.2. create a usb (32GB up) with macOS 12 Monterey install
 
 #### A. [macOS 12 Monterey 系統安裝 USB 隨身碟製作與重灌教學](https://applealmond.com/posts/123180)
 
@@ -40,13 +46,13 @@ $ sudo /Applications/Install\ macOS\ Ventura.app/Contents/Resources/createinstal
 $ sudo /Applications/Install\ macOS\ Monterey.app/Contents/Resources/createinstallmedia --volume /Volumes/MyVolume
 ```
 
-## 1.3. install macOS
+### 1.2.3. install macOS
 
 #### A. [使用「磁碟工具程式」清除 Intel 型 Mac](https://support.apple.com/zh-hk/HT208496)
 
 #### B. [如何重新安裝 macOS](https://support.apple.com/zh-hk/HT204904)
 
-# 2. Mac Dock
+# 2. Customize UI
 
 ## 2.1. How to reset the Mac Dock to default
 ```bash
@@ -175,12 +181,6 @@ sudo port install youtube-dl
 ```
 
 
-
-# 6. Hardware
-
-## 6.1. mac mini ssd upgrade
-
-#### A. [Hard Drive Upgrade SSD - Mac Mini 2014 - 2017 (A1347)](https://www.youtube.com/watch?v=LMGaZ9rdSeI)
 
 
 # Appendix
