@@ -64,12 +64,12 @@ $ ./wsdiscovery_123 -d 4
 
 ```mermaid
 flowchart LR
-	router[network router]
+	camera[camera]
 	win10[ONVIF Device Manage v2.2.250]
 	ubuntu[wsdiscovery_123]
 	
-	win10 <--> |ONVIF,http/soap| router
-	ubuntu <--> |ONVIF,http/soap| router
+	win10 <--> |ONVIF,http/soap| camera
+	ubuntu <--> |ONVIF,http/soap| camera
 ```
 
 ```bash
@@ -82,8 +82,9 @@ Usage: onvif_client
   -s, --pass        pass
   -e, --dpath       device url path
   -m, --mpath       media url path
+  -a, --auth        http auth
   -h, --help
-Version: 0x01004000, 2588, 1668048693, lanka, 1668067183
+Version: 0x01004000, 2589, 1668517373, lanka, 1668607007
 Example:
   onvif_client -i 192.168.50.239 -p 80 -u admin -s hahahaha
 
@@ -172,9 +173,43 @@ $ ./onvif_client_123 -d3 -i 192.168.50.21 -p 80 -u admin -s admin -e "/onvif/dev
 
 #### B. update your *.xml
 
+##### B.1. GetProfiles.xml: without AUTH
+
+```xml
+<?xml version='1.0' encoding='utf-8'?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://www.w3.org/2003/05/soap-envelope" xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:trt="http://www.onvif.org/ver10/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+	<SOAP-ENV:Body>
+		<trt:GetProfiles/>
+	</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+```
+
+##### B.2. GetProfiles-auth.xml: with AUTH
+
+```xml
+Created: {ONVIF_XML_CREATED}
+Nonce: {ONVIF_XML_NONCE}
+Username: {ONVIF_XML_USERNAME}
+Password: {ONVIF_XML_PASSWORD}
+```
+
 ```bash
-GetProfiles.xml: without AUTH
-GetProfiles-auth.xml: with AUTH
+<?xml version='1.0' encoding='utf-8'?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://www.w3.org/2003/05/soap-envelope" xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:trt="http://www.onvif.org/ver10/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
+	<SOAP-ENV:Body>
+		<trt:GetProfiles/>
+	</SOAP-ENV:Body>
+	<SOAP-ENV:Header>
+		<Security SOAP-ENV:mustUnderstand="1" xmlns="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+			<UsernameToken>
+				<Created xmlns="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">{ONVIF_XML_CREATED}</Created>
+				<Nonce EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary">{ONVIF_XML_NONCE}</Nonce>
+				<Username>{ONVIF_XML_USERNAME}</Username>
+				<Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest">{ONVIF_XML_PASSWORD}</Password>
+			</UsernameToken>
+		</Security>
+	</SOAP-ENV:Header>
+</SOAP-ENV:Envelope>
 ```
 #### C. update onvif_client.sh
 
