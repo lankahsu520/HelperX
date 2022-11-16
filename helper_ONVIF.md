@@ -166,6 +166,36 @@ $ ./onvif_client_123 -d3 -i 192.168.50.21 -p 80 -u admin -s admin -e "/onvif/dev
 
 ```
 
+# 4. Test with curl
+
+#### A. git pull utilx9
+
+#### B. update your *.xml
+
+```bash
+GetProfiles.xml: without AUTH
+GetProfiles-auth.xml: with AUTH
+```
+#### C. update onvif_client.sh
+
+```bash
+USER=admin
+PASSWORD=admin
+
+ONVIF_URL="http://192.168.50.21/onvif/media_service"
+ONVIF_ACTION="GetProfiles"
+ONVIF_AUTH="-auth"
+
+```
+
+#### D. run
+
+```bash
+$ ./onvif_client.sh
+
+```
+
+
 
 # Appendix
 

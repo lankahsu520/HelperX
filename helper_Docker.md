@@ -135,6 +135,10 @@ flowchart LR
 
 ```bash
 # Run a command in a new container
+# -t, --tty=true|false
+#    Allocate a pseudo-TTY. The default is false.
+# -i, --interactive=true|false
+#    Keep STDIN open even if not attached. The default is false.
 $ docker run -t -i ubuntu:22.04 /bin/bash
 $ docker run -t -i df5de72bdb3b /bin/bash
 ```
@@ -357,7 +361,7 @@ $ docker stop ae96128535e6
 
 ```bash
 # Run a command in a running container
-$ docker exec -ti 2ea0d23f30cf ls
+$ docker exec -ti 2ea0d23f30cf ls -al /
 
 ```
 
@@ -379,6 +383,31 @@ $ docker inspect 2ea0d23f30cf
 ```bash
 $ docker cp -a README.md ac52ddefee1f:/work
 $ docker cp -a helloworld ac52ddefee1f:/work
+
+```
+
+# 6. Test Case
+
+## 6.1. Run Image -> Leave Container -> Return Container (attach)
+
+```bash
+$ docker-images
+REPOSITORY   TAG       IMAGE ID       CREATED        SIZE
+123          latest    0ae48a4b087c   3 months ago   8.03GB
+ubuntu       22.04     df5de72bdb3b   3 months ago   77.8MB
+ubuntu       20.04     3bc6e9f30f51   3 months ago   72.8MB
+
+# Run Image:123, 0ae48a4b087c
+$ docker run -ti 0ae48a4b087c
+
+In Container: 15948ab15718
+Ctrl+P, Ctrl+Q 
+
+$ docker ps
+CONTAINER ID   IMAGE          COMMAND   CREATED          STATUS          PORTS     NAMES
+15948ab15718   0ae48a4b087c   "bash"    10 minutes ago   Up 10 minutes             heuristic_yalow
+
+$ docker attach 15948ab15718
 
 ```
 
