@@ -10,6 +10,8 @@ flowchart LR
 	ubuntu <--> |multicast<br>239.255.255.250:3702| router
 ```
 
+## 1.1. wsdiscovery_123
+
 ```bash
 $ ./wsdiscovery_123 -d 4
 [501487/501488] chainX_udp_bind:2113 - bind ... (239.255.255.250:3702)
@@ -52,13 +54,13 @@ $ ./wsdiscovery_123 -d 4
 
 # 2. ONVIF Info (You must have)
 
-#### URI
+#### A. URI
 
 ```bash
 [501487/501488] wsd_ProbeMatches_cb:54 - (XAddrs: http://192.168.50.21/onvif/device_service)
 ```
 
-#### name and passowrd
+#### B. name and passowrd
 
 # 3. ONVIF Client ask camera 
 
@@ -71,6 +73,8 @@ flowchart LR
 	win10 <--> |ONVIF,http/soap| camera
 	ubuntu <--> |ONVIF,http/soap| camera
 ```
+
+## 3.1. onvif_client_123
 
 ```bash
 $ ./onvif_client_123 --help
@@ -90,13 +94,13 @@ Example:
 
 ```
 
-#### run
+#### A. run
 
 ```bash
 $ ./onvif_client_123 -d3 -i 192.168.50.21 -p 80 -u admin -s admin -e "/onvif/device_service" -m "/onvif/media_service"
 ```
 
-#### log
+#### B. log
 
 ```bash
 [503117/503117] main:784 - Start !!! (192.168.50.21:80, admin:admin, device_url_path: /onvif/device_service, media_url_path: /onvif/media_service)
