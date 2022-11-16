@@ -230,8 +230,6 @@ $ ./onvif_client.sh
 
 ```
 
-
-
 # Appendix
 
 # I. Study
@@ -241,3 +239,25 @@ $ ./onvif_client.sh
 # III. Tools
 
 ## III.1. [ONVIF Device Manager](https://sourceforge.net/projects/onvifdm/)
+
+# IV. [gSOAP](https://www.genivia.com/index.html)
+
+## IV.1. onvif.h
+
+```bash
+$ wsdl2h -c -o onvif.h \
+	http://www.onvif.org/onvif/ver10/device/wsdl/devicemgmt.wsdl \
+	http://www.onvif.org/onvif/ver10/media/wsdl/media.wsdl \
+	http://www.onvif.org/onvif/ver10/recording.wsdl \
+	http://www.onvif.org/onvif/ver10/replay.wsdl \
+	http://www.onvif.org/onvif/ver10/network/wsdl/remotediscovery.wsdl \
+	http://www.w3.org/2006/03/addressing/ws-addr.xsd
+```
+
+## IV.2. xxx.req.xml & xxx.res.xml 
+
+```bash
+$ soapcpp2 -C -I../gsoap-2.8/gsoap/import onvif.h
+
+```
+
