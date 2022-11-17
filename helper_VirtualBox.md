@@ -21,7 +21,7 @@ Ubuntu 22.04 already uses OpenSSL 3.0 and gcc is too brand new to compile.
 
 #### A. Download
 
-#### - [Windows hosts](https://download.virtualbox.org/virtualbox/6.1.36/VirtualBox-6.1.36-152435-Win.exe)
+##### A.1. [Windows hosts](https://download.virtualbox.org/virtualbox/6.1.36/VirtualBox-6.1.36-152435-Win.exe)
 
 #### B. Install
 
@@ -215,5 +215,6 @@ zerofree -v $PURGE_DISK
 # II. Debug
 
 # III. Images
-- [OSBoxes - Virtual Machines for VirtualBox & VMware](http://www.osboxes.org/#)
-- [Android-x86](https://www.android-x86.org)
+#### A. [OSBoxes - Virtual Machines for VirtualBox & VMware](http://www.osboxes.org/#)
+
+#### B. [Android-x86](https://www.android-x86.org)

@@ -196,7 +196,7 @@ svn relocate http://trac-vbx/svnroot/trunk/xbox
 
 # I. Study
 
-- [Chapter 4. Branching and Merging](https://svnbook.red-bean.com/en/1.7/svn.branchmerge.summary.html)
+#### A. [Chapter 4. Branching and Merging](https://svnbook.red-bean.com/en/1.7/svn.branchmerge.summary.html)
 
 
 # II. Debug

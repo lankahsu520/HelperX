@@ -727,14 +727,14 @@ sequenceDiagram
 	dbusx_456->>bluezx_123: method call, destination=com.github.lankahsu520 path=/com/github/lankahsu520 interface=com.github.lankahsu520.demo member=command<br>string "advertise.name&on"
 	bluezx_123->>dbusx_456: method return,<br>string "Got !!!"
 ```
-#### - signal
+#### A. signal
 
 | Destination |                             |
 | ----------- | --------------------------- |
 | interface   | com.github.lankahsu520.demo |
 | member      | command                     |
 
-#### - method
+#### B. method
 | Destination | com.github.lankahsu520  |
 | ----------- | ----------------------- |
 | interface   | /com/github/lankahsu520 |
@@ -795,7 +795,7 @@ $ ll /etc/dbus-1/system.d/
 # Appendix
 
 # I. Study
-- [D-Bus](https://en.wikipedia.org/wiki/D-Bus)
+#### A. [D-Bus](https://en.wikipedia.org/wiki/D-Bus)
 
 # II. Debug
 
@@ -826,7 +826,7 @@ Usage: dbus-send [--help] [--system | --session | --bus=ADDRESS | --peer=ADDRESS
 
 ```
 
-- [V.1. dbus-send — Send a message to a message bus](https://dbus.freedesktop.org/doc/dbus-send.1.html)
+## IV.1. [dbus-send — Send a message to a message bus](https://dbus.freedesktop.org/doc/dbus-send.1.html)
 
 # V. dbus-monitor Usage
 
@@ -842,7 +842,7 @@ $ sudo dbus-monitor --system \
 	"type='method_call',interface='org.bluez.Adapter1'"
 ```
 
-VI. dbus-daemon Usage
+# VI. dbus-daemon Usage
 
 ```bash
 $ dbus-daemon --help

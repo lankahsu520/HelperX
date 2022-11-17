@@ -335,8 +335,6 @@ sudo shutdown -c
 
 ```
 
-
-
 ## 2.1. [Linux crontab 命令](https://www.runoob.com/linux/linux-comm-crontab.html)
 
 ```bash
@@ -1233,6 +1231,6 @@ ls | xargs cat
 
 # I. Study
 
-- [Linux 教程](https://www.runoob.com/linux/linux-tutorial.html)
+#### A. [Linux 教程](https://www.runoob.com/linux/linux-tutorial.html)
 
 # II. Debug

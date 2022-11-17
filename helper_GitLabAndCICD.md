@@ -720,15 +720,15 @@ flowchart LR
 
 # I. Study
 
-- [GitLab: 建立第一條 CI/CD Pipeline](https://ithelp.ithome.com.tw/articles/10219427)
+#### A. [GitLab: 建立第一條 CI/CD Pipeline](https://ithelp.ithome.com.tw/articles/10219427)
 
-- [GitLab CI 之 Runner 的 Executor 該如何選擇？](https://chengweichen.com/2021/03/gitlab-ci-executor.html)
+#### B. [GitLab CI 之 Runner 的 Executor 該如何選擇？](https://chengweichen.com/2021/03/gitlab-ci-executor.html)
 
-- [Gitlab-CI 入門實作教學 - 單元測試篇](https://nick-chen.medium.com/gitlab-ci-入門筆記-單元測試篇-156455e2ad9f)
+#### C. [Gitlab-CI 入門實作教學 - 單元測試篇](https://nick-chen.medium.com/gitlab-ci-入門筆記-單元測試篇-156455e2ad9f)
 
-- [Gitlab-CI 入門實作 — 自動化部署篇](https://nick-chen.medium.com/教學-gitlab-ci-入門實作-自動化部署篇-ci-cd-系列分享文-cbb5100a73d4)
+#### D. [Gitlab-CI 入門實作 — 自動化部署篇](https://nick-chen.medium.com/教學-gitlab-ci-入門實作-自動化部署篇-ci-cd-系列分享文-cbb5100a73d4)
 
-- [Configuration of your builds with .gitlab-ci.yml](https://www.perforce.com/manuals/gitswarm/ci/yaml/README.html)
+#### E. [Configuration of your builds with .gitlab-ci.yml](https://www.perforce.com/manuals/gitswarm/ci/yaml/README.html)
 
 # II. Debug
 

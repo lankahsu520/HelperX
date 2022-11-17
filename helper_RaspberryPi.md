@@ -149,6 +149,6 @@ Interface Options / I6 Serial Port
 
 # I. Study
 
--  [Day2 - 安裝樹莓派OS](https://ithelp.ithome.com.tw/articles/10235135)
+#### A. [Day2 - 安裝樹莓派OS](https://ithelp.ithome.com.tw/articles/10235135)
 
 # II. Debug

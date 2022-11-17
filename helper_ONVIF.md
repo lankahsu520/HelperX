@@ -238,7 +238,7 @@ $ ./onvif_client.sh
 
 # I. Study
 
-- [ONVIF](https://www.onvif.org)
+#### A. [ONVIF](https://www.onvif.org)
 
 # II. Debug
 
@@ -263,7 +263,7 @@ $ wsdl2h -c -o onvif.h \
 	http://www.w3.org/2006/03/addressing/ws-addr.xsd
 ```
 
-## IV.2. xxx.req.xml & xxx.res.xml 
+## V.2. xxx.req.xml & xxx.res.xml 
 
 ```bash
 $ soapcpp2 -C -I../gsoap-2.8/gsoap/import onvif.h

@@ -417,10 +417,13 @@ $ docker attach 15948ab15718
 
 # I. Study
 
-- [Docker CLI (docker)](https://docs.docker.com/reference/)
-- [Docker 基礎教學與介紹 101](https://cwhu.medium.com/docker-tutorial-101-c3808b899ac6)
-- [Ubuntu Linux 安裝 Docker 步驟與使用教學](https://ithelp.ithome.com.tw/articles/10219427)
-- [Docker 筆記 Part 2 ｜指令操作](https://visonli.medium.com/docker-入門-筆記-part-2-91e4dfa2b365)
+#### A. [Docker CLI (docker)](https://docs.docker.com/reference/)
+
+#### B. [Docker 基礎教學與介紹 101](https://cwhu.medium.com/docker-tutorial-101-c3808b899ac6)
+
+#### C. [Ubuntu Linux 安裝 Docker 步驟與使用教學](https://ithelp.ithome.com.tw/articles/10219427)
+
+#### D. [Docker 筆記 Part 2 ｜指令操作](https://visonli.medium.com/docker-入門-筆記-part-2-91e4dfa2b365)
 
 # II. Debug
 
@@ -634,6 +637,7 @@ alias docker-run="docker run -ti "
 alias docker-ps="docker ps -a "
 alias docker-rmimage="docker rmi "
 alias docker-rmcontainer="docker rm "
+alias docker-attach="docker attach "
 
 alias docker-prunesystem="docker system prune "
 alias docker-prunecontainer="docker container prune "

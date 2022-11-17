@@ -627,11 +627,11 @@ gst-launch-1.0 souphttpsrc is-live=true \
 
 # I. Study
 
+# II. Debug
 
+# III. gstreamer1.0
 
-# II. gstreamer1.0
-
-## II.1. apt-get install
+## III.1. apt-get install
 
 ```bash
 sudo apt-get --yes install gstreamer1.0
@@ -642,7 +642,7 @@ sudo apt-get --yes install gstreamer1.0-plugins-base-apps
 sudo apt-get --yes install gstreamer1.0-plugins-bad 
 sudo apt-get --yes install gstreamer1.0-plugins-ugly
 ```
-## II.2. Environment
+## III.2. Environment
 
 ```bash
 export GST_PLUGIN_PATH=`pwd`
