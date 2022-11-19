@@ -30,12 +30,18 @@ flowchart LR
 		Git-Local[Git Local Repository]
 		Git-Staging[Git Staging]
 		Git-Working[Git Working]
+		Git-Untracked[Git Untracked]
 	end
 	subgraph Remote
 		Git-Remote[Git Remote Repository]
 	end
 
+	Git-Untracked --> |add|Git-Staging
+	Git-Staging --> |restore / restore --staged| Git-Untracked
+
 	Git-Working --> |add|Git-Staging
+	Git-Staging --> |restore / restore --staged| Git-Working
+	
 	Git-Staging --> |commit|Git-Local
 	Git-Local --> |clone|Git-Remote
   Git-Local --> |push|Git-Remote
@@ -45,6 +51,8 @@ flowchart LR
 ```bash
 $ git config –global user.name "name"
 $ git config –global user.email "email address"
+$ git config --global user.email "lankahsu@gmail.com"
+$ git config --global user.name "Lanka Hsu"
 
 # Create an empty Git repository or reinitialize an existing one
 $ mkdir HelloWorld
@@ -53,6 +61,35 @@ $ git init
 
 # to set the default editor
 $ export GIT_EDITOR=vim
+$ git config --global core.editor "vim"
+
+```
+
+## 1.1. Branch
+
+#### svn
+
+> svn 基本上沒有 git branch 的概念，那要如何實作相同的功能，就用不同目錄來代表。如 svnroot/trunk/xbox、svnroot/brancees/xbox-b1。
+>
+> 也因此 svn 可以擷取單一目錄，不用抓取整個 repository，也因此省下不少時間！
+>
+> 
+
+## 1.2. Git Local Repository
+
+```bash
+#** 四個狀態 **
+Untracked files
+
+Working directory
+	Changes not staged for commit
+		$ git checkout -- *
+Staging area
+	Changes to be committed
+		$ git reset
+Repository
+	Committed
+		$ git reset --hard HEAD
 ```
 
 # 2. General Commands
@@ -62,15 +99,20 @@ $ export GIT_EDITOR=vim
 #### svn co
 
 ```bash
-$ svn co http://trac-vbx/svnroot/trunk/xbox
+$ svn co http://trac-vbx/svnroot/trunk/xbox xbox-123
 
+# to get the special folder - test 
+$ svn co http://trac-vbx/svnroot/trunk/xbox/test xbox-test
 ```
 
 #### git clone
 
 ```bash
-$ git clone http://trac-vbx/svnroot/trunk/xbox
-$ git clone --recurse-submodules http://trac-vbx/svnroot/trunk/xbox
+$ git clone http://trac-vbx/gitroot/xbox xbox-123
+$ git clone --recurse-submodules http://trac-vbx/gitroot/xbox xbox-456
+
+# to get the special branch - test
+$ git clone -b test http://trac-vbx/gitroot/xbox xbox-test
 ```
 
 ## 2.2. Record changes to the repository
@@ -89,6 +131,9 @@ $ svn commit ./
 $ git commit ./
 # Update remote refs along with associated objects.
 $ git push ./
+
+# 不建議使用，要就一起上，Not pushed + most recent commit
+git commit --amend ./
 ```
 
 ## 2.3. Fetch from and integrate with another repository or a local branch.
@@ -140,12 +185,67 @@ origin
 # to check the repository root URL
 $ git remote -v
 
-$ git remote set-url origin http://trac-vbx/svnroot/trunk/xbox
+$ git remote set-url origin http://trac-vbx/gitroot/xbox
 ```
 
-# 
+## 2.6. Show the working tree status
 
-# 3. svn copy between repositories with history
+#### svn status
+
+```bash
+$ svn status
+
+# don't print unversioned items
+$ svn st -q
+
+# disregard default and svn:ignore and svn:global-ignores property ignores
+$ svn status --no-ignore
+```
+
+#### git status
+
+```bash
+$ git status
+```
+
+## 2.7. Show commit logs
+
+#### svn log
+
+```bash
+$ svn log | more
+```
+
+#### git log
+
+```bash
+$ git log
+$ git log --oneline
+```
+
+## 2.8. List, create, or delete branches.
+
+#### git branch
+
+```bash
+# List all
+$ git branch -a
+
+
+```
+
+# 3. Others
+## 3.1. ???
+
+```bash
+
+$ git gc --prune=now #清除 git reflog
+
+```
+
+
+
+## 3.2. svn copy between repositories with history
 
 ```mermaid
 flowchart LR
@@ -179,9 +279,9 @@ drwxrwxrwx  6 www-data www-data         4096  一   3  2019 svn/
 
 ```
 
-## 3.1. generate history
+#### A. generate history
 
-#### A. dump
+##### A.1. dump 
 
 ```bash
 export SVN_NAME_SRC=svn
@@ -190,7 +290,7 @@ export SVN_DUMP_SOURCE_FILE="./dump_svn_20220822"
 svnadmin dump $SVN_NAME_SRC > $SVN_DUMP_SOURCE_FILE
 ```
 
-#### B. filter
+##### A.2. filter
 
 ```bash
 export SVN_DUMP_FILTER=""
@@ -198,7 +298,7 @@ export SVN_DUMP_FILTER="$SVN_DUMP_FILTER trunk/xbox"
 
 ```
 
-#### C. include/exclude
+##### A.3. include/exclude
 
 ```bash
 export SVN_DUMP_FILTER_FILE_INCLUDE="./dump_svn_20220822include"
@@ -222,9 +322,9 @@ export SVN_DUMP_FILTER_FILE_EXCLUDE="./dump_svn_20220822exclude"
 
 ```
 
-## 3.2. create new repository
+#### B. create new repository
 
-### 3.2.1. include
+##### B.1. include
 
 ```mermaid
 flowchart LR
@@ -254,7 +354,7 @@ sudo chmod -R 777 $SVN_NAME_DST/db
 
 ```
 
-### 3.2.2. exclude
+##### B.2. exclude
 ```mermaid
 flowchart LR
 	subgraph svn
