@@ -165,6 +165,10 @@ Repository
 >
 > 所以要小心！再小心！
 
+> 另外 Git 使用中有所謂的 Index，這個反而會讓使用者有困擾。
+>
+> 我們應該把事情簡單化，將 Git 的使用方式同化為  SVN Tracked 和 SVN Untracked。
+
 # 2. General Commands
 
 ## 2.1. Clone a repository into a new directory
@@ -242,16 +246,16 @@ $ git add helloworld.c
 
 ## 2.5. Remove files from the working tree and from the index
 
-#### svn add
+#### svn rm
 
 ```bash
-$ svn add helloworld.c
+$ svn rm helloworld.c
 ```
 
-#### git add
+#### git rm
 
 ```bash
-$ git add helloworld.c
+$ git rm helloworld.c
 ```
 
 ## 2.6. Move an item in a working copy
