@@ -1,3 +1,5 @@
+# Linux
+
 # 1. File Handler
 
 #### cd  - change the working directory
@@ -1234,3 +1236,13 @@ ls | xargs cat
 #### A. [Linux 教程](https://www.runoob.com/linux/linux-tutorial.html)
 
 # II. Debug
+
+
+# Author
+
+Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+
+# License
+
+[HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
+

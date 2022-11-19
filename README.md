@@ -1,5 +1,7 @@
 # HelperX
 
+## helper_AWS-SDK.md - AWS-SDK helper.
+
 ## helper_DBus.md - dbus helper.
 ## helper_Docker.md - docker helper.
 ```bash
@@ -25,6 +27,15 @@ use mosquitto.
 ## helper_ONVIF.md - ONVIF helper.
 
 ## helper_RaspberryPi.md - Raspberry Pi helper.
-## helper_svn.md - svn helper.
+## helper_SVNvsGit.md - SVN vs. Git helper.
 ## helper_VirtualBox.md - VirtualBox helper.
 ## helper_Yocto.md - Yocto helper.
+
+# Author
+
+Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+
+# License
+
+[HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
+

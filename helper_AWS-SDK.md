@@ -91,3 +91,13 @@ $ make install
 #### A. [C++ 的 AWS SDK 開發套件使用教學與範例](https://officeguide.cc/aws-sdk-cpp-installation-tutorial-examples/)
 
 # II. Debug
+
+
+# Author
+
+Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+
+# License
+
+[HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
+

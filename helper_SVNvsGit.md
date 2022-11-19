@@ -866,6 +866,8 @@ See 'git help git' for an overview of the system.
 
 # V. ~/.bash_aliases
 
+## V.1. svn
+
 ```bash
 #** svn **
 export SVN_EDITOR=vim
@@ -878,6 +880,10 @@ alias svn-diff2file="svn diff $* > /tmp/diff"
 alias svn-stq="svn st -q"
 alias svn-new="svn status | grep -e ^?"
 alias svn-st="svn status --no-ignore"
+
+alias svn-external="svn propedit svn:externals"
+
+alias svn-blame="svn blame"
 
 alias svn-log="svn log | perl -l40pe 's/^-+/\n/'"
 
@@ -911,4 +917,86 @@ function svn-revert()
 	fi
 }
 ```
+
+## V.2. git
+
+```bash
+#** git **
+export GIT_EDITOR=vim
+
+alias git-push="git push"
+alias git-pull="git pull"
+
+alias git-diff="git diff HEAD $*"
+alias git-diff2file="git diff HEAD $* > /tmp/diff"
+
+alias git-st="git status $*"
+
+alias git-blame="git blame"
+
+alias git-log="git log --oneline"
+
+alias git-rev="git log --oneline 2>/dev/null | cut -d' ' -f1 | head -n1"
+
+alias git-remote="git remote"
+alias git-seturl="git remote set-url origin"
+
+#清除 git reflog
+alias git-reflog="git gc --prune=now"
+
+function git-addchangs()
+{
+	#git ls-files . -m
+	#git diff --name-only | git add
+	git status --porcelain | grep ' M'| awk '{$1=""; print "  \""substr($0,2)"\"" }' | xargs git add
+}
+
+function git-adduntracked()
+{
+	#git ls-files . -m
+	#git diff --name-only | git add
+	git status --porcelain | grep '??'| awk '{$1=""; print "  \""substr($0,2)"\"" }' | xargs git add
+}
+
+function git-revertchanges()
+{
+	HINT="Usage: ${FUNCNAME[0]} <files>"
+	FILES="$*"
+	[ ! -z "$FILES" ] || FILES="./"
+
+	git restore --staged $FILES
+}
+
+function git-revert()
+{
+	HINT="Usage: ${FUNCNAME[0]} <files>"
+	FILES="$*"
+	[ ! -z "$FILES" ] || FILES="./"
+
+	git checkout -- $FILES
+}
+
+alias git-branch="git branch"
+
+function git-checkoutb()
+{
+	HINT="Usage: ${FUNCNAME[0]} <branch-name>"
+	BRANCH_NAME=$1
+
+	if [ ! -z "$BRANCH_NAME" ]; then
+		git checkout $BRANCH_NAME
+	else
+		echo $HINT
+	fi
+}
+```
+
+
+# Author
+
+Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+
+# License
+
+[HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
 

@@ -1,4 +1,7 @@
+# D-Bus
+
 # 1. Overview
+
 > D-Bus is an [inter-process communication](https://en.wikipedia.org/wiki/Inter-process_communication) (IPC) mechanism.
 
 # 2. System
@@ -850,6 +853,13 @@ dbus-daemon [--version] [--session] [--system] [--config-file=FILE] [--print-add
 
 $ dbus-daemon --config-file=./system.conf
 
-
 ```
+
+# Author
+
+Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+
+# License
+
+[HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
 

@@ -1,3 +1,5 @@
+# VirtualBox
+
 # 1. Host - Windows 10
 
 # 2. Client - Ubuntu 20.04
@@ -218,3 +220,13 @@ zerofree -v $PURGE_DISK
 #### A. [OSBoxes - Virtual Machines for VirtualBox & VMware](http://www.osboxes.org/#)
 
 #### B. [Android-x86](https://www.android-x86.org)
+
+
+# Author
+
+Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+
+# License
+
+[HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
+

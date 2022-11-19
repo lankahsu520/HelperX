@@ -1,4 +1,7 @@
-﻿# 1. mosquitto
+﻿# MQTT
+
+# 1. mosquitto
+
 ## 1.1. Install
 ```bash
 sudo add-apt-repository ppa:mosquitto-dev/mosquitto-ppa
@@ -223,4 +226,13 @@ openssl x509 -noout -modulus -in mqtt.ca | openssl md5
 #### E. [如何在Ubuntu 16.04上安装和保护Mosquitto MQTT消息传递代理](https://www.howtoing.com/how-to-install-and-secure-the-mosquitto-mqtt-messaging-broker-on-ubuntu-16-04/)
 
 #### F. [Mosquitto ACL -Configuring and Testing MQTT Topic Restrictions](http://www.steves-internet-guide.com/topic-restriction-mosquitto-configuration/)
+
+
+# Author
+
+Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+
+# License
+
+[HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
 

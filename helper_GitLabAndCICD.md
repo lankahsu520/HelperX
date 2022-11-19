@@ -1,3 +1,5 @@
+# GitLab and CI/CD
+
 # 1. Communicate with GitLab
 
 ## 1.1. [Use SSH keys to communicate with GitLab](https://docs.gitlab.com/ee/user/ssh.html)
@@ -835,4 +837,12 @@ deploy-job:      # This job runs in the deploy stage.
     - echo "Application successfully deployed."
 
 ```
+
+# Author
+
+Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+
+# License
+
+[HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
 

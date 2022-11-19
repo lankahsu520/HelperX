@@ -1,7 +1,8 @@
 # Raspberry Pi
 
 # 1. [Install Raspberry Pi OS using Raspberry Pi Imager](https://www.raspberrypi.com/software/)
-(I can't use Traditional Chinese !!! )
+> I can't use Traditional Chinese !!!
+
 #### A. Run
 ![pi0001](./images/pi0001.jpg)
 #### B. Select OS
@@ -152,3 +153,13 @@ Interface Options / I6 Serial Port
 #### A. [Day2 - 安裝樹莓派OS](https://ithelp.ithome.com.tw/articles/10235135)
 
 # II. Debug
+
+
+# Author
+
+Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+
+# License
+
+[HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
+

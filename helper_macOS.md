@@ -1,3 +1,5 @@
+# macOS
+
 # 1. Upgrade [Mac Mini](https://www.apple.com/tw/mac-mini/)
 
 ## 1.1. mac mini ssd upgrade
@@ -212,4 +214,13 @@ sudo port install youtube-dl
 ### A. [比较Fink, macports 和 homebrew](https://www.iteye.com/blog/tetsu-1507524)
 
 # II. Debug
+
+
+# Author
+
+Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+
+# License
+
+[HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
 
