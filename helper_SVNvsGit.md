@@ -7,14 +7,19 @@
 ```mermaid
 flowchart LR
 	subgraph Local
-		SVN-Local[SVN Local Files]
+		SVN-Tracked[SVN Tracked]
+		SVN-Untracked[SVN Untracked]
 	end
 	subgraph Remote
 		SVN-Remote[SVN Remote Repository]
 	end
-	SVN-Local --> |ci|SVN-Remote
-	SVN-Remote --> |up|SVN-Local
-	SVN-Remote --> |co|SVN-Local
+	SVN-Tracked --> |ci|SVN-Remote
+	SVN-Remote --> |up|SVN-Tracked
+	SVN-Remote --> |co|SVN-Tracked
+	
+	SVN-Untracked --> |add|SVN-Tracked
+	SVN-Tracked --> |revert|SVN-Tracked
+	SVN-Tracked --> |revert|SVN-Untracked
 ```
 > SVN：沒有所謂的 Local Repository。需要一個 SVN Server 擺放 Repository。
 ```bash
@@ -43,7 +48,6 @@ flowchart LR
 	Git-Working --> |add|Git-Staging
 	Git-Staging --> |restore / restore --staged| Git-Working
 	
-	Git-Working --> |add|Git-Staging
 	Git-Staging --> |commit|Git-Local
 	Git-Local --> |clone|Git-Remote
   Git-Local --> |push|Git-Remote
@@ -72,7 +76,7 @@ $ git config --global core.editor "vim"
 
 ## 1.1. Branch
 
-#### svn
+#### svn cp
 
 > svn 基本上沒有 git branch 的概念，那要如何實作相同的功能，就用不同目錄來代表。如 svnroot/trunk/xbox、svnroot/brancees/xbox-b1。
 >
@@ -80,7 +84,65 @@ $ git config --global core.editor "vim"
 >
 > 
 
-## 1.2. Git Local Repository
+#### git branch
+
+```bash
+# the current
+$ git branch
+
+# list all
+$ git branch -a
+$ git branch -r
+
+# delete
+$ git branch -d new-branch
+# force to delete
+$ git branch -D new-branch
+# rename
+$ git branch -m new-branch new-branch1
+```
+
+#### git checkout
+```bash
+# List all
+$ git branch -a
+
+# switch to new-branch (exist)
+$ git checkout new-branch
+
+# create 
+$ git checkout -b new-branch
+$ git checkout -b new-branch origin
+```
+
+
+## 1.2. Tag
+
+#### svn cp
+
+> svn 基本上沒有 git tag 的概念，那要如何實作相同的功能，就用不同目錄來代表。如 svnroot/trunk/xbox、svnroot/tags/xbox-v1。
+>
+> 也因此 svn 可以擷取單一目錄，不用抓取整個 repository，也因此省下不少時間！
+>
+> 
+
+#### git tag
+
+```bash
+# Create, list, delete or verify a tag object signed with GPG
+# list
+$ git tag
+
+# create
+$ git tag -a v1.1.0
+$ git push origin v1.1.0
+
+# delete
+$ git tag -d v1.1.0
+$ git push --delete origin v1.1.0
+
+```
+## 1.3. Git Local Repository
 
 ```bash
 #** 四個狀態 **
@@ -99,7 +161,7 @@ Repository
 
 ### 注意！注意！注意！
 
-> 從上可以知道 Git 有四個狀態，感覺上管理的很有制度，但是如果 Working<--> Staging 變動過多，就算只有“你”一位修改人員，之後 commit、push 和 pull時，也會發生衝突！
+> 從上可以知道 Git 有四個狀態，感覺上管理的很有制度，但是如果 Working <--> Staging 變動過多，就算只有“你”一位修改人員，之後 commit、push 和 pull時，也會發生衝突！
 >
 > 所以要小心！再小心！
 
@@ -150,7 +212,7 @@ git commit --amend ./s
 
 ```
 
-## 2.3. Fetch from and integrate with another repository or a local branch.
+## 2.3. Fetch from and integrate with another repository or a local branch
 
 #### svn up
 
@@ -178,7 +240,155 @@ $ svn add helloworld.c
 $ git add helloworld.c
 ```
 
-## 2.5. Manage set of tracked repositories
+## 2.5. Remove files from the working tree and from the index
+
+#### svn add
+
+```bash
+$ svn add helloworld.c
+```
+
+#### git add
+
+```bash
+$ git add helloworld.c
+```
+
+## 2.6. Move an item in a working copy
+
+#### svn mv
+
+```bash
+$ svn mv helloworld.c helloworld_bak.c
+```
+
+#### git mv
+
+```bash
+$ git mv helloworld.c helloworld_bak.c
+```
+
+## 2.7. Copy files and directories in a working copy or repository
+
+#### svn cp
+
+```bash
+$ svn cp helloworld.c helloworld_cp.c
+```
+
+#### git ??
+
+```bash
+```
+
+# 3. Show difference, log
+
+## 3.1. Show the working tree status
+
+#### svn status
+
+```bash
+$ svn status
+
+# don't print unversioned items
+$ svn st -q
+
+# disregard default and svn:ignore and svn:global-ignores property ignores
+$ svn status --no-ignore
+```
+
+#### git status
+
+```bash
+$ git status
+```
+
+## 3.2. Show changes between commits, commit and working tree
+
+#### svn diff
+
+```bash
+$ svn diff
+
+# show history
+$ svn diff -r2600
+```
+
+#### git diff
+
+```bash
+$ git diff
+```
+
+#### git show
+
+```bash
+$ git show
+
+# show history
+$ git show HEAD
+$ git show 366aace
+```
+
+## 3.3. Show commit logs
+
+#### svn log
+
+```bash
+$ svn log | more
+```
+
+#### git log
+
+```bash
+$ git log
+$ git log --oneline
+```
+
+# 4. Advanced Commands
+
+## 4.1. Restore working tree files
+
+#### svn revert
+
+```mermaid
+flowchart LR
+	SVN-Untracked --> |add|SVN-Tracked 
+	SVN-Tracked  --> |revert|SVN-Tracked
+	SVN-Tracked  --> |revert|SVN-Untracked
+```
+
+```bash
+$ svn revert helloworld_cp.c 
+```
+
+#### svn restore or ? checkout
+
+```mermaid
+flowchart LR
+	subgraph Local
+		Git-Staging[Git Staging]
+		Git-Working[Git Working]
+
+		Git-Untracked[Git Untracked]
+	end
+
+	Git-Untracked --> |add|Git-Staging
+	Git-Staging --> |restore / restore --staged| Git-Untracked
+
+	Git-Working --> |add|Git-Staging
+	Git-Staging --> |restore / restore --staged| Git-Working
+
+```
+
+```bash
+$ git restore helloworld_cp.c
+$ git restore --staged helloworld_cp.c
+
+$ git checkout -- *
+```
+
+## 4.2. Manage set of tracked repositories
 
 #### svn relocate
 
@@ -202,64 +412,143 @@ $ git remote -v
 $ git remote set-url origin http://trac-vbx/gitroot/xbox
 ```
 
-## 2.6. Show the working tree status
+## 4.3. Roll back
 
-#### svn status
+```mermaid
+flowchart LR
 
-```bash
-$ svn status
-
-# don't print unversioned items
-$ svn st -q
-
-# disregard default and svn:ignore and svn:global-ignores property ignores
-$ svn status --no-ignore
+	121 --> 122 --> 123 --> 124
+	124 --> |Roll back|123
 ```
 
-#### git status
+#### svn merge
 
 ```bash
-$ git status
+# Undo a committed change
+SVN_LAST=`svn info 2>/dev/null | grep 'Last Changed Rev' | cut -d':' -f2 | awk '{print $1}'`
+svn merge -c -${SVN_LAST} .
+
+svn ci ./
 ```
 
-## 2.7. Show commit logs
-
-#### svn log
+#### git reset
 
 ```bash
-$ svn log | more
+$ git reset --hard xxxxxx
+$ git reset --hard ORIG_HEAD
+
+# back 2*committed
+$ git reset HEAD^^
+
+# back 3*committed
+$ git reset HEAD~3
+
+$ git push -f
 ```
 
-#### git log
+## 4.4. Merge
+```mermaid
+flowchart LR
+
+	subgraph master
+		M119 --> M121--> M122 --> M123 --> M124 --> M126
+	end
+	subgraph curr
+		B120 --> B125 --> B???
+	end
+	M119--> B120
+	M121 --> B???
+	M122 --> B???
+	M123 --> B???
+	M124 --> B???
+```
+```mermaid
+flowchart LR
+
+	subgraph master
+		M119 --> M121--> M122 --> M123 --> M124 --> M126
+	end
+	subgraph curr
+		B120 --> B125 --> B???
+	end
+	M119--> B120
+
+	M122 --> B???
+
+```
+#### svn merge
+
 
 ```bash
-$ git log
-$ git log --oneline
+# Merge a range of changes
+$ svn merge -r 121:124 http://trac-vbx/svnroot/trunk/xbox ./
+$ svn ci ./
 ```
 
-## 2.8. List, create, or delete branches.
-
-#### git branch
 
 ```bash
-# List all
-$ git branch -a
-
-
+# Merge one specific change
+$ svn merge -c 122 ./
+$ svn ci ./
 ```
 
-# 3. Others
-## 3.1. ???
+```bash
+# Remove svn:mergeinfo
+$ svn propget svn:mergeinfo --depth=infinity | grep -v "^/" | grep -v "^\." | cut -d- -f1 | xargs svn propdel svn:mergeinfo
+
+$ svn ci ./
+```
+
+#### git merge
 
 ```bash
+$ git checkout curr
+Switched to branch 'curr'
 
+# master -> curr
+$ git merge master
+# 儘量使用這個，可保留分支線形，比較好閱讀
+$ git merge --no-ff master
+```
+```bash
+# Merge one specific change
+$ git cherry-pick 122
+```
+
+## 4.5. Show what revision and author last modified each line of a file
+
+#### svn blame
+
+
+```bash
+$ svn blame helper_SVNvsGit.md
+```
+
+#### git blame
+
+```bash
+$ git blame helper_SVNvsGit.md
+```
+
+# 5. Others ???
+
+```bash
+# Cleanup unnecessary files and optimize the local repository
 $ git gc --prune=now #清除 git reflog
 
+# Stash the changes in a dirty working directory away
+# 不常用，會忘掉。不要用
+git stash -u
+git stash list
+git stash pop
+git stash clear
 ```
 
+# Appendix
 
-
-## 3.2. svn copy between repositories with history
+# I. Study
+## I.1. SVN
+#### A. [Chapter 4. Branching and Merging](https://svnbook.red-bean.com/en/1.7/svn.branchmerge.summary.html)
 
 ```mermaid
 flowchart LR
@@ -293,9 +582,10 @@ drwxrwxrwx  6 www-data www-data         4096  一   3  2019 svn/
 
 ```
 
-#### A. generate history
+##### A.1. generate history
 
-##### A.1. dump 
+###### A.1.1. dump 
+
 ```bash
 export SVN_NAME_SRC=svn
 export SVN_DUMP_SOURCE_FILE="./dump_svn_20220822"
@@ -303,14 +593,16 @@ export SVN_DUMP_SOURCE_FILE="./dump_svn_20220822"
 svnadmin dump $SVN_NAME_SRC > $SVN_DUMP_SOURCE_FILE
 ```
 
-##### A.2. filter
+###### A.1.2. filter
+
 ```bash
 export SVN_DUMP_FILTER=""
 export SVN_DUMP_FILTER="$SVN_DUMP_FILTER trunk/xbox"
 
 ```
 
-##### A.3. include/exclude
+###### A.1.3. include/exclude
+
 ```bash
 export SVN_DUMP_FILTER_FILE_INCLUDE="./dump_svn_20220822include"
 
@@ -333,9 +625,10 @@ export SVN_DUMP_FILTER_FILE_EXCLUDE="./dump_svn_20220822exclude"
 
 ```
 
-#### B. create new repository
+##### A.2. create new repository
 
-##### B.1. include
+###### A.2.1. include
+
 ```mermaid
 flowchart LR
 	subgraph svn
@@ -351,6 +644,7 @@ flowchart LR
 	svn --> |include-trunk/xbox|svnnew-include
 
 ```
+
 ```bash
 export SVN_DUMP_FILTER_FILE_INCLUDE="./dump_svn_20220822include"
 export SVN_NAME_DST=svnnew-include
@@ -364,7 +658,8 @@ sudo chmod -R 777 $SVN_NAME_DST/db
 
 ```
 
-##### B.2. exclude
+###### A.2.2. exclude
+
 ```mermaid
 flowchart LR
 	subgraph svn
@@ -380,6 +675,7 @@ flowchart LR
 
 	svn --> |exclude-trunk/xbox|svnnew-exclude
 ```
+
 ```bash
 export SVN_DUMP_FILTER_FILE_EXCLUDE="./dump_svn_20220822exclude"
 export SVN_NAME_DST=svnnew-exclude
@@ -392,7 +688,9 @@ sudo chmod -R 775 $SVN_NAME_DST
 sudo chmod -R 777 $SVN_NAME_DST/db
 
 ```
-## 3.3. ? Merge repository - include (main) + exclude
+
+##### A.3. ? Merge repository - include (main) + exclude
+
 ```mermaid
 flowchart LR
 	subgraph svnnew-include-new
@@ -413,92 +711,33 @@ flowchart LR
 	svnnew-include --> svnnew-include-new
 	svnnew-exclude --> svnnew-include-new
 ```
+
 ```bash
 svnadmin load --parent-dir svnnew-include < $SVN_DUMP_FILTER_FILE_EXCLUDE
 
 ```
 
-# 4. svn merge
-
-## 4.1. Remove svn:mergeinfo
-
-```bash
-svn propget svn:mergeinfo --depth=infinity | grep -v "^/" | grep -v "^\." | cut -d- -f1 | xargs svn propdel svn:mergeinfo
-
-svn ci ./
-
-```
-
-## 4.2. Roll back
-
-```mermaid
-flowchart LR
-
-	121 --> 122 --> 123 --> 124
-	124 --> |Roll back|123
-```
-
-```bash
-# Undo a committed change
-SVN_LAST=`svn info 2>/dev/null | grep 'Last Changed Rev' | cut -d':' -f2 | awk '{print $1}'`
-svn merge -c -${SVN_LAST} .
-
-svn ci ./
-```
-
-## 4.3. Merge
-
-```mermaid
-flowchart LR
-
-	subgraph master
-		M119 --> M121--> M122 --> M123 --> M124 --> M126
-	end
-	subgraph curr
-		B120 --> B125 --> B???
-	end
-	M119--> B120
-	M121 --> B???
-	M122 --> B???
-	M123 --> B???
-	M124 --> B???
-```
-
-```bash
-# Merge a range of changes
-svn merge -r 121:124 http://trac-vbx/svnroot/trunk/xbox ./
-svn ci ./
-```
-
-```mermaid
-flowchart LR
-
-	subgraph master
-		M119 --> M121--> M122 --> M123 --> M124 --> M126
-	end
-	subgraph curr
-		B120 --> B125 --> B???
-	end
-	M119--> B120
-
-	M122 --> B???
-
-```
-```bash
-# Merge one specific change
-svn merge -c 122 ./
-svn ci ./
-```
-
-# Appendix
-
-# I. Study
-## I.1. SVN
-#### A. [Chapter 4. Branching and Merging](https://svnbook.red-bean.com/en/1.7/svn.branchmerge.summary.html)
-
 ## I.2. Git
 
 #### A. [Git 初學筆記 - 指令操作教學](https://blog.longwin.com.tw/2009/05/git-learn-initial-command-2009/)
+
+#### B. [連猴子都能懂的Git入門指南](https://backlog.com/git-tutorial/tw/)
+
+#### C. [GIT教學](https://kingofamani.gitbooks.io/git-teach/content/)
+
+#### D. [[ 狀況題 ] 如何徹底將檔案從 Git 中移除？](https://mtr04-note.coderbridge.io/2020/08/09/about-git-deletefile/)
+
+```bash
+$ git filter-branch -f --tree-filter "rm -f helloworld_bak.c"
+$ rm .git/refs/original/refs/heads/master
+$ git reflog expire --all --expire=now
+$ git fsck --unreachable
+$ git gc --prune=now
+$ git fsck
+$ git push -f
+```
+
+
 
 # II. Debug
 
