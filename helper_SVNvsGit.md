@@ -30,18 +30,25 @@ flowchart LR
 		Git-Local[Git Local Repository]
 		Git-Staging[Git Staging]
 		Git-Working[Git Working]
+<<<<<<< HEAD
 		Git-Untracked[Git Untracked]
+=======
+>>>>>>> 42301914a2fe92dfd154227db7cad2a28eeb303e
 	end
 	subgraph Remote
 		Git-Remote[Git Remote Repository]
 	end
 
+<<<<<<< HEAD
 	Git-Untracked --> |add|Git-Staging
 	Git-Staging --> |restore / restore --staged| Git-Untracked
 
 	Git-Working --> |add|Git-Staging
 	Git-Staging --> |restore / restore --staged| Git-Working
 	
+=======
+	Git-Working --> |add|Git-Staging
+>>>>>>> 42301914a2fe92dfd154227db7cad2a28eeb303e
 	Git-Staging --> |commit|Git-Local
 	Git-Local --> |clone|Git-Remote
   Git-Local --> |push|Git-Remote
@@ -51,8 +58,11 @@ flowchart LR
 ```bash
 $ git config –global user.name "name"
 $ git config –global user.email "email address"
+<<<<<<< HEAD
 $ git config --global user.email "lankahsu@gmail.com"
 $ git config --global user.name "Lanka Hsu"
+=======
+>>>>>>> 42301914a2fe92dfd154227db7cad2a28eeb303e
 
 # Create an empty Git repository or reinitialize an existing one
 $ mkdir HelloWorld
@@ -61,6 +71,7 @@ $ git init
 
 # to set the default editor
 $ export GIT_EDITOR=vim
+<<<<<<< HEAD
 $ git config --global core.editor "vim"
 
 ```
@@ -90,6 +101,8 @@ Staging area
 Repository
 	Committed
 		$ git reset --hard HEAD
+=======
+>>>>>>> 42301914a2fe92dfd154227db7cad2a28eeb303e
 ```
 
 # 2. General Commands
@@ -99,20 +112,30 @@ Repository
 #### svn co
 
 ```bash
+<<<<<<< HEAD
 $ svn co http://trac-vbx/svnroot/trunk/xbox xbox-123
 
 # to get the special folder - test 
 $ svn co http://trac-vbx/svnroot/trunk/xbox/test xbox-test
+=======
+$ svn co http://trac-vbx/svnroot/trunk/xbox
+
+>>>>>>> 42301914a2fe92dfd154227db7cad2a28eeb303e
 ```
 
 #### git clone
 
 ```bash
+<<<<<<< HEAD
 $ git clone http://trac-vbx/gitroot/xbox xbox-123
 $ git clone --recurse-submodules http://trac-vbx/gitroot/xbox xbox-456
 
 # to get the special branch - test
 $ git clone -b test http://trac-vbx/gitroot/xbox xbox-test
+=======
+$ git clone http://trac-vbx/svnroot/trunk/xbox
+$ git clone --recurse-submodules http://trac-vbx/svnroot/trunk/xbox
+>>>>>>> 42301914a2fe92dfd154227db7cad2a28eeb303e
 ```
 
 ## 2.2. Record changes to the repository
@@ -131,9 +154,12 @@ $ svn commit ./
 $ git commit ./
 # Update remote refs along with associated objects.
 $ git push ./
+<<<<<<< HEAD
 
 # 不建議使用，要就一起上，Not pushed + most recent commit
 git commit --amend ./
+=======
+>>>>>>> 42301914a2fe92dfd154227db7cad2a28eeb303e
 ```
 
 ## 2.3. Fetch from and integrate with another repository or a local branch.
@@ -185,6 +211,7 @@ origin
 # to check the repository root URL
 $ git remote -v
 
+<<<<<<< HEAD
 $ git remote set-url origin http://trac-vbx/gitroot/xbox
 ```
 
@@ -246,6 +273,14 @@ $ git gc --prune=now #清除 git reflog
 
 
 ## 3.2. svn copy between repositories with history
+=======
+$ git remote set-url origin http://trac-vbx/svnroot/trunk/xbox
+```
+
+# 
+
+# 3. svn copy between repositories with history
+>>>>>>> 42301914a2fe92dfd154227db7cad2a28eeb303e
 
 ```mermaid
 flowchart LR
@@ -279,9 +314,15 @@ drwxrwxrwx  6 www-data www-data         4096  一   3  2019 svn/
 
 ```
 
+<<<<<<< HEAD
 #### A. generate history
 
 ##### A.1. dump 
+=======
+## 3.1. generate history
+
+#### A. dump
+>>>>>>> 42301914a2fe92dfd154227db7cad2a28eeb303e
 
 ```bash
 export SVN_NAME_SRC=svn
@@ -290,7 +331,11 @@ export SVN_DUMP_SOURCE_FILE="./dump_svn_20220822"
 svnadmin dump $SVN_NAME_SRC > $SVN_DUMP_SOURCE_FILE
 ```
 
+<<<<<<< HEAD
 ##### A.2. filter
+=======
+#### B. filter
+>>>>>>> 42301914a2fe92dfd154227db7cad2a28eeb303e
 
 ```bash
 export SVN_DUMP_FILTER=""
@@ -298,7 +343,11 @@ export SVN_DUMP_FILTER="$SVN_DUMP_FILTER trunk/xbox"
 
 ```
 
+<<<<<<< HEAD
 ##### A.3. include/exclude
+=======
+#### C. include/exclude
+>>>>>>> 42301914a2fe92dfd154227db7cad2a28eeb303e
 
 ```bash
 export SVN_DUMP_FILTER_FILE_INCLUDE="./dump_svn_20220822include"
@@ -322,9 +371,15 @@ export SVN_DUMP_FILTER_FILE_EXCLUDE="./dump_svn_20220822exclude"
 
 ```
 
+<<<<<<< HEAD
 #### B. create new repository
 
 ##### B.1. include
+=======
+## 3.2. create new repository
+
+### 3.2.1. include
+>>>>>>> 42301914a2fe92dfd154227db7cad2a28eeb303e
 
 ```mermaid
 flowchart LR
@@ -354,7 +409,11 @@ sudo chmod -R 777 $SVN_NAME_DST/db
 
 ```
 
+<<<<<<< HEAD
 ##### B.2. exclude
+=======
+### 3.2.2. exclude
+>>>>>>> 42301914a2fe92dfd154227db7cad2a28eeb303e
 ```mermaid
 flowchart LR
 	subgraph svn
