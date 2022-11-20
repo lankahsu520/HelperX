@@ -67,9 +67,9 @@ flowchart LR
 	Git-Staging --> |restore / restore --staged| Git-Working
 	
 	Git-Staging --> |commit|Git-Local
-	Git-Local --> |clone|Git-Remote
   Git-Local --> |push|Git-Remote
 	Git-Remote --> |pull|Git-Local
+  Git-Remote --> |clone|Git-Local
 ```
 > Git：分別存在 Remote Repository 和 Local Repository。
 ```bash
@@ -142,7 +142,7 @@ $ git checkout -b new-branch origin
 >
 > 也因此 svn 可以擷取單一目錄，不用抓取整個 repository，也因此省下不少時間！
 >
-> 
+> 另外因為是不同目錄代表，所以可以繼續延伸開發。不像 Git tag 在定錨後就不能進版。
 
 #### git tag
 
