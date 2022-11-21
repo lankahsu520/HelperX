@@ -88,7 +88,11 @@ TARGET_ARCH
 USE_OPENSSL
 ```
 
-## 3.2. Build All services
+## 3.2. Building the SDK
+
+### 3.2.1. Special defines
+
+#### A. All services
 
 
 ```bash
@@ -101,7 +105,7 @@ $ cd build_xxx \
 	..
 ```
 
-## 3.3. BUILD_ONLY
+#### B. BUILD_ONLY
 
 ```
 # Builds only the clients you want to use.
@@ -109,14 +113,46 @@ $ cd build_xxx \
 $ cd build_xxx \
 	&& cmake \
 	-DCMAKE_BUILD_TYPE=Debug \
-	-DBUILD_ONLY="monitoring;logs;s3" \
+	-DBUILD_ONLY="dynamodb;s3" \
 	..
-
-$ make
-$ make install
 ```
 
 > The core SDK module, `aws-sdk-cpp-core`, is *always* built, regardless of the value of the *BUILD_ONLY* parameter.
+
+#### C. Myself
+
+```bash
+CMAKE_FLAGS += \
+		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+		-DBUILD_ONLY="dynamodb;iam;s3;sts"
+		
+cd $(SOURCE) \
+&& $(PJ_SH_MKDIR) build_xxx \
+&& cd build_xxx \
+&& $(PJ_SH_CP) $(PJ_CMAKE_CROSS) ./build.cmake \
+&& cmake \
+	-DCMAKE_TOOLCHAIN_FILE=./build.cmake \
+	-DCMAKE_INSTALL_PREFIX=$(SDK_ROOT_DIR) \
+	-DCMAKE_PREFIX_PATH=$(SDK_ROOT_DIR) \
+	$(CMAKE_FLAGS) \
+	..
+	#-DTARGET_ARCH=ANDROID
+	#-DCMAKE_VERBOSE_MAKEFILE=ON \
+	#-DCMAKE_MODULE_LINKER_FLAGS=-L$(SDK_LIB_DIR) \
+	#-DCMAKE_INCLUDE_DIRECTORIES_PROJECT_BEFORE=$(SDK_INC_DIR)
+	#-DOPENSSL_ROOT_DIR=$(PJ_INSTALL_OPENSSL) \
+
+```
+
+### 3.2.2. Build
+
+```bash
+$ cd build_xxx \
+	&& make
+$ cd build_xxx \
+	&& make install
+
+```
 
 
 
@@ -168,6 +204,8 @@ $ mkdir build_xxx \
 # I. Study
 
 #### A. [C++ 的 AWS SDK 開發套件使用教學與範例](https://officeguide.cc/aws-sdk-cpp-installation-tutorial-examples/)
+
+#### B. [Building the SDK from source on EC2](https://github.com/aws/aws-sdk-cpp/wiki/Building-the-SDK-from-source-on-EC2)
 
 # II. Debug
 
