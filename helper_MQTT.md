@@ -155,11 +155,13 @@ protocol websockets
 # 2. Test
 ```mermaid
 flowchart LR
-	mqttSub[mqttSub]
+	mqttSubA[mqttSubA]
+	mqttSubB[mqttSubB]
 	mqttPub[mqttPub]
 	Broker[Broker]
 
-	mqttSub <-.-> |+/080027A1F836/+/+/+/#| Broker
+	mqttSubA <-.-> |+/080027A1F836/+/+/+/#| Broker
+	mqttSubB <-.-> |+/080027A1F836/+/+/+/#| Broker
 	mqttPub --> |+/080027A1F836/+/+/+/#| Broker
 ```
 

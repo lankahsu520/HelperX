@@ -31,11 +31,15 @@
 
 #### D. [AWS Code Examples Repository](https://github.com/awsdocs/aws-doc-sdk-examples)
 
-# 2. [AWS SDK for C++ Repository](https://github.com/aws/aws-sdk-cpp)
+# 2. [AWS Free Tier](https://aws.amazon.com/free)
+
+> 憑證，很複雜！很複雜！很複雜！很複雜！很複雜！
+
+# 3. [AWS SDK for C++ Repository](https://github.com/aws/aws-sdk-cpp)
 
 > 使用請三思，雖然是官方提供，但是支援度和更新並不是每個功能都能完整使用或編譯。GitHub 和 AWS 官網之間的文件有差異，請小心使用。
 
-## 2.1. Download
+## 3.1. Download
 
 ```bash
 $ git clone --recurse-submodules https://github.com/aws/aws-sdk-cpp
@@ -56,7 +60,35 @@ $ ./prefetch_crt_dependency.sh
 
 > The AWS SDK for C++ has a dependency on cJSON. This dependency was updated to version 1.7.14 in the recent SDK updates. We would recommend to upgrade your SDK to version 1.9.67 for 1.9.x or 1.8.187 for 1.8.x. Thank @dkalinowski for reporting this issue: #1594
 
-## 2.2. Build
+### 3.1.1. code-generation/api-descriptions/*.json
+
+### 3.1.2. [General CMake Variables and Options](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/cmake-params.html)
+
+```cmake
+ADD_CUSTOM_CLIENTS
+BUILD_ONLY
+BUILD_SHARED_LIBS
+CPP_STANDARD
+CURL_INCLUDE_DIR
+CURL_LIBRARY
+CUSTOM_MEMORY_MANAGEMENT
+ENABLE_CURL_LOGGING
+ENABLE_RTTI
+ENABLE_TESTING
+ENABLE_UNITY_BUILD
+FORCE_CURL
+FORCE_SHARED_CRT
+G
+MINIMIZE_SIZE
+NO_ENCRYPTION
+NO_HTTP_CLIENT
+REGENERATE_CLIENTS
+SIMPLE_INSTALL
+TARGET_ARCH
+USE_OPENSSL
+```
+
+## 3.2. Build All services
 
 
 ```bash
@@ -67,8 +99,13 @@ $ cd build_xxx \
 	&& cmake \
 	-DCMAKE_BUILD_TYPE=Debug \
 	..
-or
-# to build the Amazon monitoring, logs and S3 service package
+```
+
+## 3.3. BUILD_ONLY
+
+```
+# Builds only the clients you want to use.
+# monitoring, logs and S3
 $ cd build_xxx \
 	&& cmake \
 	-DCMAKE_BUILD_TYPE=Debug \
@@ -79,19 +116,48 @@ $ make
 $ make install
 ```
 
-## 2.3. [aws-doc-sdk-examples](https://github.com/awsdocs/aws-doc-sdk-examples)
+> The core SDK module, `aws-sdk-cpp-core`, is *always* built, regardless of the value of the *BUILD_ONLY* parameter.
 
 
 
-# 3. [Amazon DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStarted.html)
+# 4. [aws-doc-sdk-examples](https://github.com/awsdocs/aws-doc-sdk-examples)
 
-## 3.1. [aws_dynamo](https://github.com/devicescape/aws_dynamo) - AWS DynamoDB Library for C and C++
+## 4.1. [Getting started with the AWS SDK for C++ code examples](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/getting-started-code-examples.html)
+
+```bash
+$ git clone --recurse-submodules https://github.com/awsdocs/aws-doc-sdk-examples.git
+
+$ cd aws-doc-sdk-examples
+
+# dynamodb
+$ cd aws-doc-sdk-examples/cpp/example_code/dynamodb 
+
+# s3
+$ cd aws-doc-sdk-examples/cpp/example_code/s3 
+
+```
+
+```bash
+$ mkdir build_xxx \
+	&& cmake \
+	..
+
+```
+
+
+# 5. [Amazon DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStarted.html)
+
+## 5.1. [aws_dynamo](https://github.com/devicescape/aws_dynamo) - AWS DynamoDB Library for C and C++
 
 
 
-# 4. [AWS IoT](https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html)
+# 6. [AWS IoT](https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html)
 
-## 4.1. [aws-iot-device-sdk-cpp-v2](https://github.com/aws/aws-iot-device-sdk-cpp-v2)
+## 6.1.[aws-iot-device-sdk-embedded-C](https://github.com/aws/aws-iot-device-sdk-embedded-C)
+
+> The AWS IoT Device SDK for Embedded C (C-SDK) is a collection of C source files under the [MIT open source license](https://github.com/aws/aws-iot-device-sdk-embedded-C/blob/main/LICENSE) that can be used in embedded applications to securely connect IoT devices to [AWS IoT Core](https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html). It contains MQTT client, HTTP client, JSON Parser, AWS IoT Device Shadow, AWS IoT Jobs, and AWS IoT Device Defender libraries. 
+
+## 6.2. [aws-iot-device-sdk-cpp-v2](https://github.com/aws/aws-iot-device-sdk-cpp-v2)
 
  > The AWS IoT SDKs and the `aws-iot-device-sdk-cpp` are separate from this SDK. The AWS IoT Device SDK for C++ v2 is available at [`aws-iot-device-sdk-cpp-v2`](https://github.com/aws/aws-iot-device-sdk-cpp-v2) on GitHub.
 
