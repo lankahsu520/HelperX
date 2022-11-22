@@ -1,2 +1,3 @@
 aws-sdk-cpp-dg.pdf AWS SDK for C++ - Developer Guide
 aws-sdk-ref.pdf AWS SDKs and Tools - Reference Guide
+s3sample.cpp https://github.com/aws/aws-sdk-cpp/wiki/Building-the-SDK-from-source-on-EC2

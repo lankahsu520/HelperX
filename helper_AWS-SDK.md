@@ -17,19 +17,48 @@
 
 # 1. [AWS SDK for C++ Documentation](https://docs.aws.amazon.com/sdk-for-cpp/index.html)
 
-#### A. [Developer Guide](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/index.html)
+## 1.1. [Developer Guide](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/index.html)
 
-##### A.1. [Providing AWS credentials](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/credentials.html)
+### 1.1.1. [Providing AWS credentials](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/credentials.html)
 
 > 要使用 AWS 服務，都需要先建立憑證；步驟很複雜，先跳過再研究
 
-###### A.1.1. [Credentials Providers](https://github.com/aws/aws-sdk-cpp/blob/master/Docs/Credentials_Providers.md)
+#### A. [Credentials Providers](https://github.com/aws/aws-sdk-cpp/blob/master/Docs/Credentials_Providers.md)
 
-#### B. [API Reference](http://sdk.amazonaws.com/cpp/api/LATEST/index.html)
+##### A.1. ~/.aws/credentials
 
-#### C. [AWS SDKs and Tools Reference Guide](https://docs.aws.amazon.com/sdkref/latest/guide/index.html)
+```bash
+$ cat ~/.aws/credentials
+[default]
+aws_access_key_id = 
+aws_secret_access_key =
+```
 
-#### D. [AWS Code Examples Repository](https://github.com/awsdocs/aws-doc-sdk-examples)
+##### A.2. ~/.aws/config
+
+```bash
+$ cat ~/.aws/config
+[default]
+region = ap-northeast-1
+output = json
+```
+##### A.3. Environment
+
+```bash
+AWS_ROLE_ARN
+AWS_WEB_IDENTITY_TOKEN_FILE
+AWS_ROLE_SESSION_NAME
+
+AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
+
+AWS_EC2_METADATA_DISABLED
+```
+
+## 1.2. [API Reference](http://sdk.amazonaws.com/cpp/api/LATEST/index.html)
+
+## 1.3. [AWS SDKs and Tools Reference Guide](https://docs.aws.amazon.com/sdkref/latest/guide/index.html)
+
+## 1.4. [AWS Code Examples Repository](https://github.com/awsdocs/aws-doc-sdk-examples)
 
 # 2. [AWS Free Tier](https://aws.amazon.com/free)
 
@@ -38,6 +67,8 @@
 # 3. [AWS SDK for C++ Repository](https://github.com/aws/aws-sdk-cpp)
 
 > 使用請三思，雖然是官方提供，但是支援度和更新並不是每個功能都能完整使用或編譯。GitHub 和 AWS 官網之間的文件有差異，請小心使用。
+>
+> AWS 文件很多，很偉大！再加一句，我有閱讀 AWS 文件困難！
 
 ## 3.1. Download
 
@@ -113,7 +144,7 @@ $ cd build_xxx \
 $ cd build_xxx \
 	&& cmake \
 	-DCMAKE_BUILD_TYPE=Debug \
-	-DBUILD_ONLY="dynamodb;s3" \
+	-DBUILD_ONLY="dynamodb;iam;s3;sts" \
 	..
 ```
 
@@ -154,11 +185,11 @@ $ cd build_xxx \
 
 ```
 
+# 4. Examples
 
+## 4.1. [aws-doc-sdk-examples](https://github.com/awsdocs/aws-doc-sdk-examples)
 
-# 4. [aws-doc-sdk-examples](https://github.com/awsdocs/aws-doc-sdk-examples)
-
-## 4.1. [Getting started with the AWS SDK for C++ code examples](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/getting-started-code-examples.html)
+### 4.1.1. [Getting started with the AWS SDK for C++ code examples](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/getting-started-code-examples.html)
 
 ```bash
 $ git clone --recurse-submodules https://github.com/awsdocs/aws-doc-sdk-examples.git
@@ -179,6 +210,26 @@ $ mkdir build_xxx \
 	..
 
 ```
+
+## 4.2. [Building the SDK from source on EC2](https://github.com/aws/aws-sdk-cpp/wiki/Building-the-SDK-from-source-on-EC2)
+
+```bash
+$ ./build_xxx/s3sample
+ Usage: s3sample <region> <bucket> <object> <local destination path>
+Example: s3sample us-west-1 utilx9 demo_000.c demo_000.c_local
+
+```
+
+### 注意！注意！注意！
+
+```c
+request.WithBucket(argv[2]).WithKey(argv[3]);
+
+WithBucket: bucket name
+WithKey: object name not aws_access_key_id or aws_secret_access_key
+^^^^^^^ 不熟悉 AWS，一開始會認為是 key or pass；結果呢？ object 才對！
+```
+
 
 
 # 5. [Amazon DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStarted.html)
