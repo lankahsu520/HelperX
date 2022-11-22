@@ -190,6 +190,8 @@ $ ./onvif_client_123 -d3 -i 192.168.50.21 -p 80 -u admin -s admin -e "/onvif/dev
 
 # 4. Test with curl
 
+## 4.1. General Command
+
 #### A. git pull utilx9
 
 #### B. update your *.xml
@@ -250,6 +252,44 @@ ONVIF_AUTH="-auth"
 $ ./onvif_client.sh
 
 ```
+
+## 4.2. HTTP AUTH vs. ONVIF AUTH
+
+#### A. HTTP AUTH
+
+```bash
+$ curl -u ${USER}:${PASSWORD}
+
+$ curl --digest -u ${USER}:${PASSWORD}
+```
+
+#### B. ONVIF AUTH
+
+##### B.1.  GetNetworkInterfaces
+
+```xml
+	<SOAP-ENV:Header>
+		<Security SOAP-ENV:mustUnderstand="1" xmlns="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+			<UsernameToken>
+				<Created xmlns="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">2022-11-22T11:09:55.000Z</Created>
+				<Nonce EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary">stDcAKnbTydYuMRDCp1P7PKnzM0=</Nonce>
+				<Username>admin</Username>
+				<Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest">NV2fNdYtLbdUXftNXCssA4yc79Q=</Password>
+			</UsernameToken>
+		</Security>
+	</SOAP-ENV:Header>
+
+```
+
+
+
+## 4.3. Wireshark filter
+
+```bash
+(ip.dst == 192.168.50.21) && (tcp.port == 80 ) && http
+```
+
+
 
 # Appendix
 
