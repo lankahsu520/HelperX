@@ -25,35 +25,6 @@
 
 #### A. [Credentials Providers](https://github.com/aws/aws-sdk-cpp/blob/master/Docs/Credentials_Providers.md)
 
-##### A.1. ~/.aws/credentials
-
-```bash
-$ cat ~/.aws/credentials
-[default]
-aws_access_key_id = 
-aws_secret_access_key =
-```
-
-##### A.2. ~/.aws/config
-
-```bash
-$ cat ~/.aws/config
-[default]
-region = ap-northeast-1
-output = json
-```
-##### A.3. Environment
-
-```bash
-AWS_ROLE_ARN
-AWS_WEB_IDENTITY_TOKEN_FILE
-AWS_ROLE_SESSION_NAME
-
-AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
-
-AWS_EC2_METADATA_DISABLED
-```
-
 ## 1.2. [API Reference](http://sdk.amazonaws.com/cpp/api/LATEST/index.html)
 
 ## 1.3. [AWS SDKs and Tools Reference Guide](https://docs.aws.amazon.com/sdkref/latest/guide/index.html)
@@ -62,15 +33,23 @@ AWS_EC2_METADATA_DISABLED
 
 # 2. [AWS Free Tier](https://aws.amazon.com/free)
 
-> 憑證，很複雜！很複雜！很複雜！很複雜！很複雜！
+> 憑證，很複雜！很複雜！很複雜！
 
-# 3. [AWS SDK for C++ Repository](https://github.com/aws/aws-sdk-cpp)
+# 3. [AWS Command Line Interface](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-chap-welcome.html)
+
+## 3.1. [helper_AWS-CLI.md](./helper_AWS-CLI.md)
+
+>AWS 的文件有千萬篇（有些描述真的過於冗長，這就是我為什麼一直要寫文件，把事情簡單化），可是卻沒有說明當程式編譯完後，執行程式時要如何引用憑證。
+>
+>其實我也是遶了一大圈，最後得到一個結果 “AWS CLI” 可以正常執行，偉大的 SDK & examples 就可以執行。
+
+# 4. [AWS SDK for C++ Repository](https://github.com/aws/aws-sdk-cpp)
 
 > 使用請三思，雖然是官方提供，但是支援度和更新並不是每個功能都能完整使用或編譯。GitHub 和 AWS 官網之間的文件有差異，請小心使用。
 >
 > AWS 文件很多，很偉大！再加一句，我有閱讀 AWS 文件困難！
 
-## 3.1. Download
+## 4.1. Download
 
 ```bash
 $ git clone --recurse-submodules https://github.com/aws/aws-sdk-cpp
@@ -91,9 +70,9 @@ $ ./prefetch_crt_dependency.sh
 
 > The AWS SDK for C++ has a dependency on cJSON. This dependency was updated to version 1.7.14 in the recent SDK updates. We would recommend to upgrade your SDK to version 1.9.67 for 1.9.x or 1.8.187 for 1.8.x. Thank @dkalinowski for reporting this issue: #1594
 
-### 3.1.1. code-generation/api-descriptions/*.json
+### 4.1.1. code-generation/api-descriptions/*.json
 
-### 3.1.2. [General CMake Variables and Options](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/cmake-params.html)
+### 4.1.2. [General CMake Variables and Options](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/cmake-params.html)
 
 ```cmake
 ADD_CUSTOM_CLIENTS
@@ -119,9 +98,9 @@ TARGET_ARCH
 USE_OPENSSL
 ```
 
-## 3.2. Building the SDK
+## 4.2. Building the SDK
 
-### 3.2.1. Cmake build options
+### 4.2.1. Cmake build options
 
 #### A. All services
 
@@ -175,7 +154,7 @@ cd $(SOURCE) \
 
 ```
 
-### 3.2.2. Build
+### 4.2.2. Build
 
 ```bash
 $ cd build_xxx \
@@ -185,11 +164,11 @@ $ cd build_xxx \
 
 ```
 
-# 4. Examples
+# 5. Examples
 
-## 4.1. [aws-doc-sdk-examples](https://github.com/awsdocs/aws-doc-sdk-examples)
+## 5.1. [aws-doc-sdk-examples](https://github.com/awsdocs/aws-doc-sdk-examples)
 
-### 4.1.1. [Getting started with the AWS SDK for C++ code examples](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/getting-started-code-examples.html)
+### 5.1.1. [Getting started with the AWS SDK for C++ code examples](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/getting-started-code-examples.html)
 
 ```bash
 $ git clone --recurse-submodules https://github.com/awsdocs/aws-doc-sdk-examples.git
@@ -211,9 +190,9 @@ $ mkdir build_xxx \
 
 ```
 
-# 5. S3
+# 6. S3
 
-## 5.1. [Building the SDK from source on EC2](https://github.com/aws/aws-sdk-cpp/wiki/Building-the-SDK-from-source-on-EC2)
+## 6.1. [Building the SDK from source on EC2](https://github.com/aws/aws-sdk-cpp/wiki/Building-the-SDK-from-source-on-EC2)
 
 ```bash
 $ ./build_xxx/s3sample
@@ -232,19 +211,17 @@ WithKey: object name not aws_access_key_id or aws_secret_access_key
 ^^^^^^^ 不熟悉 AWS，一開始會認為是 key or pass；結果呢？ object 才對！
 ```
 
-# 6. [Amazon DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStarted.html)
+# 7. [Amazon DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStarted.html)
 
-## 6.1. [aws_dynamo](https://github.com/devicescape/aws_dynamo) - AWS DynamoDB Library for C and C++
+## 7.1. [aws_dynamo](https://github.com/devicescape/aws_dynamo) - AWS DynamoDB Library for C and C++
 
+# 8. [AWS IoT](https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html)
 
-
-# 7. [AWS IoT](https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html)
-
-## 7.1.[aws-iot-device-sdk-embedded-C](https://github.com/aws/aws-iot-device-sdk-embedded-C)
+## 8.1. [aws-iot-device-sdk-embedded-C](https://github.com/aws/aws-iot-device-sdk-embedded-C)
 
 > The AWS IoT Device SDK for Embedded C (C-SDK) is a collection of C source files under the [MIT open source license](https://github.com/aws/aws-iot-device-sdk-embedded-C/blob/main/LICENSE) that can be used in embedded applications to securely connect IoT devices to [AWS IoT Core](https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html). It contains MQTT client, HTTP client, JSON Parser, AWS IoT Device Shadow, AWS IoT Jobs, and AWS IoT Device Defender libraries. 
 
-## 7.2. [aws-iot-device-sdk-cpp-v2](https://github.com/aws/aws-iot-device-sdk-cpp-v2)
+## 8.2. [aws-iot-device-sdk-cpp-v2](https://github.com/aws/aws-iot-device-sdk-cpp-v2)
 
  > The AWS IoT SDKs and the `aws-iot-device-sdk-cpp` are separate from this SDK. The AWS IoT Device SDK for C++ v2 is available at [`aws-iot-device-sdk-cpp-v2`](https://github.com/aws/aws-iot-device-sdk-cpp-v2) on GitHub.
 
