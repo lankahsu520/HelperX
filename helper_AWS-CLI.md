@@ -86,9 +86,9 @@ $ aws <command> <subcommand> help
 
 ```bash
 $ aws s3 ls
-$ aws s3 ls s3://intercom-storage
+$ aws s3 ls s3://utilx9
 
-$ aws s3 cp s3://intercom-storage/rootfs_kvs_20220111.tar.gz ./
+$ aws s3 cp s3://utilx9/demo_000.c ./
 ```
 
 ## 3.2. [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html) - [AWS Management Console](https://ap-northeast-1.console.aws.amazon.com/dynamodbv2/home?region=ap-northeast-1#dashboard)
