@@ -34,7 +34,6 @@ AWS Access Key ID [None]:
 AWS Secret Access Key [None]: 
 Default region name [None]:ap-northeast-1
 Default output format [None]:json
-
 ```
 #### A. AWS_SHARED_CREDENTIALS_FILE - ~/.aws/credentials
 
@@ -52,7 +51,7 @@ aws_secret_access_key =
 ```bash
 $ echo $AWS_CONFIG_FILE
 
-$  cat ~/.aws/config
+$ cat ~/.aws/config
 [default]
 region = ap-northeast-1
 output = json
@@ -70,32 +69,88 @@ AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
 AWS_EC2_METADATA_DISABLED
 ```
 
-# 3. Commands
+# 3. aws Usage
 
 ```bash
 $ aws --version
+aws-cli/2.4.13 Python/3.8.8 Linux/5.15.0-52-generic exe/x86_64.ubuntu.20 prompt/off
 
-$ aws <command> <subcommand> [options and parameters]
+$ aws
+
+usage: aws [options] <command> <subcommand> [<subcommand> ...] [parameters]
+To see help text, you can run:
+
+  aws help
+  aws <command> help
+  aws <command> <subcommand> help
+
+aws: error: the following arguments are required: command
 
 $ aws help
 $ aws <command> help
 $ aws <command> <subcommand> help
 ```
 
-## 3.1. s3
+# 4. S3
+
+## 4.1. [S3 Dashboard](https://s3.console.aws.amazon.com/s3/buckets?region=eu-west-1)
+
+## 4.2. aws s3 xxx
+
+#### [cp](https://docs.aws.amazon.com/cli/latest/reference/s3/cp.html)
+
+>#### copies a single file to a specified bucket and key
+
+```bash
+$ aws s3 cp s3://utilx9/demo_000.c ./
+$ aws s3 demo_000.c cp s3://utilx9
+```
+
+```bash
+# to create a folder - demo
+$ aws s3 demo_000.c cp s3://utilx9/demo/demo_000.c
+```
+
+#### [ls](https://docs.aws.amazon.com/cli/latest/reference/s3/ls.html)
+
+>copies a single file to a specified bucket and key
 
 ```bash
 $ aws s3 ls
 $ aws s3 ls s3://utilx9
-
-$ aws s3 cp s3://utilx9/demo_000.c ./
 ```
 
-## 3.2. [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html) - [AWS Management Console](https://ap-northeast-1.console.aws.amazon.com/dynamodbv2/home?region=ap-northeast-1#dashboard)
+#### [mb](https://docs.aws.amazon.com/cli/latest/reference/s3/mb.html)
 
-#### A. create-table
+>creates a bucket
 
-##### A.1. command
+```bash
+$ aws s3 mb s3://HelperX
+```
+
+#### [rb](https://docs.aws.amazon.com/cli/latest/reference/s3/rb.html)
+
+>removes a bucket
+
+```bash
+$ aws s3 rb s3://HelperX
+```
+
+#### [rm](https://docs.aws.amazon.com/cli/latest/reference/s3/rm.html)
+
+>deletes a single s3 object
+
+```bash
+$ aws s3 rm s3://utilx9/demo_000.c
+```
+
+# 4. [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html)
+
+## 4.1. [DynamoDB Dashboard](https://eu-west-1.console.aws.amazon.com/dynamodbv2/home?region=eu-west-1#service)
+
+## 4.2. aws dynamodb xxx
+
+#### create-table
 
 ```bash
 $ aws dynamodb create-table \
@@ -110,7 +165,6 @@ $ aws dynamodb create-table \
         ReadCapacityUnits=5,WriteCapacityUnits=5 \
     --table-class STANDARD
 ```
-##### A.2. response
 ```
 {
     "TableDescription": {
@@ -156,22 +210,16 @@ $ aws dynamodb create-table \
 ```
 An error occurred (ResourceInUseException) when calling the CreateTable operation: Table already exists: Music
 ```
-#### B. describe-table
-
-##### B.1. command
+#### describe-table
 
 ```bash
 $ aws dynamodb describe-table --table-name Music | grep TableStatus
 ```
 
-##### B.2. response
-
 ```
 "TableStatus": "ACTIVE",
 ```
-#### C. put-item
-
-##### C.1. command
+#### put-item
 
 ```bash
 $ aws dynamodb execute-statement --statement "INSERT INTO Music  \
@@ -191,8 +239,6 @@ $ aws dynamodb execute-statement --statement "INSERT INTO Music  \
                 {'Artist':'Acme Band','SongTitle':'PartiQL Rocks', 'AlbumTitle':'Another Album Title', 'Awards':'8'}"
 ```
 
-##### C.2. response
-
 ```
 {
     "Items": []
@@ -202,17 +248,13 @@ $ aws dynamodb execute-statement --statement "INSERT INTO Music  \
 ```
 An error occurred (DuplicateItemException) when calling the ExecuteStatement operation: Duplicate primary key exists in table
 ```
-#### D. get-item
-
-##### D.1. command
+#### get-item
 
 ```bash
 $ aws dynamodb get-item --consistent-read \
     --table-name Music \
     --key '{ "Artist": {"S": "Acme Band"}, "SongTitle": {"S": "Happy Day"}}'
 ```
-
-##### D.2. response
 
 ```
 {
@@ -233,15 +275,11 @@ $ aws dynamodb get-item --consistent-read \
 }
 ```
 
-#### E. scan
-
-##### E.1. command
+#### scan
 
 ```bash
 $ aws dynamodb scan --table-name Music
 ```
-
-##### E.2. response
 
 ```
 {

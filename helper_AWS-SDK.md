@@ -30,8 +30,6 @@ $ cat ~/.aws/credentials
 $ cat ~/.aws/config
 ```
 
-
-
 ## 1.2. [API Reference](http://sdk.amazonaws.com/cpp/api/LATEST/index.html)
 
 ## 1.3. [AWS SDKs and Tools Reference Guide](https://docs.aws.amazon.com/sdkref/latest/guide/index.html)
@@ -48,7 +46,7 @@ $ cat ~/.aws/config
 
 >AWS 的文件有千萬篇（有些描述真的過於冗長，這就是我為什麼一直要寫文件，把事情簡單化），可是卻沒有說明當程式編譯完後，執行程式時要如何引用憑證。
 
-aws-doc-sdk-examples/[README.md](https://github.com/awsdocs/aws-doc-sdk-examples/blob/main/README.md)
+[aws-doc-sdk-examples/README.md](https://github.com/awsdocs/aws-doc-sdk-examples/blob/main/README.md)
 
 >其實我也是遶了一大圈，最後得到一個結果 “AWS CLI” 可以正常執行，偉大的 SDK & examples 就可以執行。
 
@@ -128,7 +126,7 @@ $ cd build_xxx \
 
 ```bash
 # Builds only the clients you want to use.
-# monitoring, logs and S3
+# dynamodb, iam, S3 and sts
 $ cd build_xxx \
 	&& cmake \
 	-DCMAKE_BUILD_TYPE=Debug \
@@ -173,11 +171,9 @@ $ cd build_xxx \
 
 ```
 
-# 5. Examples
+# 5. [aws-doc-sdk-examples](https://github.com/awsdocs/aws-doc-sdk-examples)
 
-## 5.1. [aws-doc-sdk-examples](https://github.com/awsdocs/aws-doc-sdk-examples)
-
-### 5.1.1. [Getting started with the AWS SDK for C++ code examples](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/getting-started-code-examples.html)
+## 5.1. [Getting started with the AWS SDK for C++ code examples](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/getting-started-code-examples.html)
 
 ```bash
 $ git clone --recurse-submodules https://github.com/awsdocs/aws-doc-sdk-examples.git
@@ -199,45 +195,262 @@ $ mkdir build_xxx \
 
 ```
 
-### 5.1.2. run_???
-
 >## Invoke example code
 >
 >To invoke this example code, you must have an AWS account. For more information about creating an account, see [AWS Free Tier](https://aws.amazon.com/free/).
 >
 >You must also have AWS credentials configured. For steps on using the AWS Command Line Interface (AWS CLI) to configure credentials, see [CLI Configuration basics](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html)
 
-#### A. dynamodb
+## 5.2. DynamoDB applications
 
 ```bash
-$ run_get_item Music Artist 'Acme Band' SongTitle 'Happy Day'
+$ ls -al aws-doc-sdk-examples/cpp/example_code/dynamodb/*
+```
+
+#### [describe_table.cpp](./AWS/patches/dynamodb/describe_table.cpp)
+
+```bash
+$ ./describe_table
+Usage:
+    describe_table <region> <table>
+
+Where:
+    table - the table to describe.
+```
+```bash
+$ ./describe_table ap-northeast-1 Music
+ribe_table ap-northeast-1 Music
+Table name  : Music
+Table ARN   : arn:aws:dynamodb:ap-northeast-1:877409152866:table/Music
+Status      : ACTIVE
+Item count  : 4
+Size (bytes): 285
+Throughput
+  Read Capacity : 5
+  Write Capacity: 5
+Attributes
+  Artist (S)
+  SongTitle (S)
+```
+
+#### [delete_item.cpp](./AWS/patches/dynamodb/delete_item.cpp)
+
+```bash
+$ ./run_delete_item
+Usage:
+    DeleteItem <table> <Artist-keyValue> <SongTitle-keyValue>
+
+Where:
+    table - the table to delete the item from.
+    Artist-keyValue - the key value to update
+    SongTitle-keyValue - the key value to update
+Example:
+    DeleteItem Music Lanka Lanka520520
+
+**Warning** This program will actually delete the item that you specify!
+```
+```bash
+$ ./run_delete_item Music Lanka Lanka520520
+Deleting item Artist: "Lanka", SongTitle: "Lanka520520" from table Music
+Artist "Lanka", SongTitle: "Lanka520520" deleted!
+```
+
+#### [get_item.cpp](./AWS/patches/dynamodb/get_item.cpp)
+
+```bash
+Failed to get item: The provided key element does not match the schema
+
+Attributes
+  Artist (S)
+  SongTitle (S)
+
+需要完整輸入，Partition key (Artist) 和 Sort key (SongTitle)；
+原本的程式只有 Partition key (Artist)。
+```
+
+```bash
+$ ./run_get_item
+Usage: <tableName> <pk> <pkval> <sk> <skval>
+Where:
+    tableName - the Amazon DynamoDB table from which an item is retrieved (for example, Music).
+    pk - the key used in the Amazon DynamoDB table (for example, Artist).
+    pkval - the key value that represents the item to get (for example, Acme Band).
+    sk - the key used in the Amazon DynamoDB table (for example, SongTitle).
+    skval - the key value that represents the item to get (for example, Happy Day).
+```
+```bash
+$ ./run_get_item Music Artist 'Acme Band' SongTitle 'Happy Day'
 Values: AlbumTitle: Songs About Life
 Values: Artist: Acme Band
 Values: Awards: 10
 Values: SongTitle: Happy Day
-
 ```
 
-
-
-#### B. S3
+#### list_tables.cpp
 
 ```bash
-$ run_list_buckets
+$ ./run_list_tables
+Your DynamoDB Tables:
+Music
+```
+
+#### put_item.cpp
+
+```bash
+$ ./run_put_item
+Usage:
+    <tableName> <key> <keyVal> <albumtitle> <albumtitleval> <awards> <awardsval> <Songtitle> <songtitleval>
+
+Where:
+    tableName - the Amazon DynamoDB table in which an item is placed (for example, Music3).
+    key - the key used in the Amazon DynamoDB table (for example, Artist).
+    keyval - the key value that represents the item to get (for example, Famous Band).
+    albumTitle - album title (for example, AlbumTitle).
+    AlbumTitleValue - the name of the album (for example, Songs About Life ).
+    Awards - the awards column (for example, Awards).
+    AwardVal - the value of the awards (for example, 10).
+    SongTitle - the song title (for example, SongTitle).
+    SongTitleVal - the value of the song title (for example, Happy Day).
+**Warning** This program will  place an item that you specify into a table!
+```
+```bash
+$ ./run_put_item Music \
+	Artist 'Lanka' \
+	AlbumTitle "Lanka520" \
+	Awards "1" \
+	SongTitle "Lanka520520"
+Successfully added Item!
+```
+
+#### query_items.cpp
+
+```bash
+$ ./run_query_items
+Usage:
+    query_items <table> <partitionKeyAttributeName>=<partitionKeyValue> [projection_expression]
+
+Where:
+    table - the table to get an item from.
+    partitionKeyAttributeName  - Partition Key attribute of the table.
+    partitionKeyValue  - Partition Key value to query.
+
+Example:
+    query_items HelloTable Name=Namaste
+    query_items Players FirstName=Mike
+    query_items SiteColors Background=white "default, bold"
+```
+```bash
+$ ./run_query_items Music Artist='No One You Know'
+Number of items retrieved from Query: 2
+******************************************************
+AlbumTitle: Somewhat Famous
+Artist: No One You Know
+Awards: 1
+SongTitle: Call Me Today
+******************************************************
+AlbumTitle: Somewhat Famous
+Artist: No One You Know
+Awards: 2
+SongTitle: Howdy
+```
+
+#### scan_table.cpp
+
+```bash
+$ ./run_scan_table
+Usage:
+    scan_table <table> [projection_expression]
+
+Where:
+    table - the table to Scan.
+
+You can add an optional projection expression (a quote-delimited,
+comma-separated list of attributes to retrieve) to limit the
+fields returned from the table.
+
+Example:
+    scan_table HelloTable
+    scan_table SiteColors "default, bold"
+```
+
+```bash
+$ ./run_scan_table Music
+Number of items retrieved from scan: 5
+******************************************************
+AlbumTitle: Somewhat Famous
+Artist: No One You Know
+Awards: 1
+SongTitle: Call Me Today
+******************************************************
+AlbumTitle: Somewhat Famous
+Artist: No One You Know
+Awards: 2
+SongTitle: Howdy
+******************************************************
+AlbumTitle: Lanka520
+Artist: Lanka
+Awards: 1
+SongTitle: Lanka520520
+******************************************************
+AlbumTitle: Songs About Life
+Artist: Acme Band
+Awards: 10
+SongTitle: Happy Day
+******************************************************
+AlbumTitle: Another Album Title
+Artist: Acme Band
+Awards: 8
+SongTitle: PartiQL Rocks
+```
+
+#### [update_item.cpp](./AWS/patches/dynamodb/update_item.cpp)
+
+```bash
+$ ./run_update_item
+Usage:
+    update_item <tableName> <Artist-keyValue> <Artist-keyValue> <SongTitle-keyValue> <attribute=value> ..
+
+Where:
+    tableName       - name of the table to put the item in
+    Artist-keyValue - the key value to update
+    SongTitle-keyValue - the key value to update
+    attribute=value - attribute=updated value
+
+Examples:
+    update_item Music Lanka Lanka520520 AlbumTitle=Lanka520twice
+```
+```bash
+$ ./run_update_item Music Lanka Lanka520520 AlbumTitle=Lanka520twice
+Item was updated
+```
+
+## 5.3. S3 applications
+
+```bash
+$ ls -al aws-doc-sdk-examples/cpp/example_code/s3/*
+```
+
+#### list_buckets.cpp
+
+```bash
+$ ./run_list_buckets
+Found 2 buckets
+HelperX
+utilx9
 ```
 
 # 6. S3
 
-## 6.1. [Building the SDK from source on EC2](https://github.com/aws/aws-sdk-cpp/wiki/Building-the-SDK-from-source-on-EC2)
+## 6.1. [Building the SDK from source on EC2](https://github.com/aws/aws-sdk-cpp/wiki/Building-the-SDK-from-source-on-EC2) - [s3sample.cpp](./AWS/patches/s3/s3sample.cpp)
 
 ```bash
-$ ./build_xxx/s3sample
+$ s3sample
  Usage: s3sample <region> <bucket> <object> <local destination path>
-Example: s3sample eu-west-1 utilx9 demo_000.c demo_000.c_local
+Example: s3sample ap-northeast-1 st-1 utilx9 demo_000.c demo_000.c_local
 
 ```
 
-### 注意！注意！注意！
+##### 注意！注意！注意！
 
 ```c
 request.WithBucket(argv[2]).WithKey(argv[3]);
@@ -245,6 +458,7 @@ request.WithBucket(argv[2]).WithKey(argv[3]);
 WithBucket: bucket name
 WithKey: object name not aws_access_key_id or aws_secret_access_key
 ^^^^^^^ 不熟悉 AWS，一開始會認為是 key or pass；結果呢？ object 才對！
+只能說我不懂 AWS 的 nameing rules。
 ```
 
 # 7.  [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html) - [AWS Management Console](https://ap-northeast-1.console.aws.amazon.com/dynamodbv2/home?region=ap-northeast-1#dashboard)
@@ -260,8 +474,6 @@ WithKey: object name not aws_access_key_id or aws_secret_access_key
 ## 8.2. [aws-iot-device-sdk-cpp-v2](https://github.com/aws/aws-iot-device-sdk-cpp-v2)
 
  > The AWS IoT SDKs and the `aws-iot-device-sdk-cpp` are separate from this SDK. The AWS IoT Device SDK for C++ v2 is available at [`aws-iot-device-sdk-cpp-v2`](https://github.com/aws/aws-iot-device-sdk-cpp-v2) on GitHub.
-
-
 
 # Appendix
 

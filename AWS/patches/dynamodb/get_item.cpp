@@ -32,16 +32,16 @@
 
 int main(int argc, char** argv)
 {
-    const std::string USAGE = "\n" \
-        "Usage: <tableName> <pk> <pkval> <sk> <skval>\n" 
-        "Where:\n" 
+    const std::string USAGE = "\n"
+        "Usage: <tableName> <pk> <pkval> <sk> <skval>\n"
+        "Where:\n"
         "    tableName - the Amazon DynamoDB table from which an item is retrieved (for example, Music). \n"
-        "    pk - the key used in the Amazon DynamoDB table (for example, Artist). \n" 
-        "    pkval - the key value that represents the item to get (for example, Acme Band).\n";
-        "    sk - the key used in the Amazon DynamoDB table (for example, SongTitle). \n" 
+        "    pk - the key used in the Amazon DynamoDB table (for example, Artist). \n"
+        "    pkval - the key value that represents the item to get (for example, Acme Band).\n"
+        "    sk - the key used in the Amazon DynamoDB table (for example, SongTitle). \n"
         "    skval - the key value that represents the item to get (for example, Happy Day).\n";
 
-    if (argc < 3)
+    if (argc < 6)
     {
         std::cout << USAGE;
         return 1;
