@@ -25,6 +25,13 @@
 
 #### A. [Credentials Providers](https://github.com/aws/aws-sdk-cpp/blob/master/Docs/Credentials_Providers.md)
 
+```bash
+$ cat ~/.aws/credentials
+$ cat ~/.aws/config
+```
+
+
+
 ## 1.2. [API Reference](http://sdk.amazonaws.com/cpp/api/LATEST/index.html)
 
 ## 1.3. [AWS SDKs and Tools Reference Guide](https://docs.aws.amazon.com/sdkref/latest/guide/index.html)
@@ -40,7 +47,9 @@
 ## 3.1. [helper_AWS-CLI.md](./helper_AWS-CLI.md)
 
 >AWS 的文件有千萬篇（有些描述真的過於冗長，這就是我為什麼一直要寫文件，把事情簡單化），可是卻沒有說明當程式編譯完後，執行程式時要如何引用憑證。
->
+
+aws-doc-sdk-examples/[README.md](https://github.com/awsdocs/aws-doc-sdk-examples/blob/main/README.md)
+
 >其實我也是遶了一大圈，最後得到一個結果 “AWS CLI” 可以正常執行，偉大的 SDK & examples 就可以執行。
 
 # 4. [AWS SDK for C++ Repository](https://github.com/aws/aws-sdk-cpp)
@@ -117,7 +126,7 @@ $ cd build_xxx \
 
 #### B. BUILD_ONLY
 
-```
+```bash
 # Builds only the clients you want to use.
 # monitoring, logs and S3
 $ cd build_xxx \
@@ -131,7 +140,7 @@ $ cd build_xxx \
 
 #### C. Myself
 
-```bash
+```makefile
 CMAKE_FLAGS += \
 		-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 		-DBUILD_ONLY="dynamodb;iam;s3;sts"
@@ -190,6 +199,33 @@ $ mkdir build_xxx \
 
 ```
 
+### 5.1.2. run_???
+
+>## Invoke example code
+>
+>To invoke this example code, you must have an AWS account. For more information about creating an account, see [AWS Free Tier](https://aws.amazon.com/free/).
+>
+>You must also have AWS credentials configured. For steps on using the AWS Command Line Interface (AWS CLI) to configure credentials, see [CLI Configuration basics](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html)
+
+#### A. dynamodb
+
+```bash
+$ run_get_item Music Artist 'Acme Band' SongTitle 'Happy Day'
+Values: AlbumTitle: Songs About Life
+Values: Artist: Acme Band
+Values: Awards: 10
+Values: SongTitle: Happy Day
+
+```
+
+
+
+#### B. S3
+
+```bash
+$ run_list_buckets
+```
+
 # 6. S3
 
 ## 6.1. [Building the SDK from source on EC2](https://github.com/aws/aws-sdk-cpp/wiki/Building-the-SDK-from-source-on-EC2)
@@ -197,7 +233,7 @@ $ mkdir build_xxx \
 ```bash
 $ ./build_xxx/s3sample
  Usage: s3sample <region> <bucket> <object> <local destination path>
-Example: s3sample us-west-1 utilx9 demo_000.c demo_000.c_local
+Example: s3sample eu-west-1 utilx9 demo_000.c demo_000.c_local
 
 ```
 
@@ -211,7 +247,7 @@ WithKey: object name not aws_access_key_id or aws_secret_access_key
 ^^^^^^^ 不熟悉 AWS，一開始會認為是 key or pass；結果呢？ object 才對！
 ```
 
-# 7. [Amazon DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStarted.html)
+# 7.  [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html) - [AWS Management Console](https://ap-northeast-1.console.aws.amazon.com/dynamodbv2/home?region=ap-northeast-1#dashboard)
 
 ## 7.1. [aws_dynamo](https://github.com/devicescape/aws_dynamo) - AWS DynamoDB Library for C and C++
 
