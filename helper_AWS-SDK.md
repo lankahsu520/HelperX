@@ -215,6 +215,7 @@ Usage:
     describe_table <region> <table>
 
 Where:
+		region - region.
     table - the table to describe.
 ```
 ```bash
@@ -238,7 +239,7 @@ Attributes
 ```bash
 $ ./run_delete_item
 Usage:
-    DeleteItem <table> <Artist-keyValue> <SongTitle-keyValue>
+    delete_item <table> <Artist-keyValue> <SongTitle-keyValue>
 
 Where:
     table - the table to delete the item from.
@@ -270,7 +271,7 @@ Attributes
 
 ```bash
 $ ./run_get_item
-Usage: <tableName> <pk> <pkval> <sk> <skval>
+Usage: get_item <tableName> <pk> <pkval> <sk> <skval>
 Where:
     tableName - the Amazon DynamoDB table from which an item is retrieved (for example, Music).
     pk - the key used in the Amazon DynamoDB table (for example, Artist).
@@ -408,7 +409,7 @@ SongTitle: PartiQL Rocks
 ```bash
 $ ./run_update_item
 Usage:
-    update_item <tableName> <Artist-keyValue> <Artist-keyValue> <SongTitle-keyValue> <attribute=value> ..
+    update_item <tableName> <Artist-keyValue> <Artist-keyValue> <SongTitle-keyValue> <attribute=value>
 
 Where:
     tableName       - name of the table to put the item in

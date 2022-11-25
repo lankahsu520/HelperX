@@ -34,6 +34,7 @@ int main(int argc, char** argv)
         "Usage:\n"
         "    describe_table <region> <table>\n\n"
         "Where:\n"
+        "    region - region.\n"
         "    table - the table to describe.\n";
 
     if (argc < 3)

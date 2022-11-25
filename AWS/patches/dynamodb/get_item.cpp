@@ -29,11 +29,10 @@
    For information, see this documentation topic:
    https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/getting-started.html
 */
-
 int main(int argc, char** argv)
 {
     const std::string USAGE = "\n"
-        "Usage: <tableName> <pk> <pkval> <sk> <skval>\n"
+        "Usage: get_item <tableName> <pk> <pkval> <sk> <skval>\n"
         "Where:\n"
         "    tableName - the Amazon DynamoDB table from which an item is retrieved (for example, Music). \n"
         "    pk - the key used in the Amazon DynamoDB table (for example, Artist). \n"
