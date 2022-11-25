@@ -27,15 +27,16 @@
    For information, see this documentation topic:
    https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/getting-started.html
 */
-
 int main(int argc, char** argv)
 {
-    const Aws::String USAGE = "\n"
+    const Aws::String USAGE =
         "Usage:\n"
-        "    describe_table <region> <table>\n\n"
+        "    run_describe_table <region> <table>\n"
         "Where:\n"
         "    region - region.\n"
-        "    table - the table to describe.\n";
+        "    table - the table to describe.\n"
+        "Examples:\n"
+        "    run_describe_table ap-northeast-1 Music\n";
 
     if (argc < 3)
     {

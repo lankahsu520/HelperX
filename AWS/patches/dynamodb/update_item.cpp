@@ -41,16 +41,16 @@
  */
 int main(int argc, char** argv)
 {
-    const std::string USAGE = "\n"
+    const std::string USAGE =
         "Usage:\n"
-        "    update_item <tableName> <Artist-keyValue> <SongTitle-keyValue> <attribute=value>\n\n"
+        "    run_update_item <tableName> <Artist-keyValue> <SongTitle-keyValue> <attribute=value>\n"
         "Where:\n"
         "    tableName       - name of the table to put the item in\n"
         "    Artist-keyValue - the key value to update\n"
         "    SongTitle-keyValue - the key value to update\n"
-        "    attribute=value - attribute=updated value\n\n"
+        "    attribute=value - attribute=updated value\n"
         "Examples:\n"
-        "    update_item Music Lanka Lanka520520 AlbumTitle=Lanka520twice\n\n";
+        "    run_update_item Music Lanka Lanka520520 AlbumTitle=Lanka520twice\n";
 
     if (argc < 5)
     {

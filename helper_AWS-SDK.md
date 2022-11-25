@@ -210,16 +210,17 @@ $ ls -al aws-doc-sdk-examples/cpp/example_code/dynamodb/*
 #### [describe_table.cpp](./AWS/patches/dynamodb/describe_table.cpp)
 
 ```bash
-$ ./describe_table
+$ run_describe_table
 Usage:
-    describe_table <region> <table>
-
+    run_describe_table <region> <table>
 Where:
-		region - region.
+    region - region.
     table - the table to describe.
+Examples:
+    run_describe_table ap-northeast-1 Music
 ```
 ```bash
-$ ./describe_table ap-northeast-1 Music
+$ run_describe_table ap-northeast-1 Music
 ribe_table ap-northeast-1 Music
 Table name  : Music
 Table ARN   : arn:aws:dynamodb:ap-northeast-1:877409152866:table/Music
@@ -237,21 +238,19 @@ Attributes
 #### [delete_item.cpp](./AWS/patches/dynamodb/delete_item.cpp)
 
 ```bash
-$ ./run_delete_item
+$ run_delete_item
 Usage:
-    delete_item <table> <Artist-keyValue> <SongTitle-keyValue>
-
+    run_delete_item <tableName> <Artist-keyValue> <SongTitle-keyValue>
 Where:
-    table - the table to delete the item from.
+    tableName - the table to delete the item from.
     Artist-keyValue - the key value to update
     SongTitle-keyValue - the key value to update
 Example:
-    DeleteItem Music Lanka Lanka520520
-
+    run_delete_item Music Lanka Lanka520520
 **Warning** This program will actually delete the item that you specify!
 ```
 ```bash
-$ ./run_delete_item Music Lanka Lanka520520
+$ run_delete_item Music Lanka Lanka520520
 Deleting item Artist: "Lanka", SongTitle: "Lanka520520" from table Music
 Artist "Lanka", SongTitle: "Lanka520520" deleted!
 ```
@@ -270,21 +269,27 @@ Attributes
 ```
 
 ```bash
-$ ./run_get_item
-Usage: get_item <tableName> <pk> <pkval> <sk> <skval>
+$ run_get_item
+Usage:
+    run_get_item <tableName> <pk> <pkval> <sk> <skval>
 Where:
     tableName - the Amazon DynamoDB table from which an item is retrieved (for example, Music).
     pk - the key used in the Amazon DynamoDB table (for example, Artist).
     pkval - the key value that represents the item to get (for example, Acme Band).
     sk - the key used in the Amazon DynamoDB table (for example, SongTitle).
     skval - the key value that represents the item to get (for example, Happy Day).
+Examples:
+    run_get_item Music Artist Lanka SongTitle Lanka520520
 ```
 ```bash
-$ ./run_get_item Music Artist 'Acme Band' SongTitle 'Happy Day'
+$ run_get_item Music Artist 'Acme Band' SongTitle 'Happy Day'
 Values: AlbumTitle: Songs About Life
 Values: Artist: Acme Band
 Values: Awards: 10
 Values: SongTitle: Happy Day
+
+$ run_get_item Music Artist 'Lanka' SongTitle 'Lanka520520'
+No item found with the key Artist
 ```
 
 #### list_tables.cpp
@@ -298,7 +303,7 @@ Music
 #### put_item.cpp
 
 ```bash
-$ ./run_put_item
+$ run_put_item
 Usage:
     <tableName> <key> <keyVal> <albumtitle> <albumtitleval> <awards> <awardsval> <Songtitle> <songtitleval>
 
@@ -315,7 +320,7 @@ Where:
 **Warning** This program will  place an item that you specify into a table!
 ```
 ```bash
-$ ./run_put_item Music \
+$ run_put_item Music \
 	Artist 'Lanka' \
 	AlbumTitle "Lanka520" \
 	Awards "1" \
@@ -326,7 +331,7 @@ Successfully added Item!
 #### query_items.cpp
 
 ```bash
-$ ./run_query_items
+$ run_query_items
 Usage:
     query_items <table> <partitionKeyAttributeName>=<partitionKeyValue> [projection_expression]
 
@@ -375,7 +380,7 @@ Example:
 ```
 
 ```bash
-$ ./run_scan_table Music
+$ run_scan_table Music
 Number of items retrieved from scan: 5
 ******************************************************
 AlbumTitle: Somewhat Famous
@@ -407,21 +412,19 @@ SongTitle: PartiQL Rocks
 #### [update_item.cpp](./AWS/patches/dynamodb/update_item.cpp)
 
 ```bash
-$ ./run_update_item
+$ run_update_item
 Usage:
-    update_item <tableName> <Artist-keyValue> <Artist-keyValue> <SongTitle-keyValue> <attribute=value>
-
+    run_update_item <tableName> <Artist-keyValue> <Artist-keyValue> <SongTitle-keyValue> <attribute=value>
 Where:
     tableName       - name of the table to put the item in
     Artist-keyValue - the key value to update
     SongTitle-keyValue - the key value to update
     attribute=value - attribute=updated value
-
 Examples:
-    update_item Music Lanka Lanka520520 AlbumTitle=Lanka520twice
+    run_update_item Music Lanka Lanka520520 AlbumTitle=Lanka520twice
 ```
 ```bash
-$ ./run_update_item Music Lanka Lanka520520 AlbumTitle=Lanka520twice
+$ run_update_item Music Lanka Lanka520520 AlbumTitle=Lanka520twice
 Item was updated
 ```
 
@@ -434,7 +437,7 @@ $ ls -al aws-doc-sdk-examples/cpp/example_code/s3/*
 #### list_buckets.cpp
 
 ```bash
-$ ./run_list_buckets
+$ run_list_buckets
 Found 2 buckets
 HelperX
 utilx9
