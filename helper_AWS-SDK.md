@@ -38,6 +38,16 @@ $ cat ~/.aws/config
 
 ## 1.2. [API Reference](http://sdk.amazonaws.com/cpp/api/LATEST/index.html)
 
+> 官網提供的網頁很不友善，操作不易。
+>
+> 對於我熟悉 c 而不熟悉 cpp 的碼農，也是有些阻礙！
+>
+> 只能請大家把下面幾個目錄放 ctag 或是善用 Source Insight 等編輯工具來建立關聯。
+>
+> 最後如果你是完全沒有相關 c 或是 cpp 的工作經驗，建議請另外找工作吧！
+
+### 1.2.1. aws-sdk-cpp/aws-cpp-sdk-core
+
 ## 1.3. [AWS SDKs and Tools Reference Guide](https://docs.aws.amazon.com/sdkref/latest/guide/index.html)
 
 ## 1.4. [AWS Code Examples Repository](https://github.com/awsdocs/aws-doc-sdk-examples)
@@ -375,6 +385,13 @@ $ run_put_item Music \
 	Artist 'Lanka' \
 	AlbumTitle "Lanka520" \
 	Awards "1" \
+	SongTitle "Lanka520520"
+Successfully added Item!
+
+$ run_put_item Music \
+	Artist 'Lanka' \
+	AlbumTitle "Lanka520" \
+	Awards "2" \
 	SongTitle "Lanka520520"
 Successfully added Item!
 ```
