@@ -19,6 +19,12 @@
 
 ## 1.1. [Developer Guide](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/index.html)
 
+>## Using AWS for troubleshooting and diagnostics
+>
+>As you learn to develop applications with the AWS SDK for C++, it's also valuable to get comfortable in using both the AWS Management Console and the AWS CLI. These tools can be used interchangeably for various troubleshooting and diagnostics .
+>
+>The following tutorial shows you an example of these troubleshooting and diagnostics tasks. It focuses on the `Access denied` error, which can be encountered for several different reasons. The tutorial shows an example of how you might determine the actual cause of the error. It focuses on two of the possible causes: incorrect permissions for the current user and a resource that isn't available to the current user.
+
 ### 1.1.1. [Providing AWS credentials](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/credentials.html)
 
 > 要使用 AWS 服務，都需要先建立憑證；步驟很複雜，先跳過再研究
@@ -207,6 +213,32 @@ $ mkdir build_xxx \
 $ ls -al aws-doc-sdk-examples/cpp/example_code/dynamodb/*
 ```
 
+#### [create_table_composite_key.cpp](./AWS/patches/dynamodb/create_table_composite_key.cpp)
+
+```bash
+$ run_create_table_composite_key
+Usage:
+    run_create_table_composite_key <table> <optional:region>
+Where:
+    table - the table to create
+Example:
+    run_create_table_composite_key Music
+```
+
+```bash
+$ run_create_table_composite_key Music
+Creating table Music with a composite primary key:
+* Artist - partition key
+* SongTitle - sort key
+Table "Music" was created!
+
+$ run_create_table_composite_key Music
+Creating table Music with a composite primary key:
+* Artist - partition key
+* SongTitle - sort key
+Failed to create table:Table already exists: Music
+```
+
 #### [describe_table.cpp](./AWS/patches/dynamodb/describe_table.cpp)
 
 ```bash
@@ -221,7 +253,6 @@ Examples:
 ```
 ```bash
 $ run_describe_table ap-northeast-1 Music
-ribe_table ap-northeast-1 Music
 Table name  : Music
 Table ARN   : arn:aws:dynamodb:ap-northeast-1:877409152866:table/Music
 Status      : ACTIVE
@@ -253,6 +284,26 @@ Example:
 $ run_delete_item Music Lanka Lanka520520
 Deleting item Artist: "Lanka", SongTitle: "Lanka520520" from table Music
 Artist "Lanka", SongTitle: "Lanka520520" deleted!
+```
+
+#### [delete_table.cpp](./AWS/patches/dynamodb/delete_table.cpp)
+
+```bash
+$ run_delete_table
+Usage:
+     run_delete_table <tableName>
+Where:
+    tableName - the table to delete.
+Example:
+    delete_table Music
+**Warning** This program will actually delete the table that you specify!
+```
+
+```bash
+$ run_delete_table Music
+Your Table "Music was deleted!
+$ run_delete_table Music
+Failed to delete table: Requested resource not found: Table: Music not found
 ```
 
 #### [get_item.cpp](./AWS/patches/dynamodb/get_item.cpp)
@@ -295,7 +346,7 @@ No item found with the key Artist
 #### list_tables.cpp
 
 ```bash
-$ ./run_list_tables
+$ run_list_tables
 Your DynamoDB Tables:
 Music
 ```
@@ -346,7 +397,7 @@ Example:
     query_items SiteColors Background=white "default, bold"
 ```
 ```bash
-$ ./run_query_items Music Artist='No One You Know'
+$ run_query_items Music Artist='No One You Know'
 Number of items retrieved from Query: 2
 ******************************************************
 AlbumTitle: Somewhat Famous
@@ -363,7 +414,7 @@ SongTitle: Howdy
 #### scan_table.cpp
 
 ```bash
-$ ./run_scan_table
+$ run_scan_table
 Usage:
     scan_table <table> [projection_expression]
 
@@ -414,7 +465,7 @@ SongTitle: PartiQL Rocks
 ```bash
 $ run_update_item
 Usage:
-    run_update_item <tableName> <Artist-keyValue> <Artist-keyValue> <SongTitle-keyValue> <attribute=value>
+    run_update_item <tableName> <Artist-keyValue> <SongTitle-keyValue> <attribute=value>
 Where:
     tableName       - name of the table to put the item in
     Artist-keyValue - the key value to update
@@ -454,7 +505,7 @@ Example: s3sample ap-northeast-1 st-1 utilx9 demo_000.c demo_000.c_local
 
 ```
 
-##### 注意！注意！注意！
+## 注意！注意！注意！
 
 ```c
 request.WithBucket(argv[2]).WithKey(argv[3]);
@@ -467,7 +518,9 @@ WithKey: object name not aws_access_key_id or aws_secret_access_key
 
 # 7.  [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html) - [AWS Management Console](https://ap-northeast-1.console.aws.amazon.com/dynamodbv2/home?region=ap-northeast-1#dashboard)
 
-## 7.1. [aws_dynamo](https://github.com/devicescape/aws_dynamo) - AWS DynamoDB Library for C and C++
+## 7.1. [Developer Guide](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html)
+
+## 7.2. [aws_dynamo](https://github.com/devicescape/aws_dynamo) - AWS DynamoDB Library for C and C++
 
 # 8. [AWS IoT](https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html)
 
