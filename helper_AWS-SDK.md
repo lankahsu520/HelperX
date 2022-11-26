@@ -46,7 +46,15 @@ $ cat ~/.aws/config
 >
 > 最後如果你是完全沒有相關 c 或是 cpp 的工作經驗，建議請另外找工作吧！
 
-### 1.2.1. aws-sdk-cpp/aws-cpp-sdk-core
+#### aws-sdk-cpp/aws-cpp-sdk-core
+
+#### aws-sdk-cpp/aws-cpp-sdk-dynamodb
+
+#### aws-sdk-cpp/aws-cpp-sdk-iam
+
+#### aws-sdk-cpp/aws-cpp-sdk-s3
+
+#### aws-sdk-cpp/aws-cpp-sdk-sts
 
 ## 1.3. [AWS SDKs and Tools Reference Guide](https://docs.aws.amazon.com/sdkref/latest/guide/index.html)
 
@@ -186,6 +194,12 @@ $ cd build_xxx \
 	&& make install
 
 ```
+
+## 4.3. Code examples
+
+#### [DynamoDB examples using SDK for C++](https://docs.aws.amazon.com/code-library/latest/ug/cpp_1_dynamodb_code_examples.html)
+
+#### [Run batches of PartiQL statements on a DynamoDB table using an AWS SDK](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/example_dynamodb_BatchExecuteStatement_section.html)
 
 # 5. [aws-doc-sdk-examples](https://github.com/awsdocs/aws-doc-sdk-examples)
 
@@ -361,7 +375,7 @@ Your DynamoDB Tables:
 Music
 ```
 
-#### put_item.cpp
+#### [put_item.cpp](./AWS/patches/dynamodb/put_item.cpp) - remove item and update items
 
 ```bash
 $ run_put_item
@@ -388,12 +402,44 @@ $ run_put_item Music \
 	SongTitle "Lanka520520"
 Successfully added Item!
 
-$ run_put_item Music \
-	Artist 'Lanka' \
-	AlbumTitle "Lanka520" \
-	Awards "2" \
-	SongTitle "Lanka520520"
-Successfully added Item!
+$ aws dynamodb get-item --consistent-read \
+    --table-name Music \
+    --key '{ "Artist": {"S": "Lanka"}, "SongTitle": {"S": "Lanka520520"}}'
+{
+    "Item": {
+        "AlbumTitle": {
+            "S": "Lanka520"
+        },
+        "Awards": {
+            "S": "1"
+        },
+        "Sponsor": {
+            "L": [
+                {
+                    "S": "dog"
+                },
+                {
+                    "S": "cat"
+                },
+                {
+                    "S": "mouse"
+                },
+                {
+                    "S": "stoat"
+                },
+                {
+                    "S": "snake"
+                }
+            ]
+        },
+        "Artist": {
+            "S": "Lanka"
+        },
+        "SongTitle": {
+            "S": "Lanka520520"
+        }
+    }
+}
 ```
 
 #### query_items.cpp
