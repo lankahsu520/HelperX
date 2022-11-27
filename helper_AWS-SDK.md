@@ -36,6 +36,29 @@ $ cat ~/.aws/credentials
 $ cat ~/.aws/config
 ```
 
+### 1.1.2. [Logging](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/logging.html)
+
+```c++
+#include <aws/external/gtest.h>
+
+#include <aws/core/utils/memory/stl/AWSString.h>
+#include <aws/core/utils/logging/DefaultLogSystem.h>
+#include <aws/core/utils/logging/AWSLogging.h>
+
+#include <iostream>
+
+int main(int argc, char** argv)
+{
+    Aws::Utils::Logging::InitializeAWSLogging(
+        Aws::MakeShared<Aws::Utils::Logging::DefaultLogSystem>(
+            "RunUnitTests", Aws::Utils::Logging::LogLevel::Trace, "aws_sdk_"));
+    ::testing::InitGoogleTest(&argc, argv);
+    int exitCode = RUN_ALL_TESTS();
+    Aws::Utils::Logging::ShutdownAWSLogging();
+    return exitCode;
+}
+```
+
 ## 1.2. [API Reference](http://sdk.amazonaws.com/cpp/api/LATEST/index.html)
 
 > 官網提供的網頁很不友善，操作不易。
