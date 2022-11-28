@@ -746,8 +746,6 @@ $ svn co --username lanka http://trac-vbx/svnpi
 
 # I. Study
 
-#### A. [Configure Git Server with HTTP on Ubuntu](https://linuxhint.com/git_server_http_ubuntu/)
-
 ## I.1. SVN
 #### A. [Chapter 4. Branching and Merging](https://svnbook.red-bean.com/en/1.7/svn.branchmerge.summary.html)
 
@@ -938,7 +936,7 @@ $ git fsck
 $ git push -f
 ```
 
-
+#### E. [Configure Git Server with HTTP on Ubuntu](https://linuxhint.com/git_server_http_ubuntu/)
 
 # II. Debug
 
