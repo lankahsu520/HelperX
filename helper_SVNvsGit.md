@@ -649,7 +649,7 @@ $ sudo apt-get install libapache2-mod-python
 $ sudo a2enmod python
 
 # enable Apache mod_env, mod_cgi, mod_alias, mod_rewrite, ... modules
-$ sudo a2enmod env cgi alias rewrite dav dav_fs
+$ sudo a2enmod env cgi alias rewrite dav dav_svn dav_fs
 
 ```
 
