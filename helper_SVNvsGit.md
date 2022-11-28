@@ -563,9 +563,191 @@ git stash pop
 git stash clear
 ```
 
+# 6. Server with apache2
+
+## 6.1. apache2
+
+#### A. sites-available/*.conf
+
+```bash
+# enable the svn site configuration
+$ sudo vi /etc/apache2/sites-available/svn.conf
+$ sudo a2ensite svn.conf
+
+$ sudo htpasswd -c /work_svnroot/.htpasswd lanka
+
+# enable the git site configuration
+$ sudo vi /etc/apache2/sites-available/git.conf
+$ sudo a2ensite git.conf
+
+$ sudo htpasswd -c /work_gitroot/.htpasswd lanka
+
+# apache2 reload
+$ systemctl reload apache2
+
+```
+
+##### A.1. [git.conf](./SVNvsGit/git.conf)
+
+```conf
+	SetEnv GIT_PROJECT_ROOT /work_gitroot
+	SetEnv GIT_HTTP_EXPORT_ALL
+
+	ScriptAlias /gitroot /usr/lib/git-core/git-http-backend/
+
+	Alias /gitroot /work_gitroot
+	<Directory /usr/lib/git-core>
+		Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+		AllowOverride None
+		Require all granted
+	</Directory>
+	<Directory /work_gitroot>
+		Options Indexes FollowSymLinks MultiViews
+		AllowOverride None
+		Require all granted
+	</Directory>
+	#<LocationMatch /gitroot/.*\.git>
+	#	Dav On
+	#	AuthType Basic
+	#	AuthName "Git Verification"
+	#	AuthUserFile /work_gitroot/authz
+	#	Require valid-user
+	#</LocationMatch>
+
+	<Location /gitroot/gitroot.git>
+		AuthType Basic
+		AuthName "Git Repository - /gitroot"
+		AuthUserFile /work_gitroot/.htpasswd
+		Require valid-user
+	</Location>
+```
+
+##### A.2. [svn.conf](./SVNvsGit/svn.conf)
+
+```conf
+	<Location /svnroot>
+		DAV svn
+		SVNPath /work_svnroot/svnroot
+		AuthType Basic
+		AuthName "SVN Repository - /svnroot"
+		AuthUserFile /work_svnroot/.htpasswd
+		AuthzSVNAccessFile /work_svnroot/authz
+		Require valid-user
+	</Location>
+```
+
+#### B. ports.conf
+
+```bash
+$ sudo vi /etc/apache2/ports.conf
+```
+
+#### C. enable Apache modules
+
+```bash
+$ sudo apt-get install libapache2-mod-python
+$ sudo a2enmod python
+
+# enable Apache mod_env, mod_cgi, mod_alias, mod_rewrite, ... modules
+$ sudo a2enmod env cgi alias rewrite dav dav_fs
+
+```
+
+#### D. restart apache2
+
+```bash
+$ sudo service apache2 restart
+```
+
+## 6.2. Git Server
+
+#### A. Add User and Group
+
+```bash
+$ sudo addgroup git
+$ sudo usermod -G git -a www-data
+$ sudo usermod -G git -a lanka
+```
+
+#### B. Create Repository - [git-create-repo.sh](./SVNvsGit/git-create-repo.sh)
+
+```bash
+$ cd /work_gitroot
+$ ./git-create-repo.sh gitroot.git
+$ ll
+drwxrwxr-x  7 www-data git    4096 十一 28 14:56 gitroot.git/
+
+# Please make sure group is git
+```
+
+#### C.  git clone
+
+```bash
+$ git clone http://trac-vbx/gitroot/gitroot.git
+
+# save the specified Git credentials in the “.git/config”
+$ git config credential.helper store
+```
+
+## 6.3. SVN Server
+
+#### A. Add User and Group
+
+```bash
+$ sudo addgroup subversion
+$ sudo usermod -G subversion -a www-data
+$ sudo usermod -G subversion -a lanka
+```
+
+#### B. Create Repository - [svn-create-repo.sh](./SVNvsGit/svn-create-repo.sh)
+
+```bash
+$ cd /work_svnroot
+$ ./svn-create-repo.sh svnroot
+$ ll
+drwxrwxr-x  7 www-data www-data 4096 十一 28 17:05 svnroot/
+
+```
+
+#### C. Authz
+
+```bash
+$ sudo vi /work_svnroot/authz
+```
+
+```authz
+[groups]
+administrators = lanka
+developers = lanka
+releaser = lanka
+viewers =
+
+[/]
+@administrators = rw
+@developers =
+@releaser =
+@viewers =
+
+[svnroot:/]
+@administrators = rw
+@developers = rw
+@releaser =
+@viewers =
+```
+
+#### D.  svn co
+
+```bash
+$ svn co http://trac-vbx/svnroot
+$ svn co --username lanka http://trac-vbx/svnpi
+```
+
 # Appendix
 
 # I. Study
+
+#### A. [Configure Git Server with HTTP on Ubuntu](https://linuxhint.com/git_server_http_ubuntu/)
+
 ## I.1. SVN
 #### A. [Chapter 4. Branching and Merging](https://svnbook.red-bean.com/en/1.7/svn.branchmerge.summary.html)
 
