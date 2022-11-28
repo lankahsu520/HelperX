@@ -19,6 +19,12 @@
 
 ## 1.1. [Developer Guide](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/index.html)
 
+>## Using AWS for troubleshooting and diagnostics
+>
+>As you learn to develop applications with the AWS SDK for C++, it's also valuable to get comfortable in using both the AWS Management Console and the AWS CLI. These tools can be used interchangeably for various troubleshooting and diagnostics .
+>
+>The following tutorial shows you an example of these troubleshooting and diagnostics tasks. It focuses on the `Access denied` error, which can be encountered for several different reasons. The tutorial shows an example of how you might determine the actual cause of the error. It focuses on two of the possible causes: incorrect permissions for the current user and a resource that isn't available to the current user.
+
 ### 1.1.1. [Providing AWS credentials](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/credentials.html)
 
 > 要使用 AWS 服務，都需要先建立憑證；步驟很複雜，先跳過再研究
@@ -30,7 +36,48 @@ $ cat ~/.aws/credentials
 $ cat ~/.aws/config
 ```
 
+### 1.1.2. [Logging](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/logging.html)
+
+```c++
+#include <aws/external/gtest.h>
+
+#include <aws/core/utils/memory/stl/AWSString.h>
+#include <aws/core/utils/logging/DefaultLogSystem.h>
+#include <aws/core/utils/logging/AWSLogging.h>
+
+#include <iostream>
+
+int main(int argc, char** argv)
+{
+    Aws::Utils::Logging::InitializeAWSLogging(
+        Aws::MakeShared<Aws::Utils::Logging::DefaultLogSystem>(
+            "RunUnitTests", Aws::Utils::Logging::LogLevel::Trace, "aws_sdk_"));
+    ::testing::InitGoogleTest(&argc, argv);
+    int exitCode = RUN_ALL_TESTS();
+    Aws::Utils::Logging::ShutdownAWSLogging();
+    return exitCode;
+}
+```
+
 ## 1.2. [API Reference](http://sdk.amazonaws.com/cpp/api/LATEST/index.html)
+
+> 官網提供的網頁很不友善，操作不易。
+>
+> 對於我熟悉 c 而不熟悉 cpp 的碼農，也是有些阻礙！
+>
+> 只能請大家把下面幾個目錄放 ctag 或是善用 Source Insight 等編輯工具來建立關聯。
+>
+> 最後如果你是完全沒有相關 c 或是 cpp 的工作經驗，建議請另外找工作吧！
+
+#### aws-sdk-cpp/aws-cpp-sdk-core
+
+#### aws-sdk-cpp/aws-cpp-sdk-dynamodb
+
+#### aws-sdk-cpp/aws-cpp-sdk-iam
+
+#### aws-sdk-cpp/aws-cpp-sdk-s3
+
+#### aws-sdk-cpp/aws-cpp-sdk-sts
 
 ## 1.3. [AWS SDKs and Tools Reference Guide](https://docs.aws.amazon.com/sdkref/latest/guide/index.html)
 
@@ -171,6 +218,12 @@ $ cd build_xxx \
 
 ```
 
+## 4.3. Code examples
+
+#### [DynamoDB examples using SDK for C++](https://docs.aws.amazon.com/code-library/latest/ug/cpp_1_dynamodb_code_examples.html)
+
+#### [Run batches of PartiQL statements on a DynamoDB table using an AWS SDK](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/example_dynamodb_BatchExecuteStatement_section.html)
+
 # 5. [aws-doc-sdk-examples](https://github.com/awsdocs/aws-doc-sdk-examples)
 
 ## 5.1. [Getting started with the AWS SDK for C++ code examples](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/getting-started-code-examples.html)
@@ -207,19 +260,46 @@ $ mkdir build_xxx \
 $ ls -al aws-doc-sdk-examples/cpp/example_code/dynamodb/*
 ```
 
+#### [create_table_composite_key.cpp](./AWS/patches/dynamodb/create_table_composite_key.cpp)
+
+```bash
+$ run_create_table_composite_key
+Usage:
+    run_create_table_composite_key <table> <optional:region>
+Where:
+    table - the table to create
+Example:
+    run_create_table_composite_key Music
+```
+
+```bash
+$ run_create_table_composite_key Music
+Creating table Music with a composite primary key:
+* Artist - partition key
+* SongTitle - sort key
+Table "Music" was created!
+
+$ run_create_table_composite_key Music
+Creating table Music with a composite primary key:
+* Artist - partition key
+* SongTitle - sort key
+Failed to create table:Table already exists: Music
+```
+
 #### [describe_table.cpp](./AWS/patches/dynamodb/describe_table.cpp)
 
 ```bash
-$ ./describe_table
+$ run_describe_table
 Usage:
-    describe_table <region> <table>
-
+    run_describe_table <region> <table>
 Where:
+    region - region.
     table - the table to describe.
+Examples:
+    run_describe_table ap-northeast-1 Music
 ```
 ```bash
-$ ./describe_table ap-northeast-1 Music
-ribe_table ap-northeast-1 Music
+$ run_describe_table ap-northeast-1 Music
 Table name  : Music
 Table ARN   : arn:aws:dynamodb:ap-northeast-1:877409152866:table/Music
 Status      : ACTIVE
@@ -236,23 +316,41 @@ Attributes
 #### [delete_item.cpp](./AWS/patches/dynamodb/delete_item.cpp)
 
 ```bash
-$ ./run_delete_item
+$ run_delete_item
 Usage:
-    DeleteItem <table> <Artist-keyValue> <SongTitle-keyValue>
-
+    run_delete_item <tableName> <Artist-keyValue> <SongTitle-keyValue>
 Where:
-    table - the table to delete the item from.
+    tableName - the table to delete the item from.
     Artist-keyValue - the key value to update
     SongTitle-keyValue - the key value to update
 Example:
-    DeleteItem Music Lanka Lanka520520
-
+    run_delete_item Music Lanka Lanka520520
 **Warning** This program will actually delete the item that you specify!
 ```
 ```bash
-$ ./run_delete_item Music Lanka Lanka520520
+$ run_delete_item Music Lanka Lanka520520
 Deleting item Artist: "Lanka", SongTitle: "Lanka520520" from table Music
 Artist "Lanka", SongTitle: "Lanka520520" deleted!
+```
+
+#### [delete_table.cpp](./AWS/patches/dynamodb/delete_table.cpp)
+
+```bash
+$ run_delete_table
+Usage:
+     run_delete_table <tableName>
+Where:
+    tableName - the table to delete.
+Example:
+    delete_table Music
+**Warning** This program will actually delete the table that you specify!
+```
+
+```bash
+$ run_delete_table Music
+Your Table "Music was deleted!
+$ run_delete_table Music
+Failed to delete table: Requested resource not found: Table: Music not found
 ```
 
 #### [get_item.cpp](./AWS/patches/dynamodb/get_item.cpp)
@@ -269,35 +367,41 @@ Attributes
 ```
 
 ```bash
-$ ./run_get_item
-Usage: <tableName> <pk> <pkval> <sk> <skval>
+$ run_get_item
+Usage:
+    run_get_item <tableName> <pk> <pkval> <sk> <skval>
 Where:
     tableName - the Amazon DynamoDB table from which an item is retrieved (for example, Music).
     pk - the key used in the Amazon DynamoDB table (for example, Artist).
     pkval - the key value that represents the item to get (for example, Acme Band).
     sk - the key used in the Amazon DynamoDB table (for example, SongTitle).
     skval - the key value that represents the item to get (for example, Happy Day).
+Examples:
+    run_get_item Music Artist Lanka SongTitle Lanka520520
 ```
 ```bash
-$ ./run_get_item Music Artist 'Acme Band' SongTitle 'Happy Day'
+$ run_get_item Music Artist 'Acme Band' SongTitle 'Happy Day'
 Values: AlbumTitle: Songs About Life
 Values: Artist: Acme Band
 Values: Awards: 10
 Values: SongTitle: Happy Day
+
+$ run_get_item Music Artist 'Lanka' SongTitle 'Lanka520520'
+No item found with the key Artist
 ```
 
 #### list_tables.cpp
 
 ```bash
-$ ./run_list_tables
+$ run_list_tables
 Your DynamoDB Tables:
 Music
 ```
 
-#### put_item.cpp
+#### [put_item.cpp](./AWS/patches/dynamodb/put_item.cpp) - remove item and update items
 
 ```bash
-$ ./run_put_item
+$ run_put_item
 Usage:
     <tableName> <key> <keyVal> <albumtitle> <albumtitleval> <awards> <awardsval> <Songtitle> <songtitleval>
 
@@ -314,18 +418,57 @@ Where:
 **Warning** This program will  place an item that you specify into a table!
 ```
 ```bash
-$ ./run_put_item Music \
+$ run_put_item Music \
 	Artist 'Lanka' \
 	AlbumTitle "Lanka520" \
 	Awards "1" \
 	SongTitle "Lanka520520"
 Successfully added Item!
+
+$ aws dynamodb get-item --consistent-read \
+    --table-name Music \
+    --key '{ "Artist": {"S": "Lanka"}, "SongTitle": {"S": "Lanka520520"}}'
+{
+    "Item": {
+        "AlbumTitle": {
+            "S": "Lanka520"
+        },
+        "Awards": {
+            "S": "1"
+        },
+        "Sponsor": {
+            "L": [
+                {
+                    "S": "dog"
+                },
+                {
+                    "S": "cat"
+                },
+                {
+                    "S": "mouse"
+                },
+                {
+                    "S": "stoat"
+                },
+                {
+                    "S": "snake"
+                }
+            ]
+        },
+        "Artist": {
+            "S": "Lanka"
+        },
+        "SongTitle": {
+            "S": "Lanka520520"
+        }
+    }
+}
 ```
 
 #### query_items.cpp
 
 ```bash
-$ ./run_query_items
+$ run_query_items
 Usage:
     query_items <table> <partitionKeyAttributeName>=<partitionKeyValue> [projection_expression]
 
@@ -340,7 +483,7 @@ Example:
     query_items SiteColors Background=white "default, bold"
 ```
 ```bash
-$ ./run_query_items Music Artist='No One You Know'
+$ run_query_items Music Artist='No One You Know'
 Number of items retrieved from Query: 2
 ******************************************************
 AlbumTitle: Somewhat Famous
@@ -357,7 +500,7 @@ SongTitle: Howdy
 #### scan_table.cpp
 
 ```bash
-$ ./run_scan_table
+$ run_scan_table
 Usage:
     scan_table <table> [projection_expression]
 
@@ -374,7 +517,7 @@ Example:
 ```
 
 ```bash
-$ ./run_scan_table Music
+$ run_scan_table Music
 Number of items retrieved from scan: 5
 ******************************************************
 AlbumTitle: Somewhat Famous
@@ -406,21 +549,19 @@ SongTitle: PartiQL Rocks
 #### [update_item.cpp](./AWS/patches/dynamodb/update_item.cpp)
 
 ```bash
-$ ./run_update_item
+$ run_update_item
 Usage:
-    update_item <tableName> <Artist-keyValue> <Artist-keyValue> <SongTitle-keyValue> <attribute=value> ..
-
+    run_update_item <tableName> <Artist-keyValue> <SongTitle-keyValue> <attribute=value>
 Where:
     tableName       - name of the table to put the item in
     Artist-keyValue - the key value to update
     SongTitle-keyValue - the key value to update
     attribute=value - attribute=updated value
-
 Examples:
-    update_item Music Lanka Lanka520520 AlbumTitle=Lanka520twice
+    run_update_item Music Lanka Lanka520520 AlbumTitle=Lanka520twice
 ```
 ```bash
-$ ./run_update_item Music Lanka Lanka520520 AlbumTitle=Lanka520twice
+$ run_update_item Music Lanka Lanka520520 AlbumTitle=Lanka520twice
 Item was updated
 ```
 
@@ -433,7 +574,7 @@ $ ls -al aws-doc-sdk-examples/cpp/example_code/s3/*
 #### list_buckets.cpp
 
 ```bash
-$ ./run_list_buckets
+$ run_list_buckets
 Found 2 buckets
 HelperX
 utilx9
@@ -450,7 +591,7 @@ Example: s3sample ap-northeast-1 st-1 utilx9 demo_000.c demo_000.c_local
 
 ```
 
-##### 注意！注意！注意！
+## 注意！注意！注意！
 
 ```c
 request.WithBucket(argv[2]).WithKey(argv[3]);
@@ -463,7 +604,9 @@ WithKey: object name not aws_access_key_id or aws_secret_access_key
 
 # 7.  [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html) - [AWS Management Console](https://ap-northeast-1.console.aws.amazon.com/dynamodbv2/home?region=ap-northeast-1#dashboard)
 
-## 7.1. [aws_dynamo](https://github.com/devicescape/aws_dynamo) - AWS DynamoDB Library for C and C++
+## 7.1. [Developer Guide](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html)
+
+## 7.2. [aws_dynamo](https://github.com/devicescape/aws_dynamo) - AWS DynamoDB Library for C and C++
 
 # 8. [AWS IoT](https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html)
 

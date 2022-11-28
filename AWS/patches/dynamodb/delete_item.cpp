@@ -32,15 +32,15 @@
 */
 int main(int argc, char** argv)
 {
-    const std::string USAGE = "\n" \
+    const std::string USAGE =
         "Usage:\n"
-        "    DeleteItem <table> <Artist-keyValue> <SongTitle-keyValue> \n\n"
+        "    run_delete_item <tableName> <Artist-keyValue> <SongTitle-keyValue> \n"
         "Where:\n"
-        "    table - the table to delete the item from.\n"
+        "    tableName - the table to delete the item from.\n"
         "    Artist-keyValue - the key value to update\n"
         "    SongTitle-keyValue - the key value to update\n"
         "Example:\n"
-        "    DeleteItem Music Lanka Lanka520520\n\n"
+        "    run_delete_item Music Lanka Lanka520520\n"
         "**Warning** This program will actually delete the item that you specify!\n";
 
     if (argc < 4)

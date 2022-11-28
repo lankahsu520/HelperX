@@ -89,6 +89,8 @@ aws: error: the following arguments are required: command
 $ aws help
 $ aws <command> help
 $ aws <command> <subcommand> help
+
+$ aws sts get-caller-identity
 ```
 
 # 4. S3

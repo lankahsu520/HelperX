@@ -29,17 +29,19 @@
    For information, see this documentation topic:
    https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/getting-started.html
 */
-
 int main(int argc, char** argv)
 {
-    const std::string USAGE = "\n"
-        "Usage: <tableName> <pk> <pkval> <sk> <skval>\n"
+    const std::string USAGE =
+        "Usage:\n"
+        "    run_get_item <tableName> <pk> <pkval> <sk> <skval>\n"
         "Where:\n"
         "    tableName - the Amazon DynamoDB table from which an item is retrieved (for example, Music). \n"
         "    pk - the key used in the Amazon DynamoDB table (for example, Artist). \n"
         "    pkval - the key value that represents the item to get (for example, Acme Band).\n"
         "    sk - the key used in the Amazon DynamoDB table (for example, SongTitle). \n"
-        "    skval - the key value that represents the item to get (for example, Happy Day).\n";
+        "    skval - the key value that represents the item to get (for example, Happy Day).\n"
+        "Examples:\n"
+        "    run_get_item Music Artist Lanka SongTitle Lanka520520\n";
 
     if (argc < 6)
     {
