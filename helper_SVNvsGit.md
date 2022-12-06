@@ -549,23 +549,9 @@ $ svn blame helper_SVNvsGit.md
 $ git blame helper_SVNvsGit.md
 ```
 
-# 5. Others ???
+# 5. Server with apache2
 
-```bash
-# Cleanup unnecessary files and optimize the local repository
-$ git gc --prune=now #清除 git reflog
-
-# Stash the changes in a dirty working directory away
-# 不常用，會忘掉。不要用
-git stash -u
-git stash list
-git stash pop
-git stash clear
-```
-
-# 6. Server with apache2
-
-## 6.1. apache2
+## 5.1. apache2
 
 #### A. sites-available/*.conf
 
@@ -659,7 +645,7 @@ $ sudo a2enmod env cgi alias rewrite dav dav_svn dav_fs
 $ sudo service apache2 restart
 ```
 
-## 6.2. Git Server
+## 5.2. Git Server
 
 #### A. Add User and Group
 
@@ -689,7 +675,7 @@ $ git clone http://trac-vbx/gitroot/gitroot.git
 $ git config credential.helper store
 ```
 
-## 6.3. SVN Server
+## 5.3. SVN Server
 
 #### A. Add User and Group
 
@@ -742,11 +728,10 @@ $ svn co http://trac-vbx/svnroot
 $ svn co --username lanka http://trac-vbx/svnpi
 ```
 
-# Appendix
+# 6. Special
 
-# I. Study
+## 6.1. SVN
 
-## I.1. SVN
 #### A. [Chapter 4. Branching and Merging](https://svnbook.red-bean.com/en/1.7/svn.branchmerge.summary.html)
 
 ```mermaid
@@ -781,9 +766,18 @@ drwxrwxrwx  6 www-data www-data         4096  一   3  2019 svn/
 
 ```
 
-##### A.1. generate history
+##### A.1. **[svndumpsanitizer](https://github.com/dsuni/svndumpsanitizer)**
 
-###### A.1.1. dump 
+```bash
+$ git clone https://github.com/dsuni/svndumpsanitizer.git
+$ cd svndumpsanitizer
+$ gcc svndumpsanitizer.c -o svndumpsanitizer
+$ ./svndumpsanitizer --help
+```
+
+##### A.2. generate history
+
+###### A.2.1. dump 
 
 ```bash
 export SVN_NAME_SRC=svn
@@ -792,7 +786,7 @@ export SVN_DUMP_SOURCE_FILE="./dump_svn_20220822"
 svnadmin dump $SVN_NAME_SRC > $SVN_DUMP_SOURCE_FILE
 ```
 
-###### A.1.2. filter
+###### A.2.2. filter
 
 ```bash
 export SVN_DUMP_FILTER=""
@@ -800,7 +794,7 @@ export SVN_DUMP_FILTER="$SVN_DUMP_FILTER trunk/xbox"
 
 ```
 
-###### A.1.3. include/exclude
+###### A.2.3. include/exclude
 
 ```bash
 export SVN_DUMP_FILTER_FILE_INCLUDE="./dump_svn_20220822include"
@@ -824,9 +818,9 @@ export SVN_DUMP_FILTER_FILE_EXCLUDE="./dump_svn_20220822exclude"
 
 ```
 
-##### A.2. create new repository
+##### A.3. create new repository
 
-###### A.2.1. include
+###### A.3.1. include
 
 ```mermaid
 flowchart LR
@@ -857,7 +851,7 @@ sudo chmod -R 777 $SVN_NAME_DST/db
 
 ```
 
-###### A.2.2. exclude
+###### A.3.2. exclude
 
 ```mermaid
 flowchart LR
@@ -888,7 +882,7 @@ sudo chmod -R 777 $SVN_NAME_DST/db
 
 ```
 
-##### A.3. ? Merge repository - include (main) + exclude
+##### A.4. ? Merge repository - include (main) + exclude
 
 ```mermaid
 flowchart LR
@@ -915,6 +909,61 @@ flowchart LR
 svnadmin load --parent-dir svnnew-include < $SVN_DUMP_FILTER_FILE_EXCLUDE
 
 ```
+
+## 6.2. Git
+
+#### A. Prune tracking branches not on the remote
+
+```mermaid
+flowchart LR
+	subgraph Current
+		subgraph Current-Local
+			Current-main
+			Current-test1
+			Current-test2
+		end
+		subgraph Current-Remote
+			Current-origin/main[remotes/origin/HEAD]
+  	  end
+	end
+	subgraph Target
+		subgraph Target-Local
+			Target-main
+		end
+		subgraph Target-Remote
+			Target-origin/main[remotes/origin/HEAD]
+		end
+	end
+	Current --> Target
+```
+
+```bash
+$ git remote prune origin
+```
+
+# 7. Others ???
+
+```bash
+# Cleanup unnecessary files and optimize the local repository
+$ git gc --prune=now #清除 git reflog
+
+# Stash the changes in a dirty working directory away
+# 不常用，會忘掉。不要用
+git stash -u
+git stash list
+git stash pop
+git stash clear
+```
+
+# Appendix
+
+# I. Study
+
+## I.1. SVN
+
+#### A. [版本控制工具 SVN – 常用的基本指令 / 狀態表示](https://eeepage.info/svn-usage/)
+
+#### B. [SVN 基本指令教學](https://blog.longwin.com.tw/2007/07/svn_tutorial_2007/)
 
 ## I.2. Git
 
@@ -1057,11 +1106,9 @@ See 'git help git' for an overview of the system.
 
 
 
-# IV. **[svndumpsanitizer](https://github.com/dsuni/svndumpsanitizer)**
+# VI. ~/.bash_aliases
 
-# V. ~/.bash_aliases
-
-## V.1. svn
+## VI.1. SVN
 
 ```bash
 #** svn **
@@ -1113,7 +1160,7 @@ function svn-revert()
 }
 ```
 
-## V.2. git
+## VI.2. Git
 
 ```bash
 #** git **
