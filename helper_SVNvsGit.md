@@ -910,6 +910,39 @@ svnadmin load --parent-dir svnnew-include < $SVN_DUMP_FILTER_FILE_EXCLUDE
 
 ```
 
+#### B. [svn:externals](https://svnbook.red-bean.com/zh/1.6/svn.advanced.externals.html)
+
+```bash
+# http://trac-vbx/svnroot/trunk/xbox
+$ svn propedit svn:externals ./
+```
+```bash
+../helloworld
+
+# 相對於設置 svn:externals 屬性的目錄的 URL。
+# http://trac-vbx/svnroot/trunk/helloworld
+```
+```bash
+^/branches/helloworld
+
+# 相對於設置 svn:externals 屬性的版本庫的根。
+# http://trac-vbx/svnroot/branches/helloworld
+```
+
+```bash
+//build20-vbx/svnroot/trunk/helloworld
+
+# 相對於設置 svn:externals 屬性的目錄的 URL 的方案。
+# http:build20-vbx/svnroot/branches/helloworld
+```
+
+```bash
+/svnhello/trunk/helloworld
+
+# 相對於設置 svn:externals 屬性的服務器的根 URL。
+# http://trac-vbx/svnhello/trunk/helloworld
+```
+
 ## 6.2. Git
 
 #### A. Prune tracking branches not on the remote
