@@ -364,7 +364,7 @@ $ git log
 $ git log --oneline
 ```
 
-### 3.4. Ignore Files
+## 3.4. Ignore Files
 
 #### svn:ignore
 
