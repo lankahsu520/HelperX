@@ -364,6 +364,23 @@ $ git log
 $ git log --oneline
 ```
 
+### 3.4. Ignore Files
+
+#### svn:ignore
+
+```bash
+$ svn propedit svn:ignore .
+# enter your ignore files
+```
+
+#### .gitignore
+
+```bash
+$ touch .gitignore
+$ vi .gitignore
+# enter your ignore files
+```
+
 # 4. Advanced Commands
 
 ## 4.1. Restore working tree files
