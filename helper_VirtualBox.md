@@ -199,7 +199,15 @@ sudo systemctl restart rsyslog
 $EscapeControlCharactersOnReceive off
 ```
 
+#### F. dbus - [dbusX.conf](./DBus/dbusX.conf)
 
+```bash
+# to register com.github.lankahsu520, com.github
+
+sudo cp dbusX.conf /etc/dbus-1/system.d
+
+sudo reboot
+```
 
 # 4. VBoxManage modifyhd
 
