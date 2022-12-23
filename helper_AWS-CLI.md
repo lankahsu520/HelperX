@@ -146,11 +146,11 @@ $ aws s3 rb s3://HelperX
 $ aws s3 rm s3://utilx9/demo_000.c
 ```
 
-# 4. [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html)
+# 5. [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html)
 
-## 4.1. [DynamoDB Dashboard](https://eu-west-1.console.aws.amazon.com/dynamodbv2/home?region=eu-west-1#service)
+## 5.1. [DynamoDB Dashboard](https://eu-west-1.console.aws.amazon.com/dynamodbv2/home?region=eu-west-1#service)
 
-## 4.2. aws dynamodb xxx
+## 5.2. aws dynamodb xxx
 
 #### create-table
 
