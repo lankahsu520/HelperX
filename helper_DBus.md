@@ -19,9 +19,32 @@
 
 > D-Bus is an [inter-process communication](https://en.wikipedia.org/wiki/Inter-process_communication) (IPC) mechanism.
 
-# 2. System
 
-## 2.1. org.freedesktop.DBus.Introspectable / Introspect
+
+# 2. Configuration
+
+```bash
+$ sudo systemctl status dbus.service
+
+$ ll /etc/dbus-1/system.d/
+
+```
+
+#### A. dbus - [dbusX.conf](./DBus/dbusX.conf)
+
+```bash
+# to register com.github.lankahsu520, com.github
+
+sudo cp dbusX.conf /etc/dbus-1/system.d
+
+sudo reboot
+```
+
+
+
+# 3. System
+
+## 3.1. org.freedesktop.DBus.Introspectable / Introspect
 
 ```bash
 export BLUEZX_COMMAND=""
@@ -197,7 +220,7 @@ method return time=1662124953.336935 sender=org.freedesktop.DBus -> destination=
 
 ```
 
-## 2.2. org.freedesktop.DBus / ListNames
+## 3.2. org.freedesktop.DBus / ListNames
 
 ```bash
 export BLUEZX_COMMAND=""
@@ -297,7 +320,7 @@ method return time=1662125304.548742 sender=org.freedesktop.DBus -> destination=
 
 ```
 
-## 2.3. org.freedesktop.DBus / ListActivatableNames
+## 3.3. org.freedesktop.DBus / ListActivatableNames
 
 ```bash
 export BLUEZX_COMMAND=""
@@ -364,9 +387,9 @@ method return time=1662125758.612058 sender=org.freedesktop.DBus -> destination=
 
 ```
 
-# 3. org.bluez
+## 3.4. org.bluez
 
-## 3.1. org.freedesktop.DBus.ObjectManager / GetManagedObjects
+### 3.4.1. org.freedesktop.DBus.ObjectManager / GetManagedObjects
 
 ```bash
 export BLUEZX_COMMAND=""
@@ -701,7 +724,7 @@ method return time=1662016254.742651 sender=:1.135 -> destination=:1.268 serial=
    ]
 ```
 
-## 3.2. org.freedesktop.DBus.Introspectable / Introspect
+### 3.4.2. org.freedesktop.DBus.Introspectable / Introspect
 
 ```bash
 export BLUEZX_COMMAND=""
@@ -728,6 +751,8 @@ $ ./dbusXmethod.sh
 
 
 ```
+
+
 
 # 4. dbusx_456 <--> bluezx_123
 
@@ -799,15 +824,6 @@ export BLUEZX_COMMAND="advertise.name&on"
 
 ```
 
-# 5. Configuration
-
-```bash
-$ sudo systemctl status dbus.service
-
-$ ll /etc/dbus-1/system.d/
-
-```
-
 
 
 # Appendix
@@ -817,7 +833,9 @@ $ ll /etc/dbus-1/system.d/
 
 # II. Debug
 
-# III. gdbus Usage
+# III. Tools
+
+#### A. gdbus Usage
 
 ```bash
 $ gdbus --help
@@ -836,7 +854,7 @@ Use “gdbus COMMAND --help” to get help on each command.
 
 ```
 
-# IV. dbus-send Usage
+#### B. dbus-send Usage
 
 ```bash
 $ dbus-send --help
@@ -844,9 +862,9 @@ Usage: dbus-send [--help] [--system | --session | --bus=ADDRESS | --peer=ADDRESS
 
 ```
 
-## IV.1. [dbus-send — Send a message to a message bus](https://dbus.freedesktop.org/doc/dbus-send.1.html)
+##### B.1. [dbus-send — Send a message to a message bus](https://dbus.freedesktop.org/doc/dbus-send.1.html)
 
-# V. dbus-monitor Usage
+#### C. dbus-monitor Usage
 
 ```bash
 $ dbus-monitor --help
@@ -860,7 +878,7 @@ $ sudo dbus-monitor --system \
 	"type='method_call',interface='org.bluez.Adapter1'"
 ```
 
-# VI. dbus-daemon Usage
+#### D. dbus-daemon Usage
 
 ```bash
 $ dbus-daemon --help
