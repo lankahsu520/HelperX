@@ -81,11 +81,15 @@ int main(int argc, char** argv)
 
 ## 1.3. [AWS SDKs and Tools Reference Guide](https://docs.aws.amazon.com/sdkref/latest/guide/index.html)
 
-## 1.4. [AWS Code Examples Repository](https://github.com/awsdocs/aws-doc-sdk-examples)
+
 
 # 2. [AWS Free Tier](https://aws.amazon.com/free)
 
-> 憑證，很複雜！很複雜！很複雜！
+> 申請帳號、憑證後，才能使用相關服務，很複雜！很複雜！很複雜！
+>
+> 先假設大家都已經用過 AWS。
+
+
 
 # 3. [AWS Command Line Interface](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-chap-welcome.html)
 
@@ -96,6 +100,8 @@ int main(int argc, char** argv)
 [aws-doc-sdk-examples/README.md](https://github.com/awsdocs/aws-doc-sdk-examples/blob/main/README.md)
 
 >其實我也是遶了一大圈，最後得到一個結果 “AWS CLI” 可以正常執行，偉大的 SDK & examples 就可以執行。
+
+
 
 # 4. [AWS SDK for C++ Repository](https://github.com/aws/aws-sdk-cpp)
 
@@ -223,6 +229,8 @@ $ cd build_xxx \
 #### [DynamoDB examples using SDK for C++](https://docs.aws.amazon.com/code-library/latest/ug/cpp_1_dynamodb_code_examples.html)
 
 #### [Run batches of PartiQL statements on a DynamoDB table using an AWS SDK](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/example_dynamodb_BatchExecuteStatement_section.html)
+
+
 
 # 5. [aws-doc-sdk-examples](https://github.com/awsdocs/aws-doc-sdk-examples)
 
@@ -580,6 +588,8 @@ HelperX
 utilx9
 ```
 
+
+
 # 6. S3
 
 ## 6.1. [Building the SDK from source on EC2](https://github.com/aws/aws-sdk-cpp/wiki/Building-the-SDK-from-source-on-EC2) - [s3sample.cpp](./AWS/patches/s3/s3sample.cpp)
@@ -602,11 +612,15 @@ WithKey: object name not aws_access_key_id or aws_secret_access_key
 只能說我不懂 AWS 的 nameing rules。
 ```
 
+
+
 # 7.  [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html) - [AWS Management Console](https://ap-northeast-1.console.aws.amazon.com/dynamodbv2/home?region=ap-northeast-1#dashboard)
 
 ## 7.1. [Developer Guide](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html)
 
 ## 7.2. [aws_dynamo](https://github.com/devicescape/aws_dynamo) - AWS DynamoDB Library for C and C++
+
+
 
 # 8. [AWS IoT](https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html)
 
@@ -617,6 +631,8 @@ WithKey: object name not aws_access_key_id or aws_secret_access_key
 ## 8.2. [aws-iot-device-sdk-cpp-v2](https://github.com/aws/aws-iot-device-sdk-cpp-v2)
 
  > The AWS IoT SDKs and the `aws-iot-device-sdk-cpp` are separate from this SDK. The AWS IoT Device SDK for C++ v2 is available at [`aws-iot-device-sdk-cpp-v2`](https://github.com/aws/aws-iot-device-sdk-cpp-v2) on GitHub.
+
+
 
 # Appendix
 
