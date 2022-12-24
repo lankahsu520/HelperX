@@ -93,66 +93,15 @@ $ aws <command> <subcommand> help
 $ aws sts get-caller-identity
 ```
 
-# 4. S3
+# 4. AWS Services
 
-## 4.1. [S3 Dashboard](https://s3.console.aws.amazon.com/s3/buckets?region=eu-west-1)
+## 4.1. [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html)
 
-## 4.2. aws s3 xxx
+### 4.1.1. [DynamoDB Dashboard](https://eu-west-1.console.aws.amazon.com/dynamodbv2/home?region=eu-west-1#service)
 
-#### [cp](https://docs.aws.amazon.com/cli/latest/reference/s3/cp.html)
+### 4.1.2. [aws dynamodb xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-dynamodb.html)
 
->#### copies a single file to a specified bucket and key
-
-```bash
-$ aws s3 cp s3://utilx9/demo_000.c ./
-$ aws s3 demo_000.c cp s3://utilx9
-```
-
-```bash
-# to create a folder - demo
-$ aws s3 demo_000.c cp s3://utilx9/demo/demo_000.c
-```
-
-#### [ls](https://docs.aws.amazon.com/cli/latest/reference/s3/ls.html)
-
->copies a single file to a specified bucket and key
-
-```bash
-$ aws s3 ls
-$ aws s3 ls s3://utilx9
-```
-
-#### [mb](https://docs.aws.amazon.com/cli/latest/reference/s3/mb.html)
-
->creates a bucket
-
-```bash
-$ aws s3 mb s3://HelperX
-```
-
-#### [rb](https://docs.aws.amazon.com/cli/latest/reference/s3/rb.html)
-
->removes a bucket
-
-```bash
-$ aws s3 rb s3://HelperX
-```
-
-#### [rm](https://docs.aws.amazon.com/cli/latest/reference/s3/rm.html)
-
->deletes a single s3 object
-
-```bash
-$ aws s3 rm s3://utilx9/demo_000.c
-```
-
-# 5. [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html)
-
-## 5.1. [DynamoDB Dashboard](https://eu-west-1.console.aws.amazon.com/dynamodbv2/home?region=eu-west-1#service)
-
-## 5.2. aws dynamodb xxx
-
-#### create-table
+#### [create-table](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/dynamodb/create-table.html)
 
 ```bash
 $ aws dynamodb create-table \
@@ -167,7 +116,8 @@ $ aws dynamodb create-table \
         ReadCapacityUnits=5,WriteCapacityUnits=5 \
     --table-class STANDARD
 ```
-```
+
+```json
 {
     "TableDescription": {
         "AttributeDefinitions": [
@@ -212,7 +162,8 @@ $ aws dynamodb create-table \
 ```
 An error occurred (ResourceInUseException) when calling the CreateTable operation: Table already exists: Music
 ```
-#### describe-table
+
+#### [describe-table](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/dynamodb/describe-table.html)
 
 ```bash
 $ aws dynamodb describe-table --table-name Music | grep TableStatus
@@ -221,7 +172,8 @@ $ aws dynamodb describe-table --table-name Music | grep TableStatus
 ```
 "TableStatus": "ACTIVE",
 ```
-#### put-item
+
+#### [put-item](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/dynamodb/put-item.html)
 
 ```bash
 $ aws dynamodb execute-statement --statement "INSERT INTO Music  \
@@ -241,7 +193,7 @@ $ aws dynamodb execute-statement --statement "INSERT INTO Music  \
                 {'Artist':'Acme Band','SongTitle':'PartiQL Rocks', 'AlbumTitle':'Another Album Title', 'Awards':'8'}"
 ```
 
-```
+```json
 {
     "Items": []
 }
@@ -250,7 +202,8 @@ $ aws dynamodb execute-statement --statement "INSERT INTO Music  \
 ```
 An error occurred (DuplicateItemException) when calling the ExecuteStatement operation: Duplicate primary key exists in table
 ```
-#### get-item
+
+#### [get-item](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/dynamodb/get-item.html)
 
 ```bash
 $ aws dynamodb get-item --consistent-read \
@@ -258,7 +211,7 @@ $ aws dynamodb get-item --consistent-read \
     --key '{ "Artist": {"S": "Acme Band"}, "SongTitle": {"S": "Happy Day"}}'
 ```
 
-```
+```json
 {
     "Item": {
         "AlbumTitle": {
@@ -277,13 +230,13 @@ $ aws dynamodb get-item --consistent-read \
 }
 ```
 
-#### scan
+#### [scan](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/dynamodb/scan.html)
 
 ```bash
 $ aws dynamodb scan --table-name Music
 ```
 
-```
+```json
 {
     "Items": [
         {
@@ -346,6 +299,202 @@ $ aws dynamodb scan --table-name Music
     "Count": 4,
     "ScannedCount": 4,
     "ConsumedCapacity": null
+}
+```
+
+## 4.2. [EC2 (Amazon Elastic Compute Cloud)](https://docs.aws.amazon.com/zh_tw/AWSEC2/latest/UserGuide/concepts.html)
+
+### 4.2.1. [EC2 Dashboard](https://eu-west-1.console.aws.amazon.com/ec2/home?region=eu-west-1)
+
+### 4.2.2. [aws ec2 xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-ec2.html)
+
+>因為本身就是虛擬運算，設定起來也較複雜，不建議使用 AWS CLI；請多加使用 Dashboard。
+
+## 4.3. [S3 (Amazon Simple Storage Service)](https://docs.aws.amazon.com/zh_tw/AmazonS3/latest/userguide/Welcome.html)
+
+### 4.3.1. [S3 Dashboard](https://s3.console.aws.amazon.com/s3/buckets?region=eu-west-1)
+
+### 4.3.2. [aws s3 xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-s3.html)
+
+#### [cp](https://docs.aws.amazon.com/cli/latest/reference/s3/cp.html)
+
+> copies a single file to a specified bucket and key
+
+```bash
+$ aws s3 cp s3://utilx9/demo_000.c ./
+$ aws s3 demo_000.c cp s3://utilx9
+```
+
+```bash
+# to create a folder - demo
+$ aws s3 demo_000.c cp s3://utilx9/demo/demo_000.c
+```
+
+#### [ls](https://docs.aws.amazon.com/cli/latest/reference/s3/ls.html)
+
+>copies a single file to a specified bucket and key
+
+```bash
+$ aws s3 ls
+$ aws s3 ls s3://utilx9
+```
+
+#### [mb](https://docs.aws.amazon.com/cli/latest/reference/s3/mb.html)
+
+>creates a bucket
+
+```bash
+$ aws s3 mb s3://HelperX
+```
+
+#### [mv](https://docs.aws.amazon.com/cli/latest/reference/s3/mv.html)
+
+> move a file
+
+```bash
+$ aws s3 mv s3://HelperX/README.md s3://HelperX/README_bak.md
+```
+
+#### [rb](https://docs.aws.amazon.com/cli/latest/reference/s3/rb.html)
+
+>removes a bucket
+
+```bash
+$ aws s3 rb s3://HelperX
+```
+
+#### [rm](https://docs.aws.amazon.com/cli/latest/reference/s3/rm.html)
+
+>deletes a single s3 object
+
+```bash
+$ aws s3 rm s3://utilx9/demo_000.c
+```
+
+#### [sync](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3/sync.html)
+
+> Syncs directories and S3 prefixes
+
+```bash
+$ aws s3 sync s3://HelperX s3://HelperX_Bak
+```
+
+## 4.4. [S3 Glacier](https://docs.aws.amazon.com/zh_tw/amazonglacier/latest/dev/introduction.html)
+
+> 因為不適用正常檔案存取方式，先不花時間研究。
+
+### 4.4.1. [S3 Glacier](https://eu-west-1.console.aws.amazon.com/sns/v3/home?region=eu-west-1#/dashboard)
+
+### 4.4.2. [aws glacier xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-glacier.html)
+
+## 4.5. [SNS (Amazon Simple Notification Service)](https://docs.aws.amazon.com/zh_tw/sns/latest/dg/welcome.html)
+
+> publish a message to AmazonSNS, then send ([protocol](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sns/subscribe.html)) to subscriber(s)
+
+```mermaid
+flowchart LR
+	awsCli[sns publish]
+	Lanka["lankahsu@gmail.com"]
+	Mary["mary@gmail.com"]
+
+	AmazonSNS[AmazonSNS]
+
+	awsCli --> |publish| AmazonSNS
+	Lanka <-.-> | email / arn:aws:sns:us-west-1:123456789012:lankahsu520| AmazonSNS
+	Mary <-.-> | email / arn:aws:sns:us-west-1:123456789012:lankahsu520| AmazonSNS
+```
+
+### 4.5.1. [SNS Dashboard](https://eu-west-1.console.aws.amazon.com/sns/v3/home?region=eu-west-1#/dashboard)
+
+### 4.5.2. [aws sns xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-s3.html)
+
+#### [create-topic](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sns/create-topic.html)
+
+```bash
+$ aws sns create-topic --name lankahsu520
+{
+    "TopicArn": "arn:aws:sns:eu-west-1:123456789012:lankahsu520"
+}
+```
+
+#### [delete-topic](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sns/delete-topic.html)
+
+```bash
+$ aws sns delete-topic --topic-arn arn:aws:sns:eu-west-1:123456789012:lankahsu520
+```
+
+#### [subscribe](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sns/subscribe.html)
+
+>The protocol that you want to use. Supported protocols include:
+>- `http` – delivery of JSON-encoded message via HTTP POST
+>- `https` – delivery of JSON-encoded message via HTTPS POST
+>- `email` – delivery of message via SMTP
+>- `email-json` – delivery of JSON-encoded message via SMTP
+>- `sms` – delivery of message via SMS
+>- `sqs` – delivery of JSON-encoded message to an Amazon SQS queue
+>- `application` – delivery of JSON-encoded message to an EndpointArn for a mobile app and device
+>- `lambda` – delivery of JSON-encoded message to an Lambda function
+>- `firehose` – delivery of JSON-encoded message to an Amazon Kinesis Data Firehose delivery stream.
+
+```bash
+$ aws sns subscribe --topic-arn arn:aws:sns:us-west-1:123456789012:lankahsu520 --protocol email --notification-endpoint lankahsu@gmail.com
+{
+    "SubscriptionArn": "pending confirmation"
+}
+```
+
+#### [list-subscriptions](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sns/list-subscriptions.html)
+
+```bash
+$ aws sns list-subscriptions
+{
+    "Subscriptions": [
+        {
+            "SubscriptionArn": "arn:aws:sns:eu-west-1:123456789012:lankahsu520:9aaa9c9a-8dba-45b6-999b-7871bad374d2",
+            "Owner": "123456789012",
+            "Protocol": "email",
+            "Endpoint": "lankahsu@gmail.com",
+            "TopicArn": "arn:aws:sns:eu-west-1:123456789012:lankahsu520"
+        },
+    ]
+}
+```
+
+#### [list-topics](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sns/list-topics.html)
+
+```bash
+$ aws sns list-topics
+```
+
+#### [publish](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sns/publish.html)
+
+```bash
+$ aws sns publish --topic-arn arn:aws:sns:us-west-1:123456789012:lankahsu520 --message "Hello World!"
+{
+    "MessageId": "2e91a93d-8b5c-5f66-8da9-f5224ebfb6f2"
+}
+```
+
+#### [unsubscribe](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sns/unsubscribe.html)
+
+```bash
+$ aws sns unsubscribe --subscription-arn arn:aws:sns:eu-west-1:123456789012:lankahsu520:9aaa9c9a-8dba-45b6-999b-7871bad374d2
+```
+
+#### [list-subscriptions](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sns/list-subscriptions.html)
+
+```bash
+$ aws sns list-subscriptions
+{
+    "Subscriptions": [
+        {
+            "SubscriptionArn": "arn:aws:sns:eu-west-1:123456789012:lankahsu520:9aaa9c9a-8dba-45b6-999b-7871bad374d2",
+            "Owner": "123456789012",
+            "Protocol": "email",
+            "Endpoint": "lankahsu@gmail.com",
+            "TopicArn": "arn:aws:sns:eu-west-1:123456789012:lankahsu520"
+        },
+    ]
 }
 ```
 
