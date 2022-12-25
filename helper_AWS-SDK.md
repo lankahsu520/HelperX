@@ -232,9 +232,11 @@ $ cd build_xxx \
 
 
 
-# 5. [aws-doc-sdk-examples](https://github.com/awsdocs/aws-doc-sdk-examples)
+# 5. Examples
 
-## 5.1. [Getting started with the AWS SDK for C++ code examples](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/getting-started-code-examples.html)
+## 5.1. [aws-doc-sdk-examples](https://github.com/awsdocs/aws-doc-sdk-examples)
+
+### 5.1.1. [Getting started with the AWS SDK for C++ code examples](https://docs.aws.amazon.com/sdk-for-cpp/v1/developer-guide/getting-started-code-examples.html)
 
 ```bash
 $ git clone --recurse-submodules https://github.com/awsdocs/aws-doc-sdk-examples.git
@@ -262,7 +264,7 @@ $ mkdir build_xxx \
 >
 >You must also have AWS credentials configured. For steps on using the AWS Command Line Interface (AWS CLI) to configure credentials, see [CLI Configuration basics](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html)
 
-## 5.2. DynamoDB applications
+### 5.1.2. DynamoDB applications
 
 ```bash
 $ ls -al aws-doc-sdk-examples/cpp/example_code/dynamodb/*
@@ -573,7 +575,7 @@ $ run_update_item Music Lanka Lanka520520 AlbumTitle=Lanka520twice
 Item was updated
 ```
 
-## 5.3. S3 applications
+### 5.1.3. S3 applications
 
 ```bash
 $ ls -al aws-doc-sdk-examples/cpp/example_code/s3/*
@@ -588,11 +590,17 @@ HelperX
 utilx9
 ```
 
+## 5.2. [awsX9](https://github.com/lankahsu520/awsX9)
+
+> 這是本人開發的，簡單好用！
 
 
-# 6. S3
 
-## 6.1. [Building the SDK from source on EC2](https://github.com/aws/aws-sdk-cpp/wiki/Building-the-SDK-from-source-on-EC2) - [s3sample.cpp](./AWS/patches/s3/s3sample.cpp)
+# 6. Services
+
+## 6.1. S3
+
+### 6.1.1. [Building the SDK from source on EC2](https://github.com/aws/aws-sdk-cpp/wiki/Building-the-SDK-from-source-on-EC2) - [s3sample.cpp](./AWS/patches/s3/s3sample.cpp)
 
 ```bash
 $ s3sample
@@ -612,23 +620,19 @@ WithKey: object name not aws_access_key_id or aws_secret_access_key
 只能說我不懂 AWS 的 nameing rules。
 ```
 
+## 6.2.  [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html) 
 
-
-# 7.  [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html) - [AWS Management Console](https://ap-northeast-1.console.aws.amazon.com/dynamodbv2/home?region=ap-northeast-1#dashboard)
-
-## 7.1. [Developer Guide](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html)
-
-## 7.2. [aws_dynamo](https://github.com/devicescape/aws_dynamo) - AWS DynamoDB Library for C and C++
+### 6.2.1. [aws_dynamo](https://github.com/devicescape/aws_dynamo) - AWS DynamoDB Library for C and C++
 
 
 
-# 8. [AWS IoT](https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html)
+# 7. [AWS IoT](https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html)
 
-## 8.1. [aws-iot-device-sdk-embedded-C](https://github.com/aws/aws-iot-device-sdk-embedded-C)
+## 7.1. [aws-iot-device-sdk-embedded-C](https://github.com/aws/aws-iot-device-sdk-embedded-C)
 
 > The AWS IoT Device SDK for Embedded C (C-SDK) is a collection of C source files under the [MIT open source license](https://github.com/aws/aws-iot-device-sdk-embedded-C/blob/main/LICENSE) that can be used in embedded applications to securely connect IoT devices to [AWS IoT Core](https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html). It contains MQTT client, HTTP client, JSON Parser, AWS IoT Device Shadow, AWS IoT Jobs, and AWS IoT Device Defender libraries. 
 
-## 8.2. [aws-iot-device-sdk-cpp-v2](https://github.com/aws/aws-iot-device-sdk-cpp-v2)
+## 7.2. [aws-iot-device-sdk-cpp-v2](https://github.com/aws/aws-iot-device-sdk-cpp-v2)
 
  > The AWS IoT SDKs and the `aws-iot-device-sdk-cpp` are separate from this SDK. The AWS IoT Device SDK for C++ v2 is available at [`aws-iot-device-sdk-cpp-v2`](https://github.com/aws/aws-iot-device-sdk-cpp-v2) on GitHub.
 
