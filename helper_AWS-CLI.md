@@ -310,6 +310,29 @@ $ aws dynamodb scan --table-name Music
 
 >因為本身就是虛擬運算，設定起來也較複雜，不建議使用 AWS CLI；請多加使用 Dashboard。
 
+### 4.2.3. ec2metadata xxx
+
+```bash
+# please use ssh to link with ec2
+$ ec2metadata --instance-id
+i-01234567890abcdef
+
+$ ec2metadata --instance-type
+t3.medium
+
+$ ec2metadata --public-ipv4
+199.199.199.199
+
+$ ec2metadata --public-hostname
+ec2-199-199-199-199.eu-west-1.compute.amazonaws.com
+
+or
+$ curl http://169.254.169.254/latest/meta-data/public-hostname
+ec2-199-199-199-199.eu-west-1.compute.amazonaws.com
+```
+
+
+
 ## 4.3. [S3 (Amazon Simple Storage Service)](https://docs.aws.amazon.com/zh_tw/AmazonS3/latest/userguide/Welcome.html)
 
 ### 4.3.1. [S3 Dashboard](https://s3.console.aws.amazon.com/s3/buckets?region=eu-west-1)
