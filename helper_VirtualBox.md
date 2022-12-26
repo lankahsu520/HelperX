@@ -209,7 +209,9 @@ sudo cp dbusX.conf /etc/dbus-1/system.d
 sudo reboot
 ```
 
-# 4. VBoxManage modifyhd
+# 4. VBoxManage
+
+## 4.1. modifyhd
 
 #### A. Client (Ubuntu 20.04)
 
@@ -231,6 +233,20 @@ zerofree -v $PURGE_DISK
 "C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" modifyhd work_curr.vdi --compact
 
 ```
+
+## 4.1. Virtual Media Manager
+
+#### A. Add Disk Image
+
+> 載入現有的 Disk Image。
+
+#### B. Create Disk Image
+
+> 建立新的 Disk Image。
+
+#### C. Copy Disk Image
+
+> 複製選定的  Disk Image。如果你是用 win10 的檔案總管複製，會同時複製內部的 uuid。但是使用此工具會建立新的uuid。
 
 # Appendix
 
