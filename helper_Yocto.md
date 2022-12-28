@@ -15,9 +15,35 @@
 [issues-image]: https://img.shields.io/github/issues/lankahsu520/HelperX.svg
 [issues-url]: https://github.com/lankahsu520/HelperX/issues
 
-# 1. bb helper
+# 1.  [Yocto Project](https://www.yoctoproject.org/software-overview/)
 
-## 1.1. utils - [layers/poky/bitbake/lib/bb/utils.py](layers/poky/bitbake/lib/bb/utils.py)
+## 1.1. [Yocto計劃](https://zh.m.wikipedia.org/zh-tw/Yocto計劃)
+
+> Yocto計畫主要由三個元件組成：
+>
+> BitBake：讀取組態檔與處方檔（recipes)並執行，組態與建置所指定的應用程式或者系統檔案映像檔。
+>
+> OpenEmbedded-Core：由基礎layers所組成，並為處方檔（recipes)，layers與classes的集合：這些要素都是在OpenEmbedded系統中共享使用的。
+>
+> Poky：是一個參考系統。是許多案子與工具的集合，用來讓使用者延伸出新的發行版（Distribution)
+
+## 1.2. 使用心得
+
+>編譯很花時間，至少2小時（手邊是有intel i9-11980HK）以上 ~ 1天 or 2天都有可能。
+>
+>很佔空間，至少要留個100G。
+>
+>還有你要先決定 Poky要抓那一版本（branch 和 rev），相對應的 meta-openembedded 和硬體相依性比較高的 meta-raspberrypi 你也要決定版本（branch 和 rev）。就算所有需要的軟體都集齊了，最後也編譯完了，最後能不能開機也是問題！
+>
+>如果你不是晶片供應商（如聯發科），而只是一位 embedded engineer，聯發科領多少錢，而我們領不到他們的一半，甚至連破百萬都沒有；卻要幫他們組一包可以編譯的環境，這情何以堪。
+>
+>BB 的語法太靈活，shellscript 的支援度不高；我們寫程式的時間都不夠了，還要學習這奇怪的語法。
+>
+>在編譯時一定要上網！就算你已經編譯成功，而且已經下載過，還是會報失敗。
+
+# 2. bb helper
+
+## 2.1. utils - [layers/poky/bitbake/lib/bb/utils.py](layers/poky/bitbake/lib/bb/utils.py)
 
 #### def contains(variable, checkvalues, truevalue, falsevalue, d):
 
@@ -89,6 +115,8 @@ SRCREV = "${@'${AUTOREV}' if d.getVar('BB_EXTRA_SRCREV', 'AUTOINC') \
 # Appendix
 
 # I. Study
+
+#### A. [Yocto計劃](https://zh.m.wikipedia.org/zh-tw/Yocto計劃)
 
 # II. Debug
 
