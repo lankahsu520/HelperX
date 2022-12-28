@@ -74,7 +74,7 @@ $ cooker cook ./cooker-menu/pi3-sample-menu.json
 ```bash
 $ cd /work/YoctoPI3
 # provides you a new shell into the build directory with all the environment variables set.
-$ cooker shell
+$ cooker shell pi3
 ```
 
 ## 3.1. rootfs
@@ -94,6 +94,18 @@ $ cooker generate
 $ cat ./builds/build-pi3/conf/local.conf
 
 $ cat ./poky/meta/classes/extrausers.bbclass
+```
+
+##### - pi3-sample-menu.json
+
+```json
+		"local.conf": [
+			"MACHINE = 'raspberrypi3' ",
+			"ENABLE_UART = '1' ",
+			"IMAGE_CLASSES += 'extrausers'",
+			"EXTRA_USERS_PARAMS = 'usermod -P 1234567890 root;'",
+			"CMDLINE_append += 'quiet' "
+		]
 ```
 
 #### A. [/etc/passwd](https://www.cyberciti.biz/faq/understanding-etcpasswd-file-format/)
@@ -125,6 +137,26 @@ $ cat ./layers/poky/meta/recipes-core/dropbear/dropbear/init
 $ vi ./layers/poky/meta/recipes-core/dropbear/dropbear/dropbear.default
 # please mark
 # DROPBEAR_EXTRA_ARGS="-w"
+```
+
+##### - pi3-sample-menu.json
+
+```json
+		"local.conf": [
+			"MACHINE = 'raspberrypi3' ",
+			"ENABLE_UART = '1' ",
+			"IMAGE_CLASSES += 'extrausers'",
+			"EXTRA_USERS_PARAMS = 'usermod -P 1234567890 root;'",
+			"IMAGE_INSTALL += ' dropbear'",
+			"CMDLINE_append += 'quiet' "
+		]
+```
+
+##### - dropbear.default
+
+```config
+# Disallow root logins by default
+#DROPBEAR_EXTRA_ARGS="-w"
 ```
 
 ## 3.4. [create a layer](https://blog.csdn.net/CSDN1013/article/details/111088399)
@@ -170,6 +202,8 @@ $ ls -al ./builds/build-pi3/tmp/deploy/images/raspberrypi3/core-image-base-raspb
 #### [balenaEtcher-Portable-1.5.49](https://www.balena.io/etcher/)
 
 
+
+# 5. QEMU
 
 # Appendix
 # I. Study
