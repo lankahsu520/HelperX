@@ -130,6 +130,11 @@ $ git checkout -b new-branch
 $ git checkout -b new-branch origin
 ```
 
+#### git switch
+
+```bash
+$ git switch -c hardknott remotes/origin/hardknott
+```
 
 ## 1.2. Tag
 
