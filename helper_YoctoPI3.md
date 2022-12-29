@@ -67,6 +67,8 @@ $ cooker cook ./cooker-menu/pi3-sample-menu.json
 
 # 3. Customize
 
+> yocto 版本相容性很低，或許目前的版本可以進行客製化；但是其它版本的語法可能就不同了，這個要小心！
+
 ```bash
 $ cd /work/YoctoPI3
 
@@ -158,7 +160,9 @@ $ bitbake -s | grep example
 
 # 4. Raspberry PI
 
-## 4.1. Image
+## 4.1. Tool - [balenaEtcher-Portable-1.5.49](https://www.balena.io/etcher/)
+
+## 4.2. Image
 
 ```bash
 $ ls -al ./builds/build-pi3/tmp/deploy/images/raspberrypi3/core-image-base-raspberrypi3.rpi-sdimg
