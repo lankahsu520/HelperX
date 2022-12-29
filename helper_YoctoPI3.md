@@ -201,7 +201,7 @@ $ ls -al images_pi3/pi3-master_core-image-base-raspberrypi3.wic.bz2
 
 ```bash
 $ cd cookerX
-$ . conf/pi3-master.conf
+$ . conf/qemux86_64.conf
 $ make
 
 # check rootfs
