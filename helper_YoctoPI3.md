@@ -158,7 +158,7 @@ $ vi ./builds/build-pi3/conf/bblayers.conf
 $ bitbake -s | grep example
 ```
 
-# 4. Raspberry PI
+# 4. Install to Raspberry PI
 
 ## 4.1. Tool - [balenaEtcher-Portable-1.5.49](https://www.balena.io/etcher/)
 
@@ -167,8 +167,6 @@ $ bitbake -s | grep example
 ```bash
 $ ls -al ./builds/build-pi3/tmp/deploy/images/raspberrypi3/core-image-base-raspberrypi3.rpi-sdimg
 ```
-
-#### [balenaEtcher-Portable-1.5.49](https://www.balena.io/etcher/)
 
 # 5. QEMU
 
