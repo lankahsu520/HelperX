@@ -1,0 +1,45 @@
+{
+	"notes": ["This is a standard menu for Raspberry Pi 3.", "Please refer to the README file for instruction on how to build the image"],
+	"sources": [{
+			"url": "git://git.yoctoproject.org/poky",
+			"branch": "master",
+			"rev": "7ec846be8b"
+		}, {
+			"url": "git://git.openembedded.org/meta-openembedded",
+			"branch": "master",
+			"rev": "7f15e7975"
+		}, {
+			"url": "git://git.yoctoproject.org/meta-raspberrypi",
+			"branch": "master",
+			"rev": "2b733d5"
+		}
+	],
+	"local.conf": [
+		"CONF_VERSION = '2'"
+		,"BB_NUMBER_THREADS = '6'"
+		,"PARALLEL_MAKE = '-j 6'"
+		,"PATCHRESOLVE = 'noop'"
+		,"PACKAGECONFIG:append:pn-qemu-system-native = ' sdl'"
+		,"EXTRA_IMAGE_FEATURES = 'debug-tweaks ssh-server-dropbear'"
+		,"USER_CLASSES = 'buildstats'"
+		,"ENABLE_UART = '1'"
+	],
+	"layers": ["poky/meta", "poky/meta-poky", "poky/meta-yocto-bsp", "meta-openembedded/meta-oe"],
+	"builds": {
+		"qemux86-64": {
+			"notes": ["The default `core-image-base` image is used for bitbake."],
+			"target": "core-image-base",
+			"layers": ["meta-raspberrypi"],
+			"local.conf": ["MACHINE = 'qemux86-64' "]
+		},
+		"pi3-master": {
+			"notes": ["The default `core-image-base` image is used for bitbake."],
+			"target": "core-image-base",
+			"layers": ["meta-raspberrypi"],
+			"local.conf": [
+				"MACHINE = 'raspberrypi3' "
+				,"LICENSE_FLAGS_ACCEPTED = 'synaptics-killswitch'"
+			]
+		}
+	}
+}

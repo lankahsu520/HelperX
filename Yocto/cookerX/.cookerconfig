@@ -1,0 +1,8 @@
+{
+    "menu": "cooker-menu/pi3-master.json",
+    "layer-dir": "layers-master",
+    "build-dir": "builds",
+    "dl-dir": "downloads",
+    "sstate-dir": "sstate-cache",
+    "cooker-config-version": 1
+}
