@@ -170,7 +170,11 @@ example                                               :0.1-r0
 
 # 4. Install to Raspberry PI
 
-## 4.1. Tool - [balenaEtcher-Portable-1.5.49](https://www.balena.io/etcher/)
+## 4.1. Tools
+
+#### A. [balenaEtcher](https://www.balena.io/etcher/)
+
+#### B. [win32diskimager](https://sourceforge.net/projects/win32diskimager/)
 
 ## 4.2. Image
 
@@ -188,9 +192,13 @@ $ ls -al ./builds/build-pi3/tmp/deploy/images/raspberrypi3/core-image-base-raspb
 
 # 6. cookerX
 
-cookerX is based on [Yocto Cooker](https://github.com/cpb-/yocto-cooker).  pi3-sample-menu.json 使用的版本過舊。
-
-於是將引用 poky、meta-openembedded 和 meta-raspberrypi 的 branch: master。
+> cookerX is based on [Yocto Cooker](https://github.com/cpb-/yocto-cooker).  pi3-sample-menu.json 使用的版本過舊。
+>
+> | meta              | branch | rev        |
+> | ----------------- | ------ | ---------- |
+> | poky              | master | 7ec846be8b |
+> | meta-openembedded | master | 7f15e7975  |
+> | meta-raspberrypi  | master | 2b733d5    |
 
 #### A. pi3-master
 
