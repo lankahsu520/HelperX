@@ -138,9 +138,8 @@ Add your new layer with 'bitbake-layers add-layer meta-lanka'
 
 # we don't need to add-layer.
 ```
-#### A. [meta-lanka](https://github.com/lankahsu520/HelperX/tree/master/Yocto/meta-lanka)
-
 ```bash
+# The following steps don't have to be performed.
 $ cd /work/YoctoPI3/layers
 $ . ./poky/oe-init-build-env
 
@@ -148,6 +147,8 @@ $ cd /work/YoctoPI3/layers
 $ yocto-check-layer meta-lanka
 $ rm -rf build
 ```
+
+### 3.4.1. [meta-lanka](https://github.com/lankahsu520/HelperX/tree/master/Yocto/meta-lanka)
 
 ```bash
 # check example exist
@@ -164,9 +165,13 @@ $ vi ./builds/build-pi3/conf/bblayers.conf
 # check again
 $ bitbake -s | grep example
 example                                               :0.1-r0
+
+# Then update meta-lanka/recipes-example/example/example_0.1.bb and add meta-lanka/recipes-example/example/files/* 
 ```
 
-#### B. Please add some files
+### 3.4.2. Update [example_0.1.bb](https://github.com/lankahsu520/HelperX/tree/master/Yocto/meta-lanka/recipes-example/example/example_0.1.bb)
+
+### 3.4.3. Add [files](https://github.com/lankahsu520/HelperX/tree/master/Yocto/meta-lanka/recipes-example/example/files)
 
 # 4. Install to Raspberry PI
 
@@ -175,6 +180,8 @@ example                                               :0.1-r0
 #### A. [balenaEtcher](https://www.balena.io/etcher/)
 
 #### B. [win32diskimager](https://sourceforge.net/projects/win32diskimager/)
+
+#### C. [rpi-imager](https://github.com/raspberrypi/rpi-imager)
 
 ## 4.2. Image
 
