@@ -133,6 +133,8 @@ $ cd /work/YoctoPI3/layers
 $ bitbake-layers create-layer meta-lanka
 NOTE: Starting bitbake server...
 Add your new layer with 'bitbake-layers add-layer meta-lanka'
+
+# we don't need to add-layer.
 ```
 ```bash
 $ cd /work/YoctoPI3/layers
@@ -146,6 +148,7 @@ $ rm -rf build
 ```bash
 # check example exist
 $ bitbake -s | grep example
+# not found
 
 $ vi ./cooker-menu/pi3-sample-menu.json
 # add "meta-lanka" into "layers"
@@ -156,6 +159,7 @@ $ vi ./builds/build-pi3/conf/bblayers.conf
 
 # check again
 $ bitbake -s | grep example
+example                                               :0.1-r0
 ```
 
 # 4. Install to Raspberry PI
