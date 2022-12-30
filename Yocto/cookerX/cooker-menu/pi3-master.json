@@ -23,14 +23,17 @@
 		,"EXTRA_IMAGE_FEATURES = 'debug-tweaks ssh-server-dropbear'"
 		,"USER_CLASSES = 'buildstats'"
 		,"ENABLE_UART = '1'"
+		,"IMAGE_INSTALL:append = ' example'"
 	],
-	"layers": ["poky/meta", "poky/meta-poky", "poky/meta-yocto-bsp", "meta-openembedded/meta-oe"],
+	"layers": ["poky/meta", "poky/meta-poky", "poky/meta-yocto-bsp", "meta-openembedded/meta-oe", "meta-lanka"],
 	"builds": {
 		"qemux86-64": {
 			"notes": ["The default `core-image-base` image is used for bitbake."],
 			"target": "core-image-base",
 			"layers": ["meta-raspberrypi"],
-			"local.conf": ["MACHINE = 'qemux86-64' "]
+			"local.conf": [
+				"MACHINE = 'qemux86-64' "
+			]
 		},
 		"pi3-master": {
 			"notes": ["The default `core-image-base` image is used for bitbake."],

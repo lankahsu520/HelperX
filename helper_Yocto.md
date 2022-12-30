@@ -17,7 +17,35 @@
 
 # 1.  [Yocto Project](https://www.yoctoproject.org/software-overview/)
 
-## 1.1. [Yocto計劃](https://zh.m.wikipedia.org/zh-tw/Yocto計劃)
+## 1.1. [Release Activity](https://wiki.yoctoproject.org/wiki/Releases)
+| Codename  | Yocto Project Version | Release Date |   Current Version   |                 Support Level                  | Poky Version | BitBake branch |                     Maintainer                      |
+| :-------: | :-------------------: | :----------: | :-----------------: | :--------------------------------------------: | :----------: | :------------: | :-------------------------------------------------: |
+| Mickledore  |          4.2          | April 2023 |                     | Future - Support for 7 months (until October 2023) |     N/A      |                | Richard Purdie <richard.purdie@linuxfoundation.org> |
+| Langdale  |          4.1          | October 2022 |                     | Future - Support for 7 months (until May 2023) |     N/A      |                | Richard Purdie <richard.purdie@linuxfoundation.org> |
+| Kirkstone |          4.0          |   May 2022   | 4.0.3 (August 2022) |     Long Term Support (minimum Apr. 2024)      |     N/A      |      2.0       |          Steve Sakoman <steve@sakoman.com>          |
+| Honister  |          3.4          | October 2021 |  3.4.4 (May 2022)   |                      EOL                       |     N/A      |      1.52      |         Anuj Mittal <anuj.mittal@intel.com>         |
+| Hardknott |          3.3          |  April 2021  | 3.3.6 (April 2022)  |                      EOL                       |     N/A      |      1.50      |         Anuj Mittal <anuj.mittal@intel.com>         |
+
+## 1.2. [Release Information](https://docs.yoctoproject.org/migration-guides/index.html)
+
+## 1.3. [OpenEmbedded Layer Index](https://layers.openembedded.org/layerindex/)
+
+## 1.4. Source Tree
+
+#### [meta-freescale](https://git.yoctoproject.org/meta-freescale/)
+
+#### [meta-freescale-distro](https://github.com/Freescale/meta-freescale-distro)
+
+
+#### [meta-imx](https://source.codeaurora.org/external/imx/meta-imx/)
+
+#### [meta-openembedded](http://cgit.openembedded.org/meta-openembedded/tree/meta-oe?h=master)
+
+#### [meta-rauc](https://github.com/rauc/meta-rauc)
+
+#### [poky](https://git.yoctoproject.org/poky/)
+
+### 1.4.1. [Yocto計劃](https://zh.m.wikipedia.org/zh-tw/Yocto計劃)
 
 > Yocto計畫主要由三個元件組成：
 >
@@ -27,7 +55,7 @@
 >
 > Poky：是一個參考系統。是許多案子與工具的集合，用來讓使用者延伸出新的發行版（Distribution)
 
-## 1.2. 使用心得
+## 1.5. Read Me First
 
 >編譯很花時間，至少2小時（手邊是有intel i9-11980HK）以上 ~ 1天 or 2天都有可能。
 >
@@ -43,9 +71,131 @@
 >
 >yocto 的版本變動很快，或許今年允許的 class 或語法，明年就不能用了。就連google 大神也救不了，因為新的東西，還要等有心人把踩到的狗屎寫出來。
 
-# 2. bb helper
+# 2. Poky
 
-## 2.1. utils - [layers/poky/bitbake/lib/bb/utils.py](layers/poky/bitbake/lib/bb/utils.py)
+## 2.1. version
+
+```bash
+$ bitbake -e virtual/kernel | grep "^PN"
+PN="linux-raspberrypi"
+
+$ bitbake -e virtual/kernel | grep "^PV"
+PV="5.15.56+gitAUTOINC+3b1dc2f1fc_a90998a3e5"
+
+$ cat ./$PJ_YOCTO_LAYERS/poky/meta-poky/conf/distro/poky.conf | grep DISTRO_VERSION
+#DISTRO_VERSION = "4.1+snapshot-${METADATA_REVISION}"
+DISTRO_VERSION = "4.1"
+SDK_VERSION = "${@d.getVar('DISTRO_VERSION').replace('snapshot-${METADATA_REVISION}', 'snapshot')}"
+
+```
+
+# 3. Yocto Recipes
+
+## 3.1. bitbake
+
+#### core-image-base
+
+
+```bash
+# check core-image-base exist
+$ bitbake -s | grep core-image-base
+core-image-base                                       :1.0-r0
+$ find -name core-image-base*.bb
+./layers-master/poky/meta/recipes-core/images/core-image-base.bb
+
+$ bitbake -e core-image-base | grep ^SRC_URI=
+
+$ bitbake -e core-image-base | grep ^S=
+S="/work/codebase/RaspberryPi/Yocto/yocto-pi/builds/build-pi3-master/tmp/work/raspberrypi3-poky-linux-gnueabi/core-image-base/1.0-r0/core-image-base-1.0"
+
+$ bitbake -c listtasks core-image-base
+$ bitbake -c cleanall core-image-base
+$ bitbake -c build core-image-base
+```
+
+#### Linux Kernel (linux-)
+
+```bash
+$ bitbake -s | grep linux-
+
+# make menuconfig
+$ bitbake -c menuconfig virtual/kernel
+```
+#### ?apache2
+
+```json
+"layers": [ "meta-openembedded/meta-webserver" ]
+```
+
+```bash
+$ bitbake -s | grep apache2
+```
+
+#### avahi (mDNS)
+
+```bash
+$ bitbake -s | grep avahi
+```
+
+#### bluez5
+
+```bash
+$ bitbake -s | grep bluez5
+```
+
+#### Busybox - [yocto项目修改busybox](https://community.nxp.com/t5/i-MX-Processors/yocto项目修改busybox/m-p/1076952)
+
+```bash
+$ bitbake -s | grep busybox
+```
+
+#### dbus
+
+```bash
+$ bitbake -s | grep dbus
+```
+
+#### dropbear (SSH)
+
+```bash
+$ bitbake -s | grep dropbear
+```
+
+#### libwebsockets
+
+```json
+"layers": [ "meta-openembedded/meta-networking" ]
+```
+
+```bash
+$ bitbake -s | grep libwebsockets
+```
+
+#### ?mosquitto
+
+```json
+"layers": [ "meta-openembedded/meta-networking" ]
+```
+
+```bash
+$ bitbake -s | grep mosquitto
+```
+
+#### glib-2.0
+
+```bash
+$ bitbake -s | grep glib-2.0
+```
+
+#### systemd
+
+```bash
+$ bitbake -s | grep systemd
+```
+
+# 4. bb helper
+
+## 4.1. utils - [layers/poky/bitbake/lib/bb/utils.py](layers/poky/bitbake/lib/bb/utils.py)
 
 #### def contains(variable, checkvalues, truevalue, falsevalue, d):
 
@@ -72,9 +222,9 @@ PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'x11', d)}"
 
 ```
 
-# 2. Others
+# 5. Others
 
-## 2.1. BB_ENV_EXTRAWHITE
+## 5.1. BB_ENV_EXTRAWHITE
 
 ```bb
 ERROR: Variable BB_ENV_EXTRAWHITE has been renamed to BB_ENV_PASSTHROUGH_ADDITIONS
@@ -83,7 +233,7 @@ ERROR: Exiting to allow enviroment variables to be corrected
 
 ```
 
-## 2.2. [BB_ENV_PASSTHROUGH_ADDITIONS](https://docs.yoctoproject.org/bitbake/dev/bitbake-user-manual/bitbake-user-manual-ref-variables.html#term-BB_ENV_PASSTHROUGH_ADDITIONS)
+## 5.2. [BB_ENV_PASSTHROUGH_ADDITIONS](https://docs.yoctoproject.org/bitbake/dev/bitbake-user-manual/bitbake-user-manual-ref-variables.html#term-BB_ENV_PASSTHROUGH_ADDITIONS)
 
 ```mermaid
 flowchart LR

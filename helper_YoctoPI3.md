@@ -35,9 +35,11 @@ $ sudo apt-get install gawk wget git-core diffstat unzip texinfo gcc-multilib bu
 
 ```bash
 $ python3 -m pip install --upgrade git+https://github.com/cpb-/yocto-cooker.git
+$ cooker --version
+# 1.3.0
 ```
 
-## 2.1. Cooker Menu- ([pi3-sample-menu.json](https://github.com/cpb-/yocto-cooker/blob/master/sample-menus/pi3-sample-menu.json))
+## 2.1. Cooker Menu - ([pi3-sample-menu.json](https://github.com/cpb-/yocto-cooker/blob/master/sample-menus/pi3-sample-menu.json))
 
 ```bash
 $ mkdir -p /work/YoctoPI3/cooker-menu
@@ -136,6 +138,8 @@ Add your new layer with 'bitbake-layers add-layer meta-lanka'
 
 # we don't need to add-layer.
 ```
+#### A. [meta-lanka](https://github.com/lankahsu520/HelperX/tree/master/Yocto/meta-lanka)
+
 ```bash
 $ cd /work/YoctoPI3/layers
 $ . ./poky/oe-init-build-env
@@ -161,6 +165,8 @@ $ vi ./builds/build-pi3/conf/bblayers.conf
 $ bitbake -s | grep example
 example                                               :0.1-r0
 ```
+
+#### B. Please add some files
 
 # 4. Install to Raspberry PI
 
@@ -250,7 +256,8 @@ $ find -name qemu*.bb
 
 - [linux-firmware-rpidistro: add branch in SRC_URI](https://lore.kernel.org/all/a4a248b1-4a28-4c38-981b-76bd7013ec6f@www.fastmail.com/T/)
 
-## II.3. linux-firmware-rpidistro RPROVIDES linux-firmware-rpidistro-bcm43456 but was skipped: because it has a restricted license 'synaptics-killswitch'. Which is not listed in LICENSE_FLAGS_ACCEPTED
+## II.3. it has a restricted license 'synaptics-killswitch'
+> linux-firmware-rpidistro RPROVIDES linux-firmware-rpidistro-bcm43456 but was skipped: because it has a restricted license 'synaptics-killswitch'. Which is not listed in LICENSE_FLAGS_ACCEPTED
 
 #### - local.conf
 
@@ -258,7 +265,34 @@ $ find -name qemu*.bb
 LICENSE_FLAGS_ACCEPTED = 'synaptics-killswitch'
 ```
 
+## II.4. sh: no job control in this shell
 
+> [    1.795126] Run /sbin/init as init process
+> [    1.795772] hid-generic 0003:0627:0001.0002: input: USB HID v1.11 Keyboard [QEMU QEMU USB Keyboard] on usb-0000:00:1d.7-2/input0
+> [    1.796985] Run /etc/init as init process
+> [    1.797744] Run /bin/init as init process
+> [    1.798366] Run /bin/sh as init process
+> sh: cannot set terminal process group (-1): Inappropriate ioctl for device
+> sh: no job control in this shell
+> sh-5.2#
+> [    2.108334] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+
+#### - busybox in rootfs ?
+
+```bash
+# check busybox exist
+$ ls -al rootfs/bin/busybox
+```
+
+#### - local.conf
+
+```bash
+Fail:
+,"IMAGE_INSTALL += ' example'"
+
+Ok:
+,"IMAGE_INSTALL:append = ' example'"
+```
 
 # Author
 
