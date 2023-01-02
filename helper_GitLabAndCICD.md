@@ -749,7 +749,9 @@ flowchart LR
 
 # II. Debug
 
-# III. gitlab-runner Usage
+# III. Tool Usage
+
+#### A. gitlab-runner Usage
 
 ```bash
 $ sudo gitlab-runner

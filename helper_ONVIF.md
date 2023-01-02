@@ -1,4 +1,4 @@
-# ONVIF
+# [ONVIF](https://www.onvif.org)
 [![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
 [![GitHub license][license-image]][license-url]
 [![GitHub stars][stars-image]][stars-url]
@@ -296,19 +296,17 @@ $ curl --digest -u ${USER}:${PASSWORD}
 # I. Study
 
 #### A. [ONVIF](https://www.onvif.org)
+#### B. [wsdl](https://github.com/onvif/specs/tree/22.12/wsdl)
 
 # II. Debug
 
-# III. Tools
+# III. Tool Usage
 
-## III.1. [ONVIF Device Manager](https://sourceforge.net/projects/onvifdm/)
+#### A. [ONVIF Device Manager](https://sourceforge.net/projects/onvifdm/)
 
-# IV. [ONVIF on GitHub](https://www.onvif.org)
-## IV.1. [wsdl](https://github.com/onvif/specs/tree/22.12/wsdl)
+# IV. [gSOAP](https://www.genivia.com/index.html)
 
-# V. [gSOAP](https://www.genivia.com/index.html)
-
-## V.1. onvif.h
+## IV.1. onvif.h
 
 ```bash
 $ wsdl2h -c -o onvif.h \
@@ -320,7 +318,7 @@ $ wsdl2h -c -o onvif.h \
 	http://www.w3.org/2006/03/addressing/ws-addr.xsd
 ```
 
-## V.2. xxx.req.xml & xxx.res.xml 
+## IV.2. xxx.req.xml & xxx.res.xml 
 
 ```bash
 $ soapcpp2 -C -I../gsoap-2.8/gsoap/import onvif.h

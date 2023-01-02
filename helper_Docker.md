@@ -428,8 +428,76 @@ $ docker attach 15948ab15718
 
 ```
 
+# 7. Virtual Machine vs. Container
+
+## 7.1. Virtual Machine
+
+![](https://oer.gitlab.io/oer-on-oer-infrastructure/figures/OS/virtual-machines.png)
+
+> image from oer.gitlab.io
+
+## 7.2. Container
+
+![](https://oer.gitlab.io/oer-on-oer-infrastructure/figures/OS/containers.png)
+
+> image from oer.gitlab.io
+
+## 7.3. A binary in low-level language can run on ???
+> 說真的，從上面的圖檔分析；Virtual Machine裏的 Host OS with Hypervisor ，只是把Host OS 和一個manager畫在一起，不就等同於 Host OS + Container manager。Guest OS1 = Env based on kernel of Host OS。
+>
+> Docker 在安裝 image 時，不是有個動作叫 pull；VM 部分也有很多預先安裝的〝系統〞放在網路請大家自己抓。所以兩邊都是要安裝的！安裝的！安裝的！
+>
+> 討論至此，那最主要的差別就是在 Hardware 的實作程度的範圍。那我可不可以說實作比較差的 VM 就是 Container。當然不能這麼一刀切，繼續看下去。
+>
+> 其實這兩張圖畫的太複雜了，沒辦法簡易的說明差別；這裏舉個很簡單的例子：
+>
+> $ docker pull node:10.15.3-alpine
+>
+> node 很累贅，但還稱不上是一個系統、一個OS，但它完全複製了可執行的環境, 並且在 HOST OS 上〝正確〞執行。
+>
+> 從這裏可以得到一個結論，Container 既可以是個 OS 模擬，也可以很簡單的模擬軟體層執行環境。
+> 很重要!很重要!很重要! 看圖就知，像是比較低底層所構建之執行檔，並不能交亙執行！
+> 也因為得知 docker image 是不同的！ (ubuntu run $ docker pull ubuntu ) !=  (Raspberry Pi run $ docker pull ubuntu )
+
+```mermaid
+flowchart LR
+	subgraph Host[Host - Ubuntu 20.04.4 LTS]
+		subgraph Native[Native compiler]
+			gcc[gcc helloworld.c]
+		end
+	end
+
+	subgraph Target[Target - Raspberry Pi]
+		helloworld_run_pi[-bash: ./helloworld: cannot execute binary file: Exec format error]
+		subgraph DockerPIU[Docker - Ubuntu 20.04]
+			helloworld_run_pi_u_docker[bash: ./helloworld: cannot execute binary file: Exec format error]
+		end
+	end
 
 
+	subgraph HostA[Host - Ubuntu 20.04.4 LTS]
+		helloworld_run_host[Hello world !!!]
+		subgraph DockerAU2004[Docker - Ubuntu 20.04]
+			helloworld_run_AU2004_docker[Hello world !!!]
+		end
+ 		subgraph DockerAU2204[Docker - Ubuntu 22.04]
+			helloworld_run_AU2204_docker[Hello world !!!]
+		end
+  end
+	
+	gcc --> |run|helloworld_run_host
+	gcc --> |run|helloworld_run_AU2004_docker
+	gcc --> |run|helloworld_run_AU2204_docker
+
+	gcc --> |run|helloworld_run_pi
+	gcc --> |run|helloworld_run_pi_u_docker
+
+```
+```bash
+$ file helloworld
+helloworld: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=18d2f341bfac8c548cedce30a01e9a865ba383f8, for GNU/Linux 3.2.0, not stripped
+
+```
 # Appendix
 
 # I. Study
@@ -444,7 +512,9 @@ $ docker attach 15948ab15718
 
 # II. Debug
 
-# III. docker Usage
+# III. Tool Usage
+
+#### A. docker Usage
 
 ```bash
 Usage:  docker [OPTIONS] COMMAND
@@ -572,77 +642,6 @@ EXPOSE 9981
 RUN apt-get clean
 RUN apt-get autoclean
 RUN apt-get autoremove --purge
-
-```
-
-
-# V. Virtual Machine vs. Container
-
-## V.1. Virtual Machine (from oer.gitlab.io)
-
-![](https://oer.gitlab.io/oer-on-oer-infrastructure/figures/OS/virtual-machines.png)
-
-## V.2. Container (from oer.gitlab.io)
-
-![](https://oer.gitlab.io/oer-on-oer-infrastructure/figures/OS/containers.png)
-
-## V.3. A binary in low-level language can run on ???
-
-說真的，從上面的圖檔分析；Virtual Machine裏的 Host OS with Hypervisor ，只是把Host OS 和一個manager畫在一起，不就等同於 Host OS + Container manager。Guest OS1 = Env based on kernel of Host OS。
-
-Docker 在安裝 image 時，不是有個動作叫 pull；VM 部分也有很多預先安裝的〝系統〞放在網路請大家自己抓。所以兩邊都是要安裝的！安裝的！安裝的！
-
-討論至此，那最主要的差別就是在 Hardware 的實作程度的範圍。那我可不可以說實作比較差的 VM 就是 Container。當然不能這麼一刀切，繼續看下去。
-
-其實這兩張圖畫的太複雜了，沒辦法簡易的說明差別；這裏舉個很簡單的例子：
-
-$ docker pull node:10.15.3-alpine
-
-node 很累贅，但還稱不上是一個系統、一個OS，但它完全複製了可執行的環境, 並且在 HOST OS 上〝正確〞執行。
-
-從這裏可以得到一個結論，Container 既可以是個 OS 模擬，也可以很簡單的模擬軟體層執行環境。
-
-很重要!很重要!很重要! 看圖就知，像是比較低底層所構建之執行檔，並不能交亙執行！
-
-也因為得知 docker image 是不同的！ (ubuntu run $ docker pull ubuntu ) !=  (Raspberry Pi run $ docker pull ubuntu )
-
-```mermaid
-flowchart LR
-	subgraph Host[Host - Ubuntu 20.04.4 LTS]
-		subgraph Native[Native compiler]
-			gcc[gcc helloworld.c]
-		end
-	end
-
-	subgraph Target[Target - Raspberry Pi]
-		helloworld_run_pi[-bash: ./helloworld: cannot execute binary file: Exec format error]
-		subgraph DockerPIU[Docker - Ubuntu 20.04]
-			helloworld_run_pi_u_docker[bash: ./helloworld: cannot execute binary file: Exec format error]
-		end
-	end
-
-
-	subgraph HostA[Host - Ubuntu 20.04.4 LTS]
-		helloworld_run_host[Hello world !!!]
-		subgraph DockerAU2004[Docker - Ubuntu 20.04]
-			helloworld_run_AU2004_docker[Hello world !!!]
-		end
- 		subgraph DockerAU2204[Docker - Ubuntu 22.04]
-			helloworld_run_AU2204_docker[Hello world !!!]
-		end
-  end
-	
-	gcc --> |run|helloworld_run_host
-	gcc --> |run|helloworld_run_AU2004_docker
-	gcc --> |run|helloworld_run_AU2204_docker
-
-	gcc --> |run|helloworld_run_pi
-	gcc --> |run|helloworld_run_pi_u_docker
-
-```
-```bash
-$ file helloworld
-helloworld: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=18d2f341bfac8c548cedce30a01e9a865ba383f8, for GNU/Linux 3.2.0, not stripped
 
 ```
 

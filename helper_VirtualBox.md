@@ -248,16 +248,18 @@ zerofree -v $PURGE_DISK
 
 > 複製選定的  Disk Image。如果你是用 win10 的檔案總管複製，會同時複製內部的 uuid。但是使用此工具會建立新的uuid。
 
+# 5. Images
+#### A. [OSBoxes - Virtual Machines for VirtualBox & VMware](http://www.osboxes.org/#)
+
+#### B. [Android-x86](https://www.android-x86.org)
+
 # Appendix
 
 # I. Study
 
 # II. Debug
 
-# III. Images
-#### A. [OSBoxes - Virtual Machines for VirtualBox & VMware](http://www.osboxes.org/#)
-
-#### B. [Android-x86](https://www.android-x86.org)
+# III. Tool Usage
 
 
 # Author

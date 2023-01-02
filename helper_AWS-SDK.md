@@ -81,15 +81,11 @@ int main(int argc, char** argv)
 
 ## 1.3. [AWS SDKs and Tools Reference Guide](https://docs.aws.amazon.com/sdkref/latest/guide/index.html)
 
-
-
 # 2. [AWS Free Tier](https://aws.amazon.com/free)
 
 > 申請帳號、憑證後，才能使用相關服務，很複雜！很複雜！很複雜！
 >
 > 先假設大家都已經用過 AWS。
-
-
 
 # 3. [AWS Command Line Interface](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-chap-welcome.html)
 
@@ -100,8 +96,6 @@ int main(int argc, char** argv)
 [aws-doc-sdk-examples/README.md](https://github.com/awsdocs/aws-doc-sdk-examples/blob/main/README.md)
 
 >其實我也是遶了一大圈，最後得到一個結果 “AWS CLI” 可以正常執行，偉大的 SDK & examples 就可以執行。
-
-
 
 # 4. [AWS SDK for C++ Repository](https://github.com/aws/aws-sdk-cpp)
 
@@ -226,11 +220,9 @@ $ cd build_xxx \
 
 ## 4.3. Code examples
 
-#### [DynamoDB examples using SDK for C++](https://docs.aws.amazon.com/code-library/latest/ug/cpp_1_dynamodb_code_examples.html)
+### 4.3.1. [DynamoDB examples using SDK for C++](https://docs.aws.amazon.com/code-library/latest/ug/cpp_1_dynamodb_code_examples.html)
 
-#### [Run batches of PartiQL statements on a DynamoDB table using an AWS SDK](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/example_dynamodb_BatchExecuteStatement_section.html)
-
-
+### 4.3.2. [Run batches of PartiQL statements on a DynamoDB table using an AWS SDK](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/example_dynamodb_BatchExecuteStatement_section.html)
 
 # 5. Examples
 
@@ -594,8 +586,6 @@ utilx9
 
 > 這是本人開發的，簡單好用！
 
-
-
 # 6. Services
 
 ## 6.1. S3
@@ -624,8 +614,6 @@ WithKey: object name not aws_access_key_id or aws_secret_access_key
 
 ### 6.2.1. [aws_dynamo](https://github.com/devicescape/aws_dynamo) - AWS DynamoDB Library for C and C++
 
-
-
 # 7. [AWS IoT](https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html)
 
 ## 7.1. [aws-iot-device-sdk-embedded-C](https://github.com/aws/aws-iot-device-sdk-embedded-C)
@@ -636,8 +624,6 @@ WithKey: object name not aws_access_key_id or aws_secret_access_key
 
  > The AWS IoT SDKs and the `aws-iot-device-sdk-cpp` are separate from this SDK. The AWS IoT Device SDK for C++ v2 is available at [`aws-iot-device-sdk-cpp-v2`](https://github.com/aws/aws-iot-device-sdk-cpp-v2) on GitHub.
 
-
-
 # Appendix
 
 # I. Study
@@ -647,6 +633,8 @@ WithKey: object name not aws_access_key_id or aws_secret_access_key
 #### B. [Building the SDK from source on EC2](https://github.com/aws/aws-sdk-cpp/wiki/Building-the-SDK-from-source-on-EC2)
 
 # II. Debug
+
+# III. Tool Usage
 
 
 # Author

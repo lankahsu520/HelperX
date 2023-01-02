@@ -15,13 +15,16 @@
 [issues-image]: https://img.shields.io/github/issues/lankahsu520/HelperX.svg
 [issues-url]: https://github.com/lankahsu520/HelperX/issues
 
-# 1. Install
+# 1. aws cli v2
+
+## 1.1. Install
+
 ```bash
 $ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 $ unzip awscliv2.zip
 $ sudo ./aws/install
 ```
-# 2. Environment Variables
+## 1.2. Environment Variables
 
 ```bash
 $ export AWS_ACCESS_KEY_ID=<access_key>
@@ -69,7 +72,7 @@ AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
 AWS_EC2_METADATA_DISABLED
 ```
 
-# 3. aws Usage
+## 1.3. aws Usage
 
 ```bash
 $ aws --version
@@ -93,13 +96,13 @@ $ aws <command> <subcommand> help
 $ aws sts get-caller-identity
 ```
 
-# 4. AWS Services
+# 2. AWS Services
 
-## 4.1. [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html)
+## 2.1. [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html)
 
-### 4.1.1. [DynamoDB Dashboard](https://eu-west-1.console.aws.amazon.com/dynamodbv2/home?region=eu-west-1#service)
+### 2.1.1. [DynamoDB Dashboard](https://eu-west-1.console.aws.amazon.com/dynamodbv2/home?region=eu-west-1#service)
 
-### 4.1.2. [aws dynamodb xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-dynamodb.html)
+### 2.1.2. [aws dynamodb xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-dynamodb.html)
 
 #### [create-table](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/dynamodb/create-table.html)
 
@@ -302,15 +305,15 @@ $ aws dynamodb scan --table-name Music
 }
 ```
 
-## 4.2. [EC2 (Amazon Elastic Compute Cloud)](https://docs.aws.amazon.com/zh_tw/AWSEC2/latest/UserGuide/concepts.html)
+## 2.2. [EC2 (Amazon Elastic Compute Cloud)](https://docs.aws.amazon.com/zh_tw/AWSEC2/latest/UserGuide/concepts.html)
 
-### 4.2.1. [EC2 Dashboard](https://eu-west-1.console.aws.amazon.com/ec2/home?region=eu-west-1)
+### 2.2.1. [EC2 Dashboard](https://eu-west-1.console.aws.amazon.com/ec2/home?region=eu-west-1)
 
-### 4.2.2. [aws ec2 xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-ec2.html)
+### 2.2.2. [aws ec2 xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-ec2.html)
 
 >因為本身就是虛擬運算，設定起來也較複雜，不建議使用 AWS CLI；請多加使用 Dashboard。
 
-### 4.2.3. ec2metadata xxx
+### 2.2.3. ec2metadata xxx
 
 ```bash
 # please use ssh to link with ec2
@@ -331,13 +334,11 @@ $ curl http://169.254.169.254/latest/meta-data/public-hostname
 ec2-199-199-199-199.eu-west-1.compute.amazonaws.com
 ```
 
+## 2.3. [S3 (Amazon Simple Storage Service)](https://docs.aws.amazon.com/zh_tw/AmazonS3/latest/userguide/Welcome.html)
 
+### 2.3.1. [S3 Dashboard](https://s3.console.aws.amazon.com/s3/buckets?region=eu-west-1)
 
-## 4.3. [S3 (Amazon Simple Storage Service)](https://docs.aws.amazon.com/zh_tw/AmazonS3/latest/userguide/Welcome.html)
-
-### 4.3.1. [S3 Dashboard](https://s3.console.aws.amazon.com/s3/buckets?region=eu-west-1)
-
-### 4.3.2. [aws s3 xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-s3.html)
+### 2.3.2. [aws s3 xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-s3.html)
 
 #### [cp](https://docs.aws.amazon.com/cli/latest/reference/s3/cp.html)
 
@@ -402,15 +403,15 @@ $ aws s3 rm s3://utilx9/demo_000.c
 $ aws s3 sync s3://HelperX s3://HelperX_Bak
 ```
 
-## 4.4. [S3 Glacier](https://docs.aws.amazon.com/zh_tw/amazonglacier/latest/dev/introduction.html)
+## 2.4. [S3 Glacier](https://docs.aws.amazon.com/zh_tw/amazonglacier/latest/dev/introduction.html)
 
 > 因為不適用正常檔案存取方式，先不花時間研究。
 
-### 4.4.1. [S3 Glacier](https://eu-west-1.console.aws.amazon.com/sns/v3/home?region=eu-west-1#/dashboard)
+### 2.4.1. [S3 Glacier](https://eu-west-1.console.aws.amazon.com/sns/v3/home?region=eu-west-1#/dashboard)
 
-### 4.4.2. [aws glacier xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-glacier.html)
+### 2.4.2. [aws glacier xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-glacier.html)
 
-## 4.5. [SNS (Amazon Simple Notification Service)](https://docs.aws.amazon.com/zh_tw/sns/latest/dg/welcome.html)
+## 2.5. [SNS (Amazon Simple Notification Service)](https://docs.aws.amazon.com/zh_tw/sns/latest/dg/welcome.html)
 
 > publish a message to AmazonSNS, then send ([protocol](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sns/subscribe.html)) to subscriber(s)
 
@@ -427,9 +428,9 @@ flowchart LR
 	Mary <-.-> | email / arn:aws:sns:us-west-1:123456789012:lankahsu520| AmazonSNS
 ```
 
-### 4.5.1. [SNS Dashboard](https://eu-west-1.console.aws.amazon.com/sns/v3/home?region=eu-west-1#/dashboard)
+### 2.5.1. [SNS Dashboard](https://eu-west-1.console.aws.amazon.com/sns/v3/home?region=eu-west-1#/dashboard)
 
-### 4.5.2. [aws sns xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-s3.html)
+### 2.5.2. [aws sns xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-s3.html)
 
 #### [create-topic](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sns/create-topic.html)
 
@@ -527,6 +528,7 @@ $ aws sns list-subscriptions
 
 # II. Debug
 
+# III. Tool Usage
 
 # Author
 

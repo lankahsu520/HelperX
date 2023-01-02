@@ -29,6 +29,8 @@
 
 # II. Debug
 
+# III. Tool Usage
+
 
 # Author
 
@@ -37,4 +39,3 @@ Created and designed by [Lanka Hsu](lankahsu@gmail.com).
 # License
 
 [HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
-

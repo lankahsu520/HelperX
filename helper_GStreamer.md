@@ -647,9 +647,35 @@ gst-launch-1.0 souphttpsrc is-live=true \
 
 # II. Debug
 
-# III. gstreamer1.0
+# III. Tool Usage
 
-## III.1. apt-get install
+#### A. gst-launch-1.0
+
+```bash
+$ gst-launch-1.0 --help
+Usage:
+  gst-launch-1.0 [OPTION…] PIPELINE-DESCRIPTION
+
+Help Options:
+  -h, --help                        Show help options
+  --help-all                        Show all help options
+  --help-gst                        Show GStreamer Options
+
+Application Options:
+  -t, --tags                        Output tags (also known as metadata)
+  -c, --toc                         Output TOC (chapters and editions)
+  -v, --verbose                     Output status information and property notifications
+  -q, --quiet                       Do not print any progress information
+  -m, --messages                    Output messages
+  -X, --exclude=PROPERTY-NAME       Do not output status information for the specified property if verbose output is enabled (can be used multiple times)
+  -f, --no-fault                    Do not install a fault handler
+  -e, --eos-on-shutdown             Force EOS on sources before shutting the pipeline down
+  --version                         Print version information and exit
+```
+
+# IV. gstreamer1.0
+
+## IV.1. apt-get install
 
 ```bash
 sudo apt-get --yes install gstreamer1.0
@@ -660,7 +686,7 @@ sudo apt-get --yes install gstreamer1.0-plugins-base-apps
 sudo apt-get --yes install gstreamer1.0-plugins-bad 
 sudo apt-get --yes install gstreamer1.0-plugins-ugly
 ```
-## III.2. Environment
+## IV.2. Environment
 
 ```bash
 export GST_PLUGIN_PATH=`pwd`

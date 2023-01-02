@@ -1044,7 +1044,7 @@ $ git push -f
 
 # II. Debug
 
-# III. Usage
+# III. Tool Usage
 
 ## III.1. svn Usage
 

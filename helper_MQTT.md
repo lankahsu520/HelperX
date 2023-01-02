@@ -230,7 +230,7 @@ openssl x509 -noout -modulus -in mqtt.ca | openssl md5
 
 # Appendix
 
-## I. Study
+# I. Study
 
 #### A. [樹莓派安裝 Mosquitto 輕量級 MQTT Broker 教學，連接各種物聯網設備](https://blog.gtwang.org/iot/raspberry-pi/raspberry-pi-mosquitto-mqtt-broker-iot-integration/)
 
@@ -244,6 +244,9 @@ openssl x509 -noout -modulus -in mqtt.ca | openssl md5
 
 #### F. [Mosquitto ACL -Configuring and Testing MQTT Topic Restrictions](http://www.steves-internet-guide.com/topic-restriction-mosquitto-configuration/)
 
+# II. Debug
+
+# III. Tool Usage
 
 # Author
 

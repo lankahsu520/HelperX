@@ -833,7 +833,7 @@ export BLUEZX_COMMAND="advertise.name&on"
 
 # II. Debug
 
-# III. Tools
+# III. Tool Usage
 
 #### A. gdbus Usage
 
