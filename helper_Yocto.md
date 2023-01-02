@@ -69,7 +69,9 @@
 >
 >在編譯時一定要上網！就算你已經編譯成功，而且已經下載過，還是會報失敗。
 >
->yocto 的版本變動很快，或許今年允許的 class 或語法，明年就不能用了。就連google 大神也救不了，因為新的東西，還要等有心人把踩到的狗屎寫出來。
+>yocto 的版本變動很快，或許今年允許的 class 或語法，明年就不能用了。就連google 大神也救不了，因為新的東西，還要等有心人把踩到的屎寫出來。
+>
+>最後就是 yocto 編譯的錯誤訊息相當的難理解，這有一部分是繼承了 python的傳統。
 
 # 2. Poky
 
@@ -90,8 +92,6 @@ SDK_VERSION = "${@d.getVar('DISTRO_VERSION').replace('snapshot-${METADATA_REVISI
 ```
 
 # 3. Yocto Recipes
-
-## 3.1. bitbake
 
 #### core-image-base
 
