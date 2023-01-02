@@ -25,7 +25,7 @@
 
 # I. Study
 
-#### A. [Alexa交叉编译（avs-device-sdk)](https://blog.csdn.net/qq_38731735/article/details/120869805)
+#### A. [Alexa交叉编译 (avs-device-sdk)](https://blog.csdn.net/qq_38731735/article/details/120869805)
 
 # II. Debug
 
