@@ -181,9 +181,9 @@ $ vi ./cooker-menu/pi3-sample-menu.json
 # ,"IMAGE_INSTALL:append = ' example'"
 ```
 
-# 4. Install to Raspberry PI
+# 4. Run on Raspberry PI
 
-## 4.1. Tools
+## 4.1. Burn Image Tools
 
 #### A. [balenaEtcher](https://www.balena.io/etcher/)
 
@@ -191,7 +191,7 @@ $ vi ./cooker-menu/pi3-sample-menu.json
 
 #### C. [rpi-imager](https://github.com/raspberrypi/rpi-imager)
 
-## 4.2. Image
+## 4.2. Get Image at
 
 ```bash
 $ ls -al ./builds/build-pi3/tmp/deploy/images/raspberrypi3/core-image-base-raspberrypi3.rpi-sdimg
