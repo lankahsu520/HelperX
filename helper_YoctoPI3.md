@@ -171,7 +171,15 @@ example                                               :0.1-r0
 
 ### 3.4.2. Update [example_0.1.bb](https://github.com/lankahsu520/HelperX/tree/master/Yocto/meta-lanka/recipes-example/example/example_0.1.bb)
 
-### 3.4.3. Add [files](https://github.com/lankahsu520/HelperX/tree/master/Yocto/meta-lanka/recipes-example/example/files)
+### 3.4.3. Add files - [helloworld-123.c and Makefile](https://github.com/lankahsu520/HelperX/tree/master/Yocto/meta-lanka/recipes-example/example/files)
+
+### 3.4.4. Install into Image
+
+```bash
+$ vi ./cooker-menu/pi3-sample-menu.json
+# add "example" into "local.conf"
+# ,"IMAGE_INSTALL:append = ' example'"
+```
 
 # 4. Install to Raspberry PI
 
