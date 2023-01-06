@@ -979,6 +979,14 @@ find * -name "*.bat" | xargs svn propset svn:executable on
 find * -name "*.dll" | xargs svn propset svn:executable on
 ```
 
+#### D. propdel
+
+```bash
+svn propdel svn:global-ignores
+svn propdel svn:ignore
+svn propdel svn:externals
+```
+
 ## 6.2. Git
 
 #### A. Prune tracking branches not on the remote
