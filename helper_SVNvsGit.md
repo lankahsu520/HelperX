@@ -378,6 +378,12 @@ $ svn propedit svn:ignore .
 # enter your ignore files
 ```
 
+#### svn:global-ignores
+```bash
+$ svn propedit svn:global-ignores .
+# 測試過好像沒什麼效果
+```
+
 #### .gitignore
 
 ```bash
