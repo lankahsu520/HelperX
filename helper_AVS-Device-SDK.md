@@ -21,6 +21,7 @@
 
 # 2. [AVS Device SDK Repository](https://github.com/alexa/avs-device-sdk)
 
+# 
 # Appendix
 
 # I. Study
@@ -28,6 +29,13 @@
 #### A. [Alexa交叉编译 (avs-device-sdk)](https://blog.csdn.net/qq_38731735/article/details/120869805)
 
 # II. Debug
+
+## II.1. configure: error: applications were requested (--enable-app) but dependencies are not met
+```bash
+$ sudo apt-get install libcunit1 libcunit1-doc libcunit1-dev
+$ sudo apt-get install libc-ares-dev
+```
+
 
 # III. Tool Usage
 

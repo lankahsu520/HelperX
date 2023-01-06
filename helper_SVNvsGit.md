@@ -965,6 +965,14 @@ $ svn propedit svn:externals ./
 # http://trac-vbx/svnhello/trunk/helloworld
 ```
 
+#### C. svn:executable
+
+```bash
+find * -name "*.exe" | xargs svn propset svn:executable on
+find * -name "*.bat" | xargs svn propset svn:executable on
+find * -name "*.dll" | xargs svn propset svn:executable on
+```
+
 ## 6.2. Git
 
 #### A. Prune tracking branches not on the remote
