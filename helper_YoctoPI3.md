@@ -1,11 +1,10 @@
 # [Yocto](https://www.yoctoproject.org) Raspberry Pi 3
-
 [![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
 [![GitHub license][license-image]][license-url]
 [![GitHub stars][stars-image]][stars-url]
 [![GitHub forks][forks-image]][forks-url]
 [![GitHub issues][issues-image]][issues-image]
-
+[![GitHub watchers][watchers-image]][watchers-image]
 
 [license-image]: https://img.shields.io/github/license/lankahsu520/HelperX.svg
 [license-url]: https://github.com/lankahsu520/HelperX/blob/master/LICENSE
@@ -15,6 +14,8 @@
 [forks-url]: https://github.com/lankahsu520/HelperX/network
 [issues-image]: https://img.shields.io/github/issues/lankahsu520/HelperX.svg
 [issues-url]: https://github.com/lankahsu520/HelperX/issues
+[watchers-image]: https://img.shields.io/github/watchers/lankahsu520/HelperX.svg
+[watchers-url]: https://github.com/lankahsu520/HelperX/watchers
 
 ```
 The Yocto Project (YP) is an open source collaboration project that helps developers create custom Linux-based systems regardless of the hardware architecture.

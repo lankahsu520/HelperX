@@ -4,7 +4,7 @@
 [![GitHub stars][stars-image]][stars-url]
 [![GitHub forks][forks-image]][forks-url]
 [![GitHub issues][issues-image]][issues-image]
-
+[![GitHub watchers][watchers-image]][watchers-image]
 
 [license-image]: https://img.shields.io/github/license/lankahsu520/HelperX.svg
 [license-url]: https://github.com/lankahsu520/HelperX/blob/master/LICENSE
@@ -14,6 +14,8 @@
 [forks-url]: https://github.com/lankahsu520/HelperX/network
 [issues-image]: https://img.shields.io/github/issues/lankahsu520/HelperX.svg
 [issues-url]: https://github.com/lankahsu520/HelperX/issues
+[watchers-image]: https://img.shields.io/github/watchers/lankahsu520/HelperX.svg
+[watchers-url]: https://github.com/lankahsu520/HelperX/watchers
 
 # 1. [Alexa Voice Service](https://developer.amazon.com/en-US/docs/alexa/alexa-voice-service/get-started-with-alexa-voice-service.html)
 
