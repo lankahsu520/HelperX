@@ -98,6 +98,8 @@ int main(int argc, char** argv)
 [aws-doc-sdk-examples/README.md](https://github.com/awsdocs/aws-doc-sdk-examples/blob/main/README.md)
 
 >其實我也是遶了一大圈，最後得到一個結果 “AWS CLI” 可以正常執行，偉大的 SDK & examples 就可以執行。
+>
+>所以聰明的您，從 4 開始看就可以了。
 
 # 4. [AWS SDK for C++ Repository](https://github.com/aws/aws-sdk-cpp)
 
