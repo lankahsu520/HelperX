@@ -258,7 +258,7 @@ $ mkdir build_xxx \
 >
 >You must also have AWS credentials configured. For steps on using the AWS Command Line Interface (AWS CLI) to configure credentials, see [CLI Configuration basics](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html)
 
-### 5.1.2. DynamoDB applications
+### 5.1.2. [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html) applications
 
 ```bash
 $ ls -al aws-doc-sdk-examples/cpp/example_code/dynamodb/*
@@ -588,11 +588,7 @@ utilx9
 
 > 這是本人開發的，簡單好用！
 
-# 6. Services
-
-## 6.1. S3
-
-### 6.1.1. [Building the SDK from source on EC2](https://github.com/aws/aws-sdk-cpp/wiki/Building-the-SDK-from-source-on-EC2) - [s3sample.cpp](./AWS/patches/s3/s3sample.cpp)
+## 5.3. [s3sample.cpp](./AWS/patches/s3/s3sample.cpp) - [Building the SDK from source on EC2](https://github.com/aws/aws-sdk-cpp/wiki/Building-the-SDK-from-source-on-EC2) 
 
 ```bash
 $ s3sample
@@ -601,9 +597,9 @@ Example: s3sample ap-northeast-1 st-1 utilx9 demo_000.c demo_000.c_local
 
 ```
 
-## 注意！注意！注意！
-
 ```c
+注意！注意！注意！
+
 request.WithBucket(argv[2]).WithKey(argv[3]);
 
 WithBucket: bucket name
@@ -612,17 +608,15 @@ WithKey: object name not aws_access_key_id or aws_secret_access_key
 只能說我不懂 AWS 的 nameing rules。
 ```
 
-## 6.2.  [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html) 
+## 5.4. [aws_dynamo](https://github.com/devicescape/aws_dynamo) - AWS DynamoDB Library for C and C++
 
-### 6.2.1. [aws_dynamo](https://github.com/devicescape/aws_dynamo) - AWS DynamoDB Library for C and C++
+# 6. [AWS IoT](https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html)
 
-# 7. [AWS IoT](https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html)
-
-## 7.1. [aws-iot-device-sdk-embedded-C](https://github.com/aws/aws-iot-device-sdk-embedded-C)
+## 6.1. [aws-iot-device-sdk-embedded-C](https://github.com/aws/aws-iot-device-sdk-embedded-C)
 
 > The AWS IoT Device SDK for Embedded C (C-SDK) is a collection of C source files under the [MIT open source license](https://github.com/aws/aws-iot-device-sdk-embedded-C/blob/main/LICENSE) that can be used in embedded applications to securely connect IoT devices to [AWS IoT Core](https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html). It contains MQTT client, HTTP client, JSON Parser, AWS IoT Device Shadow, AWS IoT Jobs, and AWS IoT Device Defender libraries. 
 
-## 7.2. [aws-iot-device-sdk-cpp-v2](https://github.com/aws/aws-iot-device-sdk-cpp-v2)
+## 6.2. [aws-iot-device-sdk-cpp-v2](https://github.com/aws/aws-iot-device-sdk-cpp-v2)
 
  > The AWS IoT SDKs and the `aws-iot-device-sdk-cpp` are separate from this SDK. The AWS IoT Device SDK for C++ v2 is available at [`aws-iot-device-sdk-cpp-v2`](https://github.com/aws/aws-iot-device-sdk-cpp-v2) on GitHub.
 
