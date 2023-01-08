@@ -185,6 +185,12 @@ a/b/c/#
 
 #### methodid/macid/uuid/nodeid/epid/issueid
 
+```bash
+methodid - 1:event, 2:get, 3: response
+macid - mac address
+uuid - maybe a usb uuid, a group uuid or special function uuid 
+```
+
 
 ## 2.2. Subscriber
 
