@@ -102,6 +102,28 @@ $ aws sts get-caller-identity
 
 ## 2.1. [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html)
 
+```mermaid
+flowchart TD
+	subgraph Amazon
+		DynamoDB
+	end
+
+	subgraph ubuntu
+  subgraph awsCli[aws cli]
+		awsCliDynamodb[aws dynamodb xxx]
+	end
+	end
+	DynamoDB <--> awsCliDynamodb
+
+	classDef yellow fill:#FFFFCC
+	classDef pink fill:#FFCCCC
+	classDef blue fill:#0000FF
+	classDef lightblue fill:#ADD8E6
+
+	class DynamoDB pink
+	class awsCliDynamodb pink
+```
+
 ### 2.1.1. [DynamoDB Dashboard](https://eu-west-1.console.aws.amazon.com/dynamodbv2/home?region=eu-west-1#service)
 
 ### 2.1.2. [aws dynamodb xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-dynamodb.html)
@@ -309,6 +331,31 @@ $ aws dynamodb scan --table-name Music
 
 ## 2.2. [EC2 (Amazon Elastic Compute Cloud)](https://docs.aws.amazon.com/zh_tw/AWSEC2/latest/UserGuide/concepts.html)
 
+```mermaid
+flowchart TD
+	subgraph Amazon
+		EC2
+	end
+
+	subgraph ubuntu
+	subgraph awsCli[aws cli]
+		awsCliEC2[aws ec2 xxx]
+	end
+		sshClient[ssh client]
+  end
+	EC2 <--> awsCliEC2
+	EC2 <--> sshClient
+
+	classDef yellow fill:#FFFFCC
+	classDef pink fill:#FFCCCC
+	classDef blue fill:#0000FF
+	classDef lightblue fill:#ADD8E6
+
+	class EC2 pink
+	class awsCliEC2 pink
+	class sshClient pink
+```
+
 ### 2.2.1. [EC2 Dashboard](https://eu-west-1.console.aws.amazon.com/ec2/home?region=eu-west-1)
 
 ### 2.2.2. [aws ec2 xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-ec2.html)
@@ -337,6 +384,28 @@ ec2-199-199-199-199.eu-west-1.compute.amazonaws.com
 ```
 
 ## 2.3. [S3 (Amazon Simple Storage Service)](https://docs.aws.amazon.com/zh_tw/AmazonS3/latest/userguide/Welcome.html)
+
+```mermaid
+flowchart TD
+	subgraph Amazon
+		S3
+	end
+
+	subgraph ubuntu
+	subgraph awsCli[aws cli]
+		awsCliS3[aws s3 xxx]
+	end
+  end
+	S3 <--> awsCliS3
+
+	classDef yellow fill:#FFFFCC
+	classDef pink fill:#FFCCCC
+	classDef blue fill:#0000FF
+	classDef lightblue fill:#ADD8E6
+
+	class S3 pink
+	class awsCliS3 pink
+```
 
 ### 2.3.1. [S3 Dashboard](https://s3.console.aws.amazon.com/s3/buckets?region=eu-west-1)
 
@@ -419,7 +488,7 @@ $ aws s3 sync s3://HelperX s3://HelperX_Bak
 
 ```mermaid
 flowchart LR
-	awsCli[sns publish]
+	awsCli[aws sns publish]
 	Lanka["lankahsu@gmail.com"]
 	Mary["mary@gmail.com"]
 
