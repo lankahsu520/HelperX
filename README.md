@@ -23,6 +23,12 @@
 
 ## [helper_AWS-SDK.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-SDK.md) - AWS-SDK helper.
 
+## [helper_BLE.md](https://github.com/lankahsu520/HelperX/blob/master/helper_BLE.md) - BLE helper.
+
+> BLE 的水很深，這邊只有概要，並且用不同的觀點去分析。
+>
+> 如果你是要實作的話，文件是幫不了你的！請直接找Opensource，而這裏有[BlueZX](https://github.com/lankahsu520/BlueZX) 或許能幫助到你。
+
 ## [helper_DBus.md](https://github.com/lankahsu520/HelperX/blob/master/helper_DBus.md) - dbus helper.
 ## [helper_Docker.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Docker.md) - docker helper.
 > docker is useful ? Please make sure that you aren't a low-level programmer or embedded engineer.
