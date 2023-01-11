@@ -33,7 +33,10 @@
 ## [helper_Docker.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Docker.md) - docker helper.
 > docker is useful ? Please make sure that you aren't a low-level programmer or embedded engineer.
 
+## [helper_FreeRTOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_FreeRTOS.md) - FreeRTOS helper.
+
 ## [helper_GitLabAndCICD.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitLabAndCICD.md) - GitLab helper.
+
 > CI/CD is useful ? Please make sure that you aren't a low-level programmer, system integration developer or embedded engineer.
 
 ## [helper_GStreamer.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GStreamer.md) - GStreamer helper.

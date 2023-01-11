@@ -99,6 +99,8 @@ flowchart TD
 
 #### B. [Everyone is using Bluetooth Low Energy – should you?](https://www.avsystem.com/blog/bluetooth-low-energy-ble/)
 
+#### C. [[Day 16] BLE 封包監聽工具(Packet Sniffer)](https://ithelp.ithome.com.tw/articles/10223483)
+
 # II. Debug
 
 # III. Tool Usage
