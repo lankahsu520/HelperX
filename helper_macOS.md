@@ -53,13 +53,21 @@ flowchart LR
 		SSD[SSD DISK without macOS]
 	end
 	win10[win10]
-	usb_BSur[usb 64GB up - Big Sur]
-	usb_install[usb 32GB up - macOS 12 Monterey install]
+	usb_BSur[(usb 64GB up - Big Sur)]
+	usb_install[(usb 32GB up - macOS 12 Monterey install)]
 ```
 
 ![macOS_12_Monterey](./images/macOS_12_Monterey.png)
 
 ### 1.2.1 create a usb (64GB up) with Big Sur
+
+```mermaid
+flowchart LR
+	BigSur[Big Sur]
+	usb_BSur[(usb 64GB up - Big Sur)]
+	BigSur-->|create|usb_BSur
+
+```
 
 #### A. [Mac無法開機了? 自行建立macOS Catalina或Big Sur緊急開機診斷碟!](https://www.osslab.com.tw/catalina-boot-diag-usb/)
 
@@ -67,13 +75,30 @@ flowchart LR
 
 #### C. resize the partition 32GB to 64GB
 
+> 這邊最主要是因為 Big Sur在建立開機 USB 時，空間只設定32 GB，於下一章節需要下載可安裝的 Monterey 時會空間不足。 
+
 ### 1.2.2. create a usb (32GB up) with macOS 12 Monterey install
+
+```mermaid
+flowchart LR
+	AppStore[App Store]
+	usb_BSur[(usb 64GB up - Big Sur)]
+	usb_install[(usb 32GB up - macOS 12 Monterey install)]
+	AppStore-->|macOS 12 Monterey|usb_BSur-->|create|usb_install
+
+```
 
 #### A. [macOS 12 Monterey 系統安裝 USB 隨身碟製作與重灌教學](https://applealmond.com/posts/123180)
 
+>照著網頁說明，下載 macOS 12 Monterey 安裝檔。
+
 #### B. reset user's password
 
+> 因為 Big Sur 建立時未設定密碼，這樣無法使用 sudo。
+
 #### C. [為 macOS 製作可開機安裝磁碟](https://support.apple.com/zh-tw/HT201372)
+
+> 插入另一隻空白 USB ，將macOS 12 Monterey 安裝檔寫入進去。
 
 ##### C.1. Ventura
 
