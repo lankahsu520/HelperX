@@ -91,6 +91,34 @@ flowchart TD
 
 > 在 Linux 之上有 BlueZ，這真的是造福大眾，由衷的感謝！
 
+# 3. [Network Topology](https://hackmd.io/@ShenTengTu/H1aUE5ltV?type=view)
+
+> 在此網頁內容中，可以很簡單的知道相關訊息。
+>
+> 
+
+## 3.1. Advertising and Scan Response Data
+
+![](https://cdn-learn.adafruit.com/assets/assets/000/013/825/medium800/microcontrollers_Advertising2.png?1390835933)
+
+## 3.2. Broadcast
+
+![](https://cdn-learn.adafruit.com/assets/assets/000/013/819/medium800/microcontrollers_BroadcastTopology.png?1390835745)
+
+## 3.2. Connected
+
+![](https://cdn-learn.adafruit.com/assets/assets/000/013/826/medium800/microcontrollers_ConnectedTopology.png?1390836031)
+
+
+
+### 3.2.1. GATT Transactions
+
+![](https://cdn-learn.adafruit.com/assets/assets/000/013/827/medium800/microcontrollers_GattMasterSlaveTransactions.png?1390836048)
+
+#### A. Profile  - Services and Characteristics ([Profiles Overview](https://www.bluetooth.com/specifications/gatt))
+
+![](https://cdn-learn.adafruit.com/assets/assets/000/013/828/medium800/microcontrollers_GattStructure.png?1390836057)
+
 # Appendix
 
 # I. Study
@@ -101,9 +129,25 @@ flowchart TD
 
 #### C. [[Day 16] BLE 封包監聽工具(Packet Sniffer)](https://ithelp.ithome.com.tw/articles/10223483)
 
+#### D. [藍芽低功耗介紹](https://hackmd.io/@ShenTengTu/H1aUE5ltV?type=view)
+
 # II. Debug
 
 # III. Glossary
+
+#### ADV, Advertising
+
+> BLE 裝置透過 Advertising 告知周邊 BLE 裝置自己的存在。
+>
+> 所使用的頻率 channel 37 (2402 MHz)、channel 38 (2426 MHz)、 和 channel 39 (2480 MHz)。
+
+#### GAP, Generic Access Profile
+
+> 設備的的配置文件。定義設備的角色 Central or Peripheral。用於 Advertising之中。
+
+#### GATT, Generic Attribute Profile
+
+> 定義了設備的主/從關係。
 
 # IV. Tool Usage
 
