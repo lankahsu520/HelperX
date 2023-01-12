@@ -302,13 +302,15 @@ $ curl --digest -u ${USER}:${PASSWORD}
 
 # II. Debug
 
-# III. Tool Usage
+# III. Glossary
+
+# IV. Tool Usage
 
 #### A. [ONVIF Device Manager](https://sourceforge.net/projects/onvifdm/)
 
-# IV. [gSOAP](https://www.genivia.com/index.html)
+# V. [gSOAP](https://www.genivia.com/index.html)
 
-## IV.1. onvif.h
+#### A. onvif.h
 
 ```bash
 $ wsdl2h -c -o onvif.h \
@@ -320,7 +322,7 @@ $ wsdl2h -c -o onvif.h \
 	http://www.w3.org/2006/03/addressing/ws-addr.xsd
 ```
 
-## IV.2. xxx.req.xml & xxx.res.xml 
+#### B. xxx.req.xml & xxx.res.xml 
 
 ```bash
 $ soapcpp2 -C -I../gsoap-2.8/gsoap/import onvif.h

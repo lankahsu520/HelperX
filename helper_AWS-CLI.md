@@ -599,7 +599,9 @@ $ aws sns list-subscriptions
 
 # II. Debug
 
-# III. Tool Usage
+# III. Glossary
+
+# IV. Tool Usage
 
 # Author
 

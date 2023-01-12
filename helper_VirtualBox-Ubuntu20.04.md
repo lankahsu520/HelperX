@@ -262,7 +262,9 @@ zerofree -v $PURGE_DISK
 
 # II. Debug
 
-# III. Tool Usage
+# III. Glossary
+
+# IV. Tool Usage
 
 
 # Author

@@ -835,7 +835,9 @@ export BLUEZX_COMMAND="advertise.name&on"
 
 # II. Debug
 
-# III. Tool Usage
+# III. Glossary
+
+# IV. Tool Usage
 
 #### A. gdbus Usage
 

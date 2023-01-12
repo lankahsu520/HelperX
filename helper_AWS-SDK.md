@@ -632,7 +632,9 @@ WithKey: object name not aws_access_key_id or aws_secret_access_key
 
 # II. Debug
 
-# III. Tool Usage
+# III. Glossary
+
+# IV. Tool Usage
 
 
 # Author

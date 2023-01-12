@@ -751,7 +751,9 @@ flowchart LR
 
 # II. Debug
 
-# III. Tool Usage
+# III. Glossary
+
+# IV. Tool Usage
 
 #### A. gitlab-runner Usage
 
@@ -799,11 +801,11 @@ GLOBAL OPTIONS:
 
 ```
 
-# IV. .gitlab-ci.yml
+# V. .gitlab-ci.yml
 
-## IV.1.  [`.gitlab-ci.yml` keyword reference **(FREE)**](https://gitlab.fdimatelec.fr/help/ci/yaml/index)
+#### A.  [`.gitlab-ci.yml` keyword reference **(FREE)**](https://gitlab.fdimatelec.fr/help/ci/yaml/index)
 
-## IV.2. a template
+#### B. a template
 
 ```yml
 # This file is a template, and might need editing before it works on your project.

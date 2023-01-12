@@ -514,7 +514,9 @@ helloworld: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically 
 
 # II. Debug
 
-# III. Tool Usage
+# III. Glossary
+
+# IV. Tool Usage
 
 #### A. docker Usage
 
@@ -603,7 +605,7 @@ To get more help with docker, check out our guides at https://docs.docker.com/go
 
 ```
 
-# IV. Dockerfile
+# V. Dockerfile
 #### A.  a simple
 ```dockerfile
 # ubuntu 20.04

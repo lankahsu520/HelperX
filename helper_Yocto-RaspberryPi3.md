@@ -317,7 +317,9 @@ Ok:
 ,"IMAGE_INSTALL:append = ' example'"
 ```
 
-# III. Tool Usage
+# III. Glossary
+
+# IV. Tool Usage
 
 # Author
 

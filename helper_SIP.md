@@ -374,9 +374,11 @@ https://www.microsip.org
 
 # II. Debug
 
-# III. Tool Usage
+# III. Glossary
 
-# IV. ErrorNO
+# IV. Tool Usage
+
+# V. ErrorNO
 
 ```
 100	正在嘗試	

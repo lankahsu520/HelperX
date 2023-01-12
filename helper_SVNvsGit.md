@@ -1068,9 +1068,11 @@ $ git push -f
 
 # II. Debug
 
-# III. Tool Usage
+# III. Glossary
 
-## III.1. svn Usage
+# IV. Tool Usage
+
+#### A. svn Usage
 
 ```bash
 $ svn help
@@ -1131,7 +1133,7 @@ For additional information, see http://subversion.apache.org/
 
 ```
 
-## III.2. git Usage
+#### B. git Usage
 
 ```bash
 $ git help
@@ -1185,9 +1187,9 @@ See 'git help git' for an overview of the system.
 
 
 
-# VI. ~/.bash_aliases
+# V. ~/.bash_aliases
 
-## VI.1. SVN
+#### A. SVN
 
 ```bash
 #** svn **
@@ -1239,7 +1241,7 @@ function svn-revert()
 }
 ```
 
-## VI.2. Git
+#### B. Git
 
 ```bash
 #** git **

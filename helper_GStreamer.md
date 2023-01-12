@@ -649,7 +649,9 @@ gst-launch-1.0 souphttpsrc is-live=true \
 
 # II. Debug
 
-# III. Tool Usage
+# III. Glossary
+
+# IV. Tool Usage
 
 #### A. gst-launch-1.0
 
@@ -675,9 +677,9 @@ Application Options:
   --version                         Print version information and exit
 ```
 
-# IV. gstreamer1.0
+# V. gstreamer1.0
 
-## IV.1. apt-get install
+## V.1. apt-get install
 
 ```bash
 sudo apt-get --yes install gstreamer1.0
@@ -688,7 +690,7 @@ sudo apt-get --yes install gstreamer1.0-plugins-base-apps
 sudo apt-get --yes install gstreamer1.0-plugins-bad 
 sudo apt-get --yes install gstreamer1.0-plugins-ugly
 ```
-## IV.2. Environment
+## V.2. Environment
 
 ```bash
 export GST_PLUGIN_PATH=`pwd`

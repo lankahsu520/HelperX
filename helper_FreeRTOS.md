@@ -325,5 +325,7 @@ sequenceDiagram
 
 # II. Debug
 
-# III. Tool Usage
+# III. Glossary
+
+# IV. Tool Usage
 

@@ -38,8 +38,9 @@ $ sudo apt-get install libcunit1 libcunit1-doc libcunit1-dev
 $ sudo apt-get install libc-ares-dev
 ```
 
+# III. Glossary
 
-# III. Tool Usage
+# IV. Tool Usage
 
 
 # Author

@@ -254,7 +254,9 @@ openssl x509 -noout -modulus -in mqtt.ca | openssl md5
 
 # II. Debug
 
-# III. Tool Usage
+# III. Glossary
+
+# IV. Tool Usage
 
 # Author
 
