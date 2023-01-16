@@ -300,6 +300,8 @@ $ curl --digest -u ${USER}:${PASSWORD}
 #### A. [ONVIF](https://www.onvif.org)
 #### B. [wsdl](https://github.com/onvif/specs/tree/22.12/wsdl)
 
+#### C. [網際網路上用來找尋設備的方法](http://albert-oma.blogspot.com/2012/07/blog-post.html)
+
 # II. Debug
 
 # III. Glossary
