@@ -141,7 +141,27 @@ flowchart TD
 >
 > 所使用的頻率 channel 37 (2402 MHz)、channel 38 (2426 MHz)、 和 channel 39 (2480 MHz)。
 
-#### GAP, Generic Access Profile
+#### BAS, [Battery Service](https://www.bluetooth.com/specifications/specs/battery-service/)
+
+> The Battery Service exposes the battery level and other information for a battery within a device.
+
+#### [Core Specification](https://www.bluetooth.com/specifications/specs/core-specification-5-3/)
+
+>This specification defines the technologies required to create interoperable Bluetooth devices.
+
+#### DIS, [Device Information Service](https://www.bluetooth.com/specifications/specs/device-information-service-1-1/)
+
+> This service exposes manufacturer and/or vendor information about a device.
+
+#### HIDS, [Human Interface Service](https://www.bluetooth.com/specifications/specs/human-interface-device-service-1-0/)
+
+> This service exposes HID reports and other HID data intended for HID Hosts and HID Devices.
+
+#### HRS, [Heart Rate Service](https://www.bluetooth.com/specifications/specs/heart-rate-profile-1-0/)
+
+> This profile enables a Collector device to connect and interact with a Heart Rate Sensor for use in fitness applications.
+
+#### GAP, [Generic Access Profile](https://software-dl.ti.com/lprf/simplelink_cc2640r2_latest/docs/blestack/ble_user_guide/html/ble-stack-3.x/gap.html)
 
 > 設備的的配置文件。定義設備的角色 Central or Peripheral。用於 Advertising之中。
 
