@@ -131,6 +131,8 @@ flowchart TD
 
 #### D. [藍芽低功耗介紹](https://hackmd.io/@ShenTengTu/H1aUE5ltV?type=view)
 
+#### E. [iBeacon詳細指南](https://www.mokoblue.com/zh-tw/a-detailed-guide-to-ibeacon/)
+
 # II. Debug
 
 # III. Glossary
@@ -168,6 +170,10 @@ flowchart TD
 #### GATT, Generic Attribute Profile
 
 > 定義了設備的主/從關係。
+
+#### [iBeacon](https://developer.apple.com/ibeacon/)
+
+> From welcoming people as they arrive at a sporting event to providing information about a nearby museum exhibit, iBeacon opens a new world of possibilities for location awareness, and countless opportunities for interactivity between iOS devices and iBeacon hardware.
 
 # IV. Tool Usage
 
