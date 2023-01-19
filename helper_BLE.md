@@ -133,6 +133,8 @@ flowchart TD
 
 #### E. [iBeacon詳細指南](https://www.mokoblue.com/zh-tw/a-detailed-guide-to-ibeacon/)
 
+#### F. [BluetoothProfile](https://github.com/www378660084/BluetoothProfile)
+
 # II. Debug
 
 # III. Glossary
@@ -154,14 +156,24 @@ flowchart TD
 #### DIS, [Device Information Service](https://www.bluetooth.com/specifications/specs/device-information-service-1-1/)
 
 > This service exposes manufacturer and/or vendor information about a device.
+>
+> DIS_SPEC_V11r00.pdf
 
 #### HIDS, [Human Interface Service](https://www.bluetooth.com/specifications/specs/human-interface-device-service-1-0/)
 
 > This service exposes HID reports and other HID data intended for HID Hosts and HID Devices.
 
+#### HOGP, [HID OVER GATT PROFILE](https://www.bluetooth.com/specifications/specs/hid-over-gatt-profile-1-0/)
+
+> This profile defines how a device with Bluetooth low energy wireless communications can support HID services over the Bluetooth low energy protocol stack using the Generic Attribute Profile.
+
 #### HRS, [Heart Rate Service](https://www.bluetooth.com/specifications/specs/heart-rate-profile-1-0/)
 
 > This profile enables a Collector device to connect and interact with a Heart Rate Sensor for use in fitness applications.
+>
+> HRP_V10.pdf (HEART RATE PROFILE)
+>
+> HRS_SPEC_V10.pdf (HEART RATE SERVICE)
 
 #### GAP, [Generic Access Profile](https://software-dl.ti.com/lprf/simplelink_cc2640r2_latest/docs/blestack/ble_user_guide/html/ble-stack-3.x/gap.html)
 
