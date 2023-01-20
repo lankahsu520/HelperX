@@ -61,7 +61,7 @@
 ## [helper_VirtualBox-Ubuntu20.04.md](https://github.com/lankahsu520/HelperX/blob/master/helper_VirtualBox.md) - VirtualBox helper.
 ## [helper_Yocto.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Yocto.md) - Yocto helper.
 
-## [helper_Yocto-RaspberryPi3.md](https://github.com/lankahsu520/HelperX/blob/master/helper_YoctoPI3.md) - Yocto Raspberry Pi 3 helper.
+## [helper_Yocto-RaspberryPi3.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Yocto-RaspberryPi3.md) - Yocto Raspberry Pi 3 helper.
 
 # Author
 
