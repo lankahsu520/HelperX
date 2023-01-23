@@ -23,7 +23,45 @@
 
 # 2. [AVS Device SDK Repository](https://github.com/alexa/avs-device-sdk)
 
-# 
+## 2.1. Depend on
+
+- [openssl](https://www.openssl.org)
+- [zlib](https://zlib.net)
+- [portaudio](http://www.portaudio.com)
+- [libxml2](http://xmlsoft.org)
+- [libcares](https://c-ares.org)
+
+```bash
+$ sudo apt-get install libc-ares-dev
+```
+
+- [libev](http://software.schmorp.de/pkg/libev.html)
+
+```bash
+$ sudo apt-get install libev-dev
+```
+
+- [nghttp2](https://github.com/nghttp2/nghttp2) (openssl, zlib, libev, libcares)
+- [curl](https://curl.haxx.se) (openssl, nghttp2)
+- [libffi](https://sourceware.org/libffi)
+- [glib](https://gitlab.gnome.org/GNOME/glib) (libffi, zlib)
+- [orc](https://github.com/GStreamer/orc)
+- [gstreamer](https://github.com/GStreamer/gstreamer) (glib)
+
+```bash
+$ sudo apt-get --yes install libgstreamer1.0-dev
+$ sudo apt-get --yes install libgstreamer-plugins-base1.0-dev
+$ sudo apt-get --yes install libgstreamer-plugins-good1.0-dev
+$ sudo apt-get --yes install libgstreamer-plugins-bad1.0-dev
+```
+
+- gst-plugins-base
+
+- gst-plugins-good
+- gst-plugins-ugly
+- [sqlite](http://www.sqlite.org)
+- 
+
 # Appendix
 
 # I. Study

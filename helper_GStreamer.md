@@ -17,7 +17,9 @@
 [watchers-image]: https://img.shields.io/github/watchers/lankahsu520/HelperX.svg
 [watchers-url]: https://github.com/lankahsu520/HelperX/watchers
 
-# 1. rtspsrc -> autovideosink
+# 1. rtspsrc 
+
+## 1.1. rtspsrc -> autovideosink
 
 #### Video only
 ```mermaid
@@ -65,7 +67,7 @@ gst-launch-1.0 rtspsrc \
 	src. ! queue ! decodebin ! videoconvert ! autovideosink \
 	src. ! queue ! decodebin ! audioconvert ! audioresample ! autoaudiosink
 ```
-# 2. rtspsrc -> udpsink (Multicast) ⇢ udpsrc -> autovideosink
+## 1.2. rtspsrc -> udpsink (Multicast) ⇢ udpsrc -> autovideosink
 ```mermaid
 flowchart LR
 	rtspsrc[rtspsrc]
@@ -92,7 +94,7 @@ gst-launch-1.0 -v udpsrc \
 	! rtph264depay \
 	! decodebin ! videoconvert ! autovideosink
 ```
-# 3. rtspsrc -> udpsink  ⇢ udpsrc -> autovideosink
+## 1.3. rtspsrc -> udpsink  ⇢ udpsrc -> autovideosink
 ```mermaid
 flowchart LR
 	rtspsrc[rtspsrc]
@@ -138,7 +140,7 @@ gst-launch-1.0 -v udpsrc \
 
 
 
-# 4. rtspsrc -> kvssink
+## 1.4. rtspsrc -> kvssink
 
 ```mermaid
 flowchart LR
@@ -158,7 +160,10 @@ gst-launch-1.0  rtspsrc location=rtsp://192.168.50.21:554 user-id=admin user-pw=
 
 ```
 
-# 5. appsrc (i420) -> udpsink (Multicast) ⇢ udpsrc -> autovideosink
+# 2. appsrc
+
+## 2.1. appsrc (i420) -> udpsink (Multicast) ⇢ udpsrc -> autovideosink
+
 ```mermaid
 flowchart LR
 	appsrc[appsrc]
@@ -194,7 +199,10 @@ c=IN IP4 224.0.0.1
 a=rtpmap:96 H264/90000
 ```
 
-# 6. videotestsrc -> autovideosink/ximagesink
+# 3. videotestsrc 
+
+## 3.1. videotestsrc -> autovideosink/ximagesink
+
 ```mermaid
 flowchart LR
 	videotestsrc[videotestsrc]
@@ -207,7 +215,10 @@ gst-launch-1.0 videotestsrc ! autovideosink
 gst-launch-1.0 videotestsrc ! ximagesink
 ```
 
-# 7. v4l2src -> autovideosink/ximagesink
+# 4. v4l2src
+
+## 4.1. v4l2src -> autovideosink/ximagesink
+
 ```mermaid
 flowchart LR
 	v4l2src[v4l2src]
@@ -253,7 +264,10 @@ gst-launch-1.0 -v v4l2src device=/dev/video0 \
 	! autovideosink
 ```
 
-# 8. filesrc (mp3) -> alsasink/pulsesink/autoaudiosink
+# 5. filesrc
+
+## 5.1. filesrc (mp3) -> alsasink/pulsesink/autoaudiosink
+
 ```mermaid
 flowchart LR
 	filesrc[filesrc]
@@ -280,7 +294,7 @@ gst-launch-1.0 filesrc \
 	! audioconvert \
 	! alsasink
 ```
-# 9. filesrc (mp3) -> udpsink  ⇢ udpsrc -> alsasink
+## 5.2. filesrc (mp3) -> udpsink  ⇢ udpsrc -> alsasink
 ```mermaid
 flowchart LR
 	filesrc[filesrc]
@@ -324,8 +338,8 @@ gst-launch-1.0 -v udpsrc \
 	! audioconvert \
 	! autoaudiosink
 ```
-# 10. filesrc (wav) -> ???sink
-## 10.1. filesrc (wav) -> autoaudiosink
+## 5.3. filesrc (wav) -> ???sink
+### 5.3.1. filesrc (wav) -> autoaudiosink
 ```mermaid
 flowchart LR
 	filesrc[filesrc]
@@ -352,7 +366,7 @@ gst-launch-1.0 filesrc \
 	! audioconvert \
 	! pulsesink
 ```
-## 10.2. filesrc (wav) -> filesink
+### 5.3.2. filesrc (wav) -> filesink
 ```mermaid
 flowchart LR
 	filesrc[filesrc - wav]
@@ -415,8 +429,8 @@ gst-launch-1.0 filesrc \
 	! oggmux \
 	! filesink location="0001vorbis.ogg"
 ```
-# 11. filesrc (pcm) -> ???sink
-## 11.1. filesrc (pcm) -> autoaudiosink
+## 5.4. filesrc (pcm) -> ???sink
+### 5.4.1. filesrc (pcm) -> autoaudiosink
 ```mermaid
 flowchart LR
 	filesrc[filesrc]
@@ -440,7 +454,7 @@ gst-launch-1.0 filesrc \
 	! autoaudiosink
 ```
 
-## 11.2. filesrc (pcm) -> filesink
+### 5.4.2. filesrc (pcm) -> filesink
 ```mermaid
 flowchart LR
 	filesrc[filesrc]
@@ -486,18 +500,21 @@ gst-launch-1.0 filesrc \
 	! wavenc \
 	! filesink location=0001le-fail.wav
 ```
-# 12. filesrc (audio) -> udpsink  ⇢ udpsrc -> alsasink
+# 6. udpsrc
+
+## 6.1. filesrc (audio) -> udpsink  ⇢ udpsrc -> ???sink
+
 ```mermaid
 flowchart LR
 	filesrc[filesrc]
 	udpsink[udpsink]
 	udpsrc[udpsrc]
-    alsasink[alsasink]
+    alsasink[???sink]
 
 	filesrc --> udpsink -. :51000 .-> udpsrc --> alsasink
 ```
 - [rtpopuspay](https://gstreamer.freedesktop.org/documentation/rtp/rtpopuspay.html?gi-language=c)
-## 12.1. filesrc (audio) -> udpsink
+### 6.1.1. filesrc (audio) -> udpsink
 ```
 export UDP_SINK="udpsink host=127.0.0.1 port=51000"
 export UDP_SINK="udpsink host=192.168.56.1 port=51000"
@@ -527,7 +544,7 @@ gst-launch-1.0 filesrc \
 ```
 #### filesrc (mp3) -> udpsink (opus)
 
-```bash
+```/bash
 gst-launch-1.0 filesrc \
 	location="/work/BeethovenFurElise.mp3" \
 	! decodebin \
@@ -537,7 +554,7 @@ gst-launch-1.0 filesrc \
 	! $UDP_SINK
 ```
 
-## 12.2. udpsrc (audio) -> ???sink
+## 6.2. udpsrc (audio) -> ???sink
 
 #### udpsrc (opus) -> autoaudiosink (pcm, S16LE)
 ```bash
@@ -580,7 +597,7 @@ gst-launch-1.0 udpsrc \
 	! audio/x-raw,format=S16LE,channels=2,rate=44100 \
 	! filesink location="0001le.pcm"
 ```
-# 13. Video/Audio -> udpsink ⇢ udpsrc -> autoaudiosink
+## 6.3. Video/Audio -> udpsink ⇢ udpsrc -> autoaudiosink
 ```mermaid
 flowchart LR
 	udpsink[udpsink]
@@ -604,7 +621,7 @@ gst-launch-1.0 -v udpsrc port=50000 \
 	! opusdec \
 	! autoaudiosink
 ```
-# 14. playbin
+# 7. playbin
 ```mermaid
 flowchart LR
 	uri[(http://relay.slayradio.org:800)]
@@ -623,7 +640,7 @@ gst-launch-1.0 -v playbin \
 	uri=file:///work/wav/0001.wav
 ```
 
-# 15. rtmpsrc with youtube-dl
+# 8. rtmpsrc with youtube-dl
 
 #### youtube-dl
 
@@ -642,6 +659,24 @@ $ youtube-dl --format "best[ext=mp4][protocol=https]" --get-url https://www.yout
 gst-launch-1.0 souphttpsrc is-live=true \
 	location="$(youtube-dl --format 134 --get-url https://www.youtube.com/watch?v=rSgzrSyQZc0)" \
 	! decodebin ! videoconvert ! autovideosink
+```
+
+# 9. alsasrc
+## 9.1. alsasrc -> filesink
+```mermaid
+flowchart LR
+	alsasrc[alsasrc]
+	filesink[filesink]
+
+	alsasrc --> filesink
+```
+```bash
+gst-launch-1.0 alsasrc \
+	! queue \
+	! audioconvert \
+	! vorbisenc \
+	! oggmux \
+	! filesink location="0001vorbis.ogg"
 ```
 # Appendix
 
@@ -683,12 +718,16 @@ Application Options:
 
 ```bash
 sudo apt-get --yes install gstreamer1.0
-sudo apt-get --yes install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
 sudo apt-get --yes install gstreamer1.0-plugins-base
 sudo apt-get --yes install gstreamer1.0-plugins-good
 sudo apt-get --yes install gstreamer1.0-plugins-base-apps
 sudo apt-get --yes install gstreamer1.0-plugins-bad 
 sudo apt-get --yes install gstreamer1.0-plugins-ugly
+
+sudo apt-get --yes install libgstreamer1.0-dev
+sudo apt-get --yes install libgstreamer-plugins-base1.0-dev
+sudo apt-get --yes install libgstreamer-plugins-good1.0-dev
+sudo apt-get --yes install libgstreamer-plugins-bad1.0-dev
 ```
 ## V.2. Environment
 
@@ -699,6 +738,14 @@ export LD_LIBRARY_PATH=`pwd`
 - [Amazon Kinesis Video Streams CPP Producer, GStreamer Plugin and JNI](https://github.com/awslabs/amazon-kinesis-video-streams-producer-sdk-cpp)
 - [GstApp.AppSrc](https://lazka.github.io/pgi-docs/GstApp-1.0/classes/AppSrc.html)
 - [IPv4 Multicast Address Space Registry](https://www.iana.org/assignments/multicast-addresses/multicast-addresses.xhtml)
+
+# VI. Audio Input
+
+## VI.1. sound-recorder
+
+```
+sudo apt install gnome-sound-recorder
+```
 
 # Author
 
