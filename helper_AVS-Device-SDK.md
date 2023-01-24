@@ -76,6 +76,12 @@ $ sudo apt-get install libcunit1 libcunit1-doc libcunit1-dev
 $ sudo apt-get install libc-ares-dev
 ```
 
+## II.2. -- Could NOT find GTest (missing: GTEST_LIBRARY GTEST_INCLUDE_DIR GTEST_MAIN_LIBRARY)
+
+```bash
+$ sudo apt-get install libgtest-dev
+```
+
 # III. Glossary
 
 # IV. Tool Usage

@@ -177,7 +177,7 @@ $ aws dynamodb create-table \
         },
         "TableSizeBytes": 0,
         "ItemCount": 0,
-        "TableArn": "arn:aws:dynamodb:ap-northeast-1:877409152866:table/Music",
+        "TableArn": "arn:aws:dynamodb:ap-northeast-1:123456789012:table/Music",
         "TableId": "25e42645-c399-4c68-aac6-f7b7084bd23e",
         "TableClassSummary": {
             "TableClass": "STANDARD"

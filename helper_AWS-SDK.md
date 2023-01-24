@@ -307,7 +307,7 @@ Examples:
 ```bash
 $ run_describe_table ap-northeast-1 Music
 Table name  : Music
-Table ARN   : arn:aws:dynamodb:ap-northeast-1:877409152866:table/Music
+Table ARN   : arn:aws:dynamodb:ap-northeast-1:123456789012:table/Music
 Status      : ACTIVE
 Item count  : 4
 Size (bytes): 285
