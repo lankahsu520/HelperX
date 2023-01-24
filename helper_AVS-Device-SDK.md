@@ -19,6 +19,8 @@
 
 # 1. [Alexa Voice Service](https://developer.amazon.com/en-US/docs/alexa/alexa-voice-service/get-started-with-alexa-voice-service.html)
 
+![avs-device-sdk-architecture](./images/avs-device-sdk-architecture.png)
+
 ## 1.1. [AVS Device SDK 3.X](https://developer.amazon.com/en-US/docs/alexa/avs-device-sdk/overview.html)
 
 # 2. [AVS Device SDK Repository](https://github.com/alexa/avs-device-sdk)
@@ -67,6 +69,8 @@ $ sudo apt-get --yes install libgstreamer-plugins-bad1.0-dev
 # I. Study
 
 #### A. [Alexa交叉编译 (avs-device-sdk)](https://blog.csdn.net/qq_38731735/article/details/120869805)
+
+#### B. [在 Raspberry Pi 上使用 AVS Device SDK 實現智慧音箱](https://ellis-wu.github.io/2019/07/15/avs-device-sdk-installation/)
 
 # II. Debug
 
