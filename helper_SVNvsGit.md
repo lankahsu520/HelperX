@@ -1068,6 +1068,12 @@ $ git push -f
 
 # II. Debug
 
+## II.1. svn: E170013: Unable to connect to a repository at URL 'https:..'
+
+```bash
+$ rm -f ~/.subversion/auth/svn.simple/*
+```
+
 # III. Glossary
 
 # IV. Tool Usage

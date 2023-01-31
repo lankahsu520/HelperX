@@ -162,6 +162,8 @@ flowchart TD
 #### HIDS, [Human Interface Service](https://www.bluetooth.com/specifications/specs/human-interface-device-service-1-0/)
 
 > This service exposes HID reports and other HID data intended for HID Hosts and HID Devices.
+>
+> HIDS_SPEC_V10.pdf
 
 #### HOGP, [HID OVER GATT PROFILE](https://www.bluetooth.com/specifications/specs/hid-over-gatt-profile-1-0/)
 
@@ -171,17 +173,21 @@ flowchart TD
 
 > This profile enables a Collector device to connect and interact with a Heart Rate Sensor for use in fitness applications.
 >
-> HRP_V10.pdf (HEART RATE PROFILE)
+> HRP_V10.pdf
 >
-> HRS_SPEC_V10.pdf (HEART RATE SERVICE)
+> HRS_SPEC_V10.pdf
 
 #### GAP, [Generic Access Profile](https://software-dl.ti.com/lprf/simplelink_cc2640r2_latest/docs/blestack/ble_user_guide/html/ble-stack-3.x/gap.html)
 
 > 設備的的配置文件。定義設備的角色 Central or Peripheral。用於 Advertising之中。
+>
+> BLUETOOTH SPECIFICATION Version 5.0 | Vol 3, Part C
 
 #### GATT, Generic Attribute Profile
 
 > 定義了設備的主/從關係。
+>
+> BLUETOOTH SPECIFICATION Version 5.0 | Vol 3, Part G
 
 #### [iBeacon](https://developer.apple.com/ibeacon/)
 
