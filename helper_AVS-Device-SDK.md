@@ -70,7 +70,7 @@ $ sudo apt-get --yes install libgstreamer-plugins-bad1.0-dev
 - gst-plugins-ugly
 - [sqlite](http://www.sqlite.org)
 
-## 2.2. Build
+## 2.2. Build on ubuntu64
 
 ```bash
 $ cd $HOME/sdk-folder/sdk-build
@@ -87,43 +87,89 @@ $ make SampleApp
 
 # 3. Register A Device - [Amazon Developer](https://developer.amazon.com/alexa/console/avs/products)
 
+#### A. Product name
 
-## 3.1. Get config.json
+![avs_device_info01](./images/avs_device_info01.png)
 
+#### B. Touch-initiated, Hands-free, etc.
+
+![avs_device_info02](./images/avs_device_info02.png)
+
+#### C. LWA Security Profile
+
+![avs_device_info03](./images/avs_device_info03.png)
+
+#### D. Platform information
+
+![avs_device_info04](./images/avs_device_info04.png)
+
+#### E. FINISH
+
+![avs_device_info05](T:\codebase\lankahsu520\HelperX\images\avs_device_info05.png)
+
+#### F. config.json
 ```json
 {
  "deviceInfo": {
-  "clientId": "your clientid",
-  "productId": "your product id"
+  "clientId": "amzn1.application-oa2-client.xxxxxx",
+  "productId": "EchoLankaHsu520"
  }
 }
 ```
-## 3.2. Set up your SDK configuration file
+# 4. Enable Security Profile - [LWA Console](https://developer.amazon.com/lwa/sp/overview.html)
+
+#### A. Select Security Profile
+
+![avs_device_enable01](./images/avs_device_enable01.png)
+
+![avs_device_enable02](./images/avs_device_enable02.png)
+
+#### B. Enabled
+
+![avs_device_enable03](./images/avs_device_enable03.png)
+
+# 5. Set up on ubuntu64
 
 ```bash
-cd $HOME/sdk-folder/sdk-source/avs-device-sdk/tools/Install
+$ cd $HOME/sdk-folder/sdk-source/avs-device-sdk/tools/Install
 
-bash genConfig.sh \
-config.json \
-12345 \
-$HOME/sdk-folder/db \
-$HOME/sdk-folder/sdk-source/avs-device-sdk \
-$HOME/sdk-folder/sdk-build/Integration/AlexaClientSDKConfig.json \
--DSDK_CONFIG_MANUFACTURER_NAME="Ubuntu" \
--DSDK_CONFIG_DEVICE_DESCRIPTION="Ubuntu"
+$ . genConfig.sh \
+	config.json \
+	12345 \
+	$HOME/sdk-folder/db \
+	$HOME/sdk-folder/sdk-source/avs-device-sdk \
+	$HOME/sdk-folder/sdk-build/Integration/AlexaClientSDKConfig.json \
+	-DSDK_CONFIG_MANUFACTURER_NAME="Ubuntu" \
+	-DSDK_CONFIG_DEVICE_DESCRIPTION="Ubuntu"
 ```
 
-# 4. Run
+# 6. Run on ubuntu64
+
+#### A. Run 1st
+
 ```bash
 $ cd $HOME/sdk-folder/sdk-build/
-./SampleApplications/ConsoleSampleApplication/src/SampleApp ./Integration/AlexaClientSDKConfig.json 
+$ ./SampleApplications/ConsoleSampleApplication/src/SampleApp ./Integration/AlexaClientSDKConfig.json 
 ```
 
-#### To relaunch the Sample App
+#### B. Please the below log messages
+
+```log
+######################################################
+#       > > > > > NOT YET AUTHORIZED < < < < <       #
+######################################################
+
+############################################################################################
+#     To authorize, browse to: 'https://amazon.com/us/code' and enter the code: {XXXX}     #
+############################################################################################
+```
+
+#### C. Relaunch
 
 ```bash
-cd $HOME/sdk-folder/sdk-build
-./SampleApplications/ConsoleSampleApplication/src/SampleApp ./Integration/AlexaClientSDKConfig.json DEBUG9
+# To relaunch the Sample App with DEBUG9
+$ cd $HOME/sdk-folder/sdk-build
+$ ./SampleApplications/ConsoleSampleApplication/src/SampleApp ./Integration/AlexaClientSDKConfig.json DEBUG9
 ```
 
 # Appendix
@@ -140,7 +186,7 @@ cd $HOME/sdk-folder/sdk-build
 
 #### E. [更換 AVS Device SDK 的喚醒詞](https://ellis-wu.github.io/2019/07/17/avs-device-sdk-wwe/)
 
-#### F. [在 Raspberry Pi 上使用 AVS Device SDK 實現智慧音箱](https://ellis-wu.github.io/2019/07/15/avs-device-sdk-installation/)
+#### F. [如何用树莓派搭建亚马逊语音助手，Raspberry Pi Alexa](https://www.labno3.com/2021/01/15/raspberry-pi-alexa-build-your-own-amazon-echo/)
 
 # II. Debug
 
