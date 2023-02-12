@@ -128,7 +128,11 @@ $ make SampleApp
 
 ![avs_device_enable03](./images/avs_device_enable03.png)
 
-# 5. Set up on ubuntu64
+# 5. Startup on ???
+
+## 5.1. [ubuntu](https://developer.amazon.com/en-US/docs/alexa/avs-device-sdk/ubuntu.html)
+
+#### A. AlexaClientSDKConfig.json
 
 ```bash
 $ cd $HOME/sdk-folder/sdk-source/avs-device-sdk/tools/Install
@@ -143,16 +147,14 @@ $ . genConfig.sh \
 	-DSDK_CONFIG_DEVICE_DESCRIPTION="Ubuntu"
 ```
 
-# 6. Run on ubuntu64
-
-#### A. Run 1st
+#### B. Run 1st
 
 ```bash
 $ cd $HOME/sdk-folder/sdk-build/
 $ ./SampleApplications/ConsoleSampleApplication/src/SampleApp ./Integration/AlexaClientSDKConfig.json 
 ```
 
-#### B. Please the below log messages
+#### C. Please the below log messages
 
 ```log
 ######################################################
@@ -164,7 +166,82 @@ $ ./SampleApplications/ConsoleSampleApplication/src/SampleApp ./Integration/Alex
 ############################################################################################
 ```
 
-#### C. Relaunch
+#### D. Relaunch - Enable debug logs
+
+```bash
+# To relaunch the Sample App with DEBUG9
+$ cd $HOME/sdk-folder/sdk-build
+$ ./SampleApplications/ConsoleSampleApplication/src/SampleApp ./Integration/AlexaClientSDKConfig.json DEBUG9
+```
+
+## 5.2. [Raspberry Pi](https://developer.amazon.com/en-US/docs/alexa/avs-device-sdk/raspberry-pi.html)
+
+#### A. AlexaClientSDKConfig.json
+
+```bash
+$ cd $HOME/sdk-folder/sdk-source/avs-device-sdk/tools/Install
+
+$ . genConfig.sh \
+	config.json \
+	12345 \
+	$HOME/sdk-folder/db \
+	$HOME/sdk-folder/sdk-source/avs-device-sdk \
+	$HOME/sdk-folder/sdk-build/Integration/AlexaClientSDKConfig.json \
+	-DSDK_CONFIG_MANUFACTURER_NAME="raspberrypi" \
+	-DSDK_CONFIG_DEVICE_DESCRIPTION="raspberrypi"
+```
+
+##### A.1. list all available recording devices
+
+```bash
+$ arecord -l
+```
+
+##### A.2. list all playback devices
+
+```bash
+$ aplay -l
+```
+
+##### A.3. update ~/.asoundrc
+
+```bash
+pcm.!default {
+  type asym
+   playback.pcm {
+     type plug
+     slave.pcm "hw:0,0"
+   }
+   capture.pcm {
+     type plug
+     slave.pcm "hw:1,0"
+   }
+}
+```
+
+#### B. Run 1st
+
+```bash
+$ cd $HOME/sdk-folder/sdk-build/
+
+$ export PA_ALSA_PLUGHW=1 
+
+$ ./SampleApplications/ConsoleSampleApplication/src/SampleApp ./Integration/AlexaClientSDKConfig.json 
+```
+
+#### C. Please the below log messages
+
+```log
+######################################################
+#       > > > > > NOT YET AUTHORIZED < < < < <       #
+######################################################
+
+############################################################################################
+#     To authorize, browse to: 'https://amazon.com/us/code' and enter the code: {XXXX}     #
+############################################################################################
+```
+
+#### D. Relaunch - Enable debug logs
 
 ```bash
 # To relaunch the Sample App with DEBUG9
@@ -187,6 +264,8 @@ $ ./SampleApplications/ConsoleSampleApplication/src/SampleApp ./Integration/Alex
 #### E. [更換 AVS Device SDK 的喚醒詞](https://ellis-wu.github.io/2019/07/17/avs-device-sdk-wwe/)
 
 #### F. [如何用树莓派搭建亚马逊语音助手，Raspberry Pi Alexa](https://www.labno3.com/2021/01/15/raspberry-pi-alexa-build-your-own-amazon-echo/)
+
+#### G. [Raspberry Pi Alexa: Build your own Amazon Echo](https://pimylifeup.com/raspberry-pi-alexa/)
 
 # II. Debug
 
