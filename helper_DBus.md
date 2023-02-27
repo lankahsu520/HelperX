@@ -880,6 +880,11 @@ Usage: dbus-monitor [--system | --session | --address ADDRESS] [--monitor | --pr
 $ sudo dbus-monitor --system \
 	--profile \
 	"type='method_call',interface='org.bluez.Adapter1'"
+	
+$ sudo dbus-monitor --system \
+	--monitor \
+	"type='signal',interface='com.github.lankahsu520.demo'"
+
 ```
 
 #### D. dbus-daemon Usage
