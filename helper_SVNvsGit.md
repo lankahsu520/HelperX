@@ -121,15 +121,22 @@ $ git branch -m new-branch new-branch1
 
 #### git checkout
 ```bash
-# List all
+# List all branch
 $ git branch -a
 
 # switch to new-branch (exist)
 $ git checkout new-branch
 
-# create 
+# create branch
 $ git checkout -b new-branch
 $ git checkout -b new-branch origin
+
+# List all tag
+$ git tag
+# switch to tag
+$ git checkout 1.0.0
+# switch back
+$ git switch -
 ```
 
 #### git switch
@@ -203,6 +210,8 @@ $ svn co http://trac-vbx/svnroot/trunk/xbox xbox-123
 # to get the special folder - test 
 $ svn co http://trac-vbx/svnroot/trunk/xbox/test xbox-test
 
+# with username
+$ svn co --username lanka http://trac-vbx/svnroot/trunk/xbox/test
 ```
 
 #### git clone
