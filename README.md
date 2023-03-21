@@ -41,6 +41,8 @@
 
 ## [helper_GStreamer.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GStreamer.md) - GStreamer helper.
 
+## [helper_jq.md](https://github.com/lankahsu520/HelperX/blob/master/helper_jq.md) - jq helper.
+
 ## [helper_linux.md](https://github.com/lankahsu520/HelperX/blob/master/helper_linux.md) - linux helper.
 
 ## [helper_macOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_macOS.md) - macOS helper.
