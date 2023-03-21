@@ -1,4 +1,4 @@
-# [jq](https://manpages.ubuntu.com/manpages/xenial/man1/jq.1.html)
+# [jq](https://devdocs.io/jq/)
 [![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
 [![GitHub license][license-image]][license-url]
 [![GitHub stars][stars-image]][stars-url]
@@ -166,19 +166,213 @@ $ aws dynamodb scan --table-name Music
 
 ```
 
-# 3. Topic B
+# 3. General Commands
 
-> Topic B
+#### - Print formatted JSON
 
-# 4. Topic C
+```bash
+# from file
+$ jq . ./AWS/Music.json
+or
+# from pipe
+$ cat ./AWS/Music.json | jq .
 
-> Topic C
+$ echo '{"a":1,"b":2,"c":3,"k":11,"d":4,"e":5,"f":6,"g":7,"p":16,"h":8,"i":9,"j":10,"l":12,"m":13,"u":21,"n":14,"o":15,"v":22,"q":17,"r":18,"s":19,"t":20,"w":23,"x":24,"y":25,"z":26}' | jq -c .
+
+
+```
+
+#### - A Particular Field
+
+```bash
+$ jq '.Count' ./AWS/Music.json
+6
+$ jq '.["ScannedCount"]' ./AWS/Music.json
+6
+$ jq '.ConsumedCapacity' ./AWS/Music.json
+null
+
+```
+
+#### - Compact Output  [ --compact-output / -c ]
+
+>--compact-output / -c:
+>
+>      By default, jq pretty-prints JSON output.  Using  this  option  will  result  in  more
+>      compact output by instead putting each JSON object on a single line.
+
+```bash
+# compact output
+$ jq -c '.Items' ./AWS/Music.json
+[{"AlbumTitle":{"S":"Somewhat Famous"},"Awards":{"S":"1"},"Artist":{"S":"No One You Know"},"SongTitle":{"S":"Call Me Today"}},{"AlbumTitle":{"S":"Somewhat Famous"},"Awards":{"S":"2"},"Artist":{"S":"No One You Know"},"SongTitle":{"S":"Howdy"}},{"AlbumTitle":{"S":"Album123"},"Awards":{"S":"1"},"Sponsor":{"L":[{"S":"dog"},{"S":"mouse"},{"S":"tiger"}]},"Artist":{"S":"Lanka"},"SongTitle":{"S":"Lanka"}},{"AlbumTitle":{"S":"Lanka520"},"Awards":{"S":"1"},"Sponsor":{"L":[{"S":"dog"},{"S":"cat"},{"S":"mouse"},{"S":"stoat"},{"S":"snake"}]},"Artist":{"S":"Lanka"},"SongTitle":{"S":"Lanka520520"}},{"AlbumTitle":{"S":"Songs About Life"},"Awards":{"S":"10"},"Artist":{"S":"Acme Band"},"SongTitle":{"S":"Happy Day"}},{"AlbumTitle":{"S":"Another Album Title"},"Awards":{"S":"8"},"Artist":{"S":"Acme Band"},"SongTitle":{"S":"PartiQL Rocks"}}]
+
+```
+
+#### - Null Field(s)
+
+```bash
+$ jq '.NotFound' ./AWS/Music.json
+null
+
+$ jq -c '.Items[].NotFound' ./AWS/Music.json
+null
+null
+null
+null
+null
+null
+
+```
+
+#### - Print raw strings [ --raw-output / -r ]
+
+>```
+>--raw-output / -r:
+>
+>           With this option, if the filter´s result is a string then it will be written  directly
+>           to  standard output rather than being formatted as a JSON string with quotes. This can
+>           be useful for making jq filters talk to non-JSON-based systems.
+>```
+
+```bash
+$ jq -c '.Items[0].AlbumTitle.S' ./AWS/Music.json
+"Somewhat Famous"
+
+$ jq -cr '.Items[0].AlbumTitle.S' ./AWS/Music.json
+Somewhat Famous
+
+```
+
+#### - In sorted order [ --sort-keys / -S ]
+
+> ```
+> --sort-keys / -S:
+>            Output the fields of each object with the keys in sorted order.
+> ```
+
+```bash
+$ echo '{"z":26,"b":2,"c":3,"k":11,"d":4,"e":5,"x":24}' | jq -cS
+{"b":2,"c":3,"d":4,"e":5,"k":11,"x":24,"z":26}
+
+$ echo '{"a":1,"b":2,"c":3,"k":11,"d":4,"e":5,"f":6,"g":7,"p":16,"h":8,"i":9,"j":10,"l":12,"m":13,"u":21,"n":14,"o":15,"v":22,"q":17,"r":18,"s":19,"t":20,"w":23,"x":24,"y":25,"z":26}' | jq -cS .
+{"a":1,"b":2,"c":3,"d":4,"e":5,"f":6,"g":7,"h":8,"i":9,"j":10,"k":11,"l":12,"m":13,"n":14,"o":15,"p":16,"q":17,"r":18,"s":19,"t":20,"u":21,"v":22,"w":23,"x":24,"y":25,"z":26}
+
+```
+
+#### - Delete Field(s) [ del ]
+
+> ```
+> del(path_expression)
+>        The builtin function del removes a key and its corresponding value from an object.
+> ```
+
+```bash
+$ echo '{"z":26,"b":2,"c":3,"k":11,"d":4,"e":5,"x":24}' | jq -cS '. | del(.b,.c)'
+{"d":4,"e":5,"k":11,"x":24,"z":26}
+
+```
+
+# 4. Handle Array
+
+#### - A object of Items[?]
+
+```bash
+$ jq -c '.Items[1]' ./AWS/Music.json
+{"AlbumTitle":{"S":"Somewhat Famous"},"Awards":{"S":"2"},"Artist":{"S":"No One You Know"},"SongTitle":{"S":"Howdy"}}
+
+```
+
+#### - List AlbumTitle(s) of Items[?]
+
+```bash
+$ jq -c '.Items[].AlbumTitle' ./AWS/Music.json
+{"S":"Somewhat Famous"}
+{"S":"Somewhat Famous"}
+{"S":"Album123"}
+{"S":"Lanka520"}
+{"S":"Songs About Life"}
+{"S":"Another Album Title"}
+
+$ jq -c '.Items[].AlbumTitle' ./AWS/Music.json | jq '.S'
+"Somewhat Famous"
+"Somewhat Famous"
+"Album123"
+"Lanka520"
+"Songs About Life"
+"Another Album Title"
+
+# just retrieve one
+$ jq -c '.Items[2].AlbumTitle' ./AWS/Music.json
+{"S":"Album123"}
+$ jq -cr '.Items[2]."AlbumTitle"."S"' ./AWS/Music.json
+Album123
+```
+
+#### - Print as  a large array [ --slurp/-s ]
+
+>```
+>--slurp/-s:
+>
+>           Instead of running the filter for each JSON object in the input, read the entire input
+>           stream into a large array and run the filter just once.
+>```
+
+```bash
+$ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json | jq -cs '.'
+["Somewhat Famous","Somewhat Famous","Album123","Lanka520","Songs About Life","Another Album Title"]
+
+$ jq -c '[.Items[].AlbumTitle.S]' ./AWS/Music.json
+["Somewhat Famous","Somewhat Famous","Album123","Lanka520","Songs About Life","Another Album Title"]
+
+```
+
+#### - Remove any duplicate [ unique, unique_by(path_exp) ]
+
+>```
+>unique, unique_by(path_exp)
+>       The unique function takes as input an array and produces an array of the same elements, in
+>       sorted order, with duplicates removed.
+>```
+
+```bash
+$ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json | jq -cs 'unique_by(.)'
+["Album123","Another Album Title","Lanka520","Somewhat Famous","Songs About Life"]
+
+$ jq -c '[.Items[].AlbumTitle.S] | unique_by(.)' ./AWS/Music.json
+["Album123","Another Album Title","Lanka520","Somewhat Famous","Songs About Life"]
+
+```
+
+#### - Pickup n~m (1:3=1,2; 0:1=1)
+
+```bash
+$ jq -c '.Items[].AlbumTitle' ./AWS/Music.json | jq '.S' | jq -cs '.[1:3]'
+["Somewhat Famous","Album123"]
+
+$ jq -c '.Items[].AlbumTitle' ./AWS/Music.json | jq '.S' | jq -cs '.[0:1]'
+["Somewhat Famous"]
+
+# last one [-1:]
+$ jq -c '.Items[].AlbumTitle' ./AWS/Music.json | jq '.S' | jq -cs '.[-1:]'
+
+```
+
+#### - Pickup the special value [ select ]
+```bash
+$ jq -c '.Items[] | select(.AlbumTitle.S=="Somewhat Famous")' ./AWS/Music.json
+{"AlbumTitle":{"S":"Somewhat Famous"},"Awards":{"S":"1"},"Artist":{"S":"No One You Know"},"SongTitle":{"S":"Call Me Today"}}
+{"AlbumTitle":{"S":"Somewhat Famous"},"Awards":{"S":"2"},"Artist":{"S":"No One You Know"},"SongTitle":{"S":"Howdy"}}
+
+$ jq -c '[.Items[] | select(.AlbumTitle.S=="Somewhat Famous")]' ./AWS/Music.json
+[{"AlbumTitle":{"S":"Somewhat Famous"},"Awards":{"S":"1"},"Artist":{"S":"No One You Know"},"SongTitle":{"S":"Call Me Today"}},{"AlbumTitle":{"S":"Somewhat Famous"},"Awards":{"S":"2"},"Artist":{"S":"No One You Know"},"SongTitle":{"S":"Howdy"}}]
+
+```
 
 # Appendix
 
 # I. Study
 
-#### A. [Install jq on Ubuntu 22.04](https://lindevs.com/install-jq-on-ubuntu)
+#### A. [jq 實戰教學](https://myapollo.com.tw/blog/jq-by-example/)
 
 # II. Debug
 
@@ -186,7 +380,7 @@ $ aws dynamodb scan --table-name Music
 
 # IV. Tool Usage
 
-#### A. jq Usage
+#### A. [jq](https://manpages.ubuntu.com/manpages/xenial/man1/jq.1.html) Usage
 
 ```bash
 $ jq --help
@@ -239,8 +433,6 @@ positional arguments are available as $ARGS.positional[].
 See the manpage for more options.
 
 ```
-
-
 
 # Author
 
