@@ -1156,8 +1156,6 @@ openssl ciphers -v | awk '{print $2}' | sort | uniq
 openssl s_client -help 2>&1  > /dev/null | egrep "\-(ssl|tls)[^a-z]"
 openssl s_client -help 2>&1 | awk '/-ssl[0-9]|-tls[0-9]/{print $1}' 
 openssl ciphers
-
-openssl base64 -e <<< "lankahsu520"
 ```
 
 ```bash
