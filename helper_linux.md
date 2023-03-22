@@ -1146,14 +1146,31 @@ echo 2 > /proc/sys/vm/overcommit_memory
 
 ```
 
-# 14. SSL Handler
+# 14. Security Handler
+
+## 14.1. openssl
 
 ```bash
+# list all security version
 openssl ciphers -v | awk '{print $2}' | sort | uniq
 openssl s_client -help 2>&1  > /dev/null | egrep "\-(ssl|tls)[^a-z]"
 openssl s_client -help 2>&1 | awk '/-ssl[0-9]|-tls[0-9]/{print $1}' 
 openssl ciphers
 
+openssl base64 -e <<< "lankahsu520"
+```
+
+```bash
+# base64
+PASS_ENC=`openssl base64 -e <<< "lankahsu520"`; echo "(PASS_ENC: $PASS_ENC)"
+PASS_DEC=`openssl base64 -d <<< "$PASS_ENC"`; echo "(PASS_DEC: $PASS_DEC)"
+```
+
+## 14.2. base64
+
+```bash
+PASS_ENC=`echo lankahsu520 | base64`; echo "(PASS_ENC: $PASS_ENC)"
+PASS_DEC=`echo $PASS_ENC | base64 -d`; echo "(PASS_DEC: $PASS_DEC)"
 ```
 
 # 15. MTD Handler
