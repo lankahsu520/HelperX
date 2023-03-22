@@ -47,7 +47,7 @@
 
 ## [helper_linux.md](https://github.com/lankahsu520/HelperX/blob/master/helper_linux.md) - linux helper.
 
->有人跟我說「他是雲端工程師，從來沒有學過什麼 linux，為什麼還要去學？」或許他的話沒有錯，出社會後，你能在工作上得心應心，其實就可以了。
+>某人說「我是雲端工程師，從來沒有學過什麼 linux，為什麼還要去學？」或許他的話沒有錯，出社會後，你能在工作上得心應心，其實就可以了。
 
 ## [helper_macOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_macOS.md) - macOS helper.
 
