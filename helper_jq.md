@@ -44,6 +44,18 @@ $ aws dynamodb scan --table-name Music
 
 ```
 
+```bash
+JSON_ABC='{"a":1,"b":2,"c":3,"k":11,"d":4,"e":5,"f":6,"g":7,"p":16,"h":8,"i":9,"j":10,"l":12,"m":13,"u":21,"n":14,"o":15,"v":22,"q":17,"r":18,"s":19,"t":20,"w":23,"x":24,"y":25,"z":26}'
+
+JKEY_COUNT=Count
+JVAL_COUNT=6
+JKEY_SCANNEDCOUNT=ScannedCount
+JKEY_CONSUMEDCAPACITY=ConsumedCapacity
+
+JKEY_ITEMS=Items
+JKEY_ALBUMTITLE=AlbumTitle
+```
+
 # 3. General Commands
 
 #### - Print formatted JSON
@@ -55,8 +67,7 @@ or
 # from pipe
 $ cat ./AWS/Music.json | jq .
 
-$ echo '{"a":1,"b":2,"c":3,"k":11,"d":4,"e":5,"f":6,"g":7,"p":16,"h":8,"i":9,"j":10,"l":12,"m":13,"u":21,"n":14,"o":15,"v":22,"q":17,"r":18,"s":19,"t":20,"w":23,"x":24,"y":25,"z":26}' | jq -c .
-
+$ echo JSON_ABC | jq -c .
 
 ```
 
@@ -69,6 +80,49 @@ $ jq '.["ScannedCount"]' ./AWS/Music.json
 6
 $ jq '.ConsumedCapacity' ./AWS/Music.json
 null
+
+```
+
+#### - Pass System Environment Variable(s)
+
+>```
+> --arg name value:
+>
+>           This  option  passes a value to the jq program as a predefined variable. If you run jq
+>           with --arg foo bar, then $foo is available in the program and  has  the  value  "bar".
+>           Note that value will be treated as a string, so --arg foo 123 will bind $foo to "123".
+>```
+>
+>```
+>--argjson name JSON-text:
+>
+>           This option passes a JSON-encoded value to the jq program as a predefined variable. If
+>           you run jq with --argjson foo 123, then $foo is available in the program and  has  the
+>           value 123.
+>```
+
+```bash
+$ jq --arg X $JKEY_COUNT '.[$X]' ./AWS/Music.json
+6
+
+# parse as integer
+$ jq -c --arg X $JKEY_COUNT --argjson Y $JVAL_COUNT '. | select(.[$X]==$Y)' ./AWS/Music.json
+{"Items":[{"AlbumTitle":{"S":"Somewhat Famous"},"Awards":{"S":"1"},"Artist":{"S":"No One You Know"},"SongTitle":{"S":"Call Me Today"}},{"AlbumTitle":{"S":"Somewhat Famous"},"Awards":{"S":"2"},"Artist":{"S":"No One You Know"},"SongTitle":{"S":"Howdy"}},{"AlbumTitle":{"S":"Album123"},"Awards":{"S":"1"},"Sponsor":{"L":[{"S":"dog"},{"S":"mouse"},{"S":"tiger"}]},"Artist":{"S":"Lanka"},"SongTitle":{"S":"Lanka"}},{"AlbumTitle":{"S":"Lanka520"},"Awards":{"S":"1"},"Sponsor":{"L":[{"S":"dog"},{"S":"cat"},{"S":"mouse"},{"S":"stoat"},{"S":"snake"}]},"Artist":{"S":"Lanka"},"SongTitle":{"S":"Lanka520520"}},{"AlbumTitle":{"S":"Songs About Life"},"Awards":{"S":"10"},"Artist":{"S":"Acme Band"},"SongTitle":{"S":"Happy Day"}},{"AlbumTitle":{"S":"Another Album Title"},"Awards":{"S":"8"},"Artist":{"S":"Acme Band"},"SongTitle":{"S":"PartiQL Rocks"}}],"Count":6,"ScannedCount":6,"ConsumedCapacity":null}
+
+# parse as integer
+$ JVAL_NUMBER=10
+$ echo $JSON_ABC | jq -c --argjson X $JVAL_NUMBER '.[] | select(.==$X)'
+10
+
+$ jq '."'"$JKEY_SCANNEDCOUNT"'"' ./AWS/Music.json
+6
+$ jq --arg X $JKEY_SCANNEDCOUNT '.[$X]' ./AWS/Music.json
+6
+
+$ jq --arg X $JKEY_CONSUMEDCAPACITY '.[$X]' ./AWS/Music.json
+null
+
+$ jq --arg X $JKEY_ITEMS --arg Y $JKEY_ALBUMTITLE'.[$X].[].[$Y]' ./AWS/Music.json
 
 ```
 
@@ -132,7 +186,7 @@ Somewhat Famous
 $ echo '{"z":26,"b":2,"c":3,"k":11,"d":4,"e":5,"x":24}' | jq -cS
 {"b":2,"c":3,"d":4,"e":5,"k":11,"x":24,"z":26}
 
-$ echo '{"a":1,"b":2,"c":3,"k":11,"d":4,"e":5,"f":6,"g":7,"p":16,"h":8,"i":9,"j":10,"l":12,"m":13,"u":21,"n":14,"o":15,"v":22,"q":17,"r":18,"s":19,"t":20,"w":23,"x":24,"y":25,"z":26}' | jq -cS .
+$ echo $JSON_ABC | jq -cS .
 {"a":1,"b":2,"c":3,"d":4,"e":5,"f":6,"g":7,"h":8,"i":9,"j":10,"k":11,"l":12,"m":13,"n":14,"o":15,"p":16,"q":17,"r":18,"s":19,"t":20,"u":21,"v":22,"w":23,"x":24,"y":25,"z":26}
 
 ```
@@ -158,6 +212,8 @@ $ echo '{"z":26,"b":2,"c":3,"k":11,"d":4,"e":5,"x":24}' | jq -cS '. | del(.b,.c)
 $ jq -c '.Items[1]' ./AWS/Music.json
 {"AlbumTitle":{"S":"Somewhat Famous"},"Awards":{"S":"2"},"Artist":{"S":"No One You Know"},"SongTitle":{"S":"Howdy"}}
 
+$ jq -c --arg X $JKEY_ITEMS '.[$X][1]' ./AWS/Music.json
+
 ```
 
 #### - List AlbumTitle(s) of Items[?]
@@ -171,7 +227,11 @@ $ jq -c '.Items[].AlbumTitle' ./AWS/Music.json
 {"S":"Songs About Life"}
 {"S":"Another Album Title"}
 
-$ jq -c '.Items[].AlbumTitle' ./AWS/Music.json | jq '.S'
+$ jq -c --arg X $JKEY_ITEMS --arg Y $JKEY_ALBUMTITLE '.[$X][] | .[$Y]' ./AWS/Music.json
+
+```
+```bash
+$ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json
 "Somewhat Famous"
 "Somewhat Famous"
 "Album123"
@@ -179,11 +239,20 @@ $ jq -c '.Items[].AlbumTitle' ./AWS/Music.json | jq '.S'
 "Songs About Life"
 "Another Album Title"
 
+$ jq -c --arg X $JKEY_ITEMS --arg Y $JKEY_ALBUMTITLE '.[$X][] | .[$Y].S' ./AWS/Music.json
+
+```
+
+```bash
 # just retrieve one
 $ jq -c '.Items[2].AlbumTitle' ./AWS/Music.json
 {"S":"Album123"}
-$ jq -cr '.Items[2]."AlbumTitle"."S"' ./AWS/Music.json
-Album123
+$ jq -c --arg X $JKEY_ITEMS --arg Y $JKEY_ALBUMTITLE '.[$X][2] | .[$Y].S' ./AWS/Music.json
+
+$ jq -c '.Items[2]."AlbumTitle"."S"' ./AWS/Music.json
+"Album123"
+$ jq -c --arg X $JKEY_ITEMS --arg Y $JKEY_ALBUMTITLE '.[$X][2] | .[$Y].S' ./AWS/Music.json
+
 ```
 
 #### - Print as  a large array [ --slurp/-s ]
@@ -224,18 +293,27 @@ $ jq -c '[.Items[].AlbumTitle.S] | unique_by(.)' ./AWS/Music.json
 #### - Pickup n~m (1:3=1,2; 0:1=1)
 
 ```bash
-$ jq -c '.Items[].AlbumTitle' ./AWS/Music.json | jq '.S' | jq -cs '.[1:3]'
+$ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json | jq -cs '.[1:3]'
 ["Somewhat Famous","Album123"]
 
-$ jq -c '.Items[].AlbumTitle' ./AWS/Music.json | jq '.S' | jq -cs '.[0:1]'
+$ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json  | jq -cs '.[0:1]'
 ["Somewhat Famous"]
 
 # last one [-1:]
-$ jq -c '.Items[].AlbumTitle' ./AWS/Music.json | jq '.S' | jq -cs '.[-1:]'
+$ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json | jq -cs '.[-1:]'
 
 ```
 
 #### - Pickup the special value [ select ]
+
+>```
+>select(boolean_expression)
+>       The function select(foo) produces its input unchanged if foo returns true for that  input,
+>       and produces no output otherwise.
+>```
+>
+>注意：所列印的層級在 select 之前決定，下面的範例是從 Items 開始
+
 ```bash
 $ jq -c '.Items[] | select(.AlbumTitle.S=="Somewhat Famous")' ./AWS/Music.json
 {"AlbumTitle":{"S":"Somewhat Famous"},"Awards":{"S":"1"},"Artist":{"S":"No One You Know"},"SongTitle":{"S":"Call Me Today"}}
