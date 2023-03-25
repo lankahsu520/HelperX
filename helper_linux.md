@@ -716,7 +716,7 @@ ping -c 4 8.8.8.8
 
 ```bash
 MCTT_IP="229.255.255.250"
-route -n | grep $MCTT_IP ) || ( $SUDO route del $MCTT_IP dev lo
+( route -n | grep $MCTT_IP ) || ( $SUDO route add $MCTT_IP dev lo )
 
 route add default gw 192.168.0.1 dev ra0
 route del default gw 192.168.0.1 dev ra0

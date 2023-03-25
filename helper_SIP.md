@@ -257,15 +257,15 @@ autofallthrough=yes
 clearglobalvars=no
 
 [default]
-exten => 1001,1,Dial(SIP/1001,10)
-exten => 1002,1,Dial(SIP/1002,10)
-exten => 1003,1,Dial(SIP/1003,10)
-exten => 1004,1,Dial(SIP/1004,10)
-exten => 1005,1,Dial(SIP/1005,10)
-exten => 1006,1,Dial(SIP/1006,10)
-exten => 1007,1,Dial(SIP/1007,10)
-exten => 1008,1,Dial(SIP/1008,10)
-exten => 1009,1,Dial(SIP/1009,10)
+exten => 1001,1,Dial(SIP/1001,60)
+exten => 1002,1,Dial(SIP/1002,60)
+exten => 1003,1,Dial(SIP/1003,60)
+exten => 1004,1,Dial(SIP/1004,60)
+exten => 1005,1,Dial(SIP/1005,60)
+exten => 1006,1,Dial(SIP/1006,60)
+exten => 1007,1,Dial(SIP/1007,60)
+exten => 1008,1,Dial(SIP/1008,60)
+exten => 1009,1,Dial(SIP/1009,60)
 # timeout 60
 exten => 1010,1,Dial(SIP/1010,60)
 ```
