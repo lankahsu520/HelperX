@@ -1236,7 +1236,7 @@ unzip helloworld.zip
 
 # 18. Others Handler
 
-#### alias — define or display aliases
+#### alias - define or display aliases
 
 ```bash
 alias ll="ls -alF"
@@ -1259,6 +1259,17 @@ man ls
 ```bash
 ls | xargs cat
 
+```
+
+# 19. Editor
+
+#### vim / vi - a programmer's text editor
+
+> [~/.vimrc](https://github.com/lankahsu520/HelperX/blob/master/linux/.vimrc)
+
+```bash
+vi 123
+vim 123
 ```
 
 # Appendix
