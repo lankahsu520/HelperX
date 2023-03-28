@@ -366,6 +366,13 @@ crontab -r
 
 crontab -e -u lanka
 
+sudo systemctl status cron.service
+sudo systemctl enable cron.service
+```
+
+```bash
+# at bootup
+@reboot sleep 20 && helloworld
 ```
 
 # 3. Disk Handler
