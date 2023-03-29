@@ -17,23 +17,25 @@
 [watchers-image]: https://img.shields.io/github/watchers/lankahsu520/HelperX.svg
 [watchers-url]: https://github.com/lankahsu520/HelperX/watchers
 
-# 1. [Amazon Lex](https://docs.aws.amazon.com/lexv2/latest/dg/what-is.html)
+# 1. [Amazon Lex (V2 Developer Guide)](https://docs.aws.amazon.com/lexv2/latest/dg/what-is.html)
 
 > Amazon Lex 是一種全受管人工智慧 (AI) 服務，具有用於設計、建置、測試和部署交談介面至應用程式的進階自然語言模型。
 
 ![Amazon Lex](./images/product-page-diagram_Amazon-Lex.4227debf7110b1f16add010b55be881aa37fbd7b.png)
 
-1.1. 
+
 
 # Appendix
 
 # I. Study
 
-#### A. [建立 Amazon Lex 聊天機器人](https://vocus.cc/article/62247106fd89780001cb0b48)
+#### A. Official - [Amazon Lex (V2 Developer Guide)](https://docs.aws.amazon.com/lexv2/latest/dg/what-is.html)
 
-#### B. [Amazon Lex 功能](https://aws.amazon.com/tw/lex/features/)
+#### B. [建立 Amazon Lex 聊天機器人](https://vocus.cc/article/62247106fd89780001cb0b48)
 
-#### C. [Amazon Lex V2 教學 1](https://aprilyang.home.blog/2022/05/14/lex-jeopardy-bot-1/)
+#### C. [Amazon Lex 功能](https://aws.amazon.com/tw/lex/features/)
+
+#### D. [Amazon Lex V2 教學 1](https://aprilyang.home.blog/2022/05/14/lex-jeopardy-bot-1/)
 
 # II. Debug
 

@@ -1,4 +1,4 @@
-# [Amazon Chime](https://aws.amazon.com/tw/chime/)
+# [Amazon Connect](https://aws.amazon.com/tw/connect/)
 
 [![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
 [![GitHub license][license-image]][license-url]
@@ -18,31 +18,11 @@
 [watchers-image]: https://img.shields.io/github/watchers/lankahsu520/HelperX.svg
 [watchers-url]: https://github.com/lankahsu520/HelperX/watchers
 
-# 1. [Amazon Chime (Administration Guide)](https://docs.aws.amazon.com/chime/latest/ag/what-is-chime.html)
+# 1. [Amazon Connect (Administrator Guide)](https://docs.aws.amazon.com/connect/latest/adminguide/what-is-amazon-connect.html)
 
 ## 1.1. How it works
 
-#### A. PSTN Audio
-
-![amazon_chime_sdk_pstn](T:\codebase\lankahsu520\HelperX\images\amazon_chime_sdk_pstn.png)
-
-#### B. SIP Trunking
-
-![amazon_chime_sdk_sip_trunking](./images/amazon_chime_sdk_sip_trunking.png)
-
-#### C. Messaging
-
-![amazon_chime_sdk_messaging](./images/amazon_chime_sdk_messaging.png)
-
-#### D. WebRTC with Live Transcription
-
-![amazon_chime_sdk_webrtc_with_live](./images/amazon_chime_sdk_webrtc_with_live.png)
-
-#### E. WebRTC with Live PSTN Audio
-![amazon_chime_sdk_webrtc_with_live](./images/amazon_chime_sdk_webrtc_with_pstn.png)
-
-
-
+![amazon_connect01](./images/amazon_connect01.png)
 
 # Appendix
 
@@ -50,7 +30,7 @@
 
 > 目前網路上並沒有發現善心人士的心得，只能專心於官方提供的文件
 
-#### A. Official - [Amazon Chime (Administration Guide)](https://docs.aws.amazon.com/chime/latest/ag/what-is-chime.html)
+#### A. Official - [Amazon Connect (Administrator Guide)](https://docs.aws.amazon.com/connect/latest/adminguide/what-is-amazon-connect.html)
 
 # II. Debug
 
