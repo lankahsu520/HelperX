@@ -56,9 +56,11 @@
 
 #### B. Official - [Amazon Chime (User Guide)](https://docs.aws.amazon.com/chime/latest/ug/what-is-chime.html)
 
-#### C. Official - [Amazon Chime SDK resources](https://aws.amazon.com/chime/chime-sdk/resources/)
+#### C. Official - [Amazon Chime SDK (Developer Guide)](https://docs.aws.amazon.com/chime-sdk/latest/dg/what-is-chime-sdk.html)
 
-#### D. [Add conversational AI to any contact center with Amazon Lex and the Amazon Chime SDK](https://aws.amazon.com/tw/blogs/machine-learning/add-conversational-ai-to-any-contact-center-with-amazon-lex-and-the-amazon-chime-sdk/)
+#### D. Official - [Amazon Chime SDK resources](https://aws.amazon.com/chime/chime-sdk/resources/)
+
+#### E. [Add conversational AI to any contact center with Amazon Lex and the Amazon Chime SDK](https://aws.amazon.com/tw/blogs/machine-learning/add-conversational-ai-to-any-contact-center-with-amazon-lex-and-the-amazon-chime-sdk/)
 
 # II. Debug
 

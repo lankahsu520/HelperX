@@ -62,8 +62,8 @@ graph LR
 	KVS-WebRTC1 <--> |WebSocket|Signaling
 	KVS-WebRTC2 <--> |WebSocket|Signaling
 	
-	KVS-WebRTC1 --> |SDP, if STUN is ok|SDP2
-	KVS-WebRTC2 --> |SDP, if STUN is ok|SDP1  
+	SDP2 --> |SDP, if STUN is ok| KVS-WebRTC1
+	SDP1 --> |SDP, if STUN is ok| KVS-WebRTC2  
 	KVS-WebRTC1 <.-> |ICE|STUN
 	KVS-WebRTC2 <.-> |ICE|STUN
 	
