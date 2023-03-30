@@ -71,6 +71,18 @@ graph LR
 	KVS-WebRTC2 <--> |if STUN is fail|TURN
 ```
 
+# 4. Example / Test
+
+## 4.1. [KVS WebRTC Test Page](https://awslabs.github.io/amazon-kinesis-video-streams-webrtc-sdk-js/examples/index.html)
+
+## 4.2. [alexa-sh-camera-webrtc](https://github.com/nachawat/alexa-sh-camera-webrtc)
+
+> Sample Alexa skill to demonstrate WebRTC Integration with AWS KVS for Camera Streaming
+
+## 4.3. [kvs_webrtc_example](https://github.com/mganeko/kvs_webrtc_example)
+
+> example of Amazon Kinesis Video Streams WebRTC
+
 # Appendix
 
 # I. Study
@@ -107,6 +119,10 @@ graph LR
 # IV. Tool Usage
 
 
+
+# V. Tools
+
+## V.1. [KVS WebRTC Test Page](https://awslabs.github.io/amazon-kinesis-video-streams-webrtc-sdk-js/examples/index.html)
 
 
 
