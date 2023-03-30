@@ -20,7 +20,9 @@
 
 # 1. [Amazon Chime (Administration Guide)](https://docs.aws.amazon.com/chime/latest/ag/what-is-chime.html)
 
-## 1.1. How it works
+## 1.1. [Amazon Chime SDK](https://aws.amazon.com/chime/chime-sdk/)
+
+> Embed intelligent real-time communication capabilities into your applications
 
 #### A. PSTN Audio
 
@@ -51,6 +53,12 @@
 > 目前網路上並沒有發現善心人士的心得，只能專心於官方提供的文件
 
 #### A. Official - [Amazon Chime (Administration Guide)](https://docs.aws.amazon.com/chime/latest/ag/what-is-chime.html)
+
+#### B. Official - [Amazon Chime (User Guide)](https://docs.aws.amazon.com/chime/latest/ug/what-is-chime.html)
+
+#### C. Official - [Amazon Chime SDK resources](https://aws.amazon.com/chime/chime-sdk/resources/)
+
+#### D. [Add conversational AI to any contact center with Amazon Lex and the Amazon Chime SDK](https://aws.amazon.com/tw/blogs/machine-learning/add-conversational-ai-to-any-contact-center-with-amazon-lex-and-the-amazon-chime-sdk/)
 
 # II. Debug
 

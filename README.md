@@ -17,11 +17,33 @@
 [watchers-image]: https://img.shields.io/github/watchers/lankahsu520/HelperX.svg
 [watchers-url]: https://github.com/lankahsu520/HelperX/watchers
 
+## [helper_AmazonChime.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonChime.md) - Amazon Chime helper.
+
+>研究中…
+
+## [helper_AmazonConnect.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonConnect.md) - Amazon Connect helper.
+
+>擱置中…
+
+## [helper_AmazonKinesisVideoStreams.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonKinesisVideoStreams.md) - Amazon Kinesis Video Streams helper.
+
+>已經應用WebRTC。
+
+## [helper_AmazonLex.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonLex.md) - Amazon Lex helper.
+
+>擱置中…
+
 ## [helper_AVS-Device-SDK.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AVS-Device-SDK.md) - AVS-Device-SDK helper.
+
+>已在 Repository PI4 和 ubuntu 上實作。
 
 ## [helper_AWS-CLI.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-CLI.md) - AWS-CLI helper.
 
+>提供 command line 的方式與 Amazon  Service 對接。常用 DynamoDB 和 S3。
+
 ## [helper_AWS-SDK.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-SDK.md) - AWS-SDK helper.
+
+>提供一個 api 方式與 Amazon  Service 對接。已實作部分請參考 [awsX9](https://github.com/lankahsu520/awsX9)。
 
 ## [helper_BLE.md](https://github.com/lankahsu520/HelperX/blob/master/helper_BLE.md) - BLE helper.
 
