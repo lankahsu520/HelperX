@@ -62,6 +62,8 @@
 
 #### E. [Add conversational AI to any contact center with Amazon Lex and the Amazon Chime SDK](https://aws.amazon.com/tw/blogs/machine-learning/add-conversational-ai-to-any-contact-center-with-amazon-lex-and-the-amazon-chime-sdk/)
 
+#### F. [amazon-chime-pstn-audio-with-amazon-lex](https://github.com/aws-samples/amazon-chime-pstn-audio-with-amazon-lex)
+
 # II. Debug
 
 # III. Glossary

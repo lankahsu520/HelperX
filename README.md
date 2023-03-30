@@ -1,4 +1,13 @@
 # HelperX
+
+>記得在電影“功夫之王”中，因為古代人來到現代，錯把免治馬桶當飲水機。將這情境搬至現在，就好像叫一位完全沒有使用過電腦的人，請他去 google，他有可能連 google 是什麼都不知道 ，要他如何是好。
+>
+>這邊研究 AWS (Amazon) 的服務時，也是有相同的問題。就算得到相對應的 Developer Guide，拜讀且照著步驟操作，也會有瞎子摸象的感受！
+>
+>因此得到一個結論，它們都過於跳躍式，名稱混用且常與一般生活不同，像 dashboard、console 等，如果沒有經驗或是一些概念，真的會被搞混。而最重要的是沒有“正確”的連結和圖片。反而詢問 [ChatGPT](https://openai.com/blog/chatgpt) 得到的結果比 Guide裏的步驟還漂亮。
+>
+>而這邊都是本人一點一滴的實作，經驗累積下來的成果，也儘量提供最完整的資訊，包含 step by step 的步驟，外加“正確”的連結和圖片。
+
 [![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
 [![GitHub license][license-image]][license-url]
 [![GitHub stars][stars-image]][stars-url]
@@ -40,6 +49,16 @@
 ## [helper_AWS-CLI.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-CLI.md) - AWS-CLI helper.
 
 >提供 command line 的方式與 Amazon  Service 對接。常用 DynamoDB 和 S3。
+
+## [helper_AWS-IAM.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-IAM.md) - AWS-IAM helper.
+
+>就是一般使用者；很簡單的介紹，如安裝完 ubuntu 後會先建立 administrator，除 administrator  外就是 IAM。
+>
+>AWS 的手冊常把事情複雜化，而且不使用生活化的名稱來命名，讓人看文件看的很吃力。
+
+## [helper_AWS-Lambda.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-Lambda.md) - AWS-Lambda helper.
+
+>就是把你的程式碼放在雲端執行。你不用管主機是 linux, win10 or mac OS，也不用管 CPU 等級，RAM 多大等。
 
 ## [helper_AWS-SDK.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-SDK.md) - AWS-SDK helper.
 
