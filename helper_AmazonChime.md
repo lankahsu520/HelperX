@@ -26,7 +26,7 @@
 
 #### A. PSTN Audio
 
-![amazon_chime_sdk_pstn](T:\codebase\lankahsu520\HelperX\images\amazon_chime_sdk_pstn.png)
+![amazon_chime_sdk_pstn](./images/amazon_chime_sdk_pstn.png)
 
 #### B. SIP Trunking
 
