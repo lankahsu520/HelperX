@@ -128,7 +128,7 @@ $ docker search
 
 ```bash
 # Pull an image or a repository from a registry
-$ 
+# 目前沒有該image
 ```
 
 #### C. docker images

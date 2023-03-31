@@ -24,7 +24,7 @@
 
 ## 1.1. How it works
 
-[![amazon_kvs01](./images/amazon_kvs01.png)
+![amazon_kvs01](./images/amazon_kvs01.png)
 
 # 2. [amazon-kinesis-video-streams-producer-sdk-cpp](https://github.com/awslabs/amazon-kinesis-video-streams-producer-sdk-cpp)
 
