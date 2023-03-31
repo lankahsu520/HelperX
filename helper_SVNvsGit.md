@@ -446,7 +446,7 @@ $ git restore --staged helloworld_cp.c
 $ git checkout -- *
 ```
 
-## 4.2. Manage set of tracked repositories
+## 4.2. Manage set of tracked repositories (change the url of repositorie)
 
 #### svn relocate
 
@@ -455,6 +455,15 @@ $ git checkout -- *
 $ svn info
 
 $ svn relocate http://trac-vbx/svnroot/trunk/xbox
+```
+
+#### svn switch
+
+```bash
+# to check the repository root URL 
+$ svn info
+
+$ svn switch http://trac-vbx/svnroot/trunk/xbox
 ```
 
 #### git remote
