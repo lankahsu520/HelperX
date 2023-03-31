@@ -1,17 +1,5 @@
 # HelperX
 
->If these are helpful to you, please give me a star. Thanks a lot !
->
->本日2023/3/31，愚人節的前一天，有人跟我說「你寫的這些文件，只有你看的懂」。簡直是個屁！（這句是我從它的語氣感受到的！）而這已經不是第一次發生，我想也將不是最後一次了。記得第一次發生這類鳥事時，讓我想了很久，也讓我有很深的感觸，“我從網路上學到了這麼多，用了這麼多 Open-source；身邊的人不懂、不會、短視這些小小作品，那為什麼不分享出來，回饋給大眾，總會有需要的人或是看得“懂”的人，並且很謝謝那些貢獻的人。”
->
->從學校到出社會，從 Turbo C ++ 3.0、Delphi 5.0、 linux 2.3 到現在的 AWS，就有一直撰寫筆記的習慣，當然中間也發生幾次硬碟損壞、資料遺失，讓我可以 copy paste 的樣本變少了；後來轉至版本控管（svn 和 git）下就解決了這個煩惱。
->
->後來上手了 Markdown，能讓成果更加精美也更適合呈現給大眾，所以花了一些功夫進行重製。
->
->這邊的作品也儘量避免放上與公司相關的東西。而我與公司的關係，也只能說魚幫水，水幫魚，因為是一段歷史的累積，我也不想細究了。另外東西很多，有些記憶也不是這麼清悉了，只能請大家一起努力成長。
->
->
-
 [![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
 [![GitHub license][license-image]][license-url]
 [![GitHub stars][stars-image]][stars-url]
@@ -29,6 +17,18 @@
 [issues-url]: https://github.com/lankahsu520/HelperX/issues
 [watchers-image]: https://img.shields.io/github/watchers/lankahsu520/HelperX.svg
 [watchers-url]: https://github.com/lankahsu520/HelperX/watchers
+
+>If these are helpful to you, please give me a star. Thanks a lot !
+>
+>本日2023/3/31，愚人節的前一天，有人跟我說「你寫的這些文件，只有你看的懂」。簡直是個屁！（這句是我從它的語氣感受到的！）而這已經不是第一次發生，我想也將不是最後一次了。記得第一次發生這類鳥事時，讓我想了很久，也讓我有很深的感觸，“我從網路上學到了這麼多，用了這麼多 Open-source；身邊的人不懂、不會、短視這些小小作品，那為什麼不分享出來，回饋給大眾，總會有需要的人或是看得“懂”的人，並且很謝謝那些貢獻的人。”
+>
+>從學校到出社會，從 Turbo C ++ 3.0、Delphi 5.0、 linux 2.3 到現在的 AWS，就有一直撰寫筆記的習慣，當然中間也發生幾次硬碟損壞、資料遺失，讓我可以 copy paste 的樣本變少了；後來轉至版本控管（svn 和 git）下就解決了這個煩惱。
+>
+>後來上手了 Markdown，能讓成果更加精美也更適合呈現給大眾，所以花了一些功夫進行重製。
+>
+>這邊的作品也儘量避免放上與公司相關的東西。而我與公司的關係，也只能說魚幫水，水幫魚，因為是一段歷史的累積，我也不想細究了。另外東西很多，有些記憶也不是這麼清悉了，只能請大家一起努力成長。
+>
+>
 
 ## helper_Amazon???
 
