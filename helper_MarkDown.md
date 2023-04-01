@@ -326,6 +326,149 @@ The pattern is:
 
 More info in: https://github.com/d3/d3-time#interval_every
 
+## 5.2. Flowchart
+
+### 5.2.1. Sample
+
+```mermaid
+flowchart TD
+
+%% TB - top to bottom
+%% this is a comment; Start --> Process --> End
+	Start([起始點])
+	register{{註冊 signal}}
+	input[/輸入名稱/]
+	isboss{Is it the boss ?}
+	Process[程序]
+	Manual[\建立工作報告/]
+	Subroutine[[子程序]]
+	print[/print Hello Boss !!/]
+
+	AlternateProcess(替代流程 Plan B)
+	End([結束點]) 
+
+	Start-->|流程線|register-->input-->isboss-->|yes|print--> End
+	
+	isboss-->|no|Process-->Subroutine-->Manual--> End
+	input..-> AlternateProcess --> End
+
+```
+
+### 5.2.2. [Flowchart Symbols Defined](https://www.breezetree.com/articles/excel-flowchart-shapes/)
+
+> 以下引言取自於 https://www.breezetree.com/articles/excel-flowchart-shapes/
+
+#### A. Process
+
+> Show a Process or action step. This is the most common symbol in both process flowcharts and process maps.
+
+```mermaid
+flowchart TD
+	Process[程序]
+```
+```
+Process[程序]
+```
+
+#### B. Subroutine
+
+> A Predefined Process symbol is a marker for another process step or series of process flow steps that are formally defined elsewhere. This shape commonly depicts sub-processes (or subroutines in programming flowcharts). If the sub-process is considered "known" but not actually defined in a process procedure, work instruction, or some other process flowchart or documentation, then it is best not to use this symbol since it implies a formally defined process.
+
+```mermaid
+flowchart TD
+	Subroutine[[子程序]]
+```
+```
+Subroutine[[子程序]]
+```
+#### C. Alternate Process
+
+> As the shape name suggests, this flowchart symbol is used when the process flow step is an alternate to the normal process step. Flow lines into an alternate process flow step are typically dashed.
+
+```mermaid
+flowchart TD
+	AlternateProcess(替代流程 Plan B)
+```
+
+```
+AlternateProcess(替代流程 Plan B)
+```
+
+#### D. Delay
+
+> The Delay flowchart symbol depicts any waiting period that is part of a process. Delay shapes are common in process mapping.
+
+#### E. Preparation
+
+> As the names states, any process step that is a Preparation process flow step, such as a set-up operation.
+>
+> 前置作業，一般多為安裝、設定
+
+```mermaid
+flowchart TD
+	register{{註冊 signal}}
+```
+
+```
+register{{註冊 signal}}
+```
+
+#### F. Manual Operation
+
+> Manual Operations flowchart shapes show which process steps are not automated. In data processing flowcharts, this data flow shape indicates a looping operation along with a loop limit symbol (which is not supported by Microsoft Office, but a Manual Operation symbol rotated 180° will do the trick.)
+>
+> 非自動化，需人工參與
+
+```mermaid
+flowchart TD
+	 Manual[\建立工作報告/]
+```
+
+```
+Manual{{手沖咖啡}}
+```
+
+#### G. Terminator (Terminal Point, Oval)
+
+> Terminators show the start and stop points in a process. When used as a Start symbol, terminators depict a *trigger action* that sets the process flow into motion.
+
+```mermaid
+flowchart TD
+	Start([起始點])
+	End([結束點]) 
+```
+
+```
+Start([起始點])
+End([結束點]) 
+
+```
+
+#### H. Decision
+
+>Indicates a question or branch in the process flow. Typically, a Decision flowchart shape is used when there are 2 options (Yes/No, No/No-Go, etc.)
+
+```mermaid
+flowchart TD
+	isboss{Is it the boss ?}
+```
+
+```
+isboss{Is it the boss ?} 
+```
+
+### 5.2.3. Flowchart Orientation
+
+> Possible FlowChart orientations are:
+>
+> - TB - top to bottom
+> - TD - top-down/ same as top to bottom
+> - BT - bottom to top
+> - RL - right to left
+> - LR - left to right
+
+
+
 # Appendix
 
 # I. Study
