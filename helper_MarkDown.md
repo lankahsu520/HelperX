@@ -1,7 +1,4 @@
-
-
 # MarkDown
-
 [![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
 [![GitHub license][license-image]][license-url]
 [![GitHub stars][stars-image]][stars-url]
@@ -537,8 +534,6 @@ B <--> C
 C x--x D
 ```
 
-##### 
-
 ##### C.3. Chaining of links
 
 ```mermaid
@@ -554,8 +549,6 @@ A -- text --> B -- text2 --> C
 a --> b & c--> d
 
 ```
-
-#### 
 
 ```mermaid
 flowchart LR
@@ -608,7 +601,7 @@ flowchart LR
 	ssh --> ec2 --> |aws cli|DynamoDB
 ```
 
-#### X. Others
+#### E. Others
 
 ```mermaid
 flowchart TD
@@ -622,7 +615,6 @@ flowchart TD
 ```
 
 ```
-
 asymmetric>an asymmetric shape]
 
 ParallelogramAlt[\Parallelogram alt\]
@@ -632,7 +624,136 @@ Trapezoid[/Trapezoid\]
 Dcircle(((Double circle)))
 ```
 
+#### X. [Interaction](https://mermaid.js.org/syntax/flowchart.html#interaction)
 
+> 這一部分，基本上不常用，也不應該用！
+>
+> Flowchart 原本就是要表達某些順序、意圖等，不是要給大家來亙動的。
+
+
+
+```mermaid
+flowchart LR
+	A-->B
+	B-->C
+	C-->D
+	click A callback "Tooltip for a callback"
+	click B "https://www.github.com" "This is a tooltip for a link"
+	click C call callback() "Tooltip for a callback"
+	click D href "https://www.github.com" "This is a tooltip for a link"
+```
+
+```
+flowchart LR
+    A-->B
+    B-->C
+    C-->D
+    click A callback "Tooltip for a callback"
+    click B "https://www.github.com" "This is a tooltip for a link"
+    click C call callback() "Tooltip for a callback"
+    click D href "https://www.github.com" "This is a tooltip for a link"
+```
+```mermaid
+flowchart LR
+    A-->B
+    B-->C
+    C-->D
+    D-->E
+    click A "https://www.github.com" _blank
+    click B "https://www.github.com" "Open this in a new tab" _blank
+    click C href "https://www.github.com" _blank
+    click D href "https://www.github.com" "Open this in a new tab" _blank
+```
+
+```
+flowchart LR
+	A-->B
+	B-->C
+	C-->D
+	D-->E
+	click A "https://www.github.com" _blank
+	click B "https://www.github.com" "Open this in a new tab" _blank
+	click C href "https://www.github.com" _blank
+	click D href "https://www.github.com" "Open this in a new tab" _blank
+```
+
+#### Y. [Styling a node](https://mermaid.js.org/syntax/flowchart.html#styling-a-node)
+
+> 讓圖示的樣式有所改變
+
+##### F.1. Style
+
+```mermaid
+flowchart LR
+    id1(Start)-->id2(Stop)
+    style id1 fill:#f9f,stroke:#333,stroke-width:4px
+    style id2 fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
+```
+
+```
+flowchart LR
+    id1(Start)-->id2(Stop)
+    style id1 fill:#f9f,stroke:#333,stroke-width:4px
+    style id2 fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
+```
+
+##### F.2. Class
+
+```mermaid
+flowchart LR
+    A:::someclass --> B --> C
+
+		classDef default fill:#f3f,stroke:#333,stroke-width:4px;
+    classDef someclass fill:#f96
+```
+
+```
+flowchart LR
+    A:::someclass --> B --> C
+
+		classDef default fill:#f3f,stroke:#333,stroke-width:4px;
+    classDef someclass fill:#f96
+```
+
+##### F.3. [Css classes](https://mermaid.js.org/syntax/flowchart.html#css-classes)
+
+> 這部分，試不出有什麼效果
+
+```mermaid
+flowchart LR
+    A-->B[AAA<span>BBB</span>]
+    B-->D
+    class A cssClass
+```
+
+```
+flowchart LR
+    A-->B[AAA<span>BBB</span>]
+    B-->D
+    class A cssClass
+```
+
+##### F.4. [Basic support for fontawesome](https://mermaid.js.org/syntax/flowchart.html#basic-support-for-fontawesome)
+
+```mermaid
+flowchart TD
+    B["fab:fa-twitter for peace"]
+    B-->C[fa:fa-ban forbidden]
+    B-->D(fa:fa-spinner)
+    B-->E(A fa:fa-camera-retro perhaps?)
+```
+
+```
+flowchart TD
+    B["fab:fa-twitter for peace"]
+    B-->C[fa:fa-ban forbidden]
+    B-->D(fa:fa-spinner)
+    B-->E(A fa:fa-camera-retro perhaps?)
+```
+
+#### Z. [Configuration](https://mermaid.js.org/syntax/flowchart.html#configuration)
+
+> 只是寫個文件，沒有必要去設定。
 
 ### 5.2.3. Flowchart Orientation
 
@@ -643,8 +764,6 @@ Dcircle(((Double circle)))
 > - BT - bottom to top
 > - RL - right to left
 > - LR - left to right
-
-
 
 # Appendix
 
