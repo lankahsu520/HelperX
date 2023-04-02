@@ -41,6 +41,8 @@
 >
 > 還有就算把所有的知識學會，你也不會成為賈伯斯（Steve Jobs），你也只能把工作（jobs）做好！
 
+## 1.1. Topic
+
 #### - [helper_BLE.md](https://github.com/lankahsu520/HelperX/blob/master/helper_BLE.md) - BLE helper.
 
 > BLE 的水很深，這邊只有概要，並且用不同的觀點去分析。
@@ -69,7 +71,7 @@
 
 #### - [helper_MarkDown.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MarkDown.md) - MarkDown helper.
 
-> 對於一位軟體工程師，建議善用 MarkDown 記錄相關筆記，少用 doc。
+> 身為一個人，建議善用 MarkDown 記錄相關筆記，少用 doc。
 
 #### - [helper_MQTT.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MQTT.md) - MQTT helper.
 
@@ -87,11 +89,31 @@
 
 #### - [helper_VirtualBox-Ubuntu20.04.md](https://github.com/lankahsu520/HelperX/blob/master/helper_VirtualBox.md) - VirtualBox helper.
 
+## 1.2. Repository
+
 # 2. Be A Software Engineer
 
-[helper_DBus.md](https://github.com/lankahsu520/HelperX/blob/master/helper_DBus.md) - dbus helper.
+## 2.1. Topic
+
+#### - [helper_DBus.md](https://github.com/lankahsu520/HelperX/blob/master/helper_DBus.md) - dbus helper.
+
+## 2.2. Repository
+
+#### - [beeX](https://github.com/lankahsu520/beeX)
+
+#### - [BlueZX](https://github.com/lankahsu520/BlueZX)
+
+#### - [CvsCPPmixer](https://github.com/lankahsu520/CvsCPPmixer)
+
+#### - [GDBusX](https://github.com/lankahsu520/GDBusX)
+
+#### - [usbHunter](https://github.com/lankahsu520/usbHunter)
+
+#### - [utilx9](https://github.com/lankahsu520/utilx9)
 
 # 3. Be An Embedded Engineer
+
+## 3.1. Topic
 
 #### - helper_EmbeddedEngineer.md
 
@@ -101,8 +123,14 @@
 
 #### - [helper_Yocto-RaspberryPi3.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Yocto-RaspberryPi3.md) - Yocto Raspberry Pi 3 helper.
 
+## 3.2. Repository
+
+#### - [CrossCompilationX](https://github.com/lankahsu520/CrossCompilationX)
+
 # 4. Be A Cloud Services Collaborator 
-## 4.1. helper_Amazon???
+## 4.1. Topic
+
+### 4.1.1. helper_Amazon???
 
 >記得在電影“功夫之王”中，因為古代人來到現代，錯把免治馬桶當飲水機。將這情境搬至現在，就好像叫一位完全沒有使用過電腦的人，請他去 google，他有可能連 google 是什麼都不知道 ，要他如何是好。
 >
@@ -129,7 +157,7 @@
 
 #### - [helper_AVS-Device-SDK.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AVS-Device-SDK.md) - AVS-Device-SDK helper.
 
->已在 Repository PI4 和 ubuntu 上實作。
+>已在 Raspberry PI4 和 ubuntu 上實作。
 
 #### - [helper_AWS-CLI.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-CLI.md) - AWS-CLI helper.
 
@@ -148,6 +176,10 @@
 #### - [helper_AWS-SDK.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-SDK.md) - AWS-SDK helper.
 
 >提供一個 api 方式與 Amazon  Service 對接。已實作部分請參考 [awsX9](https://github.com/lankahsu520/awsX9)。
+
+## 2.2. Repository
+
+#### - [awsX9](https://github.com/lankahsu520/awsX9)
 
 # Author
 
