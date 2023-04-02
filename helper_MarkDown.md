@@ -769,7 +769,7 @@ flowchart TD
 
 # I. Study
 
-#### A. [Mermaid](https://mermaid.js.org/)
+#### A. [Mermaid](https://mermaid.js.org/intro/)
 
 #### B. [mermaid-js](https://github.com/mermaid-js)/[mermaid](https://github.com/mermaid-js/mermaid)
 

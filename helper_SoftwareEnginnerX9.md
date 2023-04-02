@@ -1,0 +1,228 @@
+# Software Enginner X9 (in C)
+
+[![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
+[![GitHub license][license-image]][license-url]
+[![GitHub stars][stars-image]][stars-url]
+[![GitHub forks][forks-image]][forks-url]
+[![GitHub issues][issues-image]][issues-image]
+[![GitHub watchers][watchers-image]][watchers-image]
+
+[license-image]: https://img.shields.io/github/license/lankahsu520/HelperX.svg
+[license-url]: https://github.com/lankahsu520/HelperX/blob/master/LICENSE
+[stars-image]: https://img.shields.io/github/stars/lankahsu520/HelperX.svg
+[stars-url]: https://github.com/lankahsu520/HelperX/stargazers
+[forks-image]: https://img.shields.io/github/forks/lankahsu520/HelperX.svg
+[forks-url]: https://github.com/lankahsu520/HelperX/network
+[issues-image]: https://img.shields.io/github/issues/lankahsu520/HelperX.svg
+[issues-url]: https://github.com/lankahsu520/HelperX/issues
+[watchers-image]: https://img.shields.io/github/watchers/lankahsu520/HelperX.svg
+[watchers-url]: https://github.com/lankahsu520/HelperX/watchers
+
+# 1. How to Become a Software Engineer
+
+> 以下是幾個 milestones，有志者可以先朝著這些前進。
+
+## 1.1. HelloWorld
+
+> 先從一個簡單的 HelloWorld 開始
+
+```mermaid
+flowchart LR
+	Start([Start])
+	SelectEditor{{Select Editor - vim}}
+	SelectCompiler{{Select Compiler - gcc}}
+ 	HelloWorld.c[/Get HelloWorld.c/]
+ 	Compile[Compile the code - gcc]
+ 	HelloWorld[/binary - HelloWorld/]
+  Run[Run HelloWorld]
+  End([End])
+	
+	Start-->SelectEditor-->SelectCompiler
+	SelectCompiler-->HelloWorld.c
+	HelloWorld.c-->Compile-->HelloWorld
+	HelloWorld-->Run-->End
+```
+
+## 1.2. Study C language
+
+```mermaid
+flowchart LR
+	Start([Start])
+	Buy{{Buy a C book, E-Book 要找最簡單 step by step類別}}
+ 	Study[Study]
+  End([End])
+	
+	Start-->Buy-->Study
+	Study-->End
+```
+
+## 1.3. Add more the Debugging Messages
+
+> 學會加入 Debugging Messages。
+
+```mermaid
+flowchart LR
+	Start([Start])
+	codes[/main.c + *.c/]
+	debug[Add more the Debugging Messages]
+	main[/binary - main/]
+  Run[Run main]
+  End([End])
+	
+	Start-->codes-->debug
+	debug-->|gcc|main-->Run-->End
+```
+
+## 1.4. Learn make, cmake or meson
+
+>此時寫程式已經不是問題了；將程式分類，存放在不同檔案裏，並學習軟體工具來自動化編譯程式。
+```mermaid
+flowchart LR
+	Start([Start])
+	
+	codes[/main.c + *.c/]
+	make[make]
+	cmake[cmake]
+	meson[meson]
+
+	main[/binary - main/]
+  Run[Run main]
+  End([End])
+	
+	Start-->codes
+	codes-->make-->|gcc|main
+	codes-->cmake-->|gcc|main
+	codes-->meson-->|gcc|main
+	main-->Run-->End
+
+```
+
+## 1.5. Static/Shared libraries
+
+>將程式分類，進行把包成 Static/Shared libraries
+
+```mermaid
+flowchart LR
+	Start([Start])
+	
+	codes[/*.c/]
+	main.c[/main.c/]
+
+	Static[/Static libraries/]
+	Shared[/Shared libraries/]
+	main.o[/main object/]
+
+	main[/binary - main/]
+  Run[Run main]
+  End([End])
+	
+	Start-->codes
+	Start-->main.c
+	
+	codes-->|gcc|Static --> |link|main
+	codes-->|gcc|Shared --> |link|main
+	main.c-->|gcc|main.o --> |link|main
+
+	main-->Run-->End
+
+```
+
+## 1.6. Search Sample Codes
+
+> 先弄清楚該程式目的或意圖，是要存取檔案、抓取圖片、例行工作、或是要進行計算等。
+>
+> 然後至網路上尋找（以前網路沒這麼發達時，看文件後自己慢慢刻，不然就是要問前輩，然後寫過的程式要當下次的範本）
+
+```mermaid
+flowchart LR
+	Start([Start])
+	
+	Caculate[Caculate]
+	ClientServer[Client / Server]
+	Database[Access Database]
+	File[File I/O]
+	IPC[Interprocess Communication]
+	Network[Access Network]
+	Routine[Routine]
+	Others[...]
+
+	Sample[Search Sample Codes]
+	Study[Study the Sample Codes]
+
+	End([End])
+	
+	Start-->Caculate-->Sample
+	Start-->ClientServer-->Sample
+	Start-->Database-->Sample
+	Start-->File-->Sample
+	Start-->IPC-->Sample
+	Start-->Network-->Sample
+	Start-->Routine-->Sample
+	Start-->Others-->Sample
+
+	Sample-->Study-->End
+```
+
+## 1.7. Link with Open-source
+
+>隨著需求增加，並不需要每個程式都要自己寫，可至網路尋找 Open-source。
+
+```mermaid
+flowchart LR
+	Start([Start])
+	
+	open[/Open-source/]
+	codes[/*.c/]
+	main.c[/main.c/]
+
+	Static[/Static libraries/]
+	Shared[/Shared libraries/]
+	main.o[/main object/]
+
+	main[/binary - main/]
+  Run[Run main]
+  End([End])
+	
+	Start-->codes
+	Start-->main.c
+	Start-->open
+
+	open-->|gcc|Static
+	open-->|gcc|Shared
+	codes-->|gcc|Static --> |link|main
+	codes-->|gcc|Shared --> |link|main
+	main.c-->|gcc|main.o --> |link|main
+
+	main-->Run-->End
+```
+
+# 2. Know-how
+
+## 2.1. [OSI模型](https://zh.wikipedia.org/zh-tw/OSI模型)
+
+> 因為現在已經是網路的時代，建議要了解其基本概要。
+
+## 2.2. [Network socket](https://en.wikipedia.org/wiki/Network_socket) 
+
+>也因為是網路時代，就要知道什麼是 Socket。這個很重要，一定要搞清楚！
+>
+>不管 HTTP、FTP、WebSocket 等都是從其衍生出來。我曾有問過一位Web UI的設計者，關於 Client / Server 的概念，結果得到的答案是一無所知，那更不可能討論 MQTT、WebSocket 等協定。
+
+# Appendix
+
+# I. Study
+
+# II. Debug
+
+# III. Glossary
+
+# IV. Tool Usage
+
+
+# Author
+
+Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+
+# License
+
+[HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
