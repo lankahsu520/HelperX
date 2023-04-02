@@ -99,7 +99,7 @@ flowchart LR
 
 ## 1.5. Static/Shared libraries
 
->將程式分類，進行把包成 Static/Shared libraries
+>將程式內容分類，儲存成不同檔案後，再打包成 Static/Shared libraries
 
 ```mermaid
 flowchart LR
