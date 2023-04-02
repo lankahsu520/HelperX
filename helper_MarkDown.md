@@ -342,6 +342,7 @@ flowchart TD
 	Process[程序]
 	Manual[\建立工作報告/]
 	Subroutine[[子程序]]
+	Database[(SQL)]
 	print[/print Hello Boss !!/]
 
 	AlternateProcess(替代流程 Plan B)
@@ -350,6 +351,7 @@ flowchart TD
 	Start-->|流程線|register-->input-->isboss-->|yes|print--> End
 	
 	isboss-->|no|Process-->Subroutine-->Manual--> End
+	Subroutine-->Database
 	input..-> AlternateProcess --> End
 
 ```
@@ -358,7 +360,9 @@ flowchart TD
 
 > 以下引言取自於 https://www.breezetree.com/articles/excel-flowchart-shapes/
 
-#### A. Process
+#### A. Process / Operation Symbols
+
+##### A.1. Process
 
 > Show a Process or action step. This is the most common symbol in both process flowcharts and process maps.
 
@@ -370,7 +374,7 @@ flowchart TD
 Process[程序]
 ```
 
-#### B. Subroutine
+##### A.2. Subroutine
 
 > A Predefined Process symbol is a marker for another process step or series of process flow steps that are formally defined elsewhere. This shape commonly depicts sub-processes (or subroutines in programming flowcharts). If the sub-process is considered "known" but not actually defined in a process procedure, work instruction, or some other process flowchart or documentation, then it is best not to use this symbol since it implies a formally defined process.
 
@@ -381,7 +385,7 @@ flowchart TD
 ```
 Subroutine[[子程序]]
 ```
-#### C. Alternate Process
+##### A.3. Alternate Process
 
 > As the shape name suggests, this flowchart symbol is used when the process flow step is an alternate to the normal process step. Flow lines into an alternate process flow step are typically dashed.
 
@@ -394,11 +398,11 @@ flowchart TD
 AlternateProcess(替代流程 Plan B)
 ```
 
-#### D. Delay
+##### A.4. Delay
 
 > The Delay flowchart symbol depicts any waiting period that is part of a process. Delay shapes are common in process mapping.
 
-#### E. Preparation
+##### A.5. Preparation
 
 > As the names states, any process step that is a Preparation process flow step, such as a set-up operation.
 >
@@ -413,7 +417,7 @@ flowchart TD
 register{{註冊 signal}}
 ```
 
-#### F. Manual Operation
+##### A.6. Manual Operation
 
 > Manual Operations flowchart shapes show which process steps are not automated. In data processing flowcharts, this data flow shape indicates a looping operation along with a loop limit symbol (which is not supported by Microsoft Office, but a Manual Operation symbol rotated 180° will do the trick.)
 >
@@ -425,10 +429,25 @@ flowchart TD
 ```
 
 ```
-Manual{{手沖咖啡}}
+Manual[\建立工作報告/]
 ```
 
-#### G. Terminator (Terminal Point, Oval)
+#### B. Branching and Control of Flow Symbols
+
+##### B.1. Flow Line (Arrow, Connector)
+
+> Flow line connectors show the direction that the process flows.
+
+```mermaid
+flowchart LR
+	 A-->B
+```
+
+```
+A-->B
+```
+
+##### B.2. Terminator (Terminal Point, Oval)
 
 > Terminators show the start and stop points in a process. When used as a Start symbol, terminators depict a *trigger action* that sets the process flow into motion.
 
@@ -444,7 +463,7 @@ End([結束點])
 
 ```
 
-#### H. Decision
+##### B.3. Decision
 
 >Indicates a question or branch in the process flow. Typically, a Decision flowchart shape is used when there are 2 options (Yes/No, No/No-Go, etc.)
 
@@ -456,6 +475,164 @@ flowchart TD
 ```
 isboss{Is it the boss ?} 
 ```
+
+##### B.4. Connector (Inspection)
+
+>**Flowchart**: In flowcharts, this symbol is typically small and is used as a Connector to show a jump from one point in the process flow to another. Connectors are usually labeled with capital letters (A, B, AA) to show matching jump points. They are handy for avoiding flow lines that cross other shapes and flow lines. They are also handy for jumping to and from a sub-processes defined in a separate area than the main flowchart.
+>**Process Mapping**: In process maps, this symbol is full sized and shows an Inspection point in the process flow.
+>
+>*[Just to confuse things further, some people will use a circle to indicate an operation and a square to indicate an inspection. That's why it's important to include a symbol key in the flowchart.]*
+
+```mermaid
+flowchart TD
+	Connector((Connector))
+```
+
+```
+# 這個跟預期的完全不同，暫不要使用
+Connector((Connector))
+
+```
+
+#### C. Flow Line (Arrow, Connector)
+
+> Flow line connectors show the direction that the process flows.
+
+##### C.1. Simple
+
+```mermaid
+flowchart LR
+	A-->|arrow head|B
+	C---|open link|D
+	E-.->|Dotted link|F
+	G ==>|Thick link|H
+
+  I --o J
+	K --x L
+```
+
+```
+A-->|arrow head|B
+C---|open link|D
+E-.->|Dotted link|F
+G==>|Thick link|H
+I~~~J
+I --o J
+K --x L
+```
+
+##### C.2. Multi directional arrows
+
+```mermaid
+flowchart LR
+	A o--o B
+	B <--> C
+	C x--x D
+
+```
+
+```
+A o--o B
+B <--> C
+C x--x D
+```
+
+##### 
+
+##### C.3. Chaining of links
+
+```mermaid
+flowchart LR
+	A -- text --> B -- text2 --> C
+	a --> b & c--> d
+	
+```
+
+```
+A -- text --> B -- text2 --> C
+
+a --> b & c--> d
+
+```
+
+#### 
+
+```mermaid
+flowchart LR
+	X & Y--> Z & W
+
+	A --> C
+	A --> D
+	B --> C
+	B --> D
+```
+
+```
+X & Y--> Z & W
+
+A --> C
+A --> D
+B --> C
+B --> D
+```
+
+#### D. Subgraphs
+
+```mermaid
+flowchart LR
+	subgraph aws
+		ec2
+		DynamoDB
+	end
+
+	subgraph pc
+		ssh
+	end
+	
+	pc ---> |network|aws
+	ssh --> ec2 --> |aws cli|DynamoDB
+```
+
+```
+flowchart LR
+	subgraph aws
+		ec2
+		DynamoDB
+	end
+
+	subgraph pc
+		ssh
+	end
+	
+	pc ---> |network|aws
+	ssh --> ec2 --> |aws cli|DynamoDB
+```
+
+#### X. Others
+
+```mermaid
+flowchart TD
+	asymmetric>an asymmetric shape]
+	
+	ParallelogramAlt[\Parallelogram alt\]
+	
+	Trapezoid[/Trapezoid\]
+	
+	Dcircle(((Double circle)))
+```
+
+```
+
+asymmetric>an asymmetric shape]
+
+ParallelogramAlt[\Parallelogram alt\]
+
+Trapezoid[/Trapezoid\]
+
+Dcircle(((Double circle)))
+```
+
+
 
 ### 5.2.3. Flowchart Orientation
 
