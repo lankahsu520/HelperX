@@ -212,7 +212,7 @@ flowchart LR
 >
 >曾有個學霸跑來嗆我，東西都還沒做，就訂這麼多版本，這東西是什麼鬼啊！經過我一番的解釋，他還是相當不屑。
 >
->我很平庸，不是學霸，至於你覺得我有道理，就參考看看。
+>我很平庸，不是學霸，至於你覺得有道理，就參考看看。
 >
 >這裏還有個隱藏的能力，就是預估。
 
@@ -232,15 +232,21 @@ flowchart LR
 
 > 這些其實在 OS 中有提到，不過特別拉出成一個項目，是因為後面寫程式時很常用到。
 
-#### C. 同步（synchronous）、 非同步 （asynchronous）、並行和序列
+#### C. 同步（synchronous）、 非同步 （asynchronous）、並行（Parallel）和序列（Sequential）
 
 > 要了解這些是什麼。不然跟人家討論合作時，會被認為知識水平過低。
 
-#### D. [OSI模型](https://zh.wikipedia.org/zh-tw/OSI模型)
+#### D. 堆疊（Stack）& 佇列（Queue）
+
+>要知道資料存放和取用的順序，這些常與並行、序列共用。
+>
+>像是存取RS232時，放入Queue再處理，就能解決掉包和系統卡住等問題。
+
+#### E. [OSI模型](https://zh.wikipedia.org/zh-tw/OSI模型)
 
 > 因為現在已經是網路的時代，建議要了解其基本概要。
 
-#### E. [Network socket](https://en.wikipedia.org/wiki/Network_socket) 
+#### F. [Network socket](https://en.wikipedia.org/wiki/Network_socket) 
 
 >也因為是網路時代，就要知道什麼是 Socket。這個很重要，一定要搞清楚！
 >
