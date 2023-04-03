@@ -196,13 +196,51 @@ flowchart LR
 	main-->Run-->End
 ```
 
-# 2. Know-how
+# 2. 培養態度和習慣
 
-## 2.1. [OSI模型](https://zh.wikipedia.org/zh-tw/OSI模型)
+> 這幾項，我跟某有些人說了n次，他們還是做不到
+
+#### A. 導入版本控管
+
+> 網路上免錢的有GitHub 和 GitLab。
+>
+> 另外也可以自建 git  或 svn server。
+
+#### B. 設立里程碑 （milestone），並用版本（version）來區格
+
+>這對專案管理很重要，可幫助預估時間，事後可以分析那些部分延遲。
+>
+>曾有個學霸跑來嗆我，東西都還沒做，就訂這麼多版本，這東西是什麼鬼啊！經過我一番的解釋，他還是相當不屑。
+>
+>我很平庸，不是學霸，至於你覺得我有道理，就參考看看。
+>
+>這裏還有個隱藏的能力，就是預估。
+
+#### C. 寫文件
+
+>身為一個人，建議善用 MarkDown 記錄相關筆記，少用 doc。
+
+# 3. Know-how
+
+> 基本常識、技能要補足。
+
+#### A. 作業系統 OS 的基本概念
+
+> 這邊不是要你深入特定 OS的操作和設定。而是要去清楚 OS 管理整個電腦、硬體資源，而我們要如何跟 OS 獲取相對應的資源。
+
+#### B. Thread、Mutex 和 Semaphore
+
+> 這些其實在 OS 中有提到，不過特別拉出成一個項目，是因為後面寫程式時很常用到。
+
+#### C. 同步（synchronous）、 非同步 （asynchronous）、並行和序列
+
+> 要了解這些是什麼。不然跟人家討論合作時，會被認為知識水平過低。
+
+#### D. [OSI模型](https://zh.wikipedia.org/zh-tw/OSI模型)
 
 > 因為現在已經是網路的時代，建議要了解其基本概要。
 
-## 2.2. [Network socket](https://en.wikipedia.org/wiki/Network_socket) 
+#### E. [Network socket](https://en.wikipedia.org/wiki/Network_socket) 
 
 >也因為是網路時代，就要知道什麼是 Socket。這個很重要，一定要搞清楚！
 >
