@@ -420,7 +420,7 @@ flowchart LR
 $ svn revert helloworld_cp.c 
 ```
 
-#### svn restore or ? checkout
+#### git restore or ? checkout
 
 ```mermaid
 flowchart LR
