@@ -36,9 +36,33 @@
 >
 > 這中間有可能遠端 Server 已經停止更新了、plugin(s)  version 不同、安裝的先後順序不對，而最慘的是抓錯了 Eclipse 軟體。
 
-# 2.
+# 2. What happened ?
 
+## 2.1. Too mamy user guide
 
+> 就字面上說的，就是太多使用手冊。有 administration guide、user guide、developer guide 和 [Amazon Web Services](https://aws.amazon.com) 等，每個都在講一件事，然後文件跳來跳去的，最後又跳回原點。
+
+## 2.2. [Amazon Web Services](https://aws.amazon.com) vs. [Amazon Developers](https://developer.amazon.com)
+
+> 這是兩個不同的網址！
+>
+> 詢問過那些號稱雲端工師時，居然說「不知道這是不同網址」
+
+## 2.3. XXX Services vs. XXX Services SDK
+
+> 有什麼不同，網頁又說不清楚。
+>
+> 這邊提到的 SDK又跟一般所知有所不同，說真的依我目前的功力，暫時分不清楚！
+
+## 2.4. Where is Dashboard or Console ?
+
+> 每個 Services 都要用到 UI，而且都很 AI。
+>
+> 自知沒有這麼聰明，拜讀手冊後，還是不知 Dashboard or Console 在何處？ （當然我知道 **[Services by category](https://ap-northeast-1.console.aws.amazon.com/console/services?region=ap-northeast-1#)** 去找尋）為什麼手冊完全沒有連結呢？
+
+## 2.5. Step by Step ?
+
+> 每個 Services 都要用到 UI，舉 Lambda為例，Create function -> create a test event…。為什麼沒有圖示說明呢？
 
 # Appendix
 
