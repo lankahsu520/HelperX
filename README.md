@@ -97,7 +97,7 @@
 
 #### - [helper_SoftwareEnginnerX9.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SoftwareEnginnerX9.md) - Software Engineer helper.
 
->Please read this md first !!! It is very important.
+>Please read this md at first !!! It is very important.
 
 #### - [helper_DBus.md](https://github.com/lankahsu520/HelperX/blob/master/helper_DBus.md) - dbus helper.
 
@@ -144,7 +144,7 @@
 
 #### - [helper_AmazonX9.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonX9.md) - Amazon(AWS) helper.
 
->Please read this md first !!! It is very important.
+>Please read this md at first !!! It is very important.
 
 #### - [helper_AmazonChime.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonChime.md) - Amazon Chime helper.
 
