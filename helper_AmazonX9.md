@@ -24,6 +24,21 @@
 >
 >因此得到一個結論，它們都過於跳躍式，名稱混用且常與一般生活不同，像 dashboard、console 、stack、object 等，如果沒有經驗或是一些概念，真的會被搞混。而最重要的是沒有“正確”的連結和圖片。反而詢問 [ChatGPT](https://openai.com/blog/chatgpt) 得到的結果比 Guide裏的步驟還漂亮。
 
+# 1. Fail like operating Eclipse editor
+
+> 為什麼提到 Eclipse，why ? 
+>
+> 我開始接觸AWS 時，是先用aws cli (操作 S3)、ec2 和 KVS WebRTC SDK in C。這些對於身為 Embedded Engineer 只要一個 ssh 視窗，並且了解網路協定和資料流，就能操控所有東西，情況看似美好。
+>
+> 但是當要接觸其它AWS Services 時，每個操作都有  UI，然後一篇篇的使用手冊。
+>
+> 但是就像 Eclipse，抓到了該軟體，遵循了 blog or 手冊解說，進行環境安裝，也將有可能 50% 失敗！
+>
+> 這中間有可能遠端 Server 已經停止更新了、plugin(s)  version 不同、安裝的先後順序不對，而最慘的是抓錯了 Eclipse 軟體。
+
+# 2.
+
+
 
 # Appendix
 
