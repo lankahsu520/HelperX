@@ -62,3 +62,4 @@ RUNTIME_SHORT=nodejs
 endif
 
 REGION=$(shell aws configure get region)
+[ -f $(EVENT_JSON_FILE) ] && PAYLOAD_ARG="--payload file://$(EVENT_JSON_FILE)"

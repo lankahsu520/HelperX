@@ -54,13 +54,6 @@ envs:
 	@echo 'OUTPUT_TEMPLATE_FILE: $(OUTPUT_TEMPLATE_FILE)'
 	@echo
 
-local_install_python:
-	@echo '----->> $@'
-	@cd $(LAMBDA_FUNCTION_DIR) \
-	&& [ -f requirements.txt ] \
-	&& pip3 install -r requirements.txt \
-	|| echo 
-
 local_install_nodejs:
 	@echo '----->> $@'
 	@[ ! -d node_modules ] \
@@ -70,12 +63,12 @@ local_install_nodejs:
 local_install: local_install_$(RUNTIME_SHORT)
 	@echo
 
-run_python: local_install
+run_python: layer_python
 	@echo '----->> $@'
 	@if [ -f "$(LAMBDA_FUNCTION_DIR)/lambda_function.test.py" ]; then \
-		python3 $(LAMBDA_FUNCTION_DIR)/lambda_function.test.py; \
+		PYTHONPATH=$(CONTENT_URI)/python python3 $(LAMBDA_FUNCTION_DIR)/lambda_function.test.py; \
 	elif [ -f "$(LAMBDA_FUNCTION_DIR)/lambda_function.py" ]; then \
-		python3 $(LAMBDA_FUNCTION_DIR)/lambda_function.py; \
+		PYTHONPATH=$(CONTENT_URI)/python python3 $(LAMBDA_FUNCTION_DIR)/lambda_function.py; \
 	fi
 
 run_nodejs: local_install
@@ -179,7 +172,7 @@ invoke: lambda_function_found
 	@[ "$(LAMBDA_FUNCTION_FOUND)" != "" ] \
 	&& aws lambda invoke \
 		--function-name $(LAMBDA_FUNCTION_FOUND) \
-		--payload file://$(EVENT_JSON_FILE) \
+		$(PAYLOAD_ARG) \
 		$(RESULT_JSON_FILE) \
 	&& cat $(RESULT_JSON_FILE) \
 	&& echo \

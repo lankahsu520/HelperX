@@ -502,6 +502,17 @@ delete: s3://lambda-artifacts520/blank-python//8034650f8d3f348927fb09cf2fe5ddcd
 
 # II. Debug
 
+#### A. An error occurred (ValidationError) when calling the CreateChangeSet operation: Stack:arn:aws:cloudformation:eu-west-1:123456789012:stack/blank520/5270ab20-d557-11ed-afb2-0a14943d5521 is in ROLLBACK_COMPLETE state and can not be updated.
+
+```bash
+# 修改 region
+$ vi ~/.aws/config
+region =
+
+```
+
+
+
 # III. Glossary
 
 ####  AI, Artificial Intelligence
