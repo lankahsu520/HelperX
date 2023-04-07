@@ -1,0 +1,8 @@
+{
+	"stack_name": "blank520",
+	"s3_bucket_name": "lambda-artifacts520",
+	"event_json_file": "event.json",
+	"result_json_file": "result.json",
+	"template_file": "template.yml",
+	"output_template_file": "out.yml"
+}

@@ -60,6 +60,8 @@ $ cat ~/.aws/config
 [default]
 region = ap-northeast-1
 output = json
+cli_binary_format=raw-in-base64-out
+
 ```
 
 #### C. Others
@@ -439,7 +441,7 @@ $ aws s3 ls s3://utilx9
 >creates a bucket
 
 ```bash
-$ aws s3 mb s3://HelperX
+$ aws s3 mb s3://helperx
 ```
 
 #### [mv](https://docs.aws.amazon.com/cli/latest/reference/s3/mv.html)
@@ -447,7 +449,7 @@ $ aws s3 mb s3://HelperX
 > move a file
 
 ```bash
-$ aws s3 mv s3://HelperX/README.md s3://HelperX/README_bak.md
+$ aws s3 mv s3://helperx/README.md s3://helperx/README_bak.md
 ```
 
 #### [rb](https://docs.aws.amazon.com/cli/latest/reference/s3/rb.html)
@@ -455,7 +457,7 @@ $ aws s3 mv s3://HelperX/README.md s3://HelperX/README_bak.md
 >removes a bucket
 
 ```bash
-$ aws s3 rb s3://HelperX
+$ aws s3 rb s3://helperx
 ```
 
 #### [rm](https://docs.aws.amazon.com/cli/latest/reference/s3/rm.html)
@@ -471,7 +473,7 @@ $ aws s3 rm s3://utilx9/demo_000.c
 > Syncs directories and S3 prefixes
 
 ```bash
-$ aws s3 sync s3://HelperX s3://HelperX_Bak
+$ aws s3 sync s3://helperx s3://helperx_Bak
 ```
 
 ## 2.4. [S3 Glacier](https://docs.aws.amazon.com/zh_tw/amazonglacier/latest/dev/introduction.html)
@@ -598,6 +600,12 @@ $ aws sns list-subscriptions
 # I. Study
 
 # II. Debug
+
+#### A. An error occurred (NoSuchBucket) when calling the ListObjectsV2 operation: The specified bucket does not exist
+
+> 至 S3 console 建立該 Bucket，再用 aws s3 操作即可。
+>
+> 這有可能只是aws 自身的 bug 。
 
 # III. Glossary
 
