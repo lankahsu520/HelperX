@@ -55,25 +55,35 @@ envs:
 	@echo
 
 local_install_python:
-	cd $(LAMBDA_FUNCTION_DIR) \
-	&& pip3 install -r requirements.txt
+	@echo '----->> $@'
+	@cd $(LAMBDA_FUNCTION_DIR) \
+	&& [ -f requirements.txt ] \
+	&& pip3 install -r requirements.txt \
+	|| echo 
 
 local_install_nodejs:
+	@echo '----->> $@'
 	@[ ! -d node_modules ] \
 	&& npm install \
 	|| echo
 
 local_install: local_install_$(RUNTIME_SHORT)
+	@echo
 
 run_python: local_install
 	@echo '----->> $@'
-	python3 $(LAMBDA_FUNCTION_DIR)/lambda_function.test.py
+	@if [ -f "$(LAMBDA_FUNCTION_DIR)/lambda_function.test.py" ]; then \
+		python3 $(LAMBDA_FUNCTION_DIR)/lambda_function.test.py; \
+	elif [ -f "$(LAMBDA_FUNCTION_DIR)/lambda_function.py" ]; then \
+		python3 $(LAMBDA_FUNCTION_DIR)/lambda_function.py; \
+	fi
 
 run_nodejs: local_install
 	@echo '----->> $@'
 	AWS_REGION=$(REGION) npm run test
 
 run: run_$(RUNTIME_SHORT)
+	@echo
 
 s3_bucket_found:
 	$(eval S3_BUCKET_FOUND:=$(shell aws s3 ls | grep $(S3_BUCKET_NAME) | cut -d" " -f3))
