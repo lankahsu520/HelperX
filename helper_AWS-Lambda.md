@@ -498,6 +498,8 @@ delete: s3://lambda-artifacts520/blank-python//8034650f8d3f348927fb09cf2fe5ddcd
 
 #### A. Official - [AWS Lambda (Developer Guide)](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html)
 
+#### B. [Python for AWS Lambda Functions: A Beginner’s Guide](https://codesolid.com/python-and-aws-lambda-functions/)
+
 # II. Debug
 
 # III. Glossary
