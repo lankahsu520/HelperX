@@ -39,7 +39,7 @@
 
 # 2. Sample
 
-## 2.1. Hello world
+## 2.1. Hello world (on console)
 
 ### 2.1.1. Create and Execution
 
@@ -207,9 +207,8 @@ Successfully created/updated stack - blank-python
 
 #### F. To invoke the function
 
-##### F.1. ok
-
 ```bash
+# add cli_binary_format=raw-in-base64-out, to fix Invalid base64
 $ cat ~/.aws/config
 [default]
 region = us-west-1
@@ -233,42 +232,6 @@ cli_binary_format=raw-in-base64-out
 
 ```
 
-##### F.2. A base64 error
-
-```bash
-cat ~/.aws/config
-[default]
-region = us-west-1
-output = json
-
-```
-
-```bash
-$ ./4-invoke.sh
-Invalid base64: "{
-  "Records": [
-    {
-      "messageId": "19dd0b57-b21e-4ac1-bd88-01bbb068cb78",
-      "receiptHandle": "MessageReceiptHandle",
-      "body": "Hello from SQS!",
-      "attributes": {
-        "ApproximateReceiveCount": "1",
-        "SentTimestamp": "1523232000000",
-        "SenderId": "123456789012",
-        "ApproximateFirstReceiveTimestamp": "1523232000001"
-      },
-      "messageAttributes": {},
-      "md5OfBody": "7b270e59b47ff90a553787216d55d91d",
-      "eventSource": "aws:sqs",
-      "eventSourceARN": "arn:aws:sqs:us-west-2:123456789012:MyQueue",
-      "awsRegion": "us-west-2"
-    }
-  ]
-}
-"
-
-```
-
 #### G. To delete the application
 
 ```bash
@@ -286,6 +249,36 @@ Delete function log group (/aws/lambda/blank-python-function-F75ut0BBpl5x)? (y/n
 
 > 一個簡單的 Hello, Lambda!
 
+# 3. How to Become a AWS Lambda Collaborator
+
+## 3.1. [LambdaHello](https://github.com/lankahsu520/LambdaHello)
+
+> 先從一個簡單的 [LambdaHello](https://github.com/lankahsu520/LambdaHello) 開始。學會佈署第一隻程式至 Lambda。
+>
+> 因為佈署的方式很多種，至於學習那一種，就要看自己的選擇。
+
+```mermaid
+flowchart LR
+	Start([Start])
+ 	LambdaHello[LambdaHello]
+  End([End])
+	
+	Start-->LambdaHello-->End
+
+```
+
+## 3.2. Handle event, context
+> 參數傳遞
+
+```mermaid
+flowchart LR
+	Start([Start])
+ 	Lambda[Lambda]
+  End([End])
+	
+	Start-->|event, context|Lambda
+	Lambda-->End
+```
 # Appendix
 
 # I. Study
@@ -306,8 +299,6 @@ $ vi ~/.aws/config
 region =
 
 ```
-
-
 
 # III. Glossary
 
