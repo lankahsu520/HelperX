@@ -54,16 +54,10 @@ envs:
 	@echo 'OUTPUT_TEMPLATE_FILE: $(OUTPUT_TEMPLATE_FILE)'
 	@echo
 
-local_install_nodejs:
-	@echo '----->> $@'
-	@[ ! -d node_modules ] \
-	&& npm install \
-	|| echo
-
-local_install: local_install_$(RUNTIME_SHORT)
+layer_generate: layer_$(RUNTIME_SHORT)
 	@echo
 
-run_python: layer_python
+run_python: layer_generate
 	@echo '----->> $@'
 	@if [ -f "$(LAMBDA_FUNCTION_DIR)/lambda_function.test.py" ]; then \
 		PYTHONPATH=$(CONTENT_URI)/python python3 $(LAMBDA_FUNCTION_DIR)/lambda_function.test.py; \
@@ -71,7 +65,7 @@ run_python: layer_python
 		PYTHONPATH=$(CONTENT_URI)/python python3 $(LAMBDA_FUNCTION_DIR)/lambda_function.py; \
 	fi
 
-run_nodejs: local_install
+run_nodejs: layer_generate
 	@echo '----->> $@'
 	AWS_REGION=$(REGION) npm run test
 
@@ -116,10 +110,10 @@ layer_nodejs:
 	&& mkdir -p $(PWD)/$(CONTENT_URI)/nodejs \
 	&& rm -rf node_modules \
 	&& npm install --production \
-	&& mv node_modules $(CONTENT_URI)/nodejs/ \
+	&& cp -avr node_modules $(CONTENT_URI)/nodejs/ \
 	|| echo
 
-deploy_s3_object: layer_$(RUNTIME_SHORT)
+deploy_s3_object: layer_generate
 	@echo '----->> $@ - ./$(CONTENT_URI)'
 	@[ -d "./$(CONTENT_URI)" ] \
 	&& aws cloudformation \
