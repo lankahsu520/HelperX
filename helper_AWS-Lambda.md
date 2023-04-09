@@ -279,6 +279,23 @@ flowchart LR
 	Start-->|event, context|Lambda
 	Lambda-->End
 ```
+## 3.3. Lambda and s3
+
+> 已經知道擺放程式和參數傳遞之後，就是要學習怎麼亙動
+
+```mermaid
+flowchart LR
+	Start([Start])
+ 	Lambda[Lambda]
+ 	DynamoDB[DynamoDB]
+  End([End])
+	
+	Start-->DynamoDB
+	DynamoDB-->Lambda
+  Lambda-->DynamoDB
+	Lambda-->End
+```
+
 # Appendix
 
 # I. Study
