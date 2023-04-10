@@ -102,6 +102,10 @@ def lambda_handler(event, context):
 
 ### 2.1.2. [CloudWatch](https://us-west-1.console.aws.amazon.com/cloudwatch/home?region=us-west-1#)
 
+> 特別注意，在 [CloudWatch](https://us-west-1.console.aws.amazon.com/cloudwatch/home?region=us-west-1#) 中傳遞的 event 都是用 '字串'。
+>
+> 一般 JSON都是使用 "字串"
+
 ![aws_cloudwatch010](./images/aws_cloudwatch010.png)
 
 ### 2.1.3. [IAM](https://us-east-1.console.aws.amazon.com/iamv2/home?region=us-east-1#/roles)
@@ -109,192 +113,106 @@ def lambda_handler(event, context):
 
 ## 2.2. [aws-lambda-developer-guide](https://github.com/awsdocs/aws-lambda-developer-guide)
 
-> Blank 函數範例應用程式利用一個呼叫 Lambda API 的函數來示範 Lambda 中的一般操作。它示範如何使用記錄、環境變數、AWS X-Ray 追蹤、Layer、單元測試和 AWS 開發套件。探索此應用程式可了解如何使用您的程式設計語言建置 Lambda 函數，或以它做為自有專案的起點。
->
-> follow the README.md
-
-#### A. To download
-
-```bash
-$ git clone https://github.com/awsdocs/aws-lambda-developer-guide.git
-$ cd aws-lambda-developer-guide/sample-apps/blank-python
-
-$ pip3 install jsonpickle
-$ pip3 install aws_xray_sdk
-$ pip3 install boto3
-$ pip3 install testresources
-$ pip3 install --upgrade launchpadlib
-```
-#### B. To Run on local
-
-##### B.1. sample-apps\blank-python\function\lambda_function.test.py
-
-> fix event = jsonpickle.decode(ba) raise TypeError("Input string must be text, not bytes")
-
-```bash
-$ vi sample-apps\blank-python\function\lambda_function.test.py
-
-		try:
-      ba = bytearray(file.read())
-      event = jsonpickle.decode(ba.decode('utf-8'))
-      logger.warning('## EVENT')
-      logger.warning(jsonpickle.encode(event))
-
-```
-
-##### B.2. Run
-
-```
-$ ./0-run-tests.sh
-## EVENT
-{"Records": [{"messageId": "19dd0b57-b21e-4ac1-bd88-01bbb068cb78", "receiptHandle": "MessageReceiptHandle", "body": "Hello from SQS!", "attributes": {"ApproximateReceiveCount": "1", "SentTimestamp": "1523232000000", "SenderId": "123456789012", "ApproximateFirstReceiveTimestamp": "1523232000001"}, "messageAttributes": {}, "md5OfBody": "7b270e59b47ff90a553787216d55d91d", "eventSource": "aws:sqs", "eventSourceARN": "arn:aws:sqs:us-west-2:123456789012:MyQueue", "awsRegion": "us-west-2"}]}
-{'TotalCodeSize': 773, 'FunctionCount': 2}
-.
-----------------------------------------------------------------------
-Ran 1 test in 0.146s
-
-OK
-
-```
-#### C. To create a new bucket (It will create a new bucket in S3)
-```bash
-$ ./1-create-bucket.sh
-make_bucket: lambda-artifacts-5d63c7b31336e36e
-
-```
-
-#### D. To build a Lambda layer
-
-```bash
-$ ./2-build-layer.sh
-Collecting jsonpickle==1.3
-  Using cached jsonpickle-1.3-py2.py3-none-any.whl (32 kB)
-Collecting aws-xray-sdk==2.4.3
-  Using cached aws_xray_sdk-2.4.3-py2.py3-none-any.whl (87 kB)
-Collecting wrapt
-  Using cached wrapt-1.15.0-cp38-cp38-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (81 kB)
-Collecting botocore>=1.11.3
-  Using cached botocore-1.29.103-py3-none-any.whl (10.6 MB)
-Processing /home/lanka/.cache/pip/wheels/a0/0b/ee/e6994fadb42c1354dcccb139b0bf2795271bddfe6253ccdf11/future-0.18.3-py3-none-any.whl
-Collecting jmespath<2.0.0,>=0.7.1
-  Using cached jmespath-1.0.1-py3-none-any.whl (20 kB)
-Collecting urllib3<1.27,>=1.25.4
-  Using cached urllib3-1.26.15-py2.py3-none-any.whl (140 kB)
-Collecting python-dateutil<3.0.0,>=2.1
-  Using cached python_dateutil-2.8.2-py2.py3-none-any.whl (247 kB)
-Collecting six>=1.5
-  Using cached six-1.16.0-py2.py3-none-any.whl (11 kB)
-Installing collected packages: jsonpickle, wrapt, jmespath, urllib3, six, python-dateutil, botocore, future, aws-xray-sdk
-Successfully installed aws-xray-sdk-2.4.3 botocore-1.29.103 future-0.18.3 jmespath-1.0.1 jsonpickle-1.3 python-dateutil-2.8.2 six-1.16.0 urllib3-1.26.15 wrapt-1.15.0
-
-```
-
-#### E. To deploy the application
-
-```bash
-$ ./3-deploy.sh
-Uploading to 3115f4e1f511ea0befef6922e2716e34  13160846 / 13160846.0  (100.00%)
-Successfully packaged artifacts and wrote output template to file out.yml.
-Execute the following command to deploy the packaged template
-aws cloudformation deploy --template-file /work/codebase/xbox/AWS/AWSLambda/aws-lambda-developer-guide/sample-apps/blank-python/out.yml --stack-name <YOUR STACK NAME>
-
-Waiting for changeset to be created..
-Waiting for stack create/update to complete
-
-Successfully created/updated stack - blank-python
-
-```
-
-#### F. To invoke the function
-
-```bash
-# add cli_binary_format=raw-in-base64-out, to fix Invalid base64
-$ cat ~/.aws/config
-[default]
-region = us-west-1
-output = json
-cli_binary_format=raw-in-base64-out
-
-```
-
-```bash
-./4-invoke.sh
-{
-    "StatusCode": 200,
-    "ExecutedVersion": "$LATEST"
-}
-{"TotalCodeSize": 26325013, "FunctionCount": 3}
-{
-    "StatusCode": 200,
-    "ExecutedVersion": "$LATEST"
-}
-{"TotalCodeSize": 26325013, "FunctionCount": 3}
-
-```
-
-#### G. To delete the application
-
-```bash
-$ ./5-cleanup.sh
-Deleted blank-python stack.
-Delete deployment artifacts and bucket (lambda-artifacts-936c7a7b0eed2088)? (y/n)y
-delete: s3://lambda-artifacts-936c7a7b0eed2088/d80ce43fb31ca44632b5b761801203cb
-delete: s3://lambda-artifacts-936c7a7b0eed2088/3115f4e1f511ea0befef6922e2716e34
-remove_bucket: lambda-artifacts-936c7a7b0eed2088
-Delete function log group (/aws/lambda/blank-python-function-F75ut0BBpl5x)? (y/n)y
-
-```
-
-## 2.3. [LambdaHello](https://github.com/lankahsu520/LambdaHello)
-
-> 一個簡單的 Hello, Lambda!
+> 這邊不幫忙演示其操作。請閱讀內部的 README.md。
 
 # 3. How to Become a AWS Lambda Collaborator
 
 ## 3.1. [LambdaHello](https://github.com/lankahsu520/LambdaHello)
-
-> 先從一個簡單的 [LambdaHello](https://github.com/lankahsu520/LambdaHello) 開始。學會佈署第一隻程式至 Lambda。
->
-> 因為佈署的方式很多種，至於學習那一種，就要看自己的選擇。
+> 先從一個簡單的 開始。學會部署第一隻程式至 Lambda。
+> 因為部署的方式很多種，至於學習那一種，就要看自己的選擇。
+- [LambdaHello](https://github.com/lankahsu520/LambdaHello) / [01_HelloLambda](https://github.com/lankahsu520/LambdaHello/tree/main/01_HelloLambda) 
 
 ```mermaid
-flowchart LR
+flowchart TD
 	Start([Start])
- 	LambdaHello[LambdaHello]
+	01_HelloLambda[/01_HelloLambda/]
+	layer[create layer]
+	s3[/s3://bucket/stack/]
+	subgraph CloudFormation
+ 		stack[Stack - LambdaHello]
+ 	end	
+	subgraph Lambda
+ 		LambdaHello[Function - LambdaHello]
+ 	end	
   End([End])
 	
-	Start-->LambdaHello-->End
+	Start-->01_HelloLambda-->layer
+	layer-->|aws cloudformation package|s3-->|aws cloudformation deploy|stack-->LambdaHello-->End
 
 ```
+
+#### A. 學習目標
+
+##### A.1. Deploy 部署
+
+> 這邊透過 [CloudFormation ](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) 進行部署。
+
+##### A.2. 撰寫 Makefile 
+
+> 建議使用 Makefile，可以建立depend 的關係。Shell Script 感覺會比較混亂。
+
+##### A.3. Run on local
+
+> 在 Deploy  前，記得在本地端執行。 
+
+##### A.4. Debug by [CloudWatch](https://us-west-1.console.aws.amazon.com/cloudwatch/home?region=us-west-1#)
+
+> deploy 之前記得在 Local 執行，查看相關 log messages。部署後也要再從 [CloudWatch](https://us-west-1.console.aws.amazon.com/cloudwatch/home?region=us-west-1#) 中確認。
+
+![aws_cloudwatch011](./images/aws_cloudwatch011.png)
+![aws_cloudwatch012](./images/aws_cloudwatch012.png)
+![aws_cloudwatch013](./images/aws_cloudwatch013.png)
 
 ## 3.2. Handle event, context
-> 參數傳遞
+> 新增 event.json 和模擬參數傳遞
+- [LambdaHello](https://github.com/lankahsu520/LambdaHello) / [02_HelloLambda_with_payload](https://github.com/lankahsu520/LambdaHello/tree/main/02_HelloLambda_with_payload)
 
 ```mermaid
 flowchart LR
 	Start([Start])
- 	Lambda[Lambda]
+	event[/event.json/]
+	subgraph Lambda
+ 		LambdaHello[LambdaHello]
+ 	end	
   End([End])
 	
-	Start-->|event, context|Lambda
+	Start-->event-->|event, context|LambdaHello
 	Lambda-->End
 ```
-## 3.3. Lambda and s3
+## 3.3. Lambda and S3
 
-> 已經知道擺放程式和參數傳遞之後，就是要學習怎麼亙動
+> 已經知道擺放程式和參數傳遞之後，就是要學習怎麼亙動。
+> 本範例：
+>
+> 1. 上傳檔案至 s3://lambdax9
+> 2. Trigger function - LambdaHello
+> 3. 將檔案複製至 s3://lambdax9bak
+- [LambdaHello](https://github.com/lankahsu520/LambdaHello) / [03_HelloLambda_rw_s3](https://github.com/lankahsu520/LambdaHello/tree/main/03_HelloLambda_rw_s3)
 
 ```mermaid
 flowchart LR
 	Start([Start])
- 	Lambda[Lambda]
- 	DynamoDB[DynamoDB]
+	project[/project.json/]
+	subgraph Lambda
+ 		LambdaHello[LambdaHello]
+ 	end	
+	subgraph S3
+		lambdax9[s3://lambdax9]
+		lambdax9bak[s3://lambdax9bak]
+	end
   End([End])
 	
-	Start-->DynamoDB
-	DynamoDB-->Lambda
-  Lambda-->DynamoDB
-	Lambda-->End
+	Start-->project-->|push|lambdax9
+	lambdax9-->|trigger|LambdaHello
+  LambdaHello-->|copy project.json|lambdax9bak
+	lambdax9bak-->End
 ```
+![aws_lambda031](./images/aws_lambda031.png)
+![aws_lambda032](./images/aws_lambda032.png)
+
+#### A. 學習目標
+
+##### A.1. Create Trigger
 
 # Appendix
 
@@ -316,6 +234,10 @@ $ vi ~/.aws/config
 region =
 
 ```
+
+#### B. json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 2 column 2 (char 3)
+
+>python json.load 時發生此問題時，to replace ' -> "
 
 # III. Glossary
 
