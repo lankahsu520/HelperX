@@ -476,6 +476,73 @@ $ aws s3 rm s3://utilx9/demo_000.c
 $ aws s3 sync s3://helperx s3://helperx_Bak
 ```
 
+### 2.3.3. [aws s3api](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3api/index.html)
+
+#### [get-bucket-notification-configuration](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3api/get-bucket-notification-configuration.html)
+
+> Returns the notification configuration of a bucket.
+
+```bash
+$ aws s3api get-bucket-notification-configuration \
+	--bucket lambdax9 --output yaml
+
+$ aws s3api get-bucket-notification-configuration \
+	--bucket lambdax9 --output json
+
+```
+
+- s3_notification.yml
+
+```json
+LambdaFunctionConfigurations:
+- Events:
+  - s3:ObjectCreated:*
+  - s3:ObjectRemoved:*
+  Id: bbecdad0-0539-4d92-a563-1ae812316dd0
+  LambdaFunctionArn: arn:aws:lambda:us-west-1:123456789012:function:LambdaHello-function-bLJNjfr7pRL5
+
+```
+
+#### [put-bucket-notification-configuration](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3api/put-bucket-notification-configuration.html)
+
+>Enables notifications of specified events for a bucket.
+
+- s3_notification.json
+
+```bash
+$ aws s3api put-bucket-notification-configuration \
+	--bucket lambdax9 \
+	--notification-configuration file://s3_notification.json
+```
+
+```json
+{
+	"LambdaFunctionConfigurations": [{
+			"LambdaFunctionArn": "arn:aws:lambda:us-west-1:123456789012:function:LambdaHello-function-bLJNjfr7pRL5",
+			"Events": [
+				"s3:ObjectCreated:*",
+				"s3:ObjectRemoved:*"
+			]
+		}
+	]
+}
+```
+
+- s3_notification_null.json
+
+```bash
+$ aws s3api put-bucket-notification-configuration \
+	--bucket lambdax9 \
+	--notification-configuration file://s3_notification_null.json
+```
+
+```json
+{
+}
+```
+
+
+
 ## 2.4. [S3 Glacier](https://docs.aws.amazon.com/zh_tw/amazonglacier/latest/dev/introduction.html)
 
 > 因為不適用正常檔案存取方式，先不花時間研究。
@@ -610,6 +677,10 @@ $ aws sns list-subscriptions
 # III. Glossary
 
 # IV. Tool Usage
+
+#### A. [AWS CLI Command Reference](https://awscli.amazonaws.com/v2/documentation/api/latest/index.html)
+
+#### B.  [s3api](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3api/index.html)
 
 # Author
 
