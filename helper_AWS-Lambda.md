@@ -181,7 +181,7 @@ flowchart LR
 ```
 ## 3.3. Lambda and S3
 
-> 已經知道擺放程式和參數傳遞之後，就是要學習怎麼亙動。
+> 已經知道擺放程式和參數傳遞之後，就是要學習怎麼亙動。([Tutorial: Using an Amazon S3 trigger to invoke a Lambda function](https://docs.aws.amazon.com/lambda/latest/dg/with-s3-example.html))
 > 本範例：
 >
 > 1. 上傳檔案至 s3://lambdax9
@@ -213,6 +213,37 @@ flowchart LR
 #### A. 學習目標
 
 ##### A.1. Create Trigger
+
+> 這邊用 S3 當範例，因為 S3 裏的檔案變動，利用 aws cli 就可以了。
+
+```bash
+$ S3_BUCKET_NAME=lambdax9bak; aws-ls
+$ S3_BUCKET_NAME=lambdax9; aws-ls
+$ S3_BUCKET_NAME=lambdax9; aws-push out.yml
+$ S3_BUCKET_NAME=lambdax9; aws-rm out.yml
+
+```
+
+## 3.4. Deploy S3 trigger
+
+> 之前已經學會 deploy，前段也用 Console 設定了相關 Trigger ，那為什麼還要進行這章節。
+> 主要是希望把整個流程和程式當成一個專案進行部署。不知各位在公司定版時，進行程式部署時，是否還要一個員工，這個 Console 按按，那個 Console 按按。
+>
+> 總會有人挑戰我，你只會  S3 哦，其它呢？其它呢？
+>
+> 我又不是 AWS 專案，也不是它們的員工，我也是做中學，學中做。
+
+- [LambdaHello](https://github.com/lankahsu520/LambdaHello) / [04_HelloLambda_deployS3trigger](https://github.com/lankahsu520/LambdaHello/tree/main/04_HelloLambda_deployS3trigger)
+
+#### A. 學習目標
+
+##### A.1. 一鍵部署
+
+> 當所有的步驟達到“一鍵部署”之後，才有可能進行下一步“自動部署”。
+
+##### A.2. 一鍵刪除部署
+
+> 記住 AWS 所有的東西都要錢；部署後，一定會忘了曾經做過什麼，所以學會“一鍵部署“是很重要的，而“一鍵刪除部署”更是能解決不需要的燒錢功能。
 
 # Appendix
 

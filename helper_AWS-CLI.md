@@ -665,6 +665,7 @@ $ aws sns list-subscriptions
 # Appendix
 
 # I. Study
+#### A. [AWS CLI Command Reference](https://awscli.amazonaws.com/v2/documentation/api/latest/index.html)
 
 # II. Debug
 
@@ -678,9 +679,107 @@ $ aws sns list-subscriptions
 
 # IV. Tool Usage
 
-#### A. [AWS CLI Command Reference](https://awscli.amazonaws.com/v2/documentation/api/latest/index.html)
+#### A. .bash_aliases
 
-#### B.  [s3api](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3api/index.html)
+```bash
+#******************************************************************************
+#** aws **
+#******************************************************************************
+export S3_BUCKET_NAME=intercom-storage
+
+function aws-path()
+{
+	echo "S3_BUCKET_NAME=${S3_BUCKET_NAME}"
+}
+
+function aws-ls()
+{
+	aws-path
+	aws s3 ls s3://${S3_BUCKET_NAME}
+}
+
+function aws-mb()
+{
+	HINT="Usage: ${FUNCNAME[0]} <bucket>"
+	BUCKET1="$1"
+
+	if [ ! -z "$BUCKET1" ]; then
+		aws s3 mb s3://$BUCKET1
+	else
+		echo $HINT
+	fi
+}
+
+function aws-rb()
+{
+	HINT="Usage: ${FUNCNAME[0]} <bucket>"
+	BUCKET1="$1"
+
+	if [ ! -z "$BUCKET1" ]; then
+		aws s3 rb s3://$BUCKET1
+	else
+		echo $HINT
+	fi
+}
+
+#alias aws-pull="aws-path; aws s3 cp s3://${S3_BUCKET_NAME}/$1 ./"
+function aws-pull()
+{
+	aws-path
+
+	HINT="Usage: ${FUNCNAME[0]} <file>"
+	FILE1="$1"
+
+	if [ ! -z "$FILE1" ]; then
+		aws s3 cp s3://${S3_BUCKET_NAME}/$FILE1 ./
+		#echo "aws s3 cp s3://${S3_BUCKET_NAME}/$FILE1 ./"
+	else
+		echo $HINT
+	fi
+}
+
+#alias aws-push="aws s3 cp ${1} s3://${S3_BUCKET_NAME}"
+function aws-push()
+{
+	aws-path
+
+	HINT="Usage: ${FUNCNAME[0]} <file>"
+	FILE1="$1"
+
+	if [ ! -z "$FILE1" ]; then
+		aws s3 cp $FILE1 s3://${S3_BUCKET_NAME}/
+		#echo "aws s3 cp s3://${S3_BUCKET_NAME}/$FILE1"
+	else
+		echo $HINT
+	fi
+}
+
+function aws-pull-bash_aliases()
+{
+	(cd /tmp; aws-pull .bash_aliases; chmod 775 .bash_aliases; cp .bash_aliases ~/)
+}
+
+function aws-push-bash_aliases()
+{
+	(aws-push ~/.bash_aliases)
+}
+
+#alias aws-rm="aws s3 rm s3://${S3_BUCKET_NAME}/$1"
+function aws-rm()
+{
+	aws-path
+
+	HINT="Usage: ${FUNCNAME[0]} <file>"
+	FILE1="$1"
+
+	if [ ! -z "$FILE1" ]; then
+		aws s3 rm s3://${S3_BUCKET_NAME}/$FILE1
+		#echo "aws s3 rm s3://${S3_BUCKET_NAME}/$FILE1"
+	else
+		echo $HINT
+	fi
+}
+```
 
 # Author
 
