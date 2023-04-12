@@ -245,6 +245,21 @@ $ S3_BUCKET_NAME=lambdax9; aws-rm out.yml
 
 > 記住 AWS 所有的東西都要錢；部署後，一定會忘了曾經做過什麼，所以學會“一鍵部署“是很重要的，而“一鍵刪除部署”更是能解決不需要的燒錢功能。
 
+#### B. YAML (.yml)
+
+> 這真的是一個大問題，網路上找了 10 來個範例，能用的只有一個。
+> 學會寫好一個 YAML 很難，可能比寫程式還難。
+
+```bash
+# 雖然可以驗證，但是可用度不高
+$ aws cloudformation validate-template \
+		--template-body file://$(TEMPLATE_FILE)
+
+# 從這邊滙出來的，跟 CloudFormation 有差別
+$ aws s3api get-bucket-notification-configuration \
+	--bucket lambdax9 --output yaml
+```
+
 # Appendix
 
 # I. Study
@@ -254,6 +269,8 @@ $ S3_BUCKET_NAME=lambdax9; aws-rm out.yml
 #### A. Official - [AWS Lambda (Developer Guide)](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html)
 
 #### B. [Python for AWS Lambda Functions: A Beginner’s Guide](https://codesolid.com/python-and-aws-lambda-functions/)
+
+#### C. [add S3 trigger on a Lambda function with cloudformation yaml](https://stackoverflow.com/questions/58167514/add-s3-trigger-on-a-lambda-function-with-cloudformation-yaml)
 
 # II. Debug
 
