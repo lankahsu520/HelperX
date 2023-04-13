@@ -56,6 +56,8 @@
 #### - [helper_GitLabAndCICD.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitLabAndCICD.md) - GitLab helper.
 
 > CI/CD is useful ? Please make sure that you aren't a low-level programmer, system integration developer or embedded engineer.
+>
+> 當學習 AWS Lambda、CloudFormation 後，感覺部署這件事很重要，只能用唯一的電腦和專員來進行，不應該允許人人能部署，不同電腦能上傳。這時 CI/CD 就是一個很不錯的方法。
 
 #### - [helper_GStreamer.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GStreamer.md) - GStreamer helper.
 

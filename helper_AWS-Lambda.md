@@ -118,7 +118,7 @@ def lambda_handler(event, context):
 # 3. How to Become a AWS Lambda Collaborator
 
 ## 3.1. [LambdaHello](https://github.com/lankahsu520/LambdaHello)
-> 先從一個簡單的 開始。學會部署第一隻程式至 Lambda。
+> 先從一個簡單的程式開始。學會部署第一隻程式至 Lambda。
 > 因為部署的方式很多種，至於學習那一種，就要看自己的選擇。
 - [LambdaHello](https://github.com/lankahsu520/LambdaHello) / [01_HelloLambda](https://github.com/lankahsu520/LambdaHello/tree/main/01_HelloLambda) 
 
@@ -145,7 +145,7 @@ flowchart TD
 
 ##### A.1. Deploy 部署
 
-> 這邊透過 [CloudFormation ](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) 進行部署。
+> 這邊透過 [CloudFormation](https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/) 進行部署。
 
 ##### A.2. 撰寫 Makefile 
 
@@ -231,7 +231,7 @@ $ S3_BUCKET_NAME=lambdax9; aws-rm out.yml
 >
 > 總會有人挑戰我，你只會  S3 哦，其它呢？其它呢？
 >
-> 我又不是 AWS 專案，也不是它們的員工，我也是做中學，學中做。
+> 我又不是 AWS 專家，也不是它們的員工，我也是做中學，學中做。
 
 - [LambdaHello](https://github.com/lankahsu520/LambdaHello) / [04_HelloLambda_deployS3trigger](https://github.com/lankahsu520/LambdaHello/tree/main/04_HelloLambda_deployS3trigger)
 
@@ -264,7 +264,7 @@ $ aws s3api get-bucket-notification-configuration \
 
 # I. Study
 
-> 目前網路上並沒有發現善心人士的心得，只能專心於官方提供的文件
+> Lambda 這部分，基本上都是用範例來學習，很少閱讀官方的文件。
 
 #### A. Official - [AWS Lambda (Developer Guide)](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html)
 
