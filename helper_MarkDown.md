@@ -601,6 +601,46 @@ flowchart LR
 	ssh --> ec2 --> |aws cli|DynamoDB
 ```
 
+##### D.1. Direction
+
+> 這功能還不是很完備，如果變成 C-->D就會失效。
+
+```mermaid
+flowchart TD
+
+subgraph Z[" "]
+direction LR
+  A --> B
+  B --> C
+end
+
+subgraph ZA[" "]
+direction RL
+    D-->E
+    E-->F
+end
+
+Z --> ZA
+```
+
+```
+flowchart TD
+
+subgraph Z[" "]
+direction LR
+  A --> B
+  B --> C
+end
+
+subgraph ZA[" "]
+direction RL
+    D-->E
+    E-->F
+end
+
+Z --> ZA
+```
+
 #### E. Others
 
 ```mermaid
