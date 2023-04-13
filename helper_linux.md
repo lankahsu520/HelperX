@@ -177,6 +177,49 @@ more /var/log/syslog
 
 ```
 
+#### read - read a line from standard input
+
+```bash
+read_file_cvs_fn()
+{
+	FILE_NAME=$1
+	echo "$RUN_SH ($PID) ${FUNCNAME[0]} - (FILE_NAME: $FILE_NAME) ... "
+
+	LINE_NO=1
+	while IFS="," read -r ARG1 ARG2 || [ -n "$ARG1" ]
+	do
+		echo "(LINE_NO: $LINE_NO, ARG1: $ARG1, ARG2: $ARG2)"
+		(( LINE_NO++ ))
+	done < $FILE_NAME
+
+	echo "$RUN_SH ($PID) ${FUNCNAME[0]} - (FILE_NAME: $FILE_NAME) ok "
+}
+```
+
+```bash
+input_filename_fn()
+{
+	FILE_NAME=$1
+
+	echo 
+	echo "$RUN_SH ($PID) ${FUNCNAME[0]} ... "
+	[ -z "$FILE_NAME" ] && read -p "Please input file name or (q)uit：" FILE_NAME
+	case $FILE_NAME in
+		q|Q)
+			IS_QUIT=1
+		;;
+		*)
+			if [ ! -z "$FILE_NAME" ]; then
+				echo "(FILE_NAME: $FILE_NAME)"
+				read_file_cvs_fn "$FILE_NAME
+			else
+				IS_QUIT=1
+			fi
+		;;
+	esac
+}
+```
+
 #### tail - output the last part of files
 
 ```bash
