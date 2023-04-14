@@ -526,6 +526,12 @@ sed -i "s|<user>.*|<user>$WHO</user>|g" $CFG_FILE
 
 ```
 
+#### tr - translate or delete characters
+
+```bash
+INPUT_ARY=($(echo "$INPUT_TXT" | tr "," "\n"))
+```
+
 # 5. User Handler
 
 #### ac -  print statistics about users' connect time
