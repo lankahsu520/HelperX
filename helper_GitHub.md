@@ -36,7 +36,9 @@ flowchart LR
 ### 1.2.1. Create a new Token
 
 >Note: 名稱或註記
+>
 >Expiration: 設定期限
+>
 >Select scopes: 設定存取範圍，一般選擇 repo 就可
 >
 >選項設定完成後，按下 Generate token。
