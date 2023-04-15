@@ -178,11 +178,10 @@
 
 # 4. [特殊特元](https://chukaml.tripod.com/linguistics/charCode/)
 
-> AT&amp;T
->
+> AT&amp;&#40;T&#41;
 
 ```
-AT&amp;T
+AT&amp;&#40;T&#41;
 ```
 
 > 4 &lt; 5
