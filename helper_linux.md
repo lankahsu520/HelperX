@@ -860,7 +860,7 @@ sudo netstat -ntlp | grep :80
 #### nmap - Network exploration tool and security / port scanner
 
 ```bash
-alias port-nmap="nmap -sNU localhost"
+alias port-nmap="sudo nmap -sNU localhost"
 nmap localhost
 
 sudo nmap -sNU localhost
