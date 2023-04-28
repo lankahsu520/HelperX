@@ -368,9 +368,17 @@ https://www.microsip.org
 
 # I. Study
 
-#### A. [OpenSIPS 权威指南](https://www.gitbook.com/book/erhuabushuo/opensips-definitive-guide)
+## I.1. [OpenSIPS 权威指南](https://www.gitbook.com/book/erhuabushuo/opensips-definitive-guide)
 
-#### B. [SIP 簡介](https://github.com/Ci-Jie/OpenSIPS)
+## I.2. [SIP 簡介](https://github.com/Ci-Jie/OpenSIPS)
+
+## I.3. [Asterisk Project](https://wiki.asterisk.org/wiki/display/AST)
+
+## I.4. Youtube - [How to Setup FreePBX Server on AWS (VoIP Asterisk Solution)](https://www.youtube.com/watch?v=MVoI8Qv5tFU)
+
+## I.5. [How to Install FreePBX on Ubuntu 20.04 (Open Source PBX Tutorial)](https://cloudinfrastructureservices.co.uk/how-to-install-freepbx-on-ubuntu-20-04/)
+
+## I.6. https://cloudinfrastructureservices.co.uk/how-to-setup-freepbx-on-azure-aws-gcp/
 
 # II. Debug
 

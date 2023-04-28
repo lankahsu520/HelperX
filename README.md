@@ -176,6 +176,10 @@
 
 >提供 command line 的方式與 Amazon  Service 對接。常用 DynamoDB 和 S3。
 
+#### ~~- [helper_AWS-FreePBX.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-FreePBX.md) - FreePBX Server on AWS helper.~~
+
+>目前照著網路大作操作後，還是失敗收場，希望有成功之士能告知一二。
+
 #### - [helper_AWS-IAM.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-IAM.md) - AWS-IAM helper.
 
 >就是一般使用者；很簡單的介紹，如安裝完 ubuntu 後會先建立 administrator，除 administrator  外就是 IAM。
