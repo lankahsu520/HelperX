@@ -840,7 +840,7 @@ function port-listen()
 
 	#echo "WATCH_PORT=$WATCH_PORT"
 	if [ ! -z "$WATCH_PORT" ]; then
-		ss -tnl | grep LISTEN | grep $WATCH_PORT
+		ss -tnul | grep -E 'LISTEN|UNCONN' | grep $WATCH_PORT
 	else
 		echo $HINT
 	fi
@@ -860,14 +860,22 @@ sudo netstat -ntlp | grep :80
 #### nmap - Network exploration tool and security / port scanner
 
 ```bash
-alias port-nmap="nmap 127.0.0.1"
+alias port-nmap="nmap -sNU localhost"
 nmap localhost
+
+sudo nmap -sNU localhost
 
 # 查尋網路芳鄰
 nmap 192.168.0.100-200 -p80
 
 # 查尋特定IP
 sudo nmap -P0 -O 192.168.0.92
+
+# UDP狀況
+sudo nmap -sU localhost
+
+# 查看SIP
+nmap -v -sV localhost -p 5060
 ```
 
 #### swconfig - openwrt
