@@ -299,24 +299,23 @@ flowchart LR
 > 試著觸發 Trigger，然後至 CloudWatch 查看 Log，將裏面的 event 抓取出來。
 
 ```bash
-$ aws dynamodb execute-statement --statement "INSERT INTO Music  \
+aws dynamodb execute-statement --statement "INSERT INTO Music  \
                 VALUE  \
                 {'Artist':'No One You Know','SongTitle':'Call Me Today', 'AlbumTitle':'Somewhat Famous', 'Awards':'1'}"
 
-$ aws dynamodb execute-statement --statement "INSERT INTO Music  \
+aws dynamodb execute-statement --statement "INSERT INTO Music  \
                 VALUE  \
                 {'Artist':'No One You Know','SongTitle':'Howdy', 'AlbumTitle':'Somewhat Famous', 'Awards':'2'}"
 
-$ aws dynamodb execute-statement --statement "INSERT INTO Music  \
+aws dynamodb execute-statement --statement "INSERT INTO Music  \
                 VALUE  \
                 {'Artist':'Acme Band','SongTitle':'Happy Day', 'AlbumTitle':'Songs About Life', 'Awards':'10'}"
                             
-$ aws dynamodb execute-statement --statement "INSERT INTO Music  \
+aws dynamodb execute-statement --statement "INSERT INTO Music  \
                 VALUE  \
                 {'Artist':'Acme Band','SongTitle':'PartiQL Rocks', 'AlbumTitle':'Another Album Title', 'Awards':'8'}"
+                
 ```
-
-
 
 #### B. YAML (.yml)
 
