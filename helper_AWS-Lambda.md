@@ -224,7 +224,7 @@ $ S3_BUCKET_NAME=lambdax9; aws-rm out.yml
 
 ```
 
-## 3.4. Deploy S3 trigger
+## 3.4. Deploy Lambda Function and S3 trigger (一鍵部署)
 
 > 之前已經學會 deploy，前段也用 Console 設定了相關 Trigger ，那為什麼還要進行這章節。
 > 主要是希望把整個流程和程式當成一個專案進行部署。不知各位在公司定版時，進行程式部署時，是否還要一個員工，這個 Console 按按，那個 Console 按按。
@@ -259,6 +259,68 @@ $ aws cloudformation validate-template \
 $ aws s3api get-bucket-notification-configuration \
 	--bucket lambdax9 --output yaml
 ```
+
+## 3.5. Deploy Lambda Function DynamoDB trigger (一鍵部署)
+> 將 3.3. Lambda and S3 部署後，新加入一個 DynamoDB trigger。
+>
+> 試著記錄相對應的 event ，就可進行一鍵部署。
+
+```mermaid
+flowchart LR
+	Start([Start])
+	project[/project.json/]
+	subgraph Lambda
+ 		LambdaHello[LambdaHello]
+ 	end	
+	subgraph DynamoDB
+		Music[TableName: Music]
+		MusicBak[TableName: MusicBak]
+	end
+  End([End])
+	
+	Start-->project-->|push|Music
+	Music-->|trigger|LambdaHello
+  LambdaHello-->|copy item|MusicBak
+	MusicBak-->End
+```
+![aws_lambda033](./images/aws_lambda033.png)
+- [LambdaHello](https://github.com/lankahsu520/LambdaHello) / [05_HelloLambda_deployDynamoDBtrigger](https://github.com/lankahsu520/LambdaHello/tree/main/05_HelloLambda_deployDynamoDBtrigger)
+
+#### A. 學習目標
+
+##### A.1. Policies
+
+> 這邊需要調用 DynamoDB，所以要開啟相關權限。所以 YAML 的設定很重要。
+>
+> AmazonDynamoDBFullAccess
+
+##### A.2. Create Trigger
+
+> 試著觸發 Trigger，然後至 CloudWatch 查看 Log，將裏面的 event 抓取出來。
+
+```bash
+$ aws dynamodb execute-statement --statement "INSERT INTO Music  \
+                VALUE  \
+                {'Artist':'No One You Know','SongTitle':'Call Me Today', 'AlbumTitle':'Somewhat Famous', 'Awards':'1'}"
+
+$ aws dynamodb execute-statement --statement "INSERT INTO Music  \
+                VALUE  \
+                {'Artist':'No One You Know','SongTitle':'Howdy', 'AlbumTitle':'Somewhat Famous', 'Awards':'2'}"
+
+$ aws dynamodb execute-statement --statement "INSERT INTO Music  \
+                VALUE  \
+                {'Artist':'Acme Band','SongTitle':'Happy Day', 'AlbumTitle':'Songs About Life', 'Awards':'10'}"
+                            
+$ aws dynamodb execute-statement --statement "INSERT INTO Music  \
+                VALUE  \
+                {'Artist':'Acme Band','SongTitle':'PartiQL Rocks', 'AlbumTitle':'Another Album Title', 'Awards':'8'}"
+```
+
+
+
+#### B. YAML (.yml)
+
+>很難寫，因為不好 Debug。
 
 # Appendix
 
