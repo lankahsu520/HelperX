@@ -61,7 +61,7 @@
 
 > CI/CD is useful ? Please make sure that you aren't a low-level programmer, system integration developer or embedded engineer.
 >
-> 當學習 AWS Lambda、CloudFormation 後，感覺部署這件事很重要，只能用唯一的電腦和專員來進行，不應該允許人人能部署，不同電腦能上傳。這時 CI/CD 就是一個很不錯的方法。
+> 當學習 AWS Lambda、Cloud Formation 後，感覺部署這件事很重要，只能用唯一的電腦和專員來進行，不應該允許人人能部署，不同電腦能上傳。這時 CI/CD 就是一個很不錯的方法。
 
 #### - [helper_GStreamer.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GStreamer.md) - GStreamer helper.
 
@@ -75,9 +75,9 @@
 
 #### - [helper_macOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_macOS.md) - macOS helper.
 
-#### - [helper_MarkDown.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MarkDown.md) - MarkDown helper.
+#### - [helper_MarkDown.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MarkDown.md) - Markdown helper.
 
-> 身為一個人，建議善用 MarkDown 記錄相關筆記，少用 doc。
+> 身為一個人，建議善用 Markdown 記錄相關筆記，少用 doc。
 
 #### - [helper_MQTT.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MQTT.md) - MQTT helper.
 
@@ -125,6 +125,8 @@
 
 #### - [GDBusX](https://github.com/lankahsu520/GDBusX)
 
+#### - [pythonX9](https://github.com/lankahsu520/pythonX9)
+
 #### - [usbHunter](https://github.com/lankahsu520/usbHunter)
 
 #### - [utilx9](https://github.com/lankahsu520/utilx9)
@@ -160,6 +162,12 @@
 
 >擱置中…
 
+#### - helper_AmazonDynamoDB.md - Amazon DynamoDB helper.
+
+>A fast and flexible NoSQL database service for any scale
+>
+>用就對了！請見 [helper_AWS-CLI.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-CLI.md)。
+
 #### - [helper_AmazonKinesisVideoStreams.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonKinesisVideoStreams.md) - Amazon Kinesis Video Streams helper.
 
 >已經應用WebRTC。
@@ -167,6 +175,12 @@
 #### - [helper_AmazonLex.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonLex.md) - Amazon Lex helper.
 
 >擱置中…
+
+#### - helper_AmazonS3.md - Amazon S3 helper.
+
+>Store and retrieve any amount of data from anywhere
+>
+>用就對了！請見 [helper_AWS-CLI.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-CLI.md)。
 
 #### - [helper_AVS-Device-SDK.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AVS-Device-SDK.md) - AVS-Device-SDK helper.
 
@@ -188,15 +202,19 @@
 
 #### - [helper_AWS-Lambda.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-Lambda.md) - AWS-Lambda helper.
 
->就是把你的程式碼放在雲端執行。你不用管主機是 linux, win10 or mac OS，也不用管 CPU 等級，RAM 多大等。
+>就是把你的程式碼放在雲端執行。你不用管主機是 Linux, win10 or mac OS，也不用管 CPU 等級，RAM 多大等。相關實作請參考 [LambdaHello](https://github.com/lankahsu520/LambdaHello)。
 
 #### - [helper_AWS-SDK.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-SDK.md) - AWS-SDK helper.
 
->提供一個 api 方式與 Amazon  Service 對接。已實作部分請參考 [awsX9](https://github.com/lankahsu520/awsX9)。
+>提供一個 API 方式與 Amazon  Service 對接。已實作部分請參考 [awsX9](https://github.com/lankahsu520/awsX9)。
 
 ## 4.2. Repository
 
+#### - [awsP9](https://github.com/lankahsu520/awsP9)
+
 #### - [awsX9](https://github.com/lankahsu520/awsX9)
+
+#### - [LambdaHello](https://github.com/lankahsu520/LambdaHello)
 
 # Author
 
