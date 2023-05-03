@@ -19,7 +19,7 @@
 
 # 1. Overview
 
-> descript
+> Email 基本上沒有什麼好解釋的，其實看 Topology 就可以大概知道一二。
 
 ```mermaid
 flowchart LR
