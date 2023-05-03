@@ -53,6 +53,10 @@
 
 > docker is useful ? Please make sure that you aren't a low-level programmer or embedded engineer.
 
+#### - [helper_Email.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Email.md) - Email helper.
+
+> 我的第一份工作就是寫一套電子報系統，當時的網路速度說有多慢就有多慢（記得不是很清楚，ADSL好像還沒有開始呢），當要發送電子報時，還要選擇冷門時段，不然整個銀行系統都要停擺了。
+
 #### - [helper_GitHub.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitHub.md) - GitHub helper.
 
 > 善用免費 git 空間。
