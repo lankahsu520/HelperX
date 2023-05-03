@@ -1096,7 +1096,7 @@ $ rm -f ~/.subversion/auth/svn.simple/*
 
 # IV. Tool Usage
 
-#### A. svn Usage
+## IV.1. svn Usage
 
 ```bash
 $ svn help
@@ -1157,7 +1157,7 @@ For additional information, see http://subversion.apache.org/
 
 ```
 
-#### B. git Usage
+## IV.2. git Usage
 
 ```bash
 $ git help
@@ -1209,11 +1209,11 @@ See 'git help git' for an overview of the system.
 
 ```
 
+## IV.3. bash
 
+#### A. ~/.bash_aliases
 
-# V. ~/.bash_aliases
-
-#### A. SVN
+##### A.1. SVN
 
 ```bash
 #** svn **
@@ -1265,7 +1265,7 @@ function svn-revert()
 }
 ```
 
-#### B. Git
+##### A.2. Git
 
 ```bash
 #** git **

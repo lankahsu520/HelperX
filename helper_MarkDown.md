@@ -808,22 +808,22 @@ flowchart TD
 
 # I. Study
 
-#### A. [Mermaid](https://mermaid.js.org/intro/)
+## I.1. [Mermaid](https://mermaid.js.org/intro/)
 
-#### B. [mermaid-js](https://github.com/mermaid-js)/[mermaid](https://github.com/mermaid-js/mermaid)
+## I.2. [mermaid-js](https://github.com/mermaid-js)/[mermaid](https://github.com/mermaid-js/mermaid)
 
-#### C. [Markdown 语法・简明版](https://keatonlao.gitee.io/a-study-note-for-markdown/syntax/)
-#### D. [Markdown文件](https://markdown.tw)
+## I.3. [Markdown 语法・简明版](https://keatonlao.gitee.io/a-study-note-for-markdown/syntax/)
+## I.4. [Markdown文件](https://markdown.tw)
 
-#### E. [adrai](https://github.com/adrai)/[flowchart.js](https://github.com/adrai/flowchart.js)
+## I.5. [adrai](https://github.com/adrai)/[flowchart.js](https://github.com/adrai/flowchart.js)
 
-#### F. [MarkDown flow流程图示例](https://www.jianshu.com/p/f28c94cf1204)
+## I.6. [MarkDown flow流程图示例](https://www.jianshu.com/p/f28c94cf1204)
 
-#### G [typora 画流程图、时序图(顺序图)、甘特图](https://www.runoob.com/note/47651)
+## I.7. [typora 画流程图、时序图(顺序图)、甘特图](https://www.runoob.com/note/47651)
 
-#### H. [超文本標示語言的字元代碼（Character Codes in HTML）](https://chukaml.tripod.com/linguistics/charCode/)
+## I.8. [超文本標示語言的字元代碼（Character Codes in HTML）](https://chukaml.tripod.com/linguistics/charCode/)
 
-#### I. [HTML特殊字符編碼](https://www.ifreesite.com/html-entities.htm)
+## I.9. [HTML特殊字符編碼](https://www.ifreesite.com/html-entities.htm)
 
 # II. Debug
 

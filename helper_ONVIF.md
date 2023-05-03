@@ -297,10 +297,10 @@ $ curl --digest -u ${USER}:${PASSWORD}
 
 # I. Study
 
-#### A. [ONVIF](https://www.onvif.org)
-#### B. [wsdl](https://github.com/onvif/specs/tree/22.12/wsdl)
+## I.1. [ONVIF](https://www.onvif.org)
+## I.2. [wsdl](https://github.com/onvif/specs/tree/22.12/wsdl)
 
-#### C. [網際網路上用來找尋設備的方法](http://albert-oma.blogspot.com/2012/07/blog-post.html)
+## I.3. [網際網路上用來找尋設備的方法](http://albert-oma.blogspot.com/2012/07/blog-post.html)
 
 # II. Debug
 
@@ -308,9 +308,9 @@ $ curl --digest -u ${USER}:${PASSWORD}
 
 # IV. Tool Usage
 
-#### A. [ONVIF Device Manager](https://sourceforge.net/projects/onvifdm/)
+## IV.1. [ONVIF Device Manager](https://sourceforge.net/projects/onvifdm/)
 
-# V. [gSOAP](https://www.genivia.com/index.html)
+## IV.2. [gSOAP](https://www.genivia.com/index.html)
 
 #### A. onvif.h
 

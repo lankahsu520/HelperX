@@ -688,7 +688,7 @@ gst-launch-1.0 alsasrc \
 
 # IV. Tool Usage
 
-#### A. gst-launch-1.0
+## IV.1. gst-launch-1.0
 
 ```bash
 $ gst-launch-1.0 --help

@@ -313,15 +313,15 @@ sequenceDiagram
 
 # I. Study
 
-#### A. [FreeRTOS](http://wiki.csie.ncku.edu.tw/embedded/freertos)
+## I.1. [FreeRTOS](http://wiki.csie.ncku.edu.tw/embedded/freertos)
 
-#### B. [FreeRTOS學習筆記——互斥型信號量](https://www.twblogs.net/a/5b7e42d82b71776838563861)
+## I.2. [FreeRTOS學習筆記——互斥型信號量](https://www.twblogs.net/a/5b7e42d82b71776838563861)
 
-#### C. [FreeRTOS学习笔记——二值型信号量](https://blog.csdn.net/xukai871105/article/details/43153177)
+## I.3. [FreeRTOS学习笔记——二值型信号量](https://blog.csdn.net/xukai871105/article/details/43153177)
 
-#### D. [FreeRTOS学习笔记——任务间使用队列同步数据](https://blog.csdn.net/xukai871105/article/details/17125627)
+## I.4. [FreeRTOS学习笔记——任务间使用队列同步数据](https://blog.csdn.net/xukai871105/article/details/17125627)
 
-#### E. [RTOS](https://blog.csdn.net/zhoutaopower/category_10073388.html)
+## I.5. [RTOS](https://blog.csdn.net/zhoutaopower/category_10073388.html)
 
 # II. Debug
 

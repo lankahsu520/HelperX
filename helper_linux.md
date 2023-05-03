@@ -1351,7 +1351,7 @@ vim 123
 
 # I. Study
 
-#### A. [Linux 教程](https://www.runoob.com/linux/linux-tutorial.html)
+## I.1. [Linux 教程](https://www.runoob.com/linux/linux-tutorial.html)
 
 # II. Debug
 

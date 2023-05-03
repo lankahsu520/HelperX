@@ -504,13 +504,13 @@ helloworld: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically 
 
 # I. Study
 
-#### A. [Docker CLI (docker)](https://docs.docker.com/reference/)
+## I.1. [Docker CLI (docker)](https://docs.docker.com/reference/)
 
-#### B. [Docker 基礎教學與介紹 101](https://cwhu.medium.com/docker-tutorial-101-c3808b899ac6)
+## I.2. [Docker 基礎教學與介紹 101](https://cwhu.medium.com/docker-tutorial-101-c3808b899ac6)
 
-#### C. [Ubuntu Linux 安裝 Docker 步驟與使用教學](https://ithelp.ithome.com.tw/articles/10219427)
+## I.3 [Ubuntu Linux 安裝 Docker 步驟與使用教學](https://ithelp.ithome.com.tw/articles/10219427)
 
-#### D. [Docker 筆記 Part 2 ｜指令操作](https://visonli.medium.com/docker-入門-筆記-part-2-91e4dfa2b365)
+## I.4. [Docker 筆記 Part 2 ｜指令操作](https://visonli.medium.com/docker-入門-筆記-part-2-91e4dfa2b365)
 
 # II. Debug
 
@@ -518,7 +518,7 @@ helloworld: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically 
 
 # IV. Tool Usage
 
-#### A. docker Usage
+## IV.1. docker Usage
 
 ```bash
 Usage:  docker [OPTIONS] COMMAND
@@ -605,7 +605,38 @@ To get more help with docker, check out our guides at https://docs.docker.com/go
 
 ```
 
+## IV.2. bash
+
+#### A. ~/.bash_aliases
+
+```bash
+alias docker-images="docker images "
+alias docker-run="docker run -ti "
+alias docker-ps="docker ps -a "
+alias docker-rmimage="docker rmi "
+alias docker-rmcontainer="docker rm "
+alias docker-attach="docker attach "
+
+alias docker-prunesystem="docker system prune "
+alias docker-prunecontainer="docker container prune "
+
+function docker-rmexited()
+{
+	docker rm $(docker ps --filter status=exited -q)
+}
+
+function docker-run()
+{
+	IMAGE_ID="$1"
+	SHELL_MODE="/bin/bash"
+
+	docker run -t -i $IMAGE_ID $SHELL_MODE
+}
+
+```
+
 # V. Dockerfile
+
 #### A.  a simple
 ```dockerfile
 # ubuntu 20.04
@@ -646,34 +677,6 @@ EXPOSE 9981
 RUN apt-get clean
 RUN apt-get autoclean
 RUN apt-get autoremove --purge
-
-```
-
-# VI. ~/.bash_aliases
-
-```bash
-alias docker-images="docker images "
-alias docker-run="docker run -ti "
-alias docker-ps="docker ps -a "
-alias docker-rmimage="docker rmi "
-alias docker-rmcontainer="docker rm "
-alias docker-attach="docker attach "
-
-alias docker-prunesystem="docker system prune "
-alias docker-prunecontainer="docker container prune "
-
-function docker-rmexited()
-{
-	docker rm $(docker ps --filter status=exited -q)
-}
-
-function docker-run()
-{
-	IMAGE_ID="$1"
-	SHELL_MODE="/bin/bash"
-
-	docker run -t -i $IMAGE_ID $SHELL_MODE
-}
 
 ```
 

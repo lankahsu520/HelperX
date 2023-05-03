@@ -665,11 +665,11 @@ $ aws sns list-subscriptions
 # Appendix
 
 # I. Study
-#### A. [AWS CLI Command Reference](https://awscli.amazonaws.com/v2/documentation/api/latest/index.html)
+## I.1. Official - [AWS CLI Command Reference](https://awscli.amazonaws.com/v2/documentation/api/latest/index.html)
 
 # II. Debug
 
-#### A. An error occurred (NoSuchBucket) when calling the ListObjectsV2 operation: The specified bucket does not exist
+## II.2. Official - An error occurred (NoSuchBucket) when calling the ListObjectsV2 operation: The specified bucket does not exist
 
 > 至 S3 console 建立該 Bucket，再用 aws s3 操作即可。
 >
@@ -678,6 +678,8 @@ $ aws sns list-subscriptions
 # III. Glossary
 
 # IV. Tool Usage
+
+## IV.1. bash
 
 #### A. .bash_aliases
 

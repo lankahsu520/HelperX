@@ -33,7 +33,7 @@
 
 # I. Study
 
-#### A. Official - [AWS Identity and Access Management (User Guide)](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html)
+## I.1. Official - [AWS Identity and Access Management (User Guide)](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html)
 
 # II. Debug
 

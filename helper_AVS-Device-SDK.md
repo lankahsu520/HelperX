@@ -253,19 +253,19 @@ $ ./SampleApplications/ConsoleSampleApplication/src/SampleApp ./Integration/Alex
 
 # I. Study
 
-#### A. [Alexa交叉编译 (avs-device-sdk)](https://blog.csdn.net/qq_38731735/article/details/120869805)
+## I.1. [Alexa交叉编译 (avs-device-sdk)](https://blog.csdn.net/qq_38731735/article/details/120869805)
 
-#### B. Official - [Build the Alexa Voice Service Device SDK](https://developer.amazon.com/en-US/docs/alexa/avs-device-sdk/build-the-sdk.html)
+## I.2. Official - [Build the Alexa Voice Service Device SDK](https://developer.amazon.com/en-US/docs/alexa/avs-device-sdk/build-the-sdk.html)
 
-#### C. Official - [Build with Amazon's Newest Devices & Services](https://developer.amazon.com/en-US/alexa/devices/alexa-built-in)
+## I.3. Official - [Build with Amazon's Newest Devices & Services](https://developer.amazon.com/en-US/alexa/devices/alexa-built-in)
 
-#### D. [在 Raspberry Pi 上使用 AVS Device SDK 實現智慧音箱](https://ellis-wu.github.io/2019/07/15/avs-device-sdk-installation/)
+## I.4. [在 Raspberry Pi 上使用 AVS Device SDK 實現智慧音箱](https://ellis-wu.github.io/2019/07/15/avs-device-sdk-installation/)
 
-#### E. [更換 AVS Device SDK 的喚醒詞](https://ellis-wu.github.io/2019/07/17/avs-device-sdk-wwe/)
+## I.5. [更換 AVS Device SDK 的喚醒詞](https://ellis-wu.github.io/2019/07/17/avs-device-sdk-wwe/)
 
-#### F. [如何用树莓派搭建亚马逊语音助手，Raspberry Pi Alexa](https://www.labno3.com/2021/01/15/raspberry-pi-alexa-build-your-own-amazon-echo/)
+## I.6. [如何用树莓派搭建亚马逊语音助手，Raspberry Pi Alexa](https://www.labno3.com/2021/01/15/raspberry-pi-alexa-build-your-own-amazon-echo/)
 
-#### G. [Raspberry Pi Alexa: Build your own Amazon Echo](https://pimylifeup.com/raspberry-pi-alexa/)
+## I.7. [Raspberry Pi Alexa: Build your own Amazon Echo](https://pimylifeup.com/raspberry-pi-alexa/)
 
 # II. Debug
 

@@ -29,13 +29,13 @@
 
 # I. Study
 
-#### A. Official - [Amazon Lex (V2 Developer Guide)](https://docs.aws.amazon.com/lexv2/latest/dg/what-is.html)
+## I.1. Official - [Amazon Lex (V2 Developer Guide)](https://docs.aws.amazon.com/lexv2/latest/dg/what-is.html)
 
-#### B. [建立 Amazon Lex 聊天機器人](https://vocus.cc/article/62247106fd89780001cb0b48)
+## I.2. [建立 Amazon Lex 聊天機器人](https://vocus.cc/article/62247106fd89780001cb0b48)
 
-#### C. [Amazon Lex 功能](https://aws.amazon.com/tw/lex/features/)
+## I.3. [Amazon Lex 功能](https://aws.amazon.com/tw/lex/features/)
 
-#### D. [Amazon Lex V2 教學 1](https://aprilyang.home.blog/2022/05/14/lex-jeopardy-bot-1/)
+## I.4. [Amazon Lex V2 教學 1](https://aprilyang.home.blog/2022/05/14/lex-jeopardy-bot-1/)
 
 # II. Debug
 

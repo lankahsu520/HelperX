@@ -327,15 +327,15 @@ aws dynamodb execute-statement --statement "INSERT INTO Music  \
 
 > Lambda 這部分，基本上都是用範例來學習，很少閱讀官方的文件。
 
-#### A. Official - [AWS Lambda (Developer Guide)](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html)
+## I.1. Official - [AWS Lambda (Developer Guide)](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html)
 
-#### B. [Python for AWS Lambda Functions: A Beginner’s Guide](https://codesolid.com/python-and-aws-lambda-functions/)
+## I.2. [Python for AWS Lambda Functions: A Beginner’s Guide](https://codesolid.com/python-and-aws-lambda-functions/)
 
-#### C. [add S3 trigger on a Lambda function with cloudformation yaml](https://stackoverflow.com/questions/58167514/add-s3-trigger-on-a-lambda-function-with-cloudformation-yaml)
+## I.3. [add S3 trigger on a Lambda function with cloudformation yaml](https://stackoverflow.com/questions/58167514/add-s3-trigger-on-a-lambda-function-with-cloudformation-yaml)
 
 # II. Debug
 
-#### A. An error occurred (ValidationError) when calling the CreateChangeSet operation: Stack:arn:aws:cloudformation:eu-west-1:123456789012:stack/blank520/5270ab20-d557-11ed-afb2-0a14943d5521 is in ROLLBACK_COMPLETE state and can not be updated.
+## II.1. An error occurred (ValidationError) when calling the CreateChangeSet operation: Stack:arn:aws:cloudformation:eu-west-1:123456789012:stack/blank520/5270ab20-d557-11ed-afb2-0a14943d5521 is in ROLLBACK_COMPLETE state and can not be updated.
 
 ```bash
 # 修改 region
@@ -344,7 +344,7 @@ region =
 
 ```
 
-#### B. json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 2 column 2 (char 3)
+## II.2. json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 2 column 2 (char 3)
 
 >python json.load 時發生此問題時，to replace ' -> "
 

@@ -328,7 +328,7 @@ $ jq -c '[.Items[] | select(.AlbumTitle.S=="Somewhat Famous")]' ./AWS/Music.json
 
 # I. Study
 
-#### A. [jq 實戰教學](https://myapollo.com.tw/blog/jq-by-example/)
+## I.1. [jq 實戰教學](https://myapollo.com.tw/blog/jq-by-example/)
 
 # II. Debug
 
@@ -336,7 +336,7 @@ $ jq -c '[.Items[] | select(.AlbumTitle.S=="Somewhat Famous")]' ./AWS/Music.json
 
 # IV. Tool Usage
 
-#### A. [jq](https://manpages.ubuntu.com/manpages/xenial/man1/jq.1.html) Usage
+## IV.1. [jq](https://manpages.ubuntu.com/manpages/xenial/man1/jq.1.html) Usage
 
 ```bash
 $ jq --help

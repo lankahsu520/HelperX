@@ -123,17 +123,17 @@ flowchart TD
 
 # I. Study
 
-#### A. [BLE（16）—— BLE 层次（HOST/HCI/Controller）](https://blog.csdn.net/zhoutaopower/article/details/96477626)
+## I.1. [BLE（16）—— BLE 层次（HOST/HCI/Controller）](https://blog.csdn.net/zhoutaopower/article/details/96477626)
 
-#### B. [Everyone is using Bluetooth Low Energy – should you?](https://www.avsystem.com/blog/bluetooth-low-energy-ble/)
+## I.2. [Everyone is using Bluetooth Low Energy – should you?](https://www.avsystem.com/blog/bluetooth-low-energy-ble/)
 
-#### C. [[Day 16] BLE 封包監聽工具(Packet Sniffer)](https://ithelp.ithome.com.tw/articles/10223483)
+## I.3. [[Day 16] BLE 封包監聽工具(Packet Sniffer)](https://ithelp.ithome.com.tw/articles/10223483)
 
-#### D. [藍芽低功耗介紹](https://hackmd.io/@ShenTengTu/H1aUE5ltV?type=view)
+## I.4. [藍芽低功耗介紹](https://hackmd.io/@ShenTengTu/H1aUE5ltV?type=view)
 
-#### E. [iBeacon詳細指南](https://www.mokoblue.com/zh-tw/a-detailed-guide-to-ibeacon/)
+## I.5. [iBeacon詳細指南](https://www.mokoblue.com/zh-tw/a-detailed-guide-to-ibeacon/)
 
-#### F. [BluetoothProfile](https://github.com/www378660084/BluetoothProfile)
+## I.6. [BluetoothProfile](https://github.com/www378660084/BluetoothProfile)
 
 # II. Debug
 

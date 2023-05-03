@@ -191,7 +191,7 @@ srvlookup=yes
 allow=all
 disallow=h263
 
-videosupport=always
+y=always
 
 directmedia=yes
 directmedia=outgoing
@@ -278,7 +278,36 @@ $ sudo systemctl status asterisk
 
 $ sudo systemctl start asterisk
 
+$ systemctl unmask asterisk.service
+
 $ sudo systemctl stop asterisk
+```
+
+### 2.2.4. asterisk CLI
+
+```bash
+$ sudo asterisk -rvvvvv
+[sudo] password for lanka:
+Asterisk 16.2.1~dfsg-2ubuntu1, Copyright (C) 1999 - 2018, Digium, Inc. and others.
+Created by Mark Spencer <markster@digium.com>
+Asterisk comes with ABSOLUTELY NO WARRANTY; type 'core show warranty' for details.
+This is free software, with components licensed under the GNU General Public
+License version 2 and other licenses; you are welcome to redistribute it under
+certain conditions. Type 'core show license' for details.
+=========================================================================
+Connected to Asterisk 16.2.1~dfsg-2ubuntu1 currently running on build20-vbx (pid = 1940)
+
+```
+
+#### A. [Debug](https://wiki.asterisk.org/wiki/display/AST/Collecting+Debug+Information)
+
+```bash
+build20-vbx*CLI> pjsip set logger on
+PJSIP Logging enabled
+build20-vbx*CLI> pjsip set logger on
+PJSIP Logging enabled
+build20-vbx*CLI>
+
 ```
 
 ## ~~2.1. [FreeSWITCH-1.10.6-Release-x64.msi](https://files.freeswitch.org/windows/installer/x64/FreeSWITCH-1.10.6-Release-x64.msi)~~
@@ -376,15 +405,125 @@ https://www.microsip.org
 
 ## I.4. Youtube - [How to Setup FreePBX Server on AWS (VoIP Asterisk Solution)](https://www.youtube.com/watch?v=MVoI8Qv5tFU)
 
-## I.5. [How to Install FreePBX on Ubuntu 20.04 (Open Source PBX Tutorial)](https://cloudinfrastructureservices.co.uk/how-to-install-freepbx-on-ubuntu-20-04/)
-
-## I.6. https://cloudinfrastructureservices.co.uk/how-to-setup-freepbx-on-azure-aws-gcp/
+## I.5. [Asterisk CLI 進階用法](http://www.osslab.tw:8880/index.php?title=VoIP/IP_PBX/軟體式_IP_PBX/Asterisk_-_免費_IP_PBX_網路電話交換平台/Tips/CLI_進階用法)
 
 # II. Debug
 
 # III. Glossary
 
 # IV. Tool Usage
+
+## IV.1. [asterisk cli Usage](https://wiki.asterisk.org/wiki/display/AST/Asterisk+Command+Line+Interface)
+
+```bash
+$ asterisk -V
+Asterisk 16.2.1~dfsg-2ubuntu1
+$ sudo asterisk -rvvvvv
+[sudo] password for lanka:
+Asterisk 16.2.1~dfsg-2ubuntu1, Copyright (C) 1999 - 2018, Digium, Inc. and others.
+Created by Mark Spencer <markster@digium.com>
+Asterisk comes with ABSOLUTELY NO WARRANTY; type 'core show warranty' for details.
+This is free software, with components licensed under the GNU General Public
+License version 2 and other licenses; you are welcome to redistribute it under
+certain conditions. Type 'core show license' for details.
+=========================================================================
+Connected to Asterisk 16.2.1~dfsg-2ubuntu1 currently running on build20-vbx (pid = 1940)
+build20-vbx*CLI>?
+!              acl            ael            agent          agi            aoc            ari            bridge         calendar       cc             cdr
+cel            channel        cli            confbridge     config         core           database       devstate       dialplan       dnsmgr         fax
+features       file           group          hangup         help           http           iax2           indication     keys           local          logger
+malloc         manager        media          mgcp           minivm         mixmonitor     module         moh            no             odbc           originate
+parking        phoneprov      pjproject      pjsip          presencestate  pri            queue          realtime       reload         rtcp           rtp
+say            sip            sorcery        stun           test           timing         udptl          ulimit         voicemail      xmldoc         xmpp
+
+```
+
+#### A. pjsip
+
+```bash
+build20-vbx*CLI> core show help pjsip
+pjsip dump endpt               -- Dump the res_pjsip endpt internals
+pjsip export config_wizard primitives [to] -- Export config wizard primitives
+pjsip list aors                -- List PJSIP Aors
+pjsip list auths               -- List PJSIP Auths
+pjsip list channels            -- List PJSIP Channels
+pjsip list ciphers             -- List available OpenSSL cipher names
+pjsip list contacts            -- List PJSIP Contacts
+pjsip list endpoints           -- List PJSIP Endpoints
+pjsip list identifies          -- List PJSIP Identifies
+pjsip list registrations       -- List PJSIP Registrations
+pjsip list subscriptions {inbound|outbound} [like] -- List active inbound/outbound subscriptions
+pjsip list transports          -- List PJSIP Transports
+pjsip qualify                  -- Send an OPTIONS request to a PJSIP endpoint
+pjsip reload qualify aor       -- Synchronize the PJSIP Aor qualify options
+pjsip reload qualify endpoint  -- Synchronize the qualify options for all Aors on the PJSIP endpoint
+pjsip reload                   -- <no description available>
+pjsip send notify              -- Send a NOTIFY request to a SIP endpoint
+pjsip send register            -- Registers an outbound registration target
+pjsip send unregister          -- Unregisters outbound registration target
+pjsip set history {on|off|clear} -- Enable/Disable PJSIP History
+pjsip set logger {on|off|host} -- Enable/Disable PJSIP Logger Output
+pjsip show aors                -- Show PJSIP Aors
+pjsip show aor                 -- Show PJSIP Aor
+pjsip show auths               -- Show PJSIP Auths
+pjsip show auth                -- Show PJSIP Auth
+pjsip show channels            -- Show PJSIP Channels
+pjsip show channel             -- Show PJSIP Channel
+pjsip show channelstats        -- Show PJSIP Channel Stats
+pjsip show contacts            -- Show PJSIP Contacts
+pjsip show contact             -- Show PJSIP Contact
+pjsip show endpoints           -- Show PJSIP Endpoints
+pjsip show endpoint            -- Show PJSIP Endpoint
+pjsip show history             -- Display PJSIP History
+pjsip show identifiers         -- List registered endpoint identifiers
+pjsip show identifies          -- Show PJSIP Identifies
+pjsip show identify            -- Show PJSIP Identify
+pjsip show qualify aor         -- Show the PJSIP Aor current qualify options
+pjsip show qualify endpoint    -- Show the current qualify options for all Aors on the PJSIP endpoint
+pjsip show registrations       -- Show PJSIP Registrations
+pjsip show registration        -- Show PJSIP Registration
+pjsip show scheduled_tasks     -- Show all scheduled tasks
+pjsip show settings            -- Show global and system configuration options
+pjsip show subscription {inbound|outbound} -- Show active subscription details
+pjsip show subscriptions {inbound|outbound} [like] -- Show active inbound/outbound subscriptions
+pjsip show transports          -- Show PJSIP Transports
+pjsip show transport           -- Show PJSIP Transport
+pjsip show unidentified_requests -- Show PJSIP Unidentified Requests
+pjsip show version             -- Show the version of pjproject in use
+Really destroying SIP dialog '3b7e21ec46b54d2ab813c44c1a77b121' Method: REGISTER
+build20-vbx*CLI>
+
+```
+
+#### B. sip
+
+```bash
+build20-vbx*CLI> core show help sip
+sip notify                     -- Send a notify packet to a SIP peer
+sip prune realtime [peer|all]  -- Prune cached Realtime users/peers
+sip qualify peer               -- Send an OPTIONS packet to a peer
+sip reload                     -- Reload SIP configuration
+sip set debug {on|off|ip|peer} -- Enable/Disable SIP debugging
+sip set history {on|off}       -- Enable/Disable SIP history
+sip show {channels|subscriptions} -- List active SIP channels or subscriptions
+sip show channelstats          -- List statistics for active SIP channels
+sip show channel               -- Show detailed SIP channel info
+sip show domains               -- List our local SIP domains
+sip show history               -- Show SIP dialog history
+sip show inuse [all]           -- List all inuse/limits
+sip show mwi                   -- Show MWI subscriptions
+sip show objects               -- List all SIP object allocations
+sip show peers [like]          -- List defined SIP peers
+sip show peer                  -- Show details on specific SIP peer
+sip show registry              -- List SIP registration status
+sip show sched                 -- Present a report on the status of the scheduler queue
+sip show settings              -- Show SIP global settings
+sip show tcp                   -- List TCP Connections
+sip show users [like]          -- List defined SIP users
+sip show user                  -- Show details on specific SIP user
+sip unregister                 -- Unregister (force expiration) a SIP peer from the registry
+
+```
 
 # V. ErrorNO
 

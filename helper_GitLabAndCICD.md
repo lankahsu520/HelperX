@@ -739,15 +739,15 @@ flowchart LR
 
 # I. Study
 
-#### A. [GitLab: 建立第一條 CI/CD Pipeline](https://ithelp.ithome.com.tw/articles/10219427)
+## I.1. [GitLab: 建立第一條 CI/CD Pipeline](https://ithelp.ithome.com.tw/articles/10219427)
 
-#### B. [GitLab CI 之 Runner 的 Executor 該如何選擇？](https://chengweichen.com/2021/03/gitlab-ci-executor.html)
+## I.2. [GitLab CI 之 Runner 的 Executor 該如何選擇？](https://chengweichen.com/2021/03/gitlab-ci-executor.html)
 
-#### C. [Gitlab-CI 入門實作教學 - 單元測試篇](https://nick-chen.medium.com/gitlab-ci-入門筆記-單元測試篇-156455e2ad9f)
+## I.3. [Gitlab-CI 入門實作教學 - 單元測試篇](https://nick-chen.medium.com/gitlab-ci-入門筆記-單元測試篇-156455e2ad9f)
 
-#### D. [Gitlab-CI 入門實作 — 自動化部署篇](https://nick-chen.medium.com/教學-gitlab-ci-入門實作-自動化部署篇-ci-cd-系列分享文-cbb5100a73d4)
+## I.4. [Gitlab-CI 入門實作 — 自動化部署篇](https://nick-chen.medium.com/教學-gitlab-ci-入門實作-自動化部署篇-ci-cd-系列分享文-cbb5100a73d4)
 
-#### E. [Configuration of your builds with .gitlab-ci.yml](https://www.perforce.com/manuals/gitswarm/ci/yaml/README.html)
+## I.5. [Configuration of your builds with .gitlab-ci.yml](https://www.perforce.com/manuals/gitswarm/ci/yaml/README.html)
 
 # II. Debug
 
@@ -755,7 +755,7 @@ flowchart LR
 
 # IV. Tool Usage
 
-#### A. gitlab-runner Usage
+## IV.1. gitlab-runner Usage
 
 ```bash
 $ sudo gitlab-runner

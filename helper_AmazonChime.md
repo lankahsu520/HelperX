@@ -52,17 +52,17 @@
 
 > 目前網路上並沒有發現善心人士的心得，只能專心於官方提供的文件
 
-#### A. Official - [Amazon Chime (Administration Guide)](https://docs.aws.amazon.com/chime/latest/ag/what-is-chime.html)
+## I.1. Official - [Amazon Chime (Administration Guide)](https://docs.aws.amazon.com/chime/latest/ag/what-is-chime.html)
 
-#### B. Official - [Amazon Chime (User Guide)](https://docs.aws.amazon.com/chime/latest/ug/what-is-chime.html)
+## I.2. Official - [Amazon Chime (User Guide)](https://docs.aws.amazon.com/chime/latest/ug/what-is-chime.html)
 
-#### C. Official - [Amazon Chime SDK (Developer Guide)](https://docs.aws.amazon.com/chime-sdk/latest/dg/what-is-chime-sdk.html)
+## I.3. Official - [Amazon Chime SDK (Developer Guide)](https://docs.aws.amazon.com/chime-sdk/latest/dg/what-is-chime-sdk.html)
 
-#### D. Official - [Amazon Chime SDK resources](https://aws.amazon.com/chime/chime-sdk/resources/)
+## I.4. Official - [Amazon Chime SDK resources](https://aws.amazon.com/chime/chime-sdk/resources/)
 
-#### E. [Add conversational AI to any contact center with Amazon Lex and the Amazon Chime SDK](https://aws.amazon.com/tw/blogs/machine-learning/add-conversational-ai-to-any-contact-center-with-amazon-lex-and-the-amazon-chime-sdk/)
+## I.5. [Add conversational AI to any contact center with Amazon Lex and the Amazon Chime SDK](https://aws.amazon.com/tw/blogs/machine-learning/add-conversational-ai-to-any-contact-center-with-amazon-lex-and-the-amazon-chime-sdk/)
 
-#### F. [amazon-chime-pstn-audio-with-amazon-lex](https://github.com/aws-samples/amazon-chime-pstn-audio-with-amazon-lex)
+## I.6. [amazon-chime-pstn-audio-with-amazon-lex](https://github.com/aws-samples/amazon-chime-pstn-audio-with-amazon-lex)
 
 # II. Debug
 

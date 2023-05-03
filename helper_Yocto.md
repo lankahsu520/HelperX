@@ -270,7 +270,7 @@ SRCREV = "${@'${AUTOREV}' if d.getVar('BB_EXTRA_SRCREV', 'AUTOINC') \
 
 # I. Study
 
-#### A. [Yocto計劃](https://zh.m.wikipedia.org/zh-tw/Yocto計劃)
+## I.1. [Yocto計劃](https://zh.m.wikipedia.org/zh-tw/Yocto計劃)
 
 # II. Debug
 

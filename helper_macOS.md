@@ -253,7 +253,7 @@ sudo port install youtube-dl
 
 # I. Study
 
-### A. [比较Fink, macports 和 homebrew](https://www.iteye.com/blog/tetsu-1507524)
+### I.1. [比较Fink, macports 和 homebrew](https://www.iteye.com/blog/tetsu-1507524)
 
 # II. Debug
 

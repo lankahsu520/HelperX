@@ -831,7 +831,7 @@ export BLUEZX_COMMAND="advertise.name&on"
 # Appendix
 
 # I. Study
-#### A. [D-Bus](https://en.wikipedia.org/wiki/D-Bus)
+## I.1. [D-Bus](https://en.wikipedia.org/wiki/D-Bus)
 
 # II. Debug
 
@@ -839,7 +839,7 @@ export BLUEZX_COMMAND="advertise.name&on"
 
 # IV. Tool Usage
 
-#### A. gdbus Usage
+## IV.1. gdbus Usage
 
 ```bash
 $ gdbus --help
@@ -858,7 +858,7 @@ Use “gdbus COMMAND --help” to get help on each command.
 
 ```
 
-#### B. dbus-send Usage
+## IV.2. dbus-send Usage
 
 ```bash
 $ dbus-send --help
@@ -866,9 +866,9 @@ Usage: dbus-send [--help] [--system | --session | --bus=ADDRESS | --peer=ADDRESS
 
 ```
 
-##### B.1. [dbus-send — Send a message to a message bus](https://dbus.freedesktop.org/doc/dbus-send.1.html)
+#### A. [dbus-send — Send a message to a message bus](https://dbus.freedesktop.org/doc/dbus-send.1.html)
 
-#### C. dbus-monitor Usage
+## IV.3. dbus-monitor Usage
 
 ```bash
 $ dbus-monitor --help
@@ -887,7 +887,7 @@ $ sudo dbus-monitor --system \
 
 ```
 
-#### D. dbus-daemon Usage
+## IV.4. dbus-daemon Usage
 
 ```bash
 $ dbus-daemon --help

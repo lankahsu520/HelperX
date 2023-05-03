@@ -162,6 +162,11 @@
 
 >擱置中…
 
+#### - [helper_AmazonEC2.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonEC2.md) - Amazon EC2 helper.
+
+>一般都是用 Console 設定即可。
+>
+
 #### - helper_AmazonDynamoDB.md - Amazon DynamoDB helper.
 
 >A fast and flexible NoSQL database service for any scale

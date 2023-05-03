@@ -626,9 +626,9 @@ WithKey: object name not aws_access_key_id or aws_secret_access_key
 
 # I. Study
 
-#### A. [C++ 的 AWS SDK 開發套件使用教學與範例](https://officeguide.cc/aws-sdk-cpp-installation-tutorial-examples/)
+## I.1. [C++ 的 AWS SDK 開發套件使用教學與範例](https://officeguide.cc/aws-sdk-cpp-installation-tutorial-examples/)
 
-#### B. [Building the SDK from source on EC2](https://github.com/aws/aws-sdk-cpp/wiki/Building-the-SDK-from-source-on-EC2)
+## I.2. [Building the SDK from source on EC2](https://github.com/aws/aws-sdk-cpp/wiki/Building-the-SDK-from-source-on-EC2)
 
 # II. Debug
 

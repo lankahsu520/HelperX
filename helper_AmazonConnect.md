@@ -36,7 +36,7 @@
 
 > 目前網路上並沒有發現善心人士的心得，只能專心於官方提供的文件
 
-#### A. Official - [Amazon Connect (Administrator Guide)](https://docs.aws.amazon.com/connect/latest/adminguide/what-is-amazon-connect.html)
+## I.1. Official - [Amazon Connect (Administrator Guide)](https://docs.aws.amazon.com/connect/latest/adminguide/what-is-amazon-connect.html)
 
 # II. Debug
 
