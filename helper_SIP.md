@@ -448,9 +448,19 @@ clearglobalvars=no
 exten => _20XX,1,Dial(SIP/${EXTEN},60,tT)
 ```
 
-#### C. pjsip - SIP Server3
+#### C. pjsip - SIP Server3 (bridge mode)
 
 > pjsip 對於 transport 限制很多，如果設定為 udp，你的 client 端也請指定 udp。
+>
+> 1001 dial 30XX@192.168.50.52
+>
+> 1002 dial 30XX@192.168.50.52
+>
+> 1003 can't dial 30XX@192.168.50.52
+>
+> 20xx can't dial 30XX@192.168.50.52
+>
+> 3001 dial 10XX@192.168.50.9, 20XX@192.168.50.9
 
 ```mermaid
 flowchart LR
@@ -492,7 +502,7 @@ sudo nano /etc/asterisk/pjsip.conf
 
 ```conf
 ;https://wiki.asterisk.org/wiki/display/AST/PJSIP+Configuration+Sections+and+Relationships
-[global]
+;[global]
 ; The order by which endpoint identifiers are given priority.
 ; Currently, "ip", "header", "username", "auth_username" and "anonymous"
 ; (default: ip,username,anonymous)
@@ -618,9 +628,9 @@ match=192.168.50.206, 192.168.50.55
 ;match_header=To: <sip:3002@192.168.50.52>
 ;match_header=User-Agent: LinphoneiOS/5.0.2 (iPhone) LinphoneSDK/5.2.32
 
-[SIP1]
-type=aor
-contact=sip:192.168.50.9:5060
+;[SIP1]
+;type=aor
+;contact=sip:192.168.50.9:5060
 
 ```
 
@@ -638,13 +648,58 @@ writeprotect=no
 clearglobalvars=no
 
 [default]
-exten => _X0XX,1,Dial(PJSIP/${EXTEN},60,tT)
-exten => _X0XX,n,Answer()
-exten => _X0XX,n,SayDigits(${EXTEN})
-exten => _X0XX,n,Playback(invalid)
-exten => _X0XX,n,Hangup()
+exten => _30XX,1,Dial(PJSIP/${EXTEN},12,tT)
+exten => _30XX,n,Answer()
+exten => _30XX,n,SayDigits(${EXTEN})
+exten => _30XX,n,Playback(invalid)
+;exten => _30XX,n,Playback(transfer,skip)		; "Please hold while..."
+;exten => _30XX,n,Playback(demo-thanks)	; "Thanks for trying the demo"
+;exten => _30XX,n,Playback(invalid)		; "That's not valid, try again"
+;exten => _30XX,n,Playback(demo-abouttotry)	; Let them know what's going on
+;exten => _30XX,n,Playback(demo-nogo)	; Couldn't connect to the demo site
+exten => _30XX,n,Hangup()
 
 ```
+
+#### D. match=SIPServer's IP
+
+> 10XX 30XX@192.168.50.9 -> 30XX@192.168.50.52
+>
+> 20xx can't dial 30XX@192.168.50.52
+>
+> 3001 dial 10XX@192.168.50.9, 20XX@192.168.50.9
+
+##### D.1. Dial ${EXTEN}@192.168.50.52
+
+| Filename        | sip (192.168.50.9)                                           | pjsip (192.168.50.52)                                        |
+| --------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| extensions.conf | [default]<br/>exten => _10XX,1,Dial(SIP/${EXTEN},60,tT)<br/>exten => _30XX,1,Dial(SIP/${EXTEN}@192.168.50.52) | C.1.                                                         |
+| sip.conf        | A.1.                                                         | No chanage                                                   |
+| pjsip.conf      | No chanage                                                   | [SIP1]<br/>type=endpoint<br/>aors=SIP1<br/>transport=transport-tcp<br/>context=default<br/>disallow=all<br/>allow=ulaw<br/><br/>[SIP1]<br/>; Maps a host directly to an endpoint<br/>type=identify<br/>endpoint=SIP1<br/>match=192.168.50.9<br/>;match=192.168.50.206, 192.168.50.55 |
+
+##### D.2. Dial ${EXTEN}@${DEST_IP} with Set(DEST_IP=192.168.50.52)
+
+| Filename        | sip (192.168.50.9)                                           | pjsip (192.168.50.52) |
+| --------------- | ------------------------------------------------------------ | --------------------- |
+| extensions.conf | [default]<br/>exten => _10XX,1,Dial(SIP/${EXTEN},60,tT)<br/>;exten => _30XX,1,Dial(SIP/${EXTEN}@192.168.50.52)<br/>exten => _30XX,1,Set(DEST_IP=192.168.50.52)<br/>same => n,Dial(SIP/${EXTEN}@${DEST_IP}) | C.1.                  |
+| sip.conf        | A.1.                                                         | No chanage            |
+| pjsip.conf      | No chanage                                                   | D.1.                  |
+
+##### D.3. Dial ${EXTEN}@${DEST_IP} with globals variable
+
+| Filename        | sip (192.168.50.9)                                           | pjsip (192.168.50.52) |
+| --------------- | ------------------------------------------------------------ | --------------------- |
+| extensions.conf | [globals]<br/>DEST_IP=192.168.50.52<br/><br/>[default]<br/>exten => _10XX,1,Dial(SIP/${EXTEN},60,tT)<br/>;exten => _30XX,1,Dial(SIP/${EXTEN}@192.168.50.52)<br/>;exten => _30XX,1,Set(DEST_IP=192.168.50.52)<br/>;same => n,Dial(SIP/${EXTEN}@${DEST_IP})<br/>exten => _30XX,1,Dial(SIP/${EXTEN}@${DEST_IP}) | C.1.                  |
+| sip.conf        | A.1.                                                         | No chanage            |
+| pjsip.conf      | No chanage                                                   | D.1.                  |
+
+##### D.4. Dial ${EXTEN}@${DEST_IP}, only 1009
+
+| Filename        | sip (192.168.50.9)                                           | pjsip (192.168.50.52) |
+| --------------- | ------------------------------------------------------------ | --------------------- |
+| extensions.conf | ;[globals]<br/>;DEST_IP=192.168.50.52<br/><br/>[default]<br/>exten => _10XX,1,Dial(SIP/${EXTEN},60,tT)<br/>;exten => _30XX,1,Dial(SIP/${EXTEN}@192.168.50.52)<br/>;exten => _30XX,1,Set(DEST_IP=192.168.50.52)<br/>;same => n,Dial(SIP/${EXTEN}@${DEST_IP})<br/>exten => _30XX,1,Dial(SIP/${EXTEN}@${DEST_IP}) | C.1.                  |
+| sip.conf        | [1009]<br/>type=friend<br/>host=dynamic<br/>secret=1234567890<br/>setvar=DEST_IP=192.168.50.52 | No chanage            |
+| pjsip.conf      | No chanage                                                   | D.1.                  |
 
 ### 2.2.3. Service 
 
@@ -686,6 +741,8 @@ Connected to Asterisk 16.2.1~dfsg-2ubuntu1 currently running on build20-vbx (pid
 | IAX2 (1.6.0 or higher)          | `iax2 set debug on`   |
 | IAX2 (1.4)                      | `iax2 set debug`      |
 | CDR engine                      | `cdr set debug on`    |
+
+#### B. Commands
 
 ```bash
 pjsip set logger on
