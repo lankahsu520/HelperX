@@ -1,4 +1,4 @@
-# Session Initiation Protocol
+# SIP (Session Initiation Protocol)
 [![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
 [![GitHub license][license-image]][license-url]
 [![GitHub stars][stars-image]][stars-url]
@@ -164,40 +164,88 @@ sudo apt install mariadb-server
 sudo apt --yes install asterisk asterisk-dahdi
 
 ```
-### 2.2.2. Configuration Files - [SIP TLS Transport](https://wiki.asterisk.org/wiki/display/AST/SIP+TLS+Transport)
+### 2.2.2. Setup 
+
+- [SIP TLS Transport](https://wiki.asterisk.org/wiki/display/AST/SIP+TLS+Transport)
+
 ```
 ls /etc/asterisk
 cd /etc/asterisk
 ```
-- sip.conf
+```bash
+# Backup
+sudo cp sip.conf sip.conf-old
+sudo cp pjsip.conf pjsip.conf-old
+sudo cp extensions.conf extensions.conf-old
+
+# Restore
+sudo cp sip.conf-old sip.conf
+sudo cp pjsip.conf-old  pjsip.conf
+sudo cp extensions.conf-old extensions.conf 
 ```
+
+#### A. sip - SIP Server1
+
+```mermaid
+flowchart LR
+	SIP1[SIP Server1]
+	SIP2[SIP Server2]
+	SIP3[PJSIP Server3]
+
+	1001[1001]
+	1002[1002]
+	1003[1003]
+  1001 <--> |SIP|SIP1
+	1002 <--> |SIP|SIP1
+	1003 <--> |SIP|SIP1
+```
+
+##### A.1. sip.conf
+
+```bash
 echo | sudo tee /etc/asterisk/sip.conf
 sudo nano /etc/asterisk/sip.conf
 ```
-```
+```conf
 [general]
 context=default
-allowoverlap=no
+; Disable overlap dialing support. (Default is yes)
+;allowoverlap=no
+
+; IP address to bind UDP listen socket to (0.0.0.0 binds to all)
 udpbindaddr=0.0.0.0
+
+; Enable server for incoming TCP connections (default is no)
 tcpenable=yes
+; IP address for TCP server to bind to (0.0.0.0 binds to all interfaces)
 tcpbindaddr=0.0.0.0
-transport=tcp
+; Set the default transports.  The order determines the primary default transport.
+transport=udp,tcp
+
+; Enable DNS SRV lookups on outbound calls
 srvlookup=yes
 
-#localnet=192.168.50.0/255.255.255.0
-#externaddr=8.8.8.8
-#nat=yes
+;localnet=192.168.50.0/255.255.255.0
+;externaddr=8.8.8.8
+;nat=yes
 
+; Allow codecs in order of preference
 allow=all
+; disallow h263 codecs
 disallow=h263
 
-y=always
+; Turn on support for SIP video.
+videosupport=always
 
+; Asterisk by default tries to redirect the RTP media stream to go directly from the caller to the callee.
 directmedia=yes
-directmedia=outgoing
-directrtpsetup=yes
+; When sending directmedia reinvites, do not send an immediate reinvite on an incoming call leg.
+;directmedia=outgoing
+; Enable the new experimental direct RTP setup.
+;directrtpsetup=yes
 
 [1001]
+; Asterisk will create the entity as both a friend and a peer.
 type=friend
 host=dynamic
 secret=1234567890
@@ -243,12 +291,13 @@ host=dynamic
 secret=1234567890
 
 ```
-- extensions.conf
-```
+##### A.2. extensions.conf
+
+```bash
 echo | sudo tee /etc/asterisk/extensions.conf
 sudo nano /etc/asterisk/extensions.conf
 ```
-```
+```conf
 [general]
 static=yes
 writeprotect=no
@@ -257,20 +306,348 @@ autofallthrough=yes
 clearglobalvars=no
 
 [default]
-exten => 1001,1,Dial(SIP/1001,60)
-exten => 1002,1,Dial(SIP/1002,60)
-exten => 1003,1,Dial(SIP/1003,60)
-exten => 1004,1,Dial(SIP/1004,60)
-exten => 1005,1,Dial(SIP/1005,60)
-exten => 1006,1,Dial(SIP/1006,60)
-exten => 1007,1,Dial(SIP/1007,60)
-exten => 1008,1,Dial(SIP/1008,60)
-exten => 1009,1,Dial(SIP/1009,60)
-# timeout 60
-exten => 1010,1,Dial(SIP/1010,60)
+exten => _10XX,1,Dial(SIP/${EXTEN},60,tT)
+;exten => _X0XX,1,Dial(SIP/${EXTEN},60,tT)
+
+```
+
+#### B. sip - SIP Server2
+
+```mermaid
+flowchart LR
+	SIP1[SIP Server1]
+	SIP2[SIP Server2]
+	SIP3[PJSIP Server3]
+
+	SIP1 <-..-> |SIP|SIP2
+	
+	1001[1001]
+	1002[1002]
+	1003[1003]
+  1001 <--> |SIP|SIP1
+	1002 <--> |SIP|SIP1
+	1003 <--> |SIP|SIP1
+
+	2001[2001]
+	2002[2002]
+	2003[2003]
+  2001 <--> |SIP|SIP2
+	2002 <--> |SIP|SIP2
+	2003 <--> |SIP|SIP2
+```
+
+##### A.1. sip.conf
+
+```bash
+echo | sudo tee /etc/asterisk/sip.conf
+sudo nano /etc/asterisk/sip.conf
+```
+
+```conf
+[general]
+context=default
+; Disable overlap dialing support. (Default is yes)
+;allowoverlap=no
+
+; IP address to bind UDP listen socket to (0.0.0.0 binds to all)
+udpbindaddr=0.0.0.0
+
+; Enable server for incoming TCP connections (default is no)
+tcpenable=yes
+; IP address for TCP server to bind to (0.0.0.0 binds to all interfaces)
+tcpbindaddr=0.0.0.0
+; Set the default transports.  The order determines the primary default transport.
+transport=udp,tcp
+
+; Enable DNS SRV lookups on outbound calls
+srvlookup=yes
+
+;localnet=192.168.50.0/255.255.255.0
+;externaddr=8.8.8.8
+;nat=yes
+
+; Allow codecs in order of preference
+allow=all
+; disallow h263 codecs
+disallow=h263
+
+; Turn on support for SIP video.
+videosupport=always
+
+; Asterisk by default tries to redirect the RTP media stream to go directly from the caller to the callee.
+directmedia=yes
+; When sending directmedia reinvites, do not send an immediate reinvite on an incoming call leg.
+;directmedia=outgoing
+; Enable the new experimental direct RTP setup.
+;directrtpsetup=yes
+
+[2001]
+; Asterisk will create the entity as both a friend and a peer.
+type=friend
+host=dynamic
+secret=1234567890
+
+[2002]
+type=friend
+host=dynamic
+secret=1234567890
+
+[2003]
+type=friend
+host=dynamic
+secret=1234567890
+
+[2004]
+type=friend
+host=dynamic
+secret=1234567890
+
+[2005]
+type=friend
+host=dynamic
+secret=1234567890
+
+[2006]
+type=friend
+host=dynamic
+secret=1234567890
+
+[2007]
+type=friend
+host=dynamic
+secret=1234567890
+
+[2008]
+type=friend
+host=dynamic
+secret=1234567890
+
+[2009]
+type=friend
+host=dynamic
+secret=1234567890
+
+```
+
+##### A.2. extensions.conf
+
+```bash
+echo | sudo tee /etc/asterisk/extensions.conf
+sudo nano /etc/asterisk/extensions.conf
+```
+
+```conf
+[general]
+static=yes
+writeprotect=no
+priorityjumping=no
+autofallthrough=yes
+clearglobalvars=no
+
+[default]
+exten => _20XX,1,Dial(SIP/${EXTEN},60,tT)
+```
+
+#### C. pjsip - SIP Server3
+
+> pjsip 對於 transport 限制很多，如果設定為 udp，你的 client 端也請指定 udp。
+
+```mermaid
+flowchart LR
+	SIP1[SIP Server1<br>192.168.50.9]
+	SIP2[SIP Server2]
+	SIP3[PJSIP Server3<br>192.168.50.52]
+
+	SIP1 <-..-> |SIP|SIP2
+	SIP1 <-..-> |PJSIP|SIP3
+	
+	1001[1001<br>192.168.50.206]
+	1002[1002<br>192.168.50.55]
+	1003[1003]
+  1001 <--> |SIP|SIP1
+	1002 <--> |SIP|SIP1
+	1003 <--> |SIP|SIP1
+
+	2001[2001]
+	2002[2002]
+	2003[2003]
+  2001 <--> |SIP|SIP2
+	2002 <--> |SIP|SIP2
+	2003 <--> |SIP|SIP2
+
+	3001[3001]
+	3002[3002]
+	3009[3009]
+  3001 <--> |PJSIP|SIP3
+	3002 <--> |PJSIP|SIP3
+	3009 <--> |PJSIP|SIP3
+```
+
+##### C.1. pjsip.conf
+
+```bash
+echo | sudo tee /etc/asterisk/pjsip.conf
+sudo nano /etc/asterisk/pjsip.conf
+```
+
+```conf
+;https://wiki.asterisk.org/wiki/display/AST/PJSIP+Configuration+Sections+and+Relationships
+[global]
+; The order by which endpoint identifiers are given priority.
+; Currently, "ip", "header", "username", "auth_username" and "anonymous"
+; (default: ip,username,anonymous)
+;endpoint_identifier_order=anonymous,username,ip
+
+[transport-udp]
+; Configures res_pjsip transport layer interaction.
+type=transport
+; Protocol to use for SIP traffic (default: "udp")
+protocol=udp
+; IP Address and optional port to bind to for this transport (default: "")
+;儘量使用指定的 IP
+;bind=0.0.0.0
+bind=192.168.50.52
+
+[transport-tcp]
+type=transport
+protocol=tcp
+;bind=0.0.0.0
+bind=192.168.50.52
+
+[3001]
+; Configures core SIP functionality related to SIP endpoints.
+type=endpoint
+; Authentication object to be used for outbound registrations (default: "")
+outbound_auth=3001_auth
+; AoR s to be used with the endpoint (default: "")
+aors=3001
+; Explicit transport configuration to use (default: "")
+transport=transport-udp
+; Dialplan context for inbound sessions (default: "default")
+context=default
+; Media Codec s to disallow (default: "")
+disallow=all
+; Media Codec s to allow (default: "")
+allow=ulaw
+; DTMF mode (default: "rfc4733")
+dtmf_mode=inband
+; Force use of return port (default: "yes")
+;force_rport=yes
+; Enable the ICE mechanism to help traverse NAT (default: "no")
+;ice_support=yes
+; Determines whether media may flow directly between endpoints (default: "yes")
+;direct_media=no
+; Enforce that RTP must be symmetric (default: "no")
+;rtp_symmetric=yes
+; Allow Contact header to be rewritten with the source P address port (default: "no")
+;rewrite_contact=yes
+
+[3001_auth]
+; Stores inbound or outbound authentication credentials for use by trunks, endpoints, registrations.
+type=auth
+; Authentication type (default: "userpass")
+auth_type=userpass
+; Username to use for account (default: "")
+username=3001
+; PlainText password used for authentication (default: "")
+password=1234567890
+
+[3001]
+; Stores contact information for use by endpoints.
+type=aor
+; Maximum number of contacts that can bind to an AoR (default: "0")
+max_contacts=1
+; Allow a registration to succeed by displacing any existing contacts that now exceed the max_contacts count.
+remove_existing=yes
+
+[3002]
+type=endpoint
+outbound_auth=3002_auth
+aors=3002
+transport=transport-tcp
+context=default
+disallow=all
+allow=ulaw
+
+[3002_auth]
+type=auth
+auth_type=userpass
+username=3002
+password=1234567890
+
+[3002]
+type=aor
+max_contacts=1
+remove_existing=yes
+
+[3009]
+type=endpoint
+outbound_auth=3009_auth
+aors=3009
+transport=transport-tcp
+context=default
+disallow=all
+allow=ulaw
+
+[3009_auth]
+type=auth
+auth_type=userpass
+username=3009
+password=1234567890
+
+[3009]
+type=aor
+max_contacts=1
+remove_existing=yes
+
+[SIP1]
+type=endpoint
+aors=SIP1
+transport=transport-tcp
+context=default
+disallow=all
+allow=ulaw
+
+[SIP1]
+; Maps a host directly to an endpoint
+type=identify
+endpoint=SIP1
+match=192.168.50.206, 192.168.50.55
+;match=192.168.50.0/24
+; SIP header with specified value to match against (default: "")
+;match_header=To: <sip:3002@192.168.50.52>
+;match_header=User-Agent: LinphoneiOS/5.0.2 (iPhone) LinphoneSDK/5.2.32
+
+[SIP1]
+type=aor
+contact=sip:192.168.50.9:5060
+
+```
+
+##### C.2. extensions.conf
+
+```bash
+echo | sudo tee /etc/asterisk/extensions.conf
+sudo nano /etc/asterisk/extensions.conf
+```
+
+```conf
+[general]
+static=yes
+writeprotect=no
+clearglobalvars=no
+
+[default]
+exten => _X0XX,1,Dial(PJSIP/${EXTEN},60,tT)
+exten => _X0XX,n,Answer()
+exten => _X0XX,n,SayDigits(${EXTEN})
+exten => _X0XX,n,Playback(invalid)
+exten => _X0XX,n,Hangup()
+
 ```
 
 ### 2.2.3. Service 
+
 ```bash
 $ sudo systemctl restart asterisk
 
@@ -301,16 +678,28 @@ Connected to Asterisk 16.2.1~dfsg-2ubuntu1 currently running on build20-vbx (pid
 
 #### A. [Debug](https://wiki.asterisk.org/wiki/display/AST/Collecting+Debug+Information)
 
-```bash
-build20-vbx*CLI> pjsip set logger on
-PJSIP Logging enabled
-build20-vbx*CLI> pjsip set logger on
-PJSIP Logging enabled
-build20-vbx*CLI>
+| Module (version)                | CLI Command           |
+| :------------------------------ | :-------------------- |
+| New PJSIP driver (12 or higher) | `pjsip set logger on` |
+| SIP (1.6.0 or higher)           | `sip set debug on`    |
+| SIP (1.4)                       | `sip set debug`       |
+| IAX2 (1.6.0 or higher)          | `iax2 set debug on`   |
+| IAX2 (1.4)                      | `iax2 set debug`      |
+| CDR engine                      | `cdr set debug on`    |
 
+```bash
+pjsip set logger on
+
+sip set debug on
+
+pjsip show endpoints
+
+pjsip show contacts
+
+database deltree registrar/contact
 ```
 
-## ~~2.1. [FreeSWITCH-1.10.6-Release-x64.msi](https://files.freeswitch.org/windows/installer/x64/FreeSWITCH-1.10.6-Release-x64.msi)~~
+## ~~2.3. [FreeSWITCH-1.10.6-Release-x64.msi](https://files.freeswitch.org/windows/installer/x64/FreeSWITCH-1.10.6-Release-x64.msi)~~
 
 > 除了版權問題，設定起來也不方便。
 
