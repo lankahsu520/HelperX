@@ -532,7 +532,7 @@ outbound_auth=3001_auth
 ; AoR s to be used with the endpoint (default: "")
 aors=3001
 ; Explicit transport configuration to use (default: "")
-transport=transport-udp
+transport=transport-tcp
 ; Dialplan context for inbound sessions (default: "default")
 context=default
 ; Media Codec s to disallow (default: "")
