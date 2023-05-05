@@ -663,7 +663,7 @@ exten => _30XX,n,Hangup()
 
 #### D. match=SIPServer's IP
 
-> 10XX 30XX@192.168.50.9 -> 30XX@192.168.50.52
+> 10XX dial 30XX@192.168.50.9 -> 30XX@192.168.50.52
 >
 > 20xx can't dial 30XX@192.168.50.52
 >
