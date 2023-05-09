@@ -1,4 +1,4 @@
-# [Amazon Chime](https://aws.amazon.com/tw/chime/)
+# Be An Embedded Engineer
 
 [![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
 [![GitHub license][license-image]][license-url]
@@ -17,8 +17,6 @@
 [issues-url]: https://github.com/lankahsu520/HelperX/issues
 [watchers-image]: https://img.shields.io/github/watchers/lankahsu520/HelperX.svg
 [watchers-url]: https://github.com/lankahsu520/HelperX/watchers
-
-# Be An Embedded Engineer
 
 # 0. 序
 
