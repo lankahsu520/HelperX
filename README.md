@@ -93,7 +93,7 @@
 
 #### - [helper_SIPandAsterisk.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SIPandAsterisk.md) - SIP and Asterisk helper.
 
-> use Asterisk.
+> 如果你選擇 FreePBX 或其它 UI 進行安裝設定前，不妨看看這裏的指引。
 
 #### - [helper_SVNvsGit.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SVNvsGit.md) - SVN vs. Git helper.
 
@@ -139,7 +139,15 @@
 
 ## 3.1. Topic
 
-#### - helper_EmbeddedEngineer.md
+#### - [helper_EmbeddedEngineer.md](https://github.com/lankahsu520/HelperX/blob/master/helper_EmbeddedEngineer.md)
+
+> 當初花了數個周末在家苦思，這一生學到了什麼，走過了什麼路，彙整入八個星期內，不只是想引領一位軟體工程師進嵌入式系統內；另一方面也想從中識別該員的能力。
+>
+> 隔天帶著興奮之情與同事們討論可行性，馬上被打槍「你這個太難了」、「你沒有限制編輯軟體，新人做錯了怎麼辦」，之後還有一些奇怪的想法，我也不想記了。頓時認清不用再跟他們說是非，做回我自己吧！
+>
+> 「你這個太難了」，這個還可以討論，是否更改內容或時間增長。
+>
+> 而「你沒有限制編輯軟體…」這個我也馬上“黃人”問號（現在不能說黑人問號，我講我自己總行吧）？身為一位嵌入式工程師，有的人用 vi，有的人用 Notepad++ 等。而有可能發生問題的部分常在開發 MCU，而我們主力是 Linux 環境也。 
 
 #### - [helper_FreeRTOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_FreeRTOS.md) - FreeRTOS helper.
 
