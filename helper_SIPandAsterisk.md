@@ -17,7 +17,13 @@
 [watchers-image]: https://img.shields.io/github/watchers/lankahsu520/HelperX.svg
 [watchers-url]: https://github.com/lankahsu520/HelperX/watchers
 
-> 本篇主要是 SIP 的入門，教大家在自己的系統中安裝相關的服務；並沒有要細究協定本身，因此使用了很多網路上的文章，如有不適當的引用，煩請告知。
+> 本篇主要是 SIP 的入門，並沒有要細究協定本身，因此使用了很多網路上的文章，如有不適當的引用，煩請告知。
+>
+> 不過你想要知道如何架設 Server，這篇文章能大大的幫助你！
+>
+> 探訪很多網路教學，得到的都是很單純的架設，完全沒有考慮到現實可能的狀況；而且大多是複製貼上，可行性也是大大打折（很多作者有可能都沒有真的架設過）。
+>
+> 如果你想過是否要採用 [FreePBX ](https://www.freepbx.org) 等UI 來進行安裝設定，這邊良心的建議，「放手吧！」
 
 # 1. [SIP Introduction](https://github.com/Ci-Jie/OpenSIPS)
 
@@ -184,7 +190,7 @@ sudo cp pjsip.conf-old  pjsip.conf
 sudo cp extensions.conf-old extensions.conf 
 ```
 
-#### A. sip - SIP Server1
+#### A. sip*1 - SIP Server1
 
 ```mermaid
 flowchart LR
@@ -311,7 +317,7 @@ exten => _10XX,1,Dial(SIP/${EXTEN},60,tT)
 
 ```
 
-#### B. sip - SIP Server2
+#### B. sip*2 - SIP Server2
 
 ```mermaid
 flowchart LR
@@ -448,7 +454,7 @@ clearglobalvars=no
 exten => _20XX,1,Dial(SIP/${EXTEN},60,tT)
 ```
 
-#### C. pjsip - SIP Server3 (bridge mode)
+#### C. sip\*2  & pjsip\*1 - SIP Server3 (bridge mode), match=Device's IP
 
 > pjsip 對於 transport 限制很多，如果設定為 udp，你的 client 端也請指定 udp。
 >
@@ -661,7 +667,7 @@ exten => _30XX,n,Hangup()
 
 ```
 
-#### D. match=SIPServer's IP
+#### D. sip\*2  & pjsip\*1 - SIP Server3 (bridge mode), match=SIPServer's IP
 
 > 10XX dial 30XX@192.168.50.9 -> 30XX@192.168.50.52
 >
@@ -700,6 +706,361 @@ exten => _30XX,n,Hangup()
 | extensions.conf | ;[globals]<br/>;DEST_IP=192.168.50.52<br/><br/>[default]<br/>exten => _10XX,1,Dial(SIP/${EXTEN},60,tT)<br/>;exten => _30XX,1,Dial(SIP/${EXTEN}@192.168.50.52)<br/>;exten => _30XX,1,Set(DEST_IP=192.168.50.52)<br/>;same => n,Dial(SIP/${EXTEN}@${DEST_IP})<br/>exten => _30XX,1,Dial(SIP/${EXTEN}@${DEST_IP}) | C.1.                  |
 | sip.conf        | [1009]<br/>type=friend<br/>host=dynamic<br/>secret=1234567890<br/>setvar=DEST_IP=192.168.50.52 | No chanage            |
 | pjsip.conf      | No chanage                                                   | D.1.                  |
+
+#### E. pjsip\*2 - SIP Server 1 and 3 (bridge mode)
+
+> 10XX dial 30XX@192.168.50.9 -> 30XX@192.168.50.52
+>
+> 3001 dial 10XX@192.168.50.52 -> 10XX@192.168.50.9
+
+```mermaid
+flowchart LR
+	SIP1[PJSIP Server1<br>192.168.50.9]
+	SIP3[PJSIP Server3<br>192.168.50.52]
+
+	SIP1 <-..-> |PJSIP|SIP3
+	
+	1001[1001<br>192.168.50.206]
+	1003[1003]
+  1001 <--> |PJSIP|SIP1
+	1002 <--> |PJSIP|SIP1
+	1003 <--> |PJSIP|SIP1
+
+	3001[3001]
+	3002[3002]
+	3009[3009]
+  3001 <--> |PJSIP|SIP3
+	3002 <--> |PJSIP|SIP3
+	3009 <--> |PJSIP|SIP3
+```
+
+##### E.1. pjsip.conf
+
+```bash
+echo | sudo tee /etc/asterisk/pjsip.conf
+sudo nano /etc/asterisk/pjsip.conf
+```
+
+###### E.1.1.  SIP1 (192.168.50.9)
+
+```conf
+;https://wiki.asterisk.org/wiki/display/AST/PJSIP+Configuration+Sections+and+Relationships
+[transport-udp]
+; Configures res_pjsip transport layer interaction.
+type=transport
+; Protocol to use for SIP traffic (default: "udp")
+protocol=udp
+; IP Address and optional port to bind to for this transport (default: "")
+;儘量使用指定的 IP
+;bind=0.0.0.0
+bind=192.168.50.9
+
+[transport-tcp]
+type=transport
+protocol=tcp
+;bind=0.0.0.0
+bind=192.168.50.9
+
+[1001]
+; Configures core SIP functionality related to SIP endpoints.
+type=endpoint
+; Authentication object to be used for outbound registrations (default: "")
+outbound_auth=1001_auth
+; AoR s to be used with the endpoint (default: "")
+aors=1001
+; Explicit transport configuration to use (default: "")
+transport=transport-udp
+; Dialplan context for inbound sessions (default: "default")
+context=default
+; Media Codec s to disallow (default: "")
+disallow=all
+; Media Codec s to allow (default: "")
+allow=ulaw
+; DTMF mode (default: "rfc4733")
+dtmf_mode=inband
+; Force use of return port (default: "yes")
+;force_rport=yes
+; Enable the ICE mechanism to help traverse NAT (default: "no")
+;ice_support=yes
+; Determines whether media may flow directly between endpoints (default: "yes")
+;direct_media=no
+; Enforce that RTP must be symmetric (default: "no")
+;rtp_symmetric=yes
+; Allow Contact header to be rewritten with the source P address port (default: "no")
+;rewrite_contact=yes
+
+[1001_auth]
+; Stores inbound or outbound authentication credentials for use by trunks, endpoints, registrations.
+type=auth
+; Authentication type (default: "userpass")
+auth_type=userpass
+; Username to use for account (default: "")
+username=3001
+; PlainText password used for authentication (default: "")
+password=1234567890
+
+[1001]
+; Stores contact information for use by endpoints.
+type=aor
+; Maximum number of contacts that can bind to an AoR (default: "0")
+max_contacts=1
+; Allow a registration to succeed by displacing any existing contacts that now exceed the max_contacts count.
+remove_existing=yes
+
+[1002]
+type=endpoint
+outbound_auth=1002_auth
+aors=1002
+transport=transport-tcp
+context=default
+disallow=all
+allow=ulaw
+
+[1002_auth]
+type=auth
+auth_type=userpass
+username=1002
+password=1234567890
+
+[1002]
+type=aor
+max_contacts=1
+remove_existing=yes
+
+[1009]
+type=endpoint
+outbound_auth=1009_auth
+aors=1009
+transport=transport-tcp
+context=default
+disallow=all
+allow=ulaw
+
+[1009_auth]
+type=auth
+auth_type=userpass
+username=1009
+password=1234567890
+
+[1009]
+type=aor
+max_contacts=1
+remove_existing=yes
+
+; SIP3 --> Myself (SIP1)
+[SIP3]
+type=endpoint
+aors=SIP3
+transport=transport-tcp
+context=default
+disallow=all
+allow=ulaw
+
+[SIP3]
+; Maps a host directly to an endpoint
+type=identify
+endpoint=SIP3
+match=192.168.50.52
+;match=192.168.50.206, 192.168.50.55
+;match=192.168.50.0/24
+; SIP header with specified value to match against (default: "")
+;match_header=To: <sip:3002@192.168.50.52>
+;match_header=User-Agent: LinphoneiOS/5.0.2 (iPhone) LinphoneSDK/5.2.32
+
+[SIP3]
+type=aor
+contact=sip:192.168.50.52
+
+```
+
+###### E.1.2.  SIP3 (192.168.50.52)
+
+```conf
+;https://wiki.asterisk.org/wiki/display/AST/PJSIP+Configuration+Sections+and+Relationships
+[transport-udp]
+; Configures res_pjsip transport layer interaction.
+type=transport
+; Protocol to use for SIP traffic (default: "udp")
+protocol=udp
+; IP Address and optional port to bind to for this transport (default: "")
+;儘量使用指定的 IP
+;bind=0.0.0.0
+bind=192.168.50.52
+
+[transport-tcp]
+type=transport
+protocol=tcp
+;bind=0.0.0.0
+bind=192.168.50.52
+
+[3001]
+; Configures core SIP functionality related to SIP endpoints.
+type=endpoint
+; Authentication object to be used for outbound registrations (default: "")
+outbound_auth=3001_auth
+; AoR s to be used with the endpoint (default: "")
+aors=3001
+; Explicit transport configuration to use (default: "")
+transport=transport-udp
+; Dialplan context for inbound sessions (default: "default")
+context=default
+; Media Codec s to disallow (default: "")
+disallow=all
+; Media Codec s to allow (default: "")
+allow=ulaw
+; DTMF mode (default: "rfc4733")
+dtmf_mode=inband
+; Force use of return port (default: "yes")
+;force_rport=yes
+; Enable the ICE mechanism to help traverse NAT (default: "no")
+;ice_support=yes
+; Determines whether media may flow directly between endpoints (default: "yes")
+;direct_media=no
+; Enforce that RTP must be symmetric (default: "no")
+;rtp_symmetric=yes
+; Allow Contact header to be rewritten with the source P address port (default: "no")
+;rewrite_contact=yes
+
+[3001_auth]
+; Stores inbound or outbound authentication credentials for use by trunks, endpoints, registrations.
+type=auth
+; Authentication type (default: "userpass")
+auth_type=userpass
+; Username to use for account (default: "")
+username=3001
+; PlainText password used for authentication (default: "")
+password=1234567890
+
+[3001]
+; Stores contact information for use by endpoints.
+type=aor
+; Maximum number of contacts that can bind to an AoR (default: "0")
+max_contacts=1
+; Allow a registration to succeed by displacing any existing contacts that now exceed the max_contacts count.
+remove_existing=yes
+
+[3002]
+type=endpoint
+outbound_auth=3002_auth
+aors=3002
+transport=transport-tcp
+context=default
+disallow=all
+allow=ulaw
+
+[3002_auth]
+type=auth
+auth_type=userpass
+username=3002
+password=1234567890
+
+[3002]
+type=aor
+max_contacts=1
+remove_existing=yes
+
+[3009]
+type=endpoint
+outbound_auth=3009_auth
+aors=3009
+transport=transport-tcp
+context=default
+disallow=all
+allow=ulaw
+
+[3009_auth]
+type=auth
+auth_type=userpass
+username=3009
+password=1234567890
+
+[3009]
+type=aor
+max_contacts=1
+remove_existing=yes
+
+; SIP1 --> Myself (SIP3)
+[SIP1]
+type=endpoint
+aors=SIP1
+transport=transport-tcp
+context=default
+disallow=all
+allow=ulaw
+
+[SIP1]
+; Maps a host directly to an endpoint
+type=identify
+endpoint=SIP1
+match=192.168.50.9
+;match=192.168.50.206, 192.168.50.55
+;match=192.168.50.0/24
+; SIP header with specified value to match against (default: "")
+;match_header=To: <sip:1001@192.168.50.9>
+;match_header=User-Agent: LinphoneiOS/5.0.2 (iPhone) LinphoneSDK/5.2.32
+
+[SIP1]
+type=aor
+contact=sip:192.168.50.9
+
+```
+
+##### E.2. extensions.conf
+
+```bash
+echo | sudo tee /etc/asterisk/extensions.conf
+sudo nano /etc/asterisk/extensions.conf
+```
+
+###### E.2.1.  SIP1 (192.168.50.9)
+
+```conf
+[general]
+static=yes
+writeprotect=no
+clearglobalvars=no
+
+[default]
+exten => _10XX,1,Dial(PJSIP/${EXTEN},12,tT)
+exten => _10XX,n,Answer()
+exten => _10XX,n,SayDigits(${EXTEN})
+exten => _10XX,n,Playback(invalid)
+;exten => _10XX,n,Playback(transfer,skip)		; "Please hold while..."
+;exten => _10XX,n,Playback(demo-thanks)	; "Thanks for trying the demo"
+;exten => _10XX,n,Playback(invalid)		; "That's not valid, try again"
+;exten => _10XX,n,Playback(demo-abouttotry)	; Let them know what's going on
+;exten => _10XX,n,Playback(demo-nogo)	; Couldn't connect to the demo site
+exten => _10XX,n,Hangup()
+
+exten => _30XX,1,Dial(PJSIP/${EXTEN}@SIP3)
+same =>> n,Hangup()
+
+```
+
+###### E.2.2.  SIP3 (192.168.50.52)
+
+```conf
+[general]
+static=yes
+writeprotect=no
+clearglobalvars=no
+
+[default]
+exten => _30XX,1,Dial(PJSIP/${EXTEN},12,tT)
+exten => _30XX,n,Answer()
+exten => _30XX,n,SayDigits(${EXTEN})
+exten => _30XX,n,Playback(invalid)
+;exten => _30XX,n,Playback(transfer,skip)		; "Please hold while..."
+;exten => _30XX,n,Playback(demo-thanks)	; "Thanks for trying the demo"
+;exten => _30XX,n,Playback(invalid)		; "That's not valid, try again"
+;exten => _30XX,n,Playback(demo-abouttotry)	; Let them know what's going on
+;exten => _30XX,n,Playback(demo-nogo)	; Couldn't connect to the demo site
+exten => _30XX,n,Hangup()
+
+exten => _10XX,1,Dial(PJSIP/${EXTEN}@SIP1)
+same =>> n,Hangup()
+
+```
 
 ### 2.2.3. Service 
 
@@ -826,13 +1187,13 @@ https://www.linphone.org
 ### 3.1.1. USE A SIPACCOUNT
 ```
 Username: 1001
-SIP Domain: 192.168.50.10
+SIP Domain: 192.168.50.9
 Password: 1234567890
 Transport: TCP
 ```
 ### 3.1.2. Make a call
 ```
-sip:1002@192.168.50.10
+sip:1009@192.168.50.9
 ```
 ## 3.2. MicroSIP
 ```
