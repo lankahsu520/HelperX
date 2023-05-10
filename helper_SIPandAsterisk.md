@@ -190,7 +190,7 @@ sudo cp pjsip.conf-old  pjsip.conf
 sudo cp extensions.conf-old extensions.conf 
 ```
 
-#### A. sip*1 - SIP Server1
+#### A. sip*1 - Only SIP Server1
 
 ```mermaid
 flowchart LR
@@ -317,7 +317,7 @@ exten => _10XX,1,Dial(SIP/${EXTEN},60,tT)
 
 ```
 
-#### B. sip*2 - SIP Server2
+#### B. sip*2 - Add SIP Server2
 
 ```mermaid
 flowchart LR
@@ -454,7 +454,7 @@ clearglobalvars=no
 exten => _20XX,1,Dial(SIP/${EXTEN},60,tT)
 ```
 
-#### C. sip\*2  & pjsip\*1 - SIP Server3 (bridge mode), match=Device's IP
+#### C. sip\*2  & pjsip\*1 - Add SIP Server3 (directly access), match=Device's IP
 
 > pjsip 對於 transport 限制很多，如果設定為 udp，你的 client 端也請指定 udp。
 >
@@ -497,6 +497,9 @@ flowchart LR
   3001 <--> |PJSIP|SIP3
 	3002 <--> |PJSIP|SIP3
 	3009 <--> |PJSIP|SIP3
+	
+	1001 <--> |PJSIP|SIP3
+	1002 <--> |PJSIP|SIP3
 ```
 
 ##### C.1. pjsip.conf
@@ -673,7 +676,38 @@ exten => _30XX,n,Hangup()
 >
 > 20xx can't dial 30XX@192.168.50.52
 >
-> 3001 dial 10XX@192.168.50.9, 20XX@192.168.50.9
+> 30XX dial 10XX@192.168.50.52 -> 10XX@192.168.50.9
+
+```mermaid
+flowchart LR
+	SIP1[SIP Server1<br>192.168.50.9]
+	SIP2[SIP Server2]
+	SIP3[PJSIP Server3<br>192.168.50.52]
+
+	SIP1 <-..-> |SIP|SIP2
+	SIP1 <-..-> |PJSIP|SIP3
+	
+	1001[1001]
+	1002[1002]
+	1003[1003]
+  1001 <--> |SIP|SIP1
+	1002 <--> |SIP|SIP1
+	1003 <--> |SIP|SIP1
+
+	2001[2001]
+	2002[2002]
+	2003[2003]
+  2001 <--> |SIP|SIP2
+	2002 <--> |SIP|SIP2
+	2003 <--> |SIP|SIP2
+
+	3001[3001]
+	3002[3002]
+	3009[3009]
+  3001 <--> |PJSIP|SIP3
+	3002 <--> |PJSIP|SIP3
+	3009 <--> |PJSIP|SIP3
+```
 
 ##### D.1. Dial ${EXTEN}@192.168.50.52
 
@@ -707,11 +741,11 @@ exten => _30XX,n,Hangup()
 | sip.conf        | [1009]<br/>type=friend<br/>host=dynamic<br/>secret=1234567890<br/>setvar=DEST_IP=192.168.50.52 | No chanage            |
 | pjsip.conf      | No chanage                                                   | D.1.                  |
 
-#### E. pjsip\*2 - SIP Server 1 and 3 (bridge mode)
+#### E. pjsip\*2 - Only SIP Server 1 and 3 (bridge mode)
 
 > 10XX dial 30XX@192.168.50.9 -> 30XX@192.168.50.52
 >
-> 3001 dial 10XX@192.168.50.52 -> 10XX@192.168.50.9
+> 30XX dial 10XX@192.168.50.52 -> 10XX@192.168.50.9
 
 ```mermaid
 flowchart LR
@@ -720,8 +754,9 @@ flowchart LR
 
 	SIP1 <-..-> |PJSIP|SIP3
 	
-	1001[1001<br>192.168.50.206]
-	1003[1003]
+	1001[1001]
+	1002[1002]
+  1003[1003]
   1001 <--> |PJSIP|SIP1
 	1002 <--> |PJSIP|SIP1
 	1003 <--> |PJSIP|SIP1
