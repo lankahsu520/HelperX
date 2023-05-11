@@ -558,7 +558,7 @@ dtmf_mode=inband
 ;direct_media=no
 ; Enforce that RTP must be symmetric (default: "no")
 ;rtp_symmetric=yes
-; Allow Contact header to be rewritten with the source P address port (default: "no")
+; Allow Contact header to be rewritten with the source IP address port (default: "no")
 ;rewrite_contact=yes
 
 [3001_auth]
@@ -787,8 +787,11 @@ type=transport
 protocol=udp
 ; IP Address and optional port to bind to for this transport (default: "")
 ;儘量使用指定的 IP
-;bind=0.0.0.0
-bind=192.168.50.9
+bind=0.0.0.0
+;bind=192.168.50.9
+external_media_address=192.168.50.9
+external_signaling_address=192.168.50.9
+allow_reload=yes
 
 [transport-tcp]
 type=transport
@@ -821,7 +824,7 @@ dtmf_mode=inband
 ;direct_media=no
 ; Enforce that RTP must be symmetric (default: "no")
 ;rtp_symmetric=yes
-; Allow Contact header to be rewritten with the source P address port (default: "no")
+; Allow Contact header to be rewritten with the source IP address port (default: "no")
 ;rewrite_contact=yes
 
 [1001_auth]
@@ -830,7 +833,7 @@ type=auth
 ; Authentication type (default: "userpass")
 auth_type=userpass
 ; Username to use for account (default: "")
-username=3001
+username=1001
 ; PlainText password used for authentication (default: "")
 password=1234567890
 
@@ -846,7 +849,7 @@ remove_existing=yes
 type=endpoint
 outbound_auth=1002_auth
 aors=1002
-transport=transport-tcp
+transport=transport-udp
 context=default
 disallow=all
 allow=ulaw
@@ -866,7 +869,7 @@ remove_existing=yes
 type=endpoint
 outbound_auth=1009_auth
 aors=1009
-transport=transport-tcp
+transport=transport-udp
 context=default
 disallow=all
 allow=ulaw
@@ -886,7 +889,7 @@ remove_existing=yes
 [SIP3]
 type=endpoint
 aors=SIP3
-transport=transport-tcp
+transport=transport-udp
 context=default
 disallow=all
 allow=ulaw
@@ -919,8 +922,11 @@ type=transport
 protocol=udp
 ; IP Address and optional port to bind to for this transport (default: "")
 ;儘量使用指定的 IP
-;bind=0.0.0.0
-bind=192.168.50.52
+bind=0.0.0.0
+;bind=192.168.50.52
+external_media_address=192.168.50.52
+external_signaling_address=192.168.50.52
+allow_reload=yes
 
 [transport-tcp]
 type=transport
@@ -953,7 +959,7 @@ dtmf_mode=inband
 ;direct_media=no
 ; Enforce that RTP must be symmetric (default: "no")
 ;rtp_symmetric=yes
-; Allow Contact header to be rewritten with the source P address port (default: "no")
+; Allow Contact header to be rewritten with the source IP address port (default: "no")
 ;rewrite_contact=yes
 
 [3001_auth]
@@ -978,7 +984,7 @@ remove_existing=yes
 type=endpoint
 outbound_auth=3002_auth
 aors=3002
-transport=transport-tcp
+transport=transport-udp
 context=default
 disallow=all
 allow=ulaw
@@ -998,7 +1004,7 @@ remove_existing=yes
 type=endpoint
 outbound_auth=3009_auth
 aors=3009
-transport=transport-tcp
+transport=transport-udp
 context=default
 disallow=all
 allow=ulaw
@@ -1018,7 +1024,7 @@ remove_existing=yes
 [SIP1]
 type=endpoint
 aors=SIP1
-transport=transport-tcp
+transport=transport-udp
 context=default
 disallow=all
 allow=ulaw
@@ -1068,7 +1074,7 @@ exten => _10XX,n,Playback(invalid)
 exten => _10XX,n,Hangup()
 
 exten => _30XX,1,Dial(PJSIP/${EXTEN}@SIP3)
-same =>> n,Hangup()
+same => n,Hangup()
 
 ```
 
@@ -1093,7 +1099,7 @@ exten => _30XX,n,Playback(invalid)
 exten => _30XX,n,Hangup()
 
 exten => _10XX,1,Dial(PJSIP/${EXTEN}@SIP1)
-same =>> n,Hangup()
+same => n,Hangup()
 
 ```
 
@@ -1148,6 +1154,8 @@ sip set debug on
 pjsip show endpoints
 
 pjsip show contacts
+
+pjsip show channels
 
 database deltree registrar/contact
 ```
