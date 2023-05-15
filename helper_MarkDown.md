@@ -720,7 +720,7 @@ flowchart LR
 
 > 讓圖示的樣式有所改變
 
-##### F.1. Style
+##### Y.1. Style
 
 ```mermaid
 flowchart LR
@@ -736,7 +736,7 @@ flowchart LR
     style id2 fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
 ```
 
-##### F.2. Class
+##### Y.2. Class
 
 ```mermaid
 flowchart LR
@@ -754,7 +754,7 @@ flowchart LR
     classDef someclass fill:#f96
 ```
 
-##### F.3. [Css classes](https://mermaid.js.org/syntax/flowchart.html#css-classes)
+##### Y.3. [Css classes](https://mermaid.js.org/syntax/flowchart.html#css-classes)
 
 > 這部分，試不出有什麼效果
 
@@ -772,7 +772,7 @@ flowchart LR
     class A cssClass
 ```
 
-##### F.4. [Basic support for fontawesome](https://mermaid.js.org/syntax/flowchart.html#basic-support-for-fontawesome)
+##### Y.4. [Basic support for fontawesome](https://mermaid.js.org/syntax/flowchart.html#basic-support-for-fontawesome)
 
 ```mermaid
 flowchart TD
@@ -789,6 +789,68 @@ flowchart TD
     B-->D(fa:fa-spinner)
     B-->E(A fa:fa-camera-retro perhaps?)
 ```
+
+##### Y.5. Color
+```mermaid
+flowchart LR
+	White --> Silver --> Gray -->	Black
+  Red -->	Maroon --> Yellow --> Olive
+  Lime --> Green --> Aqua --> Teal
+  Blue --> Navy --> Fuchsia --> Purple
+	lightblue --> Orange --> Tomato --> SkyBlue
+
+	classDef default stroke:#333,stroke-width:4px
+	classDef White   fill:#FFFFFF
+	classDef Silver  fill:#C0C0C0
+	classDef Gray    fill:#808080
+	classDef Black   fill:#000000
+
+	classDef Red     fill:#FF0000
+	classDef Maroon  fill:#800000
+	classDef Yellow  fill:#FFFF00
+	classDef Olive   fill:#808000
+
+	classDef Lime    fill:#00FF00
+	classDef Green   fill:#008000
+	classDef Aqua    fill:#00FFFF
+	classDef Teal    fill:#008080
+
+	classDef Blue    fill:#0000FF
+	classDef Navy    fill:#000080
+	classDef Fuchsia fill:#FF00FF
+	classDef Purple  fill:#800080
+
+	classDef lightblue fill:#ADD8E6
+	classDef Orange  fill:#FFA500
+	classDef Tomato  fill:#FF6347
+	classDef SkyBlue fill:#87CEEB
+
+	class White White
+	class Silver Silver
+	class Gray Gray
+	class Black Black
+
+	class Red Red
+	class Maroon Maroon
+	class Yellow Yellow
+	class Olive Olive
+
+	class Lime Lime
+	class Green Green
+	class Aqua Aqua
+	class Teal Teal
+
+	class Blue Blue
+	class Navy Navy
+	class Fuchsia Fuchsia
+	class Purple Purple
+
+	class lightblue lightblue
+	class Orange Orange
+	class Tomato Tomato
+	class SkyBlue SkyBlue
+```
+
 
 #### Z. [Configuration](https://mermaid.js.org/syntax/flowchart.html#configuration)
 
@@ -824,6 +886,8 @@ flowchart TD
 ## I.8. [超文本標示語言的字元代碼（Character Codes in HTML）](https://chukaml.tripod.com/linguistics/charCode/)
 
 ## I.9. [HTML特殊字符編碼](https://www.ifreesite.com/html-entities.htm)
+
+## I.10. [Get HTML color codes, Hex color codes, RGB and HSL values with our color picker, color chart and HTML color names. Let's go!](https://htmlcolorcodes.com)
 
 # II. Debug
 
