@@ -49,9 +49,9 @@ $ pwd
 /root
 $ sudo nano .ssh/authorized_keys
 # Paste the key
-$ sudo nano /home/ec2-user/.ssh/authorized_keys
+$ sudo vi /home/ec2-user/.ssh/authorized_keys
 # Paste the key
-$ sudo nano /etc/ssh/sshd_config
+$ sudo vi /etc/ssh/sshd_config
 # Paste the below line
 AllowUsers ec2-user
 $ sudo systemctl restart sshd
