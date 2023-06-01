@@ -23,7 +23,90 @@
 
 # ![](https://overapi.com/static/cs/vim-cheat-sheet-full.png)
 
-#### - show or hide line numbers
+```mermaid
+flowchart LR
+	Normal([Normal mode])
+	Command([Command mode])
+	Insert([Insert mode])
+	Search([Search mode])
+	Visual([Visual mode])
+
+	Normal-->|"[i] / [a] / [o]"|Insert
+	Insert-->|"[esc]"|Normal
+	Normal-->|"[:]"|Command
+	Normal-->|"[/]"|Search
+	Normal-->|"[v] / [V]"|Visual
+	
+	delete[delete the line]
+	Normal-..-|"[dd]"|delete
+	first[the first line]
+	Normal-..-|"[gg]"|first
+	last[the last line]
+	Normal-..-|"[G]"|last
+```
+
+## 1.1. File Handler
+
+#### - Close file
+
+```bash
+: q
+
+# 強制離開
+: q!
+```
+
+#### - Current directory
+
+```bash
+: pwd
+```
+
+#### - File navigation
+
+```bash
+: e ./
+```
+
+#### - Restore file
+
+```bash
+: e!
+```
+
+#### - Save file
+
+```bash
+: w
+
+# save and close files
+: wq
+
+# 另存新檔
+: w newfile
+```
+
+## 1.2. Editing
+
+#### - Goto the line
+
+```bash
+: 123
+```
+
+#### - Replace String
+
+```bash
+# replace all lines, lanka -> mary
+: %s/lanka/mary/g
+
+# replace the current line, lanka -> mary
+: s/lanka/mary/g
+```
+
+## 1.3. Options
+
+#### - Show or hide line numbers
 
 ```bash
 # show line numbers
@@ -32,7 +115,9 @@
 # hide line numbers
 : set nu!
 ```
-# 2. .vimrc
+# 2. System Environment
+
+## 2.1. .vimrc
 
 ```bash
 $ ~/.vimrc
@@ -63,6 +148,18 @@ set softtabstop=2
 " Reopen the last edited position in files
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
+```
+
+## 2.2. git editor
+
+```bash
+$ export GIT_EDITOR=vim
+```
+
+## 2.3. svn editor
+
+```bash
+$ export SVN_EDITOR=vim
 ```
 
 # Appendix
