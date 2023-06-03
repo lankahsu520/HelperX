@@ -163,6 +163,44 @@ Interface Options / I6 Serial Port
 
 - [[Raspberry Pi] 啟用Raspberry Pi 3B+ 序列埠功能](https://dumbcatnote.blogspot.com/2020/04/raspberry-pi-enable-serial-port.html)
 
+# 6. Hardware Information
+
+## 6.1. Power Supply
+
+#### A. Under-voltage Detected Warning
+
+```bash
+$ vcgencmd get_throttled
+throttled=0x50005
+```
+
+```bash
+$ dmesg | grep -iC 3 "under-voltage detected"
+```
+
+| Hex    | Bin                 | Desc                                                       |
+| ------ | ------------------- | ---------------------------------------------------------- |
+| 0x0001 | 0001                | Under-voltage detected<br>檢測到欠壓                       |
+| 0x0002 | 0010                | ARM frequency has been caped<br>ARM 頻率已封頂             |
+| 0x0004 | 0100                | Currently throttled<br>當前已限制                          |
+| 0x0008 | 1000                | Soft temperature limit is active<br>軟溫度限制處於活動狀態 |
+| 0x1000 | 0001 0000 0000 0000 | Under-voltage has occurred<br>發生欠壓                     |
+| 0x2000 | 0010 0000 0000 0000 | ARM frequency capping has occurred<br>發生了 ARM 頻率上限  |
+| 0x4000 | 0100 0000 0000 0000 | Throttling has occurred<br>發生限制                        |
+| 0x8000 | 1000 0000 0000 0000 | Soft temperature limit has occurred<br>出現軟溫度限制      |
+|        |                     |                                                            |
+
+```bash
+# To disable the low voltage warning
+$ sudo nano /boot/config.txt
+avoid_warnings=1
+
+# LXPanel plugin: The notification on the top-right corner of the screen
+$ sudo apt remove lxplug-ptbatt
+
+$ sudo reboot
+```
+
 # Appendix
 
 # I. Study
