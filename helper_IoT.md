@@ -5,13 +5,13 @@
 # 1. Overview - [維基百科](https://zh.wikipedia.org/zh-tw/物联网)
 > **物聯網**（英語：Internet of Things，簡稱**IoT**）是一種計算裝置、機械、數位機器相互關聯的系統，具備[通用唯一辨識碼](https://zh.wikipedia.org/wiki/通用唯一辨識碼)（UID），並具有通過網路傳輸數據的能力，無需人與人、或是人與裝置的互動
 
-## 1.1. Path (通路) vs Protocol (通訊協定)
+# 2. Path (通路) vs Protocol (通訊協定)
 
 > 這個主題很重要！一堆人搞不清什麼是通路、什麼是通訊協定等。
 >
 > 本章節將會用生活化的方式介紹
 
-### 1.1.1. Path (通路)
+## 2.1. Path (通路)
 
 #### A. 人與人
 
@@ -47,7 +47,7 @@ Lanka <--> |Thread|Mary
 Lanka <--> |Z-Wave|Mary
 ```
 
-### 1.1.2. Protocol (通訊協定)
+## 2.2. Protocol (通訊協定)
 
 #### A. 人與人
 
@@ -83,7 +83,9 @@ Lanka <--> |"Thread (2.4 GHz) / Thread"|Mary
 Lanka <--> |"Z-Wave (Sub-1 GHz) / Z-Wave"|Mary
 ```
 
-## 1.2. Gateway vs. Router
+## 2.3. Gateway vs. Router
+
+> 這裏繼續釐清 Path 和 Protocol。清楚其差別，將來在軟體開發時有助於工作分配，也能釐清責任歸屬。
 
 ```mermaid
 flowchart LR
