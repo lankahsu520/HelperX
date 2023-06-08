@@ -7,9 +7,9 @@
 
 # 2. Path (通路) vs Protocol (通訊協定)
 
-> 這個主題很重要！一堆人搞不清什麼是通路、什麼是通訊協定等。
+> 這個章節很重要！
 >
-> 本章節將會用生活化的方式介紹
+> 一堆人搞不清什麼是通路、什麼是通訊協定等。將會用生活化的方式介紹
 
 ## 2.1. Path (通路)
 
@@ -41,7 +41,7 @@ Lanka[Lanka's PC]
 Mary[Mary's PC]
 Lanka <--> |Ethernet|Mary
 Lanka <--> |Wi-Fi|Mary
-Lanka <--> |BLE|Mary
+Lanka <--> |Bluetooth|Mary
 Lanka <--> |Zigbee|Mary
 Lanka <--> |Thread|Mary
 Lanka <--> |Z-Wave|Mary
@@ -77,7 +77,7 @@ Lanka[Lanka's PC]
 Mary[Mary's PC]
 Lanka <--> |Ethernet / TCP/IP|Mary
 Lanka <--> |Wi-Fi / TCP/IP|Mary
-Lanka <--> |"BLE (2.4 GHz) / BLE"|Mary
+Lanka <--> |"Bluetooth (2.4 GHz) / BLE"|Mary
 Lanka <--> |"Zigbee (2.4 GHz) / Zigbee 3.0"|Mary
 Lanka <--> |"Thread (2.4 GHz) / Thread"|Mary
 Lanka <--> |"Z-Wave (Sub-1 GHz) / Z-Wave"|Mary
@@ -88,46 +88,54 @@ Lanka <--> |"Z-Wave (Sub-1 GHz) / Z-Wave"|Mary
 > 這裏繼續釐清 Path 和 Protocol。清楚其差別，將來在軟體開發時有助於工作分配，也能釐清責任歸屬。
 
 ```mermaid
-flowchart LR
+flowchart TD
 	subgraph Office["Central Office"]
-		subgraph GatewayO[Gateway]
+		subgraph GatewayO[Gateway Function]
 			PhoneO[PhoneGW]
 		end
 	end
 	subgraph Modem["ADSL Modem"]
-		subgraph RouterM[Router]
+		subgraph RouterM[Router Function]
 			RouterWiFiM[Wi-Fi]
 			RouterLanM[Ethernet]
+			RouterWiFiM -..- |bridge|RouterLanM
 		end
-		subgraph GatewayM[Gateway]
+		subgraph GatewayM[Gateway Function]
     	PhoneM[PhoneGW]
 		end
-    PhoneM<-->RouterM
+    PhoneM<--> |memory| RouterM
 	end
 	subgraph A["Wireless Router Archer AX50"]
-		subgraph RouterA[Router]
+		subgraph RouterA[Router Function]
 			RouterWiFiA[Wi-Fi]
 			RouterLanA[Ethernet]
+			RouterWiFiA -..- |bridge|RouterLanA
 		end
-		subgraph GatewayA[Gateway]
-			ZigbeeGWA[ZigbeeGW]
-			ThreadGWA[ThreadGW]
-		end
-		GatewayA<-->RouterA
+		subgraph GatewayA[Gateway Function]
+			ZigbeeGW3[ZigbeeGW 3.0]
+			ZigbeeGW1[ZigbeeGW 1.2]
+      ThreadGWA[ThreadGW]
+      BLUEZ[BlueZ]
+    end
+		GatewayA<-->|memory|RouterA
 	end
 
 PC[PC]
 Phone[Phone]
-Zigbee[Zigbee]
-Thread[Thread]
+Zigbee1[Sensor - Zigbee 1.2]
+Zigbee3[Light - Zigbee 3.0]
+Thread[Dimmer - Thread]
+BLE1[Sersor - BLE]
 
-Zigbee <--> |Zigbee / Zigbee 3.0|ZigbeeGWA
+Zigbee1 <--> |Zigbee / Zigbee 1.2|ZigbeeGW1
+Zigbee3 <--> |Zigbee / Zigbee 3.0|ZigbeeGW3
 Thread <--> |Thread / Thread|ThreadGWA
+BLE1 <--> |Bluetooth / BLE|BLUEZ
 
 PC <--> |Ethernet / TCP/IP|RouterLanA
 Phone <--> |Wi-Fi / TCP/IP|RouterWiFiA
 
-RouterM <--> |Ethernet / TCP/IP|RouterA
+RouterLanA <--> |Ethernet / TCP/IP|RouterLanM
 
 PhoneO <--> |phone line|PhoneM
 ```
