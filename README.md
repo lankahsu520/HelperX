@@ -69,6 +69,10 @@
 
 #### - [helper_GStreamer.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GStreamer.md) - GStreamer helper.
 
+#### - [helper_IoT.md](https://github.com/lankahsu520/HelperX/blob/master/helper_IoT.md) - IoT helper.
+
+>IoT 的概念很簡單，不要被一些 “協定” 約束你的想像。也不要被主管 or 業務員的話語所迷惑。只要清楚基本概念既可。
+
 #### - [helper_jq.md](https://github.com/lankahsu520/HelperX/blob/master/helper_jq.md) - jq helper.
 
 >JSON 是目前常用的資料格式，jq 提供於簡單的命令列下查詢、編輯，抓取所需之資訊，導入另一個程式使用。
