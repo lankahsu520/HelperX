@@ -89,9 +89,13 @@
 >
 > NCP是一個專門處理網路通信的處理器。它通常用於網絡設備（如路由器、交換機、網絡伺服器等）或網絡介面卡中。NCP負責處理網絡協議、數據封包的轉發、路由、處理等功能。它能夠處理不同層次的網絡協議，如IP（Internet Protocol）、TCP（Transmission Control Protocol）、UDP（User Datagram Protocol）等，並確保數據在網絡中的正確傳遞。
 
+#### Gecko Platform
+
+> 一般我們稱公板為 Board - Gecko Board。也就是 Silicon 的開發公板，名字稱為 Gecko 壁虎。
+
 #### XXX Gecko XXX Microcontroller
 
-> 就是Silicon 的公板
+> 就是Silicon 的 Gecko 模組。
 
 # IV. Tool Usage
 
