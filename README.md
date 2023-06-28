@@ -65,7 +65,9 @@
 
 > CI/CD is useful ? Please make sure that you aren't a low-level programmer, system integration developer or embedded engineer.
 >
-> 當學習 AWS Lambda、Cloud Formation 後，感覺部署這件事很重要，只能用唯一的電腦和專員來進行，不應該允許人人能部署，不同電腦能上傳。這時 CI/CD 就是一個很不錯的方法。
+> 當學習 AWS Lambda、Cloud Formation 後，感覺部署這件事很重要。當產品線到了最後上線或販賣時，就不應該允許專案的成員都能修改後部署，也不建議在不同電腦上進行操作。
+>
+> 這時 CI/CD 就是一個很不錯的方法。
 
 #### - [helper_GStreamer.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GStreamer.md) - GStreamer helper.
 
@@ -156,6 +158,10 @@
 > 「你沒有限制編輯軟體…」聽到這個我是馬上“黃人”問號（現在不能說黑人問號，我講我自己總行吧）？身為一位嵌入式工程師，有的人用 vi，有的人用 Notepad++ 等。一套編輯軟體只要用的順手就好，那裏來的問題。有可能發生問題的部分常在開發 MCU，可我們的主力是 Linux 環境也。 
 
 #### - [helper_FreeRTOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_FreeRTOS.md) - FreeRTOS helper.
+
+#### - [helper_UnifySDKandGeckoSDK.md](https://github.com/lankahsu520/HelperX/blob/master/helper_UnifySDKandGeckoSDK.md) - UnifySDK and GeckoSDK helper.
+
+> 研究中…
 
 #### - [helper_Yocto.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Yocto.md) - Yocto helper.
 
