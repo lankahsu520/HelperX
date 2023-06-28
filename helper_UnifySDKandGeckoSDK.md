@@ -33,6 +33,18 @@
 
 ![unify_host_sdk](./images/unify_host_sdk.png)
 
+## 2.1. [Unify Framework](https://siliconlabs.github.io/UnifySDK/doc/UnifySDK.html)
+
+>A powerful IoT gateway framework that supports multiple wireless protocols.
+>
+>??? 目前還不是很清楚溝通方式
+
+## 2.2. [Multiprotocol Host Software](https://siliconlabs.github.io/UnifySDK/doc/multiprotocol.html)
+
+> A collection of host software for simultaneously running multiple protocol stacks on the host. Using a single radio co-processor, you can run Zigbee, OpenThread, and Bluetooth.
+>
+> 這邊最熟悉的就是 BlueZ，一般都是用 D-Bus 與之溝通。
+
 # 3. [GeckoSDK](https://github.com/SiliconLabs/gecko_sdk/)
 
 > The Gecko SDK (GSDK) combines Silicon Labs wireless software development kits (SDKs) and Gecko Platform into a single, integrated package. The GSDK is your primary tool for developing in the Silicon Labs IoT Software ecosystem.
@@ -47,6 +59,14 @@
 >
 > The Unify Host SDK contains non-embedded applications developed by Silicon Labs.
 
+## I.2. [Unify Software Development Kit (SDK)](https://www.silabs.com/developers/unify-sdk?tab=overview)
+
+> Unify SDK simplifies IoT infrastructure development including gateways, access points, hubs, bridges, and application processor-based end products.
+
+## I.3. [Gecko Platform](https://docs.silabs.com/gecko-platform/4.3/platform-overview/)
+
+> Gecko Platform is the common foundation for the Gecko SDK Suite.
+
 # II. Debug
 
 # III. Glossary
@@ -56,6 +76,22 @@
 #### NCP,
 
 #### NWK,
+
+#### [RCP, Radio Co-Processor](https://openthread.io/platforms/co-processor#radio_co-processor_rcp) 
+
+>From ChatGPT, 硬體層
+>
+>RCP是一個專門處理無線通信的處理器。它通常用於行動設備（如智能手機、平板電腦等）或無線通信模組中。RCP負責處理無線訊號的傳輸、接收、調製和解調製等功能。它能夠與無線網路（如蜂窩網絡、Wi-Fi、藍牙等）進行通信，使設備能夠連接到網絡，進行數據的傳輸和接收。
+
+#### [NCP, Network Co-Processor](https://openthread.io/platforms/co-processor#network_co-processor_ncp)
+
+> From ChatGPT，軟體層
+>
+> NCP是一個專門處理網路通信的處理器。它通常用於網絡設備（如路由器、交換機、網絡伺服器等）或網絡介面卡中。NCP負責處理網絡協議、數據封包的轉發、路由、處理等功能。它能夠處理不同層次的網絡協議，如IP（Internet Protocol）、TCP（Transmission Control Protocol）、UDP（User Datagram Protocol）等，並確保數據在網絡中的正確傳遞。
+
+#### XXX Gecko XXX Microcontroller
+
+> 就是Silicon 的公板
 
 # IV. Tool Usage
 
