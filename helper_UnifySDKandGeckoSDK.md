@@ -45,6 +45,8 @@
 >
 > 這邊最熟悉的就是 BlueZ，一般都是用 D-Bus 與之溝通。
 
+### 2.2.1. [CPC Daemon](https://siliconlabs.github.io/UnifySDK/applications/cpcd/readme_user.html)
+
 # 3. [GeckoSDK](https://github.com/SiliconLabs/gecko_sdk/)
 
 > The Gecko SDK (GSDK) combines Silicon Labs wireless software development kits (SDKs) and Gecko Platform into a single, integrated package. The GSDK is your primary tool for developing in the Silicon Labs IoT Software ecosystem.
@@ -67,21 +69,31 @@
 
 > Gecko Platform is the common foundation for the Gecko SDK Suite.
 
+## I.4. [Zigbee stack layers](https://www.digi.com/resources/documentation/Digidocs/90002002/Content/Reference/r_zb_stack.htm?TocPath=zigbee%20networks%7C_____3)
+
+![dwg_zigbee_stack_layers_549x350](./images/dwg_zigbee_stack_layers_549x350.png)
+
+| Zigbee layer | Descriptions                                                 |
+| ------------ | ------------------------------------------------------------ |
+| ZDO          | Application layer that provides device and service discovery features and advanced network management capabilities. |
+| APS (AF)     | Application layer that defines various addressing objects including profiles, clusters, and endpoints. |
+| Network      | Adds routing capabilities that allows RF data packets to traverse multiple devices (multiple hops) to route data from source to destination (peer to peer). |
+| MAC          | Manages RF data transactions between neighboring devices (point to point). The MAC includes services such as transmission retry and acknowledgment management, and collision avoidance techniques (CSMA-CA). |
+| PHY          | Defines the physical operation of the Zigbee device including receive sensitivity, channel rejection, output power, number of channels, chip modulation, and transmission rate specifications. Most Zigbee applications operate on the 2.4 GHz ISM band at a 250 kb/s data rate. See the IEEE 802.15.4 specification for details. |
+
+
+
 # II. Debug
 
 # III. Glossary
 
 #### CPC-D,
 
-#### NCP,
+> The Co-Processor Daemon (CPCd) enables users to have multiple stack protocols interact with a secondary processor over a shared physical link using multiple endpoints.
 
-#### NWK,
+#### Gecko Platform
 
-#### [RCP, Radio Co-Processor](https://openthread.io/platforms/co-processor#radio_co-processor_rcp) 
-
->From ChatGPT, 硬體層
->
->RCP是一個專門處理無線通信的處理器。它通常用於行動設備（如智能手機、平板電腦等）或無線通信模組中。RCP負責處理無線訊號的傳輸、接收、調製和解調製等功能。它能夠與無線網路（如蜂窩網絡、Wi-Fi、藍牙等）進行通信，使設備能夠連接到網絡，進行數據的傳輸和接收。
+> 一般我們稱公板為 Board - Gecko Board。也就是 Silicon 的開發公板，名字稱為 Gecko 壁虎。
 
 #### [NCP, Network Co-Processor](https://openthread.io/platforms/co-processor#network_co-processor_ncp)
 
@@ -89,9 +101,13 @@
 >
 > NCP是一個專門處理網路通信的處理器。它通常用於網絡設備（如路由器、交換機、網絡伺服器等）或網絡介面卡中。NCP負責處理網絡協議、數據封包的轉發、路由、處理等功能。它能夠處理不同層次的網絡協議，如IP（Internet Protocol）、TCP（Transmission Control Protocol）、UDP（User Datagram Protocol）等，並確保數據在網絡中的正確傳遞。
 
-#### Gecko Platform
+#### NWK, Network layer
 
-> 一般我們稱公板為 Board - Gecko Board。也就是 Silicon 的開發公板，名字稱為 Gecko 壁虎。
+#### [RCP, Radio Co-Processor](https://openthread.io/platforms/co-processor#radio_co-processor_rcp) 
+
+>From ChatGPT, 硬體層
+>
+>RCP是一個專門處理無線通信的處理器。它通常用於行動設備（如智能手機、平板電腦等）或無線通信模組中。RCP負責處理無線訊號的傳輸、接收、調製和解調製等功能。它能夠與無線網路（如蜂窩網絡、Wi-Fi、藍牙等）進行通信，使設備能夠連接到網絡，進行數據的傳輸和接收。
 
 #### XXX Gecko XXX Microcontroller
 
