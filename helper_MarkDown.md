@@ -866,6 +866,295 @@ flowchart LR
 > - RL - right to left
 > - LR - left to right
 
+## 5.3. Sequence
+
+### 5.3.1. Sample
+
+#### A. Sample 1
+
+```mermaid
+sequenceDiagram
+	participant UAC as User Agent Client
+	participant RServer as Register/Redirect/Proxy Server
+	participant USER as User Database
+
+	UAC->>RServer: Register
+	RServer->>USER: Check
+	USER->>RServer: Ok
+	RServer->>UAC: SIP/2.0 200 OK
+```
+#### A. Sample 2
+
+```mermaid
+sequenceDiagram
+	participant Phone
+		link Phone: github @ https://github.com/lankahsu520/HelperX
+	participant Light
+		link Light: {"github":"https://github.com/lankahsu520/HelperX"}
+	Phone->>Light: toggle
+	Light-)Phone: ack
+```
+```
+sequenceDiagram
+	participant Phone
+		link Phone: github @ https://github.com/lankahsu520/HelperX
+	participant Light
+		link Light: {"github":"https://github.com/lankahsu520/HelperX"}
+	Phone->>Light: toggle
+	Light-)Phone: ack
+```
+
+### 5.3.2. Messages and Actor Menus
+
+> Messages
+> ```
+> [Actor][Arrow][Actor]:Message text
+> ```
+> Actor Menus
+> ```
+> link <actor>: <link-label> @ <link-url>
+> links <actor>: <json-formatted link-name link-url pairs>
+> ```
+
+### 5.3.3. Arrows
+```mermaid
+sequenceDiagram
+	participant A
+	participant B
+  
+	A -> B: Solid line without arrow
+	A --> B: Dotted line without arrow
+	A ->> B: Solid line with arrowhead
+	A-->> B: Dotted line with arrowhead
+	A -x B: Solid line with a cross at the end
+	A --x B: Dotted line with a cross at the end
+	A -) B: Solid line with an open arrow at the end (async)
+	A --) B: Dotted line with a open arrow at the end (async)
+	
+```
+### 5.3.4. Activations
+
+#### A. activate and deactivate, + and -
+```mermaid
+sequenceDiagram
+	participant Phone
+	participant Light
+
+	Phone->>Light: toggle
+	activate Light
+	Light-)Phone: ack
+	deactivate Light
+
+	Phone->>+Light: toggle
+	Light-)-Phone: ack
+```
+```
+sequenceDiagram
+	participant Phone
+	participant Light
+
+	Phone->>Light: toggle
+	activate Light
+	Light-)Phone: ack
+	deactivate Light
+
+	Phone->>+Light: toggle
+	Light-)-Phone: ack
+```
+#### B. request and response *2
+```mermaid
+sequenceDiagram
+	participant Phone
+	participant Light
+
+	Phone->>+Light: setting
+	Phone->>+Light: toggle
+	Light-)-Phone: ack
+	Light-)-Phone: ack
+```
+```
+sequenceDiagram
+	participant Phone
+	participant Light
+
+	Phone->>+Light: setting
+	Phone->>+Light: toggle
+	Light-)-Phone: ack
+	Light-)-Phone: ack
+```
+### 5.3.5. Notes, Comments and Rect
+```mermaid
+sequenceDiagram
+	Note over Phone, Light: ZigBee control
+	participant Phone
+		Note Left of Phone: Lanka's Phone
+	participant Light
+		Note Right of Light: Office Light
+
+	%% to toggle Light
+	rect rgb(255, 223, 255)
+		Phone->>+Light: toggle
+		Light-)-Phone: ack
+	end
+```
+```
+sequenceDiagram
+	Note over Phone, Light: ZigBee control
+	participant Phone
+		Note Left of Phone: Lanka's Phone
+	participant Light
+		Note Right of Light: Office Light
+
+	%% to toggle Light
+	rect rgb(255, 223, 255)
+		Phone->>+Light: toggle
+		Light-)-Phone: ack
+	end
+```
+### 5.3.6. Loops
+```mermaid
+sequenceDiagram
+	participant Phone
+	participant Light
+
+	loop 3 times
+		Phone->>Light: toggle
+		Light-)Phone: ack
+	end
+```
+```
+sequenceDiagram
+	participant Phone
+	participant Light
+
+	loop 3 times
+		Phone->>Light: toggle
+		Light-)Phone: ack
+	end
+```
+### 5.3.7. Alt
+```mermaid
+sequenceDiagram
+	participant Phone
+	participant Light
+
+	Phone->>Light: toggle
+	alt is alive
+		Light-)Phone: ack
+	else not alive
+		Phone->>Phone: timeout, Light is off
+	end
+
+	rect rgb(255, 223, 255)
+	opt others
+		Phone->>Phone: update status of Light
+	end
+	end
+```
+```
+sequenceDiagram
+	participant Phone
+	participant Light
+
+	Phone->>Light: toggle
+	alt is alive
+		Light-)Phone: ack
+	else not alive
+		Phone->>Phone: timeout, Light is off
+	end
+
+	rect rgb(255, 223, 255)
+	opt others
+		Phone->>Phone: update status of Light
+	end
+	end
+```
+### 5.3.8. Parallel
+```mermaid
+sequenceDiagram
+	participant Phone
+	participant Light1
+	participant Light2
+
+	par broadcast (Light1)
+		Phone->>Light1: toggle
+	and broadcast (Light2)
+		Phone->>Light2: toggle
+	end
+	Light2-)Phone: ack
+	Light1-)Phone: ack
+```
+```
+sequenceDiagram
+	participant Phone
+	participant Light1
+	participant Light2
+
+	par broadcast (Light1)
+		Phone->>Light1: toggle
+	and broadcast (Light2)
+		Phone->>Light2: toggle
+	end
+	Light2-)Phone: ack
+	Light1-)Phone: ack
+```
+### 5.3.9. Critical Region and Break
+```mermaid
+sequenceDiagram
+	participant Phone
+	participant Light
+
+	critical handshake
+		Phone->>Light: try to connect, new tokenA
+		Light->>Phone: ack
+		break wait for response ...
+			Phone->>Light: try to connect, new tokenA1
+		end
+		Light->>Phone: tokenB1
+		Phone->>Light: ack
+	option timeout
+		Phone->>Phone: timeout error
+	option rejected
+		Phone->>Phone: rejected
+	end
+```
+```
+sequenceDiagram
+	participant Phone
+	participant Light
+
+	critical handshake
+		Phone->>Light: try to connect, new tokenA
+		Light->>Phone: ack
+		break wait for response ...
+			Phone->>Light: try to connect, new tokenA1
+		end
+		Light->>Phone: tokenB1
+		Phone->>Light: ack
+	option timeout
+		Phone->>Phone: timeout error
+	option rejected
+		Phone->>Phone: rejected
+	end
+```
+
+```mermaid
+sequenceDiagram
+	participant Phone
+	participant Light
+
+	critical handshake
+		Phone->>Light: try to connect, new tokenA
+		Light->>Phone: ack
+		Light->>Phone: tokenB
+		Phone->>Light: ack
+	option timeout
+		Phone->>Phone: timeout error
+	option rejected
+		Phone->>Phone: rejected
+	end
+```
+
 # Appendix
 
 # I. Study
