@@ -232,6 +232,35 @@ gantt
 
 ```
 
+```
+gantt
+	title A Gantt Diagram (2023-03-29)
+
+	%%dateFormat HH:mm
+	%%axisFormat %H:%M
+	%%tickInterval 1h
+	dateFormat  YYYY-MM-DD
+	axisFormat %-m/%-d
+	tickInterval 1day
+
+	%% (`excludes` accepts specific dates in YYYY-MM-DD format, days of the week ("sunday") or "weekends", but not the word "weekdays".)
+	excludes weekends saturday,sunday, 2023-02-27, 2023-02-28
+	excludes weekends saturday,sunday, 2023-04-03, 2023-04-04, 2023-04-05
+	excludes weekends saturday,sunday, 2023-05-01
+
+	section SPEC
+		read spec1 (crit/done): crit, done, spec1, 2023-03-29, 2023-03-31
+		read spec2 (crit/active): crit, active, spec2, after spec1, 2d
+		read spec3 (crit/): crit, spec3, after spec2, 1d
+		report (milestone): milestone, active, SPEC-end, after spec3, 1d
+	section TODO
+		Todo A (/done): done, todo1, after SPEC-end, 3d
+		Todo B (/active): active, todo2, after SPEC-end, 2d
+		Todo C (/): todo3, after todo1 todo2, 48h
+		Todo B (/): todo4, after todo3, 96h
+
+```
+
 #### B. Input date format[#](https://mermaid.js.org/syntax/gantt.html#input-date-format)
 
 The default input date format is `YYYY-MM-DD`. You can define your custom `dateFormat`.
