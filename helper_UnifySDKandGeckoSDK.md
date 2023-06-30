@@ -29,7 +29,7 @@
 
 ## 1.1. Questions
 
-> 以上只是我個人的發想
+> 以下只是我個人的發想
 
 #### A. lower costs ?
 
@@ -454,6 +454,20 @@ flowchart LR
 >
 > PHY連接一個[數據鏈路層](https://zh.wikipedia.org/wiki/数据链路层)的裝置（[MAC](https://zh.wikipedia.org/wiki/媒體存取控制)）到一個物理媒介，如光纖或銅纜線。典型的PHY包括PCS（Physical Coding Sublayer，物理編碼子層）和PMD（Physical Media Dependent，物理介質相關子層）。PCS對被傳送和接受的資訊加碼和解碼，目的是使接收器更容易恢復訊號。
 
+#### pts, Pseudo Terminal Slave
+
+>[ChatGPT]
+>
+>pts 是 pty 的一個實例，它是 pty 的從屬端口。當應用程序使用 pty 創建了一個虛擬終端環境後，該虛擬終端的從屬端口就是 pts。pts 提供了對虛擬終端的操作和控制。
+
+#### pty, Pseudo Terminal
+
+>[維基百科] 
+>
+>pty 是偽終端，它模擬了一個真實的終端環境。pty 通常用於建立用戶應用程序和終端仿真器之間的通信。它提供了一個虛擬的終端介面，使應用程序可以像操作真實終端一樣與終端仿真器進行交互。
+>
+>
+
 #### [RCP, Radio Co-Processor](https://openthread.io/platforms/co-processor#radio_co-processor_rcp) 
 
 >The RCP (Radio Co-Processor) is an embedded application running on a Silicon Labs EFR32 radio chip connected to the host processor via a UART or SPI serial connection. There are different flavors of RCP depending on which protocol stacks are running on the host. The RCP software is distributed with the GSDK. For details on building RCP images for the co-processor, see [AN1333](https://www.silabs.com/documents/public/application-notes/an1333-concurrent-protocols-with-802-15-4-rcp.pdf).
@@ -478,6 +492,12 @@ flowchart LR
 >4. 支援擴展：Spinel具有擴展性，可以根據不同應用需求定義自定義的命令和屬性。
 >
 >Spinel協議被廣泛應用於Thread網路中的物聯網設備，如智能家居、工業自動化、智能照明等。它提供了一個統一的介面，使得不同廠商的設備可以相互通信和協作，從而實現更高效、互操作性的物聯網系統。
+
+#### tty, Teletypewriter
+
+>[ChatGPT]
+>
+>tty 是真實的終端設備，通常指稱連接到計算機的實體終端（如終端機或控制台）。tty 可以接收用戶輸入並顯示輸出，是用戶與計算機進行交互的介面。
 
 #### UAM,
 
