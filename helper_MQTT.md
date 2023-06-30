@@ -252,9 +252,51 @@ openssl x509 -noout -modulus -in mqtt.ca | openssl md5
 
 ## I.6. [Mosquitto ACL -Configuring and Testing MQTT Topic Restrictions](http://www.steves-internet-guide.com/topic-restriction-mosquitto-configuration/)
 
+## I.7. [MQTT Server Support](https://github.com/mqtt/mqtt.org/wiki/server-support)
+
 # II. Debug
 
 # III. Glossary
+
+#### MQTT access-control
+
+>[ChatGPT]
+>
+>以下是MQTT access-control的一些功能和作用：
+>
+>1. 身份驗證（Authentication）：Access-control可用於驗證連接到MQTT broker的客戶端的身份。這可以通過使用用戶名和密碼、憑證或其他驗證機制來實現。身份驗證確保只有經過授權的用戶可以建立連接，從而防止未經授權的訪問。
+>2. 授權（Authorization）：一旦客戶端通過身份驗證，access-control可用於授予或拒絕客戶端對MQTT broker的訪問權限。這可以通過設定特定主題（Topic）的讀取（Subscribe）和發布（Publish）權限來實現。授權確保只有具有權限的客戶端可以訪問特定主題或執行特定操作。
+>3. 安全性（Security）：MQTT access-control有助於確保通信的安全性。通過限制訪問和操作權限，它可以防止未經授權的訪問和潛在的安全風險。這對於保護敏感數據、防止未經授權的控制和確保合法訪問非常重要。
+>4. 監控和日誌（Monitoring and Logging）：access-control機制可以提供監控和日誌記錄的功能。它可以記錄用戶的操作和訪問行為，以便後續審計和故障排除。這有助於追踪和分析MQTT通信，確保合規性和安全性。
+>
+>總而言之，MQTT access-control功能的主要目的是確保只有經過授權的實體可以訪問MQTT broker，並限制他們對主題的訪問和操作。這有助於確保安全性、保護數據和設備，並提供監控和日誌記錄功能。
+
+#### MQTT clustering
+
+>[ChatGPT]
+>
+>1. 高可用性：通過將多個 Mosquitto 代理器連接在一起形成叢集，即使其中一個代理器發生故障，仍然可以保持 MQTT 消息服務的可用性。當一個代理器失效時，其他代理器可以接管處理消息流量，確保消息的連續傳遞和處理。
+>2. 負載均衡：Mosquitto 叢集可以通過將客戶端的連接分配到不同的代理器上，實現負載均衡。這可以幫助平衡代理器之間的工作負載，提高整體性能和效率。
+>3. 可擴展性：透過添加更多的 Mosquitto 代理器到叢集中，可以實現系統的水平擴展。這使得系統能夠處理更大量的消息和更多的客戶端連接，以應對不斷增長的需求。
+>4. 數據冗餘和持久性：Mosquitto 叢集可以配置為在多個代理器之間複製和同步消息數據，從而提供數據冗餘和持久性。即使其中一個代理器發生故障，消息數據仍然可以從其他代理器獲取，確保不會丟失重要的消息。
+>
+>總之，Mosquitto 叢集可以提供高可用性、負載均衡、可擴展性和數據冗餘等功能，從而增強 MQTT 消息傳輸系統的穩定性和可靠性。
+
+#### MQTT message-retention
+
+>[ChatGPT]
+>
+>MQTT message retention（MQTT訊息保留）是MQTT協議中的一個特性，它允許訂閱者在訂閱主題時接收最後一個已保留的訊息。
+>
+>當一個發佈者（Publisher）通過MQTT協議發布一個訊息到特定主題（Topic）時，訊息可以被保留在MQTT broker上。這意味著即使當沒有訂閱者處於活躍狀態，新的訂閱者在訂閱相同的主題時仍然能夠接收到最後一次已保留的訊息。這個保留的訊息被稱為保留訊息（Retained message）。
+>
+>保留訊息在MQTT協議中具有以下特點：
+>
+>1. 最新的訊息：保留訊息總是保持最新的狀態。當一個新的保留訊息被發布到特定主題時，它將替換之前的保留訊息，以便新的訂閱者能夠接收到最新的訊息。
+>2. 特定主題：保留訊息是與特定主題相關聯的。訂閱者只能接收到與他們訂閱的主題相關的保留訊息。
+>3. 非強制性：發布者可以選擇是否要將訊息保留為保留訊息。如果發布者未指定保留標誌，則該訊息不會被保留，新的訂閱者將無法接收到之前的訊息。
+>
+>MQTT的訊息保留功能提供了靈活且便捷的方式，讓新的訂閱者能夠獲取到重要的訊息，即使在它們訂閱之前該訊息已經被發布。這在某些應用中特別有用，例如裝置狀態更新、事件通知等。
 
 # IV. Tool Usage
 
