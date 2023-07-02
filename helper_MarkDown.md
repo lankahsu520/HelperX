@@ -197,11 +197,11 @@ AT&amp;&#40;T&#41;
 
 # 5. [Mermaid](https://mermaid.js.org/)
 
-## 5.1. [Gantt diagrams](https://mermaid.js.org/syntax/gantt.html)
+## 5.1. Gantt 甘特圖
 
 > 以下內容取自於 https://mermaid.js.org/syntax/gantt.html
 
-#### A. A Gantt Diagram
+#### A. Sample
 
 ```mermaid
 gantt
@@ -351,7 +351,9 @@ The pattern is:
 
 More info in: https://github.com/d3/d3-time#interval_every
 
-## 5.2. Flowchart
+## 5.2. Flowchart 流程圖
+
+> 以下內容取自於 https://mermaid.js.org/syntax/flowchart.html
 
 ### 5.2.1. Sample
 
@@ -895,7 +897,9 @@ flowchart LR
 > - RL - right to left
 > - LR - left to right
 
-## 5.3. Sequence
+## 5.3. Sequence 時序圖
+
+> 以下內容取自於 https://mermaid.js.org/syntax/sequenceDiagram.html
 
 ### 5.3.1. Sample
 
@@ -1071,7 +1075,7 @@ sequenceDiagram
 	alt is alive
 		Light-)Phone: ack
 	else not alive
-		Phone->>Phone: timeout, Light is off
+		Phone->>Phone: timeout, Light is down
 	end
 
 	rect rgb(255, 223, 255)
@@ -1089,7 +1093,7 @@ sequenceDiagram
 	alt is alive
 		Light-)Phone: ack
 	else not alive
-		Phone->>Phone: timeout, Light is off
+		Phone->>Phone: timeout, Light is down
 	end
 
 	rect rgb(255, 223, 255)
@@ -1167,22 +1171,97 @@ sequenceDiagram
 	end
 ```
 
-```mermaid
-sequenceDiagram
-	participant Phone
-	participant Light
+## 5.4. Mindmap 心智圖
 
-	critical handshake
-		Phone->>Light: try to connect, new tokenA
-		Light->>Phone: ack
-		Light->>Phone: tokenB
-		Phone->>Light: ack
-	option timeout
-		Phone->>Phone: timeout error
-	option rejected
-		Phone->>Phone: rejected
-	end
+> 以下內容取自於 https://mermaid.js.org/syntax/mindmap.html
+
+### 5.4.1. Sample
+
+> 內文是利用縮排來表示
+
+```mermaid
+mindmap
+	Root
+		1.
+			1.1.
+			1.2.
+		2.
+			2.1.
+			2.2.
+				2.2.1.
+					2.2.1.A.
+					2.2.1.B.
+		3.
+			3.1.
+				3.1.2.
+					3.1.2.A.
+					3.1.2.B.
 ```
+
+```
+mindmap
+	Root
+		1.
+			1.1.
+			1.2.
+		2.
+			2.1.
+			2.2.
+				2.2.1.
+					2.2.1.A.
+					2.2.1.B.
+		3.
+			3.1.
+				3.1.2.
+					3.1.2.A.
+					3.1.2.B.
+```
+
+### 5.4.2. Different shapes
+```mermaid
+mindmap
+	Root
+		Square[Square]
+		Rounded(Rounded square)
+		Circle((Circle))
+		Bang))Bang((
+		Cloud)Cloud(
+		Hexagon{{Hexagon}}
+		default
+```
+```
+mindmap
+	Root
+		Square[Square]
+		Rounded(Rounded square)
+		Circle((Circle))
+		Bang))Bang((
+		Cloud)Cloud(
+		Hexagon{{Hexagon}}
+		default
+```
+
+### 5.4.3. Icons and classes
+
+> [Font Awesome 5](https://fontawesome.com/v5/search?o=r&m=free)
+>
+> 注意：編輯軟體不見得都能顯示相關圖示
+>
+> 注意：class 的支援度也不高
+
+```mermaid
+mindmap
+	Root
+		book["fa-book"]
+		::icon(fa fa-book)
+
+		skull["mdi-skull-outline"]
+		::icon(mdi mdi-skull-outline)
+
+		large[large]
+		:::urgent large
+```
+
 
 # Appendix
 
