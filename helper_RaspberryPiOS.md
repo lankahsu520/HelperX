@@ -201,6 +201,35 @@ $ sudo apt remove lxplug-ptbatt
 $ sudo reboot
 ```
 
+# 7. Upgrade System
+
+> 建議重新安裝 OS 至 SD-Card 中。
+
+## 7.1. [How to Update Python on Raspberry Pi](https://linuxhint.com/update-python-raspberry-pi/)
+
+```bash
+$ wget https://www.python.org/ftp/python/3.11.4/Python-3.11.4.tgz
+$ tar -zxvf Python-3.11.4.tgz
+$ cd Python-3.11.4
+$ ./configure --enable-optimizations
+$ sudo make altinstall
+$ ll /usr/local/bin/python3*
+$ cd /usr/bin
+$ ll python*
+$ sudo rm python3
+$ sudo rm python3-config
+$ sudo ln -s /usr/local/bin/python3.11 python3
+$ sudo ln -s /usr/local/bin/python3.11-config python3-config
+$ python3 -V
+
+$ python3 -m pip list
+
+$ python3 -m pip install --upgrade --force-reinstall pip
+$ sudo mv /usr/bin/pip3 /usr/bin/pip3-old
+$ sudo cp /home/pi/.local/bin/pip3 /usr/bin/pip3
+$ pip3 -V
+```
+
 # Appendix
 
 # I. Study
