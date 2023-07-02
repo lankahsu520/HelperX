@@ -149,6 +149,8 @@
 
 #### - [pythonX9](https://github.com/lankahsu520/pythonX9)
 
+#### - [RPiP9](https://github.com/lankahsu520/RPiP9)
+
 #### - [usbHunter](https://github.com/lankahsu520/usbHunter)
 
 #### - [utilx9](https://github.com/lankahsu520/utilx9)
