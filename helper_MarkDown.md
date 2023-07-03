@@ -176,6 +176,25 @@
 ![macOS_12_Monterey](./images/macOS_12_Monterey.png)
 ```
 
+> span text - <span style="color:blue">blue</span>, <span style="color:red">red</span>, <span style="color:green">green</span>
+
+```
+span text - <span style="color:blue">blue</span>, <span style="color:red">red</span>, <span style="color:green">green</span>
+```
+
+> inline HTML font text - <font color="blue">blue</font>, <font color="red">red</font>, <font color="green">green</font>
+
+```
+font text - <font color="blue">blue</font>, <font color="red">red</font>, <font color="green">green</font>
+```
+
+> code text - <code style="color:blue">blue</code >, <code style="color:red">red</code >, <code style="color:green">green</code>
+
+```
+code text - <code style="color:blue">blue</code >, <code style="color:red">red</code >, <code style="color:green">green</code>
+```
+
+
 # 4. [特殊特元](https://chukaml.tripod.com/linguistics/charCode/)
 
 > AT&amp;&#40;T&#41;

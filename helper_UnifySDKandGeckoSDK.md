@@ -245,9 +245,7 @@ flowchart LR
 
 > The Zigbee protocol stack runs on the host in a daemon called zigbeed. Zigbeed communicates with an 802.15.4 stack on the RCP via the SPINEL protocol. Zigbeed connects via sockets to CPCd, which transports the SPINEL messages over the serial bus to the RCP. A Zigbee host application connects to Zigbeed via a PTY (pseudo terminal) and communicates using the EZSP protocol. Two host applications are included with the Unify Host SDK: ZigPC, and Z3Gateway. To get started running zigbeed with CPCd, see the [Multiprotocol Setup](https://siliconlabs.github.io/UnifySDK/doc/getting_started_multiprotocol_cpc.html) page.
 
-
-
-> NOTE: The Zigbeed application is only built for arm32 bit targets using Unify
+> <font color="red">[NOTE](https://siliconlabs.github.io/UnifySDK/applications/zigbeed/readme_user.html?highlight=zigbeed+application+only+built): The Zigbeed application is only built for arm32 bit targets using Unify</font>
 
 ```mermaid
 flowchart LR
@@ -465,8 +463,6 @@ flowchart LR
 >[維基百科] 
 >
 >pty 是偽終端，它模擬了一個真實的終端環境。pty 通常用於建立用戶應用程序和終端仿真器之間的通信。它提供了一個虛擬的終端介面，使應用程序可以像操作真實終端一樣與終端仿真器進行交互。
->
->
 
 #### [RCP, Radio Co-Processor](https://openthread.io/platforms/co-processor#radio_co-processor_rcp) 
 
