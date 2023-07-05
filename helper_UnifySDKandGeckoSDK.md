@@ -59,58 +59,77 @@
 
 ```mermaid
 flowchart LR
+	classDef SkyBlue fill:#EDF5FF
+
 	subgraph Host1
 		SW1
+		subgraph UnifyHost1[Unify Host SDK]
+    	subgraph ZigbeePCHost1[ZigbeePC]
+	      ZigbeeNCPHost1[ZigbeeNCP]
+			end
+			CPCdHost1[CPCd]
+		end
+		subgraph RCPHost1
+			CPCHost1[CPC]
+   		ZigbeeRCPHost1[ZigbeeRCP]
+   	end
+    SW1<-->|UCL over TCPIP|ZigbeePCHost1<-->CPCdHost1<-->CPCHost1
 	end
 
 	subgraph Host2
-		subgraph UnifyFramework[UnifyFramework]
-			UnifyMQTT[UnifyMQTT Broker]
-			subgraph Zwave
-				ZwavePC
-				ZwaveNCP
+		SW2[SW2]
+		subgraph Unify[Unify Host SDK]
+			subgraph UnifyFramework[UnifyFramework]
+				UnifyMQTT[UnifyMQTT Broker]
+				subgraph ZwavePC
+					ZwaveNCP
+				end
+				subgraph ZigbeePC
+					ZigbeeNCP
+				end
+				subgraph AoxPC
+					AoxNCP
+				end
+      	UnifyMQTT<-->|UCL,MQTT Client|ZigbeePC
+      	UnifyMQTT<-->|UCL,MQTT Client|AoxPC
 			end
-			subgraph Zigbee
-				ZigbeePC
-				ZigbeeNCP
-			end
-			subgraph Aox
-				AoxPC
-				AoxNCP
-			end
-			UnifyMQTT<-->|UCL,MQTT Client|ZwavePC
-			UnifyMQTT<-->|UCL,MQTT Client|ZigbeePC
-			UnifyMQTT<-->|UCL,MQTT Client|AoxPC
+			CPCd
 		end
-		CPCd
 		subgraph Host2RCP
+			CPC
 			ZwaveRCP
+	
 			ZigbeeRCP
+
 			AoxRCP
 		end
-		SW2 <--> |UCL|ZwavePC
-		SW2 <--> |UCL|ZigbeePC
-		SW2 <--> |UCL|AoxPC
+		SW2 <--> |UCL over TCPIP|ZwavePC
+		SW2 <--> |UCL over TCPIP|ZigbeePC
+		SW2 <--> |UCL over TCPIP|AoxPC
 
 		CPCd<-->ZwaveNCP
 		CPCd<-->ZigbeeNCP
 		CPCd<-->AoxNCP
 		
-		CPCd<-->RCP
+		CPCd<-->CPC
 	end
 
-	subgraph Light["Light (MCU)"]
-		ZigbeePC_MCU[ZigbeePC]
-		subgraph LightRCP
-    	ZigbeeRCP_MCU
-    end
+	subgraph Light["Light (ZigbeeRCP)"]
+		ZigbeePCLight[ZigbeePC]
+	end
+	subgraph Dimmer["Dimmer (ZigbeeRCP)"]
+		ZigbeePCDimmer[ZigbeePC]
 	end
 
-	SW1 <--> |UCL|ZwavePC
-	SW1 <--> |UCL|ZigbeePC
-	SW1 <--> |UCL|AoxPC
+	SW1 <--> |UCL over TCPIP|ZwavePC
+	SW1 <--> |UCL over TCPIP|ZigbeePC
+	SW1 <--> |UCL over TCPIP|AoxPC
 
-	SW1 <--> |UCL|ZigbeePC_MCU
+	ZigbeeRCPHost1 <--> |UCL over Zigbee|ZigbeePCLight
+	ZigbeeRCP<-->|UCL over Zigbee|ZigbeePCDimmer
+
+	class Unify SkyBlue
+	class UnifyHost1 SkyBlue
 ```
 
 # 2. [UnifySDK](https://github.com/SiliconLabs/UnifySDK)
@@ -166,11 +185,11 @@ flowchart LR
 >
 > 這邊可以想像 BlueZ 控制 Bluetooth module or Bluetooth dongle。(這邊說個題外話，目前同一台電腦只能驅動一組 Bluetooth；當電腦 with Bluetooth on board，再插上 Bluetooth dongle 時，有可能造成電腦混亂)
 
-#### A. Z-Wave Protocol Controller ([ZPC](https://siliconlabs.github.io/UnifySDK/applications/zpc/readme_user.html))
+#### A. Z-Wave Protocol Controller ([ZPC User’s Guide](https://siliconlabs.github.io/UnifySDK/applications/zpc/readme_user.html))
 
-#### B. ZigBee Protocol Controller ([ZigPC](https://siliconlabs.github.io/UnifySDK/applications/zigpc/readme_user.html))
+#### B. ZigBee Protocol Controller ([ZigPC User’s Guide](https://siliconlabs.github.io/UnifySDK/applications/zigpc/readme_user.html))
 
-#### C. Angle of Arrival/Departure Protocol Controller ([AoXPC](https://siliconlabs.github.io/UnifySDK/applications/aox/applications/aoxpc/readme_user.html))
+#### C. Bluetooth Angle of Arrival/Departure Protocol Controller ([AoXPC User’s Guide](https://siliconlabs.github.io/UnifySDK/applications/aox/applications/aoxpc/readme_user.html))
 
 ### 2.1.3. Overview of relations among Unify Applications
 
@@ -189,25 +208,25 @@ flowchart LR
 
 ### 2.1.4. Services
 
-#### A. The Unify Framework Provisioning List (UPVL)
+#### A. The Unify Framework Provisioning List ([UPVL User’s Guide](https://siliconlabs.github.io/UnifySDK/applications/upvl/readme_user.html))
 
-> [The UPVL](https://siliconlabs.github.io/UnifySDK/applications/upvl/readme_user.html) serves the SmartStart Provisioning list to perform SmartStart Security 2 (S2) inclusions and maintains the ucl/SmartStart MQTT topic.
+> The UPVL serves the SmartStart Provisioning list to perform SmartStart Security 2 (S2) inclusions and maintains the ucl/SmartStart MQTT topic.
 
-#### B. The Unify Framework Group Manager (GMS)
+#### B. The Unify Framework Group Manager ([GMS User’s Guide](https://siliconlabs.github.io/UnifySDK/applications/gms/readme_user.html))
 
-> [GMS](https://siliconlabs.github.io/UnifySDK/applications/gms/readme_user.html) manages groups and bookkeeping between protocol controllers and also publishes group state changes to the ucl/by-group MQTT topic.
+> GMS manages groups and bookkeeping between protocol controllers and also publishes group state changes to the ucl/by-group MQTT topic.
 
-#### C. The Unify Name and Location service (NAL)
+#### C. The Unify Name and Location service ([NAL User’s Guide](https://siliconlabs.github.io/UnifySDK/applications/nal/readme_user.html))
 
-> [NAL](https://siliconlabs.github.io/UnifySDK/applications/nal/readme_user.html) is a helper MQTT component that allows for book-keeping of text names and locations that have been assigned. This functionality allows IoT Services to assign and read back a Name and a Location for each node/endpoint.
+> NAL is a helper MQTT component that allows for book-keeping of text names and locations that have been assigned. This functionality allows IoT Services to assign and read back a Name and a Location for each node/endpoint.
 
-#### D. The Unify Framework OTA Image Provider
+#### D. The Unify Framework OTA Image Provider  ([Image Provider User’s Guide](https://siliconlabs.github.io/UnifySDK/applications/image_provider/readme_user.html))
 
-> [OTA Image Provider](https://siliconlabs.github.io/UnifySDK/applications/image_provider/readme_user.html) announces OTA images available in OTA storage and publishes OTA binary on request.
+> OTA Image Provider announces OTA images available in OTA storage and publishes OTA binary on request.
 
-#### E. The Unify AoX Positioning Application
+#### E. The Unify AoX Positioning Application ([AoX Positioning User Guide]())
 
-> [AoX Positioning application](https://siliconlabs.github.io/UnifySDK/applications/aox/applications/positioning/readme_user.html) reads configuration and data from AoXPCs and publishes the calculated position of asset tags in the system.
+> AoX Positioning application reads configuration and data from AoXPCs and publishes the calculated position of asset tags in the system.
 
 ### 2.1.5. IoT Services
 
@@ -215,17 +234,19 @@ flowchart LR
 
 #### A. [Developer GUI](https://siliconlabs.github.io/UnifySDK/applications/dev_ui/dev_gui/readme_user.html)
 
-> [Dev GUI User’s Guide](https://siliconlabs.github.io/UnifySDK/applications/dev_ui/dev_gui/readme_user.html)
->
 > The [Developer GUI (dev_gui)](https://siliconlabs.github.io/UnifySDK/applications/dev_ui/dev_gui/readme_user.html)  service is a graphical user interface provided for operating and provisioning IoT devices using UCL. The dev_gui can be used as a reference for basic Unify concepts, such as device provisioning and control. The user interface is provided strictly for test and demonstration purposes only and is not suitable for production.
 
-#### B. The UPTICap
+> After a reboot the Unify Framework Developer GUI can be accessed from a browser at [http://raspberrypi.local:3080](http://raspberrypi.local:3080/).
+>
+> *Note* that the Unify Framework Developer GUI needs TCP access to the port 3080 and 1337 on the Raspberry Pi.
 
-> [UPTICap (upti_cap)](https://siliconlabs.github.io/UnifySDK/applications/upti_cap/readme_user.html) is an application to communicate with Silicon Labs WSTK adapters. The adapters capture data on the debug channel and publish the captured data as MQTT messages. Application provided strictly for test and demonstration purposes only and is not suitable for production.
+#### B. [UPTI Cap](https://siliconlabs.github.io/UnifySDK/applications/upti_cap/readme_user.html)
 
-#### C. The UPTIWriter
+> UPTICap (upti_cap) is an application to communicate with Silicon Labs WSTK adapters. The adapters capture data on the debug channel and publish the captured data as MQTT messages. Application provided strictly for test and demonstration purposes only and is not suitable for production.
 
-> [UPTIWriter (upti_writer)](https://siliconlabs.github.io/UnifySDK/applications/upti_writer/readme_user.html) is an application to receive trace packages captured with *UPTI_CAP* application and save them to a file in [Network Analyzer](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-tools-network-analyzer/) compatible format. Application provided strictly for test and demonstration purposes only and is not suitable for production.
+#### C. [UPTIWriter](https://siliconlabs.github.io/UnifySDK/applications/upti_writer/readme_user.html)
+
+> UPTIWriter (upti_writer) is an application to receive trace packages captured with *UPTI_CAP* application and save them to a file in [Network Analyzer](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-tools-network-analyzer/) compatible format. Application provided strictly for test and demonstration purposes only and is not suitable for production.
 
 ## 2.2. [Multiprotocol Host Software](https://siliconlabs.github.io/UnifySDK/doc/multiprotocol.html)
 
@@ -306,6 +327,11 @@ flowchart LR
 	CPCd <--> |CPC over UART or SPI|RCP
 ```
 
+## 2.3. Host(RPi4 64-BIT) via USB
+
+- [Z-Wave module](https://www.silabs.com/wireless/z-wave) flashed with Z-Wave - NCP Serial API Controller.
+- [Zigbee module](https://www.silabs.com/wireless/zigbee) EFR32MG12/EFR32xG22 running NCP for Zigbee or RCP for Multiprotocol
+- [Bluetooth module](https://www.silabs.com/wireless/bluetooth) EFR32xG22 running NCP Firmware for AoXPC
 
 # 3. [GeckoSDK](https://github.com/SiliconLabs/gecko_sdk/)
 

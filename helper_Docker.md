@@ -235,6 +235,7 @@ $ export DOCKER_TAG="22.04v1"
 
 $ docker build -t="$DOCKER_REPOSITORY:$DOCKER_TAG" .
 
+# Put Dockerfile in the same folder
 $ docker build -t="ubuntu:22.04v1" ./
 $ docker build -t="ubuntu:20.04v1" ./
 
