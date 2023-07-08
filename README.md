@@ -99,6 +99,10 @@
 
 > 身為一個人，建議善用 Markdown 記錄相關筆記，少用 doc。
 
+#### - [helper_MultimediaMuxAndDemux.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MultimediaMuxAndDemux.md) - Multimedia Mux and Demux helper
+
+>除了用手機看 YouTube 外，有些基本常識還是補足一下。
+
 #### - [helper_MQTT.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MQTT.md) - MQTT helper.
 
 > use mosquitto.
