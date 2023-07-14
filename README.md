@@ -151,6 +151,8 @@
 
 #### - [GDBusX](https://github.com/lankahsu520/GDBusX)
 
+#### - [makeXcmakeXmeson](https://github.com/lankahsu520/makeXcmakeXmeson)
+
 #### - [pythonX9](https://github.com/lankahsu520/pythonX9)
 
 #### - [RPiP9](https://github.com/lankahsu520/RPiP9)
