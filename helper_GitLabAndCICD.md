@@ -751,6 +751,20 @@ flowchart LR
 
 # II. Debug
 
+## III.1. remote: GitLab: You are not allowed to force push code to a protected branch on this project.
+
+> 當 rollback 操作時，強制 push 時
+> 1. 進到 https://gitlab.com ，點選該 Project
+> 2. [Settings] -> [Respository] -> [Protected branches / Expand] -> [Unprotect]
+
+```bash
+$ git reset --hard 6338f92
+$ git push -f
+Total 0 (delta 0), reused 0 (delta 0)
+remote: GitLab: You are not allowed to force push code to a protected branch on this project.
+
+```
+
 # III. Glossary
 
 # IV. Tool Usage
