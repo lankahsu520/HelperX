@@ -302,6 +302,14 @@ $ docker rmi df5de72bdb3b
 $ docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
 ```
 
+## 3.5. Others
+
+#### A. Copy
+
+```bash
+$ docker image tag ubuntu:20.04 ubuntu-cpy:20.04
+```
+
 # 4. Container Handler
 
 ## 4.1. Remove Container
@@ -392,6 +400,15 @@ $ docker exec -ti 2ea0d23f30cf ls -al /
 ```bash
 # Return low-level information on Docker objects
 $ docker inspect 2ea0d23f30cf
+```
+
+## 4.6. Others
+
+#### A. docker commit
+
+```bash
+# Create a new image from a container's changes
+$ docker commit 2ea0d23f30cf ubuntu:22.04v2
 ```
 
 # 5. Docker Container Files Handler
