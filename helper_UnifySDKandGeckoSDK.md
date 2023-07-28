@@ -445,6 +445,8 @@ $ rustup self uninstall
 
 ```
 
+## I.8. [Rust 程式設計語言](https://rust-lang.tw/book-tw/title-page.html)
+
 # II. Debug
 
 # III. Glossary

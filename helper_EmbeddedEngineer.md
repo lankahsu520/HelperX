@@ -447,8 +447,6 @@ sequenceDiagram
 	}
 
 
-
-
 # 14. 報告
 
 ## 14.1. 以上的項目是如何起頭，查找的方式和key word。
@@ -463,24 +461,96 @@ sequenceDiagram
 
 
 
+# 15. Mind
+
+## 15.1. Hardware
+
+```mermaid
+mindmap
+	Platform
+		Bootloader
+			BIOS
+				UEFI
+			Uboot
+		Operating system
+			Windows
+			Linux
+			macOS
+		Processor
+			[32-bit]
+			[64-bit]
+		Endianness
+			[Big-Endian]
+			[Little-Endian]
+		Architecture
+			ARM
+			MIPS
+			X86
+			MCU
+		Connecter
+			TTY
+			USB
+			I2C
+			I2S
+			GPIO
+		Disk
+			Flash
+			SSD
+			SD card
+			Dual Images
+```
+
+## 15.2. Software
+
+```mermaid
+mindmap
+	Platform
+		SDK
+		System integration
+			Yocto
+			Buildroot
+			OpenWRT
+		Language
+			C, C++
+			Python
+			Node.js
+			cargo/rustc
+			Clang
+		Compiler
+			Cross
+			Native
+			[libxxx-dev]
+		Build tools
+			make
+			cmake
+			meson
+			Python
+			Perl
+			Shell script
+			Ninja
+			npm
+		Runtime dependency
+			library
+
+```
 
 # Appendix
 
-# I. [GitHub](https://github.com), [GitLab](https://about.gitlab.com)
+# I. Study
 
->善用網路上的資源
+> 參考資料和網址
 
-```
+## I.1. [GitHub](https://github.com)
 
-```
+> 善用網路上的資源
 
+## I.2. [GitLab](https://about.gitlab.com)
 
-# II. version control system
+> 善用網路上的資源
 
-## II.1. [svn](https://github.com/lankahsu520/HelperX/blob/master/helper_SVNvsGit.md)
+## I.3. [SVN vs. Git](https://github.com/lankahsu520/HelperX/blob/master/helper_SVNvsGit.md)
 
 ```bash
-
 $ SVN_USER=mary
 $ svn co --username $SVN_USER http://xxx/xxx/$SVN_USER
 
@@ -499,36 +569,45 @@ $ svn st -q
 
 # not under version control
 $ svn status | grep -e ^?
-
 ```
 
-## II.2. [git](https://github.com/lankahsu520/HelperX/blob/master/helper_SVNvsGit.md)
+## I.4. [Byte Ordering on Big Endian and Little Endian Platforms](https://www.sfu.ca/sasdoc/sashtml/lrcon/z0920443.htm)
 
-# III. Tools 
+![endianness](./images/endianness.jpg)
 
-## III.1. 編輯器 c, c++, etc 
+# II. Debug
 
-### III.1.1. [Notepad++](https://notepad-plus-plus.org/downloads/v8.3.3/)
+> 遇到的問題和解決方法
+
+# III. Glossary 
+
+> 專有名詞和解釋
+
+# IV. Tool Usage
+
+> 相關執行程式的參數
+
+## IV.1. 編輯器 c, c++, etc 
+
+### IV.1.1. [Notepad++](https://notepad-plus-plus.org/downloads/v8.3.3/)
 
 - [Notepad++ Plugins JSON viewer for Javascript](https://pclevin.blogspot.com/2018/01/notepad-plugins-json-viewer-for.html)
 
-### III.1.2. [Source Insight](https://www.sourceinsight.com)
+### IV.1.2. [Source Insight](https://www.sourceinsight.com)
 
-## III.2. 比較軟體 merge
+## IV.2. 比較軟體 merge
 - [Code Compare](https://www.devart.com/codecompare/?utm_medium=application&utm_campaign=fromapp_CodeCompare&utm_source=AboutForm)
 
-## III.3. SSH Client
+## IV.3. SSH Client
 - [MobaXterm](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjRqOOJpO_2AhWFyIsBHaptD80QFnoECBcQAQ&url=https%3A%2F%2Fmobaxterm.mobatek.net%2Fdownload.html&usg=AOvVaw1KdgWg-XLXLUD5WTdf0WWV)
 
-## III.4. Markdown
+## IV.4. Markdown
 
 - [Typora — a markdown editor, markdown reader.](https://typora.io/)
 - [typora 画流程图、时序图(顺序图)、甘特图](https://www.runoob.com/note/47651)
 - [About Mermaid](https://mermaid-js.github.io/mermaid/#/?id=about-mermaid)
 
-## III.5. [DIVVY](https://mizage.com/windivvy/) - 分割視窗
-
-
+## IV.5. [DIVVY](https://mizage.com/windivvy/) - 分割視窗
 
 # Author
 
