@@ -53,6 +53,12 @@
 
 ## 1.1. Topic
 
+#### - [helper_ArtificialIntelligence.md](https://github.com/lankahsu520/HelperX/blob/master/helper_ArtificialIntelligence.md) - ArtificialIntelligence helper.
+
+> 我完全不懂 AI (Artificial Intelligence)，基本上你沒辦法從我這邊學到什麼，說是蹭 AI 也行。
+>
+> 只是把生活中的發想記錄下來。
+
 #### - [helper_BLE.md](https://github.com/lankahsu520/HelperX/blob/master/helper_BLE.md) - BLE helper.
 
 > BLE 的水很深，這邊只有概要，並且用不同的觀點去分析。
