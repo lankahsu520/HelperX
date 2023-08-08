@@ -70,7 +70,7 @@ sqlite> .header on
 sqlite> .mode column
 # 設定欄位寬度
 sqlite> .width 10 20 30 40
-sqlite> .timer on
+
 ```
 
 #### D. SQL command
@@ -172,43 +172,80 @@ $ sqlitebrowser
 
 ## 4.1. CREATE
 
-> CREATE TABLE "Music" (
-> 	"Artist"	TEXT NOT NULL,
-> 	"SongTitle"	TEXT NOT NULL,
-> 	"AlbumTitle"	TEXT NOT NULL,
-> 	"Awards"	TEXT NOT NULL,
-> 	PRIMARY KEY("Artist","SongTitle")
-> );
+```sql
+CREATE TABLE "Music" (
+	"Artist"	TEXT NOT NULL,
+	"SongTitle"	TEXT NOT NULL,
+	"AlbumTitle"	TEXT NOT NULL,
+	"Awards"	TEXT NOT NULL,
+	"Price"	INTEGER NOT NULL DEFAULT 0,
+	PRIMARY KEY("Artist","SongTitle")
+);
+```
 
 ## 4.2. SELECT
-
-> SELECT * FROM Music;
-
 ![SQLite30006](./images/SQLite30006.png)
+#### A. All
+
+```sql
+SELECT * FROM Music;
+
+# WHERE [] LIKE '%Some%'
+# WHERE [] LIKE '_omewha_%'
+SELECT * FROM Music WHERE AlbumTitle LIKE '%Some%';
+SELECT * FROM Music WHERE AlbumTitle LIKE '_omewha_%';
+
+# LIMIT and OFFSET
+SELECT * FROM Music LIMIT 3;
+
+# OFFSET 起始資料，0~N
+SELECT * FROM Music LIMIT 3 OFFSET 2;
+```
+
+#### B. ORDER BY ASC / DESC
+
+```sql
+SELECT * FROM Music ORDER BY Awards ASC;
+SELECT * FROM Music ORDER BY Awards DESC;
+```
+
+#### C. GROUP BY
+
+```sql
+# SUM/MAX/MIN
+SELECT Artist,SUM(Price) FROM Music GROUP BY Artist;
+
+SELECT Artist,MIN(Price) FROM Music GROUP BY Artist HAVING Price>=110;
+```
 
 ## 4.3. INSERT
 
-> INSERT INTO Music (Artist,SongTitle,AlbumTitle,Awards)
-> VALUES('Lanka', 'Lanka', 'Album123', '3');
-
 ![SQLite30007](./images/SQLite30007.png)
+```sql
+INSERT INTO Music (Artist,SongTitle,AlbumTitle,Awards,Price)
+VALUES('Lanka', 'Lanka', 'Album123', '3', 99);
+```
 
 ## 4.4. UPDATE
-
->UPDATE Music SET Awards='4';
-
 ![SQLite30009](./images/SQLite30009.png)
 
+```sql
+UPDATE Music SET Awards='4' WHERE Artist='Lanka' and SongTitle='Lanka';
+```
+
 ## 4.5. DELETE
-
-> DELETE FROM Music
-> WHERE Artist='Lanka' and SongTitle='Lanka';
-
 ![SQLite30008](./images/SQLite30008.png)
+
+```sql
+DELETE FROM Music
+WHERE Artist='Lanka' and SongTitle='Lanka';
+```
 
 ## 4.6. DROP
 
-> DROP TABLE Music
+```sql
+DROP TABLE Music;
+```
 
 # Appendix
 
