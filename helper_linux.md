@@ -319,6 +319,10 @@ sudo apt install mlocate
 locate -r .bash_aliases
 locate -r libmpc.so
 
+# to find the special filename under this folder
+sudo apt install mlocate
+
+locate libmpc.so | grep `pwd`
 ```
 
 #### which - locate a command
