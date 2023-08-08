@@ -117,6 +117,8 @@
 
 #### - [helper_RaspberryPiOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_RaspberryPiOS.md) - Raspberry Pi OS helper.
 
+#### - [helper_SQLite.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SQLite.md) - SQLite helper.
+
 #### - [helper_SIPandAsterisk.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SIPandAsterisk.md) - SIP and Asterisk helper.
 
 > 如果你選擇 FreePBX 或其它 UI 進行安裝設定前，不妨看看這裏的指引。
