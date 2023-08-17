@@ -553,8 +553,8 @@ flowchart LR
 	E-.->|Dotted link|F
 	G ==>|Thick link|H
 
-  I --o J
-	K --x L
+  I -.-o J
+	K -.-x L
 ```
 
 ```
