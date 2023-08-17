@@ -149,6 +149,8 @@
 >
 >所以請大家試著上網查尋看看。
 
+#### - [helper_GCCAndgdb.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GCCAndgdb.md) - GCC and gdb helper.
+
 ## 2.2. Repository
 
 #### - [beeX](https://github.com/lankahsu520/beeX)
