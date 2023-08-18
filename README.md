@@ -160,9 +160,9 @@
 > 請重複 5次以上。
 >
 > 聰明的你應該知道 gdb 是個 debug 工具，而不是一個產品或是副產品。
-> 至於不熟悉的新手，請看阮 helper，再提問。不然被 RD 當笑話來看。
+> 至於不熟悉的新手，請看完 helper，再提問。不然會被 RD 當笑話來看。
 >
-> 一般解決 Compile Errors and Warnings，平常寫程式有良好的習慣，如注意 alloc、free，給初值等，加上幾行 log 就能處理至少 95%上的問題。
+> 一般解決 Compile Errors and Warnings，平常寫程式有良好的習慣，如注意 alloc、free，給初值等，加上幾行 log(s) 就能處理至少 95%上的問題。
 
 ## 2.2. Repository
 
