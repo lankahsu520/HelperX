@@ -27,7 +27,9 @@
 
 > 強力建議使用
 
-#### B. [-Wformat-truncation](https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wno-int-conversion)
+#### B. [-Wformat-truncation](https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wformat-truncation)
+
+> 警告有時無可避免，但建議使用 snprintf or asprintf
 
 ```bash
 json_api.c:342:33: warning: ‘__builtin___snprintf_chk’ output may be truncated before the last format character [-Wformat-truncation=]
@@ -40,13 +42,15 @@ json_api.c:342:33: warning: ‘__builtin___snprintf_chk’ output may be truncat
 > topic: 1024
 > key_found: pointer
 
+> Level 1 of -Wformat-truncation enabled by -Wformat employs a conservative approach that warns only about calls to bounded functions whose return value is unused and that will most likely result in output truncation.
+
 ```bash
 CFLAGS+=-Wformat-truncation=0
 ```
 
 #### C. [-Wno-implicit-function-declaration](https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration)
 
-> 不建議使用
+> 不建議使用，請 include 相對應的 Header File
 
 ```bash
 statex_api.c:231:3: warning: implicit declaration of function ‘queuex_thread_stop’; did you mean ‘dbusx_thread_stop’? [-Wimplicit-function-declaration]
