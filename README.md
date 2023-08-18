@@ -151,6 +151,18 @@
 
 #### - [helper_GCCAndgdb.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GCCAndgdb.md) - GCC and gdb helper.
 
+> 這邊又有個小故事，雖然沒辦法百分之一百重現，但是大致如下
+>
+> 主管：「gdb 我要怎麼推廣全公司、加值產品價值」
+> 小小RD：「gdb 只是用在 debug 上的」
+>
+> 請重複 5次以上。
+>
+> 聰明的你應該知道 gdb 是個 debug 工具，而不是一個產品或是副產品。
+> 至於不熟悉的新手，請看阮 helper，再提問。不然被 RD 當笑話來看。
+>
+> 一般解決 Compile Errors and Warnings，平常寫程式有良好的習慣，如注意 alloc、free，給初值等，加上幾行 log 就能處理至少 95%上的問題。
+
 ## 2.2. Repository
 
 #### - [beeX](https://github.com/lankahsu520/beeX)
