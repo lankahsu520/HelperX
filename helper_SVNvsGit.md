@@ -127,6 +127,8 @@ $ git branch -a
 # switch to new-branch (exist)
 $ git checkout new-branch
 
+# git checkout remotes/origin/branch1 -> branch1
+git checkout -b branch1 remotes/origin/branch1
 # create branch
 $ git checkout -b new-branch
 $ git checkout -b new-branch origin
