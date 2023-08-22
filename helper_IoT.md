@@ -1,6 +1,21 @@
-
-
 # IoT 物聯網
+[![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
+[![GitHub license][license-image]][license-url]
+[![GitHub stars][stars-image]][stars-url]
+[![GitHub forks][forks-image]][forks-url]
+[![GitHub issues][issues-image]][issues-image]
+[![GitHub watchers][watchers-image]][watchers-image]
+
+[license-image]: https://img.shields.io/github/license/lankahsu520/HelperX.svg
+[license-url]: https://github.com/lankahsu520/HelperX/blob/master/LICENSE
+[stars-image]: https://img.shields.io/github/stars/lankahsu520/HelperX.svg
+[stars-url]: https://github.com/lankahsu520/HelperX/stargazers
+[forks-image]: https://img.shields.io/github/forks/lankahsu520/HelperX.svg
+[forks-url]: https://github.com/lankahsu520/HelperX/network
+[issues-image]: https://img.shields.io/github/issues/lankahsu520/HelperX.svg
+[issues-url]: https://github.com/lankahsu520/HelperX/issues
+[watchers-image]: https://img.shields.io/github/watchers/lankahsu520/HelperX.svg
+[watchers-url]: https://github.com/lankahsu520/HelperX/watchers
 
 # 1. Overview
 > [維基百科](https://zh.wikipedia.org/zh-tw/物联网) **物聯網**（英語：Internet of Things，簡稱**IoT**）是一種計算裝置、機械、數位機器相互關聯的系統，具備[通用唯一辨識碼](https://zh.wikipedia.org/wiki/通用唯一辨識碼)（UID），並具有通過網路傳輸數據的能力，無需人與人、或是人與裝置的互動
