@@ -162,7 +162,7 @@
 > 聰明的你應該知道 gdb 是個 debug 工具，而不是一個產品或是副產品。
 > 至於不熟悉的新手，請看完 helper，再提問。不然會被 RD 當笑話來看。
 >
-> 平常寫程式有良好的習慣，如注意 alloc、free，給初值，使用驗證過的函數等，加上幾行 Debug message(s) ，解決 Compile Errors and Warnings，就能處理至少 95%上的問題。
+> <font color="red">平常寫程式有良好的習慣，如注意 alloc、free，給初值，使用驗證過的函數等，加上幾行 Debug message(s) ，解決 Compile Errors and Warnings，就能處理至少 95%上的問題。</font>
 
 ## 2.2. Repository
 
