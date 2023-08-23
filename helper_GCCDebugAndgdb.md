@@ -39,7 +39,11 @@
 
 #### B. [-Wformat-truncation](https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wformat-truncation)
 
-> 警告有時無可避免，但建議使用 snprintf or asprintf
+> 該警告可留下，不用加上此參數來隱藏警示。
+>
+> 程式碼可但用 asprintf 解決。
+>
+> 另外 snprintf 不能解決此警示，但能避免執行時誤寫入記憶體。
 
 ```bash
 CFLAGS+=-Wformat-truncation=0
@@ -61,7 +65,7 @@ json_api.c:342:33: warning: ‘__builtin___snprintf_chk’ output may be truncat
 
 #### C. [-Wno-format](https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wformat)
 
-> 不建議使用，請針對程式碼進行修改
+> 不建議使用此參數來隱藏警示，請針對程式碼進行修改
 
 ```bash
 CFLAGS+=-Wno-format
@@ -85,7 +89,7 @@ printf("Hello world !!! (%ld)\n", strlen(buff));
 
 #### D. [-Wno-implicit-function-declaration](https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration)
 
-> 不建議使用，<font color="red">請 include 相對應的 Header File</font>
+> 不建議使用此參數來隱藏警示，<font color="red">請 include 相對應的 Header File</font>
 
 ```bash
 CFLAGS+=-Wno-implicit-function-declaration
@@ -123,7 +127,7 @@ helloworld_warning.c:1:1: note: include ‘<string.h>’ or provide a declaratio
 
 #### E. [-Wno-int-conversion](https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wno-int-conversion)
 
-> <font color="red">禁止使用</font>
+> <font color="red">禁止使用此參數來隱藏警示</font>
 
 ```bash
 statex_api.c:215:23: warning: assignment to ‘QueueX_t *’ {aka ‘struct QueueX_Struct *’} from ‘int’ makes pointer from integer without a cast [-Wint-conversion]
@@ -136,7 +140,7 @@ CFLAGS+=-Wno-int-conversion
 
 #### F. [-Wno-unused-result](https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-result)
 
-> 不建議使用，<font color="red">直接移除該變數</font>
+> 不建議使用此參數來隱藏警示，<font color="red">請修改原始碼，移除該變數</font>
 
 ```bash
 helloworld_warning.c:5:6: warning: unused variable ‘ret’ [-Wunused-variable]
@@ -148,7 +152,9 @@ helloworld_warning.c:5:6: warning: unused variable ‘ret’ [-Wunused-variable]
 
 #### A. [-g](https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html#index-g)
 
-> 建議使用，將來有利使用 gdb 進行 debug
+> 建議使用此參數，將來有利使用 gdb 進行 debug。
+>
+> 不過會增加執行檔的大小，但對記憶體容量很計較的嵌入式系統，也要有取捨。
 
 ```bash
 $ gdb ./demo_123
@@ -190,13 +196,13 @@ helloworld: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically 
 >
 > 進行編譯最佳化。雖然執行速度和效能<font color="red">可能</font>提高，不過副作用還是存在的，如非原程式碼的問題，而是最佳化後的 bug。
 >
-> 另外如果有要進行 gdb 進行 debug，有些功能會大大的縮減。
+> <font color="red">另外如果有要進行 gdb 進行 debug，有些功能會大大的縮減。</font>
 
 ## 2.4. [Options for Code Generation Conventions](https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html)
 
 #### A. [-fPIC](https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html#index-fPIC)
 
->編譯 shared library 時，請一定要加上
+>編譯 shared library 時，請一定要加上此參數。
 
 ```bash
 Building lib (shared): libutilx9.so
@@ -215,7 +221,7 @@ CFLAGS+=-fPIC
 
 #### A. error: ‘__NR_gettid’ undeclared (first use in this function)
 
-> <font color="red">請 include 相對應的 Header File</font>
+> 遇到此錯誤訊息時，<font color="red">請 include 相對應的 Header File</font>
 
 ```bash
 helloworld_dbg.h:42:31: error: ‘__NR_gettid’ undeclared (first use in this function)
