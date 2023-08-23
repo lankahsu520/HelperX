@@ -70,11 +70,11 @@ CFLAGS+=-Wno-format
 ##### C.1. example
 
 ```bash
-helloworld_simple.c:26:28: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘size_t’ {aka ‘long unsigned int’} [-Wformat=]
-   26 |  printf("Hello world !!! (%d)\n", strlen(buff));
+helloworld_warning.c:9:28: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long unsigned int’ [-Wformat=]
+    9 |  printf("Hello world !!! (%d)\n", strlen(buff));
       |                           ~^      ~~~~~~~~~~~~
       |                            |      |
-      |                            int    size_t {aka long unsigned int}
+      |                            int    long unsigned int
       |                           %ld
 ```
 
@@ -94,11 +94,11 @@ CFLAGS+=-Wno-implicit-function-declaration
 ##### D.1. example - printf
 
 ```bash
-helloworld_simple.c:24:2: warning: implicit declaration of function ‘printf’ [-Wimplicit-function-declaration]
-   24 |  printf("Hello world !!! (%d)\n", strlen(buff));
+helloworld_warning.c:9:2: warning: implicit declaration of function ‘printf’ [-Wimplicit-function-declaration]
+    9 |  printf("Hello world !!! (%d)\n", strlen(buff));
       |  ^~~~~~
-helloworld_simple.c:24:2: warning: incompatible implicit declaration of built-in function ‘printf’
-helloworld_simple.c:1:1: note: include ‘<stdio.h>’ or provide a declaration of ‘printf’
+helloworld_warning.c:9:2: warning: incompatible implicit declaration of built-in function ‘printf’
+helloworld_warning.c:1:1: note: include ‘<stdio.h>’ or provide a declaration of ‘printf’
   +++ |+#include <stdio.h>
 ```
 
@@ -109,11 +109,11 @@ helloworld_simple.c:1:1: note: include ‘<stdio.h>’ or provide a declaration 
 ##### Ｄ.2. example - strlen
 
 ```bash
-helloworld_simple.c:24:35: warning: implicit declaration of function ‘strlen’ [-Wimplicit-function-declaration]
-   24 |  printf("Hello world !!! (%d)\n", strlen(buff));
+helloworld_warning.c:9:35: warning: implicit declaration of function ‘strlen’ [-Wimplicit-function-declaration]
+    9 |  printf("Hello world !!! (%d)\n", strlen(buff));
       |                                   ^~~~~~
-helloworld_simple.c:24:35: warning: incompatible implicit declaration of built-in function ‘strlen’
-helloworld_simple.c:1:1: note: include ‘<string.h>’ or provide a declaration of ‘strlen’
+helloworld_warning.c:9:35: warning: incompatible implicit declaration of built-in function ‘strlen’
+helloworld_warning.c:1:1: note: include ‘<string.h>’ or provide a declaration of ‘strlen’
   +++ |+#include <string.h>
 ```
 
@@ -139,8 +139,9 @@ CFLAGS+=-Wno-int-conversion
 > 不建議使用，<font color="red">直接移除該變數</font>
 
 ```bash
-helloworld_simple.c:12:6: warning: unused variable ‘ret’ [-Wunused-variable]
-   12 |  int ret = 0;
+helloworld_warning.c:5:6: warning: unused variable ‘ret’ [-Wunused-variable]
+    5 |  int ret = 0;
+      |      ^~~
 ```
 
 ## 2.2. [Options for Debugging Your Program](https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html)
@@ -238,7 +239,7 @@ helloworld_dbg.h:42:31: error: ‘__NR_gettid’ undeclared (first use in this f
 
 >由此可知，軟體的好壞，大部分的因素還是在<font color="red">人 (軟體工程師)</font> 身上。除了軟體工程師的素質外，就是其身心是否健全。
 >
->工作中就常遇到特定的軟體工程師會用 bug 養 bug(s)，在那邊裝忙。為什麼會這樣，也要怪主管只相信 commit(s)  or bug(s) 多少來決定考考績。真是苦了那些良心尚在的軟體工程師。
+>工作中就常遇到特定的軟體工程師會用 bug 養 bug(s)，在那邊裝忙。為什麼會這樣，也要怪主管只相信 commit(s)  or bug(s) 多少來決定考績。真是苦了那些良心尚在的軟體工程師。
 
 # 4.  Debug message、Log vs gdb
 
