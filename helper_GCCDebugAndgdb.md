@@ -169,11 +169,16 @@ Type "apropos word" to search for commands related to "word"...
 Reading symbols from ./demo_123...
 (No debugging symbols found in ./demo_123)
 (gdb)
-
 ```
 
 ```bash
 CFLAGS+=-g
+```
+
+```bash
+# file 查看有沒有 with debug_info
+$ file helloworld
+helloworld: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=c6c8fadaa766e62cd9720a10a435c684456fe6eb, for GNU/Linux 3.2.0, with debug_info, not stripped
 ```
 
 ## 2.3. [Options That Control Optimization](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html)
@@ -221,9 +226,7 @@ helloworld_dbg.h:42:31: error: ‘__NR_gettid’ undeclared (first use in this f
 #include <sys/syscall.h>
 ```
 
-# 3. Source 
-
-# 3. Debug
+# <font color="red">3. Debug</font>
 
 > 如果你還不知道什麼是 [Debug](https://zh.wikipedia.org/wiki/葛麗絲·霍普)，請先了解 Debug 這個字的由來。
 >
@@ -231,11 +234,16 @@ helloworld_dbg.h:42:31: error: ‘__NR_gettid’ undeclared (first use in this f
 >
 > <font color="red">不管各位是用什麼工具、用什麼方法找出問題，最終還是靠軟體工程師進行修改。</font>
 
+> <font color="red">平常寫程式有良好的習慣，如注意 alloc、free，給初值，使用驗證過的函數等，加上幾行 Debug message(s) ，解決 Compile Errors and Warnings，就能處理至少 95%上的問題。</font>
+
+>由此可知，軟體的好壞，大部分的因素還是在<font color="red">人 (軟體工程師)</font> 身上。除了軟體工程師的素質外，就是其身心是否健全。
+>
+>工作中就常遇到特定的軟體工程師會用 bug 養 bug(s)，在那邊裝忙。為什麼會這樣，也要怪主管只相信 commit(s)  or bug(s) 多少來決定考考績。真是苦了那些良心尚在的軟體工程師。
+
 # 4.  Debug message、Log vs gdb
 
 >這邊的 Log 是代表存入檔案，之後再進行解析。
 >
->一般解決 Compile Errors and Warnings，平常寫程式有良好的習慣，如注意 alloc、free，給初值，使用驗證過的函數等，加上幾行 Debug message(s) 就能處理至少 95%上的問題。
 
 ## 4.1. xxx time
 
