@@ -1,4 +1,4 @@
-# GCC and gdb
+# GCC、Debug and gdb
 [![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
 [![GitHub license][license-image]][license-url]
 [![GitHub stars][stars-image]][stars-url]
@@ -17,9 +17,19 @@
 [watchers-image]: https://img.shields.io/github/watchers/lankahsu520/HelperX.svg
 [watchers-url]: https://github.com/lankahsu520/HelperX/watchers
 
-# 1.  [GCC Command Options](https://gcc.gnu.org/onlinedocs/gcc/Invoking-GCC.html)
+# 1. Overview
 
-## 1.1. [Options to Request or Suppress Warnings](https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html)
+> 以 C 語言為主，從編譯到執行時，可能會遇到的狀況。以及 一些處理手段和工具。
+>
+> 全篇並不是要申論某一主題，只是提及相關的經驗和解決之道。
+>
+> 畢竟個人的 文采不好，請見諒。
+
+# 2.  Compile Errors and Warnings
+
+> 有些相關訊息可透過 gcc 編譯時的參數 CFLAGS 調整就可以解決，而有些就要修改原始碼，
+
+## 2.1. [Options to Request or Suppress Warnings](https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html)
 
 #### A. [-Wall, -W](https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wall)
 
@@ -32,10 +42,15 @@
 > 警告有時無可避免，但建議使用 snprintf or asprintf
 
 ```bash
+CFLAGS+=-Wformat-truncation=0
+```
+
+##### B.1. example
+
+```bash
 json_api.c:342:33: warning: ‘__builtin___snprintf_chk’ output may be truncated before the last format character [-Wformat-truncation=]
   342 |      SAFE_SPRINTF_EX(topic_new, "%s/%s", topic, key_found);
       |                                 ^~~~~~~
-
 ```
 
 > topic_new: 1024
@@ -44,41 +59,91 @@ json_api.c:342:33: warning: ‘__builtin___snprintf_chk’ output may be truncat
 
 > Level 1 of -Wformat-truncation enabled by -Wformat employs a conservative approach that warns only about calls to bounded functions whose return value is unused and that will most likely result in output truncation.
 
-```bash
-CFLAGS+=-Wformat-truncation=0
-```
+#### C. [-Wno-format](https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wformat)
 
-#### C. [-Wno-implicit-function-declaration](https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration)
-
-> 不建議使用，請 include 相對應的 Header File
+> 不建議使用，請針對程式碼進行修改
 
 ```bash
-statex_api.c:231:3: warning: implicit declaration of function ‘queuex_thread_stop’; did you mean ‘dbusx_thread_stop’? [-Wimplicit-function-declaration]
-  231 |   queuex_thread_stop(statex_req->statex_q);
-      |   ^~~~~~~~~~~~~~~~~~
-      |   dbusx_thread_stop
-
+CFLAGS+=-Wno-format
 ```
+
+##### C.1. example
+
+```bash
+helloworld_simple.c:26:28: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘size_t’ {aka ‘long unsigned int’} [-Wformat=]
+   26 |  printf("Hello world !!! (%d)\n", strlen(buff));
+      |                           ~^      ~~~~~~~~~~~~
+      |                            |      |
+      |                            int    size_t {aka long unsigned int}
+      |                           %ld
+```
+
+```bash
+// 修改成 %ld
+printf("Hello world !!! (%ld)\n", strlen(buff));
+```
+
+#### D. [-Wno-implicit-function-declaration](https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wimplicit-function-declaration)
+
+> 不建議使用，<font color="red">請 include 相對應的 Header File</font>
 
 ```bash
 CFLAGS+=-Wno-implicit-function-declaration
 ```
 
-#### D. [-Wno-int-conversion](https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wno-int-conversion)
+##### D.1. example - printf
+
+```bash
+helloworld_simple.c:24:2: warning: implicit declaration of function ‘printf’ [-Wimplicit-function-declaration]
+   24 |  printf("Hello world !!! (%d)\n", strlen(buff));
+      |  ^~~~~~
+helloworld_simple.c:24:2: warning: incompatible implicit declaration of built-in function ‘printf’
+helloworld_simple.c:1:1: note: include ‘<stdio.h>’ or provide a declaration of ‘printf’
+  +++ |+#include <stdio.h>
+```
+
+```bash
+#include <stdio.h> // printf
+```
+
+##### Ｄ.2. example - strlen
+
+```bash
+helloworld_simple.c:24:35: warning: implicit declaration of function ‘strlen’ [-Wimplicit-function-declaration]
+   24 |  printf("Hello world !!! (%d)\n", strlen(buff));
+      |                                   ^~~~~~
+helloworld_simple.c:24:35: warning: incompatible implicit declaration of built-in function ‘strlen’
+helloworld_simple.c:1:1: note: include ‘<string.h>’ or provide a declaration of ‘strlen’
+  +++ |+#include <string.h>
+```
+
+```bash
+#include <string.h> // strlen
+```
+
+#### E. [-Wno-int-conversion](https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wno-int-conversion)
 
 > <font color="red">禁止使用</font>
 
 ```bash
 statex_api.c:215:23: warning: assignment to ‘QueueX_t *’ {aka ‘struct QueueX_Struct *’} from ‘int’ makes pointer from integer without a cast [-Wint-conversion]
   215 |  statex_req->statex_q = queuex_thread_init(name, MAX_OF_QSTATEX, sizeof(StateXPuck_t), statex_q_exec_cb, statex_q_free_cb);
-
 ```
 
 ```bash
 CFLAGS+=-Wno-int-conversion
 ```
 
-## 1.2. [Options for Debugging Your Program](https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html)
+#### F. [-Wno-unused-result](https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-result)
+
+> 不建議使用，<font color="red">直接移除該變數</font>
+
+```bash
+helloworld_simple.c:12:6: warning: unused variable ‘ret’ [-Wunused-variable]
+   12 |  int ret = 0;
+```
+
+## 2.2. [Options for Debugging Your Program](https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html)
 
 #### A. [-g](https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html#index-g)
 
@@ -111,7 +176,17 @@ Reading symbols from ./demo_123...
 CFLAGS+=-g
 ```
 
-## 1.3. [Options for Code Generation Conventions](https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html)
+## 2.3. [Options That Control Optimization](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html)
+
+#### A. [-O](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html#index-O)
+
+> Optimize. Optimizing compilation takes somewhat more time, and a lot more memory for a large function.
+>
+> 進行編譯最佳化。雖然執行速度和效能<font color="red">可能</font>提高，不過副作用還是存在的，如非原程式碼的問題，而是最佳化後的 bug。
+>
+> 另外如果有要進行 gdb 進行 debug，有些功能會大大的縮減。
+
+## 2.4. [Options for Code Generation Conventions](https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html)
 
 #### A. [-fPIC](https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html#index-fPIC)
 
@@ -130,9 +205,99 @@ collect2: error: ld returned 1 exit status
 CFLAGS+=-fPIC
 ```
 
-# 2. gdb
+## 2.5. Others
 
-## 2.1. 範例 ./demo_000
+#### A. error: ‘__NR_gettid’ undeclared (first use in this function)
+
+> <font color="red">請 include 相對應的 Header File</font>
+
+```bash
+helloworld_dbg.h:42:31: error: ‘__NR_gettid’ undeclared (first use in this function)
+   42 | #define gettidv1_ex() syscall(__NR_gettid)
+
+```
+
+```bash
+#include <sys/syscall.h>
+```
+
+# 3. Source 
+
+# 3. Debug
+
+> 如果你還不知道什麼是 [Debug](https://zh.wikipedia.org/wiki/葛麗絲·霍普)，請先了解 Debug 這個字的由來。
+>
+> 為什麼會特別列出這主題，因為就算遇到本科系的學生，也常常發生雞同鴨講，更別說是文組的同學。
+>
+> <font color="red">不管各位是用什麼工具、用什麼方法找出問題，最終還是靠軟體工程師進行修改。</font>
+
+# 4.  Debug message、Log vs gdb
+
+>這邊的 Log 是代表存入檔案，之後再進行解析。
+>
+>一般解決 Compile Errors and Warnings，平常寫程式有良好的習慣，如注意 alloc、free，給初值，使用驗證過的函數等，加上幾行 Debug message(s) 就能處理至少 95%上的問題。
+
+## 4.1. xxx time
+
+```mermaid
+flowchart LR
+	Compile[Compile Time]
+	Design-->Compile-->Runtime
+```
+
+|              | Coding | Code Review | Compile Errors and Warnings | Debug message | Log  | gdb  |
+| :----------: | ------ | ----------- | --------------------------- | ------------- | ---- | ---- |
+| Design Time  | ✔      | ✔           |                             |               |      |      |
+| Compile Time |        |             | ✔                           |               |      |      |
+|   Runtime    |        |             |                             | ✔             | ✔    | ✔    |
+
+## 4.2. Runtime Checking
+
+|                        | Debug message | Log  | gdb  |
+| :--------------------: | ------------- | ---- | ---- |
+| Get immediate response | ✔             |      | ✔    |
+|   breakpoint (stop)    |               |      | ✔    |
+|      line-by-line      | ✔             | ✔    | ✔    |
+|  function-by-function  | ✔             | ✔    | ✔    |
+
+# 5. 使用 gdb、gdbserver 
+
+>GDB, the GNU Project debugger, allows you to see what is going on `inside' another program while it executes -- or what another program was doing at the moment it crashed.
+>
+>GDB can do four main kinds of things (plus other things in support of these) to help you catch bugs in the act:
+>
+>- Start your program, specifying anything that might affect its behavior.
+>- Make your program stop on specified conditions.
+>- Examine what has happened, when your program has stopped.
+>- Change things in your program, so you can experiment with correcting the effects of one bug and go on to learn about another.
+>
+>The program being debugged can be written in C, C++, Pascal, Objective-C (and many other languages). Those programs might be executing on the same machine as GDB (native) or on another machine (remote). GDB can run on most popular UNIX and Microsoft Windows variants.
+
+## 5.1. gdb 的指令
+
+>[ChatGPT]
+>
+>GDB（GNU Debugger）是一個功能豐富的調試工具，它提供了各種指令，用於幫助你調試程式、觀察變數值、設置斷點等。以下是一些常用的 GDB 指令：
+>
+>1. **run / r：** 開始執行程式，可以搭配參數。例如：`run my_program arg1 arg2`
+>2. **break / b：** 設置斷點。你可以在特定的行數或函數上設置斷點。例如：`break main` 或 `b 15`
+>3. **continue / c：** 繼續執行程式直到下一個斷點。
+>4. **step / s：** 單步執行，逐行執行並進入函數內部。
+>5. **next / n：** 單步執行，但不進入函數內部。
+>6. **finish：** 執行程式，直到當前函數執行完畢。
+>7. **print / p：** 顯示變數的值。例如：`print x`
+>8. **info locals：** 顯示當前函數的局部變數。
+>9. **info breakpoints：** 顯示已設置的斷點。
+>10. **backtrace / bt：** 顯示當前的呼叫堆疊。
+>11. **watch：** 監視變數的變化。
+>12. **set variable：** 設置變數的值。
+>13. **list / l：** 顯示程式碼，預設是當前行附近的代碼。
+>14. **delete breakpoints：** 刪除斷點。
+>15. **quit / q：** 退出 GDB。
+>
+>這只是 GDB 指令的一個簡單列表，GDB 還有更多的指令和選項可以使用。你可以通過在 GDB 命令行界面中輸入 `help` 來查看所有可用的指令，或者使用 `help 指令名稱` 來獲得特定指令的幫助信息。如果你需要更詳細的資訊，你也可以參考 GDB 的官方文檔。
+
+## 5.2. 範例 ./demo_000
 
 #### A. 進入 gdb
 
@@ -249,7 +414,7 @@ Breakpoint 2, app_ParseArguments (argv=0x7fffffff9178, argc=1) at demo_000.c:145
 126             while((opt = getopt_long (argc, argv, short_options, long_options, &option_index)) != -1)
 (gdb) list
 121
-122     static void app_ParseArguments(int argc, char **argv)
+122     static void app_ParseArguments(int argc, char argv)
 123     {
 124             int opt;
 125
@@ -277,7 +442,7 @@ $1 = 1
 (gdb) p dbg_more
 $2 = 2
 (gdb) p argv
-$3 = (char **) 0x7fffffff9178
+$3 = (char ) 0x7fffffff9178
 (gdb) p argv[0]
 $4 = 0x7fffffffa12d "/work/codebase/lankahsu520/utilx9/demo_000"
 ```
@@ -319,7 +484,7 @@ A debugging session is active.
 Quit anyway? (y or n) y
 ```
 
-## 2.2. TUI (Text User Interface)
+## 5.3. TUI (Text User Interface)
 
 #### A. 進入 gdb
 
@@ -345,13 +510,13 @@ Reading symbols from ./demo_000...
 
 ```
 
-#### B. 按下 **Ctrl+x+a**
+#### B. 按下 Ctrl+x+a
 
 ![gdb01](./images/gdb01.png)
 
-#### C. 按下 **Ctrl+l**，刷新螢幕
+#### C. 按下 Ctrl+l，刷新螢幕
 
-## 2.3. gdbserver
+## 5.4. gdbserver
 
 ```mermaid
 flowchart LR
@@ -408,13 +573,15 @@ Reading symbols from /usr/lib/debug/.build-id/45/87364908de169dec62ffa538170118c
 
 ```
 
-
-
 # Appendix
 
 # I. Study
 
 ## I.1. [GCC Command Options](https://gcc.gnu.org/onlinedocs/gcc/Invoking-GCC.html)
+
+## I.2. [GNU偵錯器](https://zh.wikipedia.org/zh-tw/GNU侦错器)
+
+## I.3. [GDB: The GNU Project Debugger](http://gnu.ist.utl.pt/software/gdb/gdb.html)
 
 # II. Debug
 
