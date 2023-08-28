@@ -19,7 +19,7 @@
 
 # 1. Overview
 
-> 以 C 語言為主，從編譯到執行時，可能會遇到的狀況。以及 一些處理手段和工具。
+> 以 C 語言為主，從編譯到執行時，可能會遇到的狀況。以及一些處理手段和工具。
 >
 > 全篇並不是要申論某一主題，只是提及相關的經驗和解決之道。
 >
@@ -202,7 +202,7 @@ helloworld: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically 
 
 #### A. [-fPIC](https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html#index-fPIC)
 
->編譯 shared library 時，請一定要加上此參數。
+><font color="red">編譯 shared library 時，請一定要加上此參數。</font>
 
 ```bash
 Building lib (shared): libutilx9.so
@@ -275,18 +275,13 @@ flowchart LR
 |      line-by-line      | ✔             | ✔    | ✔    |
 |  function-by-function  | ✔             | ✔    | ✔    |
 
-# 5. 使用 gdb、gdbserver 
+# 5. 使用 [GDB: The GNU Project Debugger]()
 
->GDB, the GNU Project debugger, allows you to see what is going on `inside' another program while it executes -- or what another program was doing at the moment it crashed.
->
->GDB can do four main kinds of things (plus other things in support of these) to help you catch bugs in the act:
->
->- Start your program, specifying anything that might affect its behavior.
->- Make your program stop on specified conditions.
->- Examine what has happened, when your program has stopped.
->- Change things in your program, so you can experiment with correcting the effects of one bug and go on to learn about another.
->
->The program being debugged can be written in C, C++, Pascal, Objective-C (and many other languages). Those programs might be executing on the same machine as GDB (native) or on another machine (remote). GDB can run on most popular UNIX and Microsoft Windows variants.
+```bash
+# 安裝 gdb 和 gdbserver
+$ sudo apt get install gdb
+$ sudo apt get install gdbserver
+```
 
 ## 5.1. gdb 的指令
 
@@ -313,6 +308,8 @@ flowchart LR
 >這只是 GDB 指令的一個簡單列表，GDB 還有更多的指令和選項可以使用。你可以通過在 GDB 命令行界面中輸入 `help` 來查看所有可用的指令，或者使用 `help 指令名稱` 來獲得特定指令的幫助信息。如果你需要更詳細的資訊，你也可以參考 GDB 的官方文檔。
 
 ## 5.2. 範例 ./demo_000
+
+> 相關的程式碼 [demo_000.c](https://github.com/lankahsu520/utilx9/blob/main/demo_000.c)
 
 #### A. 進入 gdb
 
@@ -598,7 +595,26 @@ Reading symbols from /usr/lib/debug/.build-id/45/87364908de169dec62ffa538170118c
 
 ## I.3. [GDB: The GNU Project Debugger](http://gnu.ist.utl.pt/software/gdb/gdb.html)
 
+> GDB, the GNU Project debugger, allows you to see what is going on `inside' another program while it executes -- or what another program was doing at the moment it crashed.
+>
+> GDB can do four main kinds of things (plus other things in support of these) to help you catch bugs in the act:
+>
+> - Start your program, specifying anything that might affect its behavior.
+> - Make your program stop on specified conditions.
+> - Examine what has happened, when your program has stopped.
+> - Change things in your program, so you can experiment with correcting the effects of one bug and go on to learn about another.
+>
+> The program being debugged can be written in C, C++, Pascal, Objective-C (and many other languages). Those programs might be executing on the same machine as GDB (native) or on another machine (remote). GDB can run on most popular UNIX and Microsoft Windows variants.
+
 # II. Debug
+
+## II.1. configure: error: GMP is missing or unusable
+
+> 在編譯 gdb 時錯誤
+
+```bash
+$ sudo apt-get install libgmp-dev
+```
 
 # III. Glossary
 
