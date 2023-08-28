@@ -33,6 +33,11 @@
 
 > Topic C
 
+# Footnote
+
+[^1]:
+[^2]:
+
 # Appendix
 
 # I. Study
