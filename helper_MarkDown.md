@@ -402,6 +402,31 @@ flowchart TD
 
 ```
 
+```
+flowchart TD
+
+%% TB - top to bottom
+%% this is a comment; Start --> Process --> End
+	Start([起始點])
+	register{{註冊 signal}}
+	input[/輸入名稱/]
+	isboss{Is it the boss ?}
+	Process[程序]
+	Manual[\建立工作報告/]
+	Subroutine[[子程序]]
+	Database[(SQL)]
+	print[/print Hello Boss !!/]
+
+	AlternateProcess(替代流程 Plan B)
+	End([結束點]) 
+
+	Start-->|流程線|register-->input-->isboss-->|yes|print--> End
+	
+	isboss-->|no|Process-->Subroutine-->Manual--> End
+	Subroutine-->Database
+	input..-> AlternateProcess --> End
+```
+
 ### 5.2.2. [Flowchart Symbols Defined](https://www.breezetree.com/articles/excel-flowchart-shapes/)
 
 > 以下引言取自於 https://www.breezetree.com/articles/excel-flowchart-shapes/
@@ -901,6 +926,65 @@ flowchart LR
 	class SkyBlue SkyBlue
 ```
 
+```
+flowchart LR
+	White --> Silver --> Gray -->	Black
+  Red -->	Maroon --> Yellow --> Olive
+  Lime --> Green --> Aqua --> Teal
+  Blue --> Navy --> Fuchsia --> Purple
+	lightblue --> Orange --> Tomato --> SkyBlue
+
+	classDef default stroke:#333,stroke-width:4px
+	classDef White   fill:#FFFFFF
+	classDef Silver  fill:#C0C0C0
+	classDef Gray    fill:#808080
+	classDef Black   fill:#000000
+
+	classDef Red     fill:#FF0000
+	classDef Maroon  fill:#800000
+	classDef Yellow  fill:#FFFF00
+	classDef Olive   fill:#808000
+
+	classDef Lime    fill:#00FF00
+	classDef Green   fill:#008000
+	classDef Aqua    fill:#00FFFF
+	classDef Teal    fill:#008080
+
+	classDef Blue    fill:#0000FF
+	classDef Navy    fill:#000080
+	classDef Fuchsia fill:#FF00FF
+	classDef Purple  fill:#800080
+
+	classDef lightblue fill:#ADD8E6
+	classDef Orange  fill:#FFA500
+	classDef Tomato  fill:#FF6347
+	classDef SkyBlue fill:#87CEEB
+
+	class White White
+	class Silver Silver
+	class Gray Gray
+	class Black Black
+
+	class Red Red
+	class Maroon Maroon
+	class Yellow Yellow
+	class Olive Olive
+
+	class Lime Lime
+	class Green Green
+	class Aqua Aqua
+	class Teal Teal
+
+	class Blue Blue
+	class Navy Navy
+	class Fuchsia Fuchsia
+	class Purple Purple
+
+	class lightblue lightblue
+	class Orange Orange
+	class Tomato Tomato
+	class SkyBlue SkyBlue
+```
 
 #### Z. [Configuration](https://mermaid.js.org/syntax/flowchart.html#configuration)
 
@@ -919,6 +1003,7 @@ flowchart LR
 ## 5.3. Sequence 時序圖
 
 > 以下內容取自於 https://mermaid.js.org/syntax/sequenceDiagram.html
+>
 
 ### 5.3.1. Sample
 
@@ -935,6 +1020,18 @@ sequenceDiagram
 	USER->>RServer: Ok
 	RServer->>UAC: SIP/2.0 200 OK
 ```
+```
+sequenceDiagram
+	participant UAC as User Agent Client
+	participant RServer as Register/Redirect/Proxy Server
+	participant USER as User Database
+
+	UAC->>RServer: Register
+	RServer->>USER: Check
+	USER->>RServer: Ok
+	RServer->>UAC: SIP/2.0 200 OK
+```
+
 #### A. Sample 2
 
 ```mermaid
@@ -984,6 +1081,21 @@ sequenceDiagram
 	A --) B: Dotted line with a open arrow at the end (async)
 	
 ```
+```
+sequenceDiagram
+	participant A
+	participant B
+  
+	A -> B: Solid line without arrow
+	A --> B: Dotted line without arrow
+	A ->> B: Solid line with arrowhead
+	A-->> B: Dotted line with arrowhead
+	A -x B: Solid line with a cross at the end
+	A --x B: Dotted line with a cross at the end
+	A -) B: Solid line with an open arrow at the end (async)
+	A --) B: Dotted line with a open arrow at the end (async)
+```
+
 ### 5.3.4. Activations
 
 #### A. activate and deactivate, + and -
@@ -1281,6 +1393,260 @@ mindmap
 		:::urgent large
 ```
 
+```
+mindmap
+	Root
+		book["fa-book"]
+		::icon(fa fa-book)
+
+		skull["mdi-skull-outline"]
+		::icon(mdi mdi-skull-outline)
+
+		large[large]
+		:::urgent large
+```
+
+## 5.5. State 狀態圖
+
+> 以下內容取自於 https://mermaid.js.org/syntax/stateDiagram.html
+
+### 5.5.1. Sample
+```mermaid
+stateDiagram-v2
+	Requirement --> Analysis
+	Analysis --> Design
+	Design --> Implementation
+	Implementation --> Test
+	Test-->Requirement
+```
+
+```
+stateDiagram-v2
+	Requirement --> Analysis
+	Analysis --> Design
+	Design --> Implementation
+	Implementation --> Test
+	Test-->Requirement
+```
+
+### 5.5.2. stateDiagram Symbols Defined
+#### A. [States](https://mermaid.js.org/syntax/stateDiagram.html#states)
+
+```mermaid
+stateDiagram-v2
+	idle: Idle
+```
+```
+stateDiagram-v2
+	idle: Idle
+```
+
+#### B. [Transitions, Direction](https://mermaid.js.org/syntax/stateDiagram.html#transitions) and [Comments](https://mermaid.js.org/syntax/stateDiagram.html#comments)
+
+```mermaid
+stateDiagram-v2
+	direction LR
+	idle: Idle
+	run: Run
+	%% trigger the task and switch to run
+	idle --> run: trigger
+```
+```
+stateDiagram-v2
+	direction LR
+	idle: Idle
+	run: Run
+	idle --> run: trigger
+```
+
+#### C. [Start and End](https://mermaid.js.org/syntax/stateDiagram.html#start-and-end)
+
+```mermaid
+stateDiagram-v2
+	direction LR
+	idle: Idle
+	run: Run
+	
+	[*] --> idle
+	idle --> run: trigger
+	run --> [*]
+```
+
+```
+stateDiagram-v2
+	direction LR
+	idle: Idle
+	run: Run
+	
+	[*] --> idle
+	idle --> run: trigger
+	run --> [*]
+```
+
+#### D. [Composite states (Internal states)](https://mermaid.js.org/syntax/stateDiagram.html#composite-states)
+```mermaid
+stateDiagram-v2
+	direction TB
+	idle: Idle
+	run: Run
+	state run {
+		direction LR
+		[*] --> parse
+		parse --> init
+		init --> loop
+		loop -->	[*]
+	}
+	
+	[*] --> idle
+	idle --> run: trigger
+	run --> [*]
+```
+
+```
+stateDiagram-v2
+	direction TB
+	idle: Idle
+	run: Run
+	state run {
+		direction LR
+		[*] --> parse
+		parse --> init
+		init --> loop
+		loop -->	[*]
+	}
+	
+	[*] --> idle
+	idle --> run: trigger
+	run --> [*]
+```
+
+#### E. [Choice](https://mermaid.js.org/syntax/stateDiagram.html#choice)
+```mermaid
+stateDiagram-v2
+	direction LR
+	idle: Idle
+	state check_queue <<choice>> 
+
+	[*] --> idle
+	idle --> check_queue
+
+	check_queue --> pause: if task <= 0
+	check_queue --> work: if task > 0
+```
+
+```
+stateDiagram-v2
+	direction LR
+	idle: Idle
+	state check_queue <<choice>> 
+
+	[*] --> idle
+	idle --> check_queue
+
+	check_queue --> pause: if task <= 0
+	check_queue --> work: if task > 0
+```
+
+#### F. [Fork, Join](https://mermaid.js.org/syntax/stateDiagram.html#forks) and [Notes](https://mermaid.js.org/syntax/stateDiagram.html#notes)
+
+```mermaid
+stateDiagram-v2
+	direction LR
+	idle: Idle
+	
+	state thread_start <<fork>>
+	state thread_join <<join>>
+
+	[*] --> idle
+	idle --> run
+	run --> thread_start
+	thread_start --> work1
+	thread_start --> work2
+	work1 --> thread_join
+	work2 --> thread_join
+	thread_join --> free
+	free --> [*]
+	
+	note right of work1
+		data1
+	end note
+	
+	note left of work2
+		data2
+	end note
+```
+```
+stateDiagram-v2
+	direction LR
+	idle: Idle
+	
+	state thread_start <<fork>>
+	state thread_join <<join>>
+
+	[*] --> idle
+	idle --> run
+	run --> thread_start
+	thread_start --> work1
+	thread_start --> work2
+	work1 --> thread_join
+	work2 --> thread_join
+	thread_join --> free
+	free --> [*]
+	
+	note right of work1
+		data1
+	end note
+	
+	note left of work2
+		data2
+	end note
+```
+#### G. Concurrency
+```mermaid
+stateDiagram-v2
+	direction TB
+	
+	state Keyboard {
+		NumLockOff --> NumLockOn : NumLockPressed
+		NumLockOn --> NumLockOff : NumLockPressed
+		--
+		CapsLockOff --> CapsLockOn : CapsLockPressed
+		CapsLockOn --> CapsLockOff : CapsLockPressed
+		--
+		ScrollLockOff --> ScrollLockOn : ScrollLockPressed
+		ScrollLockOn --> ScrollLockOff : ScrollLockPressed
+		--
+		Keys --> Keys: xxxPressed
+	}
+	[*] --> tty
+	tty --> Keyboard
+	Keyboard --> Action
+	Action --> [*]
+```
+
+```
+stateDiagram-v2
+	direction TB
+	
+	state Keyboard {
+		NumLockOff --> NumLockOn : NumLockPressed
+		NumLockOn --> NumLockOff : NumLockPressed
+		--
+		CapsLockOff --> CapsLockOn : CapsLockPressed
+		CapsLockOn --> CapsLockOff : CapsLockPressed
+		--
+		ScrollLockOff --> ScrollLockOn : ScrollLockPressed
+		ScrollLockOn --> ScrollLockOff : ScrollLockPressed
+		--
+		Keys --> Keys: xxxPressed
+	}
+	[*] --> tty
+	tty --> Keyboard
+	Keyboard --> Action
+	Action --> [*]
+```
+
+#### H. [Styling with classDefs](https://mermaid.js.org/syntax/stateDiagram.html#styling-with-classdefs), [Spaces in state names](https://mermaid.js.org/syntax/stateDiagram.html#spaces-in-state-names)
 
 # Appendix
 
