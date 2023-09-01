@@ -59,6 +59,10 @@
 >
 > 只是把生活中的發想記錄下來。
 
+#### - [helper_astyle.md](https://github.com/lankahsu520/HelperX/blob/master/helper_astyle.md) - astyle helper.
+
+>程式碼格式化（縮排）工具，支援 C/C++、C++/CLI、Objective-C、C# 和 Java。
+
 #### - [helper_BLE.md](https://github.com/lankahsu520/HelperX/blob/master/helper_BLE.md) - BLE helper.
 
 > BLE 的水很深，這邊只有概要，並且用不同的觀點去分析。
