@@ -43,14 +43,11 @@ $ astyle --style=gnu --indent=tab demo_123.c
 ## 2.1. style=Lanka
 
 ```bash
-$ astyle --style=gnu --indent=tab -jU demo_123.c; \
-	astyle --indent=tab -jU -S -H -xV demo_123.c
-Formatted  /work/codebase/lankahsu520/utilx9/demo_123.c
-Formatted  /work/codebase/lankahsu520/utilx9/demo_123.c
+$ astyle --style=allman --indent=tab -jU -S -H -xV -xU --indent=force-tab demo_123.c
+```
 
+```bash
 $ astyle-ex demo_123.c
-Formatted  /work/codebase/lankahsu520/utilx9/demo_123.c
-Formatted  /work/codebase/lankahsu520/utilx9/demo_123.c
 ```
 
 # 3. General Commands
@@ -178,6 +175,18 @@ $ astyle --indent=tab -K demo_123.c
 	default:
 		break;
 	}
+```
+
+##### --indent-after-parens
+
+```bash
+# --indent-after-parens  OR  -xU
+# Indent, instead of align, continuation lines following lines
+# that contain an opening paren '(' or an assignment '='.
+$ astyle --indent=tab -xU demo_123.c
+```
+
+```c
 ```
 
 #### - Padding Options
@@ -805,8 +814,7 @@ function astyle-ex()
 	if [ ! -z "$FILES" ]; then
 		for FILE in ${FILES}; do
 		(
-			astyle --style=gnu --indent=tab -jU ${FILE}
-			astyle --indent=tab -jU -S -H -xV ${FILE}
+			astyle --style=allman --indent=tab -jU -S -H -xV -xU --indent=force-tab ${FILE}
 		)
 		done
 	else
