@@ -43,7 +43,7 @@ $ astyle --style=gnu --indent=tab demo_123.c
 ## 2.1. style=Lanka
 
 ```bash
-$ astyle --style=allman --indent=tab -jU -S -H -xV -xU --indent=force-tab demo_123.c
+$ astyle --style=allman --indent=tab -jU -S -H -xV -xU --indent=force-tab -C demo_123.c
 ```
 
 ```bash
@@ -130,6 +130,28 @@ statements.
 
 #### - Indentation Options
 
+##### --indent-classes
+
+```bash
+# --indent-classes  OR  -C
+# Indent 'class' blocks so that the entire block is indented.
+$ astyle --indent=tab -C demo_123.c
+```
+
+```cpp
+class Member
+{
+	private:
+^ 縮排
+		int m_age;
+  ^ 縮排
+
+	public:
+		int m_id;
+		string m_name; 
+}
+```
+
 ##### --indent-switches
 
 ```bash
@@ -211,7 +233,7 @@ $ astyle --indent=tab -D demo_123.c
 ```bash
 # --pad-header  OR  -H
 # Insert space padding after paren headers (e.g. 'if', 'for'...).
-$ astyle --indent=tab -U demo_123.c
+$ astyle --indent=tab -H demo_123.c
 ```
 
 ```c
@@ -814,7 +836,7 @@ function astyle-ex()
 	if [ ! -z "$FILES" ]; then
 		for FILE in ${FILES}; do
 		(
-			astyle --style=allman --indent=tab -jU -S -H -xV -xU --indent=force-tab ${FILE}
+			astyle --style=allman --indent=tab -jU -S -H -xV -xU --indent=force-tab -C ${FILE}
 		)
 		done
 	else
