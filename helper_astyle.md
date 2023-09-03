@@ -44,7 +44,7 @@ $ astyle --style=gnu --indent=tab demo_123.c
 
 ```bash
 $ astyle --style=gnu --indent=tab -jU demo_123.c; \
-	astyle --indent=tab -jU -S -H demo_123.c
+	astyle --indent=tab -jU -S -H -xV demo_123.c
 Formatted  /work/codebase/lankahsu520/utilx9/demo_123.c
 Formatted  /work/codebase/lankahsu520/utilx9/demo_123.c
 
@@ -84,6 +84,20 @@ $ astyle --style=linux demo_123.c
 $ astyle --style=google demo_123.c
 ```
 
+#### - Brace Modify Options
+##### --attach-closing-while 
+```bash
+# --attach-closing-while  OR  -xV
+# Attach closing while of do-while to the closing brace.
+$ astyle --indent=tab -xV demo_123.c
+```
+```c
+do
+{
+  
+} while (nread > 0);
+  ^ 不斷行
+```
 #### - Formatting Options
 
 ##### --add-braces
@@ -792,7 +806,7 @@ function astyle-ex()
 		for FILE in ${FILES}; do
 		(
 			astyle --style=gnu --indent=tab -jU ${FILE}
-			astyle --indent=tab -jU -S -H ${FILE}
+			astyle --indent=tab -jU -S -H -xV ${FILE}
 		)
 		done
 	else
