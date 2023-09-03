@@ -105,6 +105,18 @@ $ astyle --indent=tab -j demo_123.c
 	}
 ```
 
+##### --remove-braces
+
+```bash
+--add-one-line-braces  OR  -J
+Add one line braces to unbraced one line conditional
+statements.
+```
+
+```c
+// 基本與 --add-braces 反向
+```
+
 #### - Indentation Options
 
 ##### --indent-switches
