@@ -56,17 +56,28 @@ Formatted  /work/codebase/lankahsu520/utilx9/demo_123.c
 # 3. General Commands
 
 #### -  Brace Style Options
+
+##### --style=gnu
+
 ```bash
 # --style=gnu  OR  -A7
 # GNU style formatting/indenting.
 # Broken braces, indented blocks.
 $ astyle --style=gnu demo_123.c
+```
 
+##### --style=linux
+
+```bash
 # --style=linux  OR  --style=knf  OR  -A8
 # Linux style formatting/indenting.
 # Linux braces, minimum conditional indent is one-half indent.
 $ astyle --style=linux demo_123.c
+```
 
+##### --style=google
+
+```bash
 # --style=google  OR  -A14
 # Google style formatting/indenting.
 # Attached braces, indented class modifiers.
@@ -74,39 +85,110 @@ $ astyle --style=google demo_123.c
 ```
 
 #### - Formatting Options
+
+##### --add-braces
+
 ```bash
 # --add-braces  OR  -j
 # Add braces to unbraced one line conditional statements.
-# 添加大托號
-$ astyle -j demo_123.c
+$ astyle --indent=tab -j demo_123.c
+```
+
+```c
+	if (ret==0) ret++;
+```
+
+```c
+	// 添加 {}
+	if (ret==0) {
+		ret++;
+	}
 ```
 
 #### - Indentation Options
+
+##### --indent-switches
+
 ```bash
 # --indent-switches  OR  -S
 # Indent 'switch' blocks, so that the inner 'case XXX:'
 # headers are indented in relation to the switch block.
-$ astyle -S demo_123.c
+$ astyle --indent=tab -S demo_123.c
+```
 
+```c
+	switch (ret)
+	{
+		case 1:
+  ^ 縮排
+		{
+		}
+		break;
+		case 2:
+			break;
+		default:
+			break;
+	}
+```
+
+##### --indent-cases
+
+```bash
 # --indent-cases  OR  -K
 # Indent case blocks from the 'case XXX:' headers.
 # Case statements not enclosed in blocks are NOT indented.
-$ astyle -K demo_123.c
+$ astyle --indent=tab -K demo_123.c
+```
+
+```c
+	switch (ret)
+	{
+	case 1:
+		{
+		}
+		break;
+	case 2:
+		break;
+	default:
+		break;
+	}
 ```
 
 #### - Padding Options
 
+##### --pad-paren-in
+
 ```bash
 # Insert space padding around parenthesis on the inside only
 # --pad-paren-in  OR  -D
-$ astyle -D demo_123.c
+$ astyle --indent=tab -D demo_123.c
+```
 
+```c
+{
+	DBG_TR_LN( "enter" );
+            ^       ^ 加入 space
+}
+```
+
+##### --unpad-paren
+
+```bash
 # Remove unnecessary space padding around parenthesis.
 # --unpad-paren  OR  -U
-$ astyle -U demo_123.c
+$ astyle --indent=tab -U demo_123.c
+```
+
+```c
+{
+    <<<< 這會被移除
+  <<<< 這會被移除
+}
 ```
 
 #### - Tab Options
+
+##### --indent=tab
 
 ```bash
 # --indent=tab  OR  --indent=tab=#  OR  -t  OR  -t#
@@ -114,19 +196,48 @@ $ astyle -U demo_123.c
 # indent is # spaces long. Not specifying # will result
 # in a default assumption of 4 spaces per indent.
 $ astyle --indent=tab demo_123.c
+```
 
+```bash
+{
+	DBG_TR_LN("enter");
+^ 1 tab
+}
+```
+
+##### --indent=force-tab-x=2
+
+```bash
 # --indent=force-tab-x=#  OR  -xT#
 # Allows the tab length to be set to a length that is different
 # from the indent length. This may cause the indentation to be
 # a mix of both spaces and tabs. This option sets the tab length.
 # 2 spaces -> 1 tab
 $ astyle --indent=force-tab-x=2 demo_123.c
+```
 
+```c
+{
+		DBG_TR_LN("enter");
+^ ^ ( 原本 4 spaces, 1 tab/2paces)
+}
+```
+
+##### --indent=spaces=4
+
+```bash
 # --indent=spaces=#  OR  -s#
 # Indent using # spaces per indent. Not specifying #
 # will result in a default of 4 spaces per indent.
 # 4 spaces per indent
 $ astyle --indent=spaces=4 demo_123.c
+```
+
+```c
+{
+    DBG_TR_LN("enter");
+^^^^ 4 spaces
+}
 ```
 
 # Appendix
