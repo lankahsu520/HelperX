@@ -183,6 +183,21 @@ $ astyle --indent=tab -D demo_123.c
 }
 ```
 
+##### --pad-header
+
+```bash
+# --pad-header  OR  -H
+# Insert space padding after paren headers (e.g. 'if', 'for'...).
+$ astyle --indent=tab -U demo_123.c
+```
+
+```c
+if (a==1)
+  ^ a space
+{
+}
+```
+
 ##### --unpad-paren
 
 ```bash
@@ -777,7 +792,7 @@ function astyle-ex()
 		for FILE in ${FILES}; do
 		(
 			astyle --style=gnu --indent=tab -jU ${FILE}
-			astyle --indent=tab -jU -S ${FILE}
+			astyle --indent=tab -jU -S -H ${FILE}
 		)
 		done
 	else
