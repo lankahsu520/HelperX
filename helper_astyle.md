@@ -44,7 +44,7 @@ $ astyle --style=gnu --indent=tab demo_123.c
 
 ```bash
 $ astyle --style=gnu --indent=tab -jU demo_123.c; \
-	astyle --indent=tab -jU -S demo_123.c
+	astyle --indent=tab -jU -S -H demo_123.c
 Formatted  /work/codebase/lankahsu520/utilx9/demo_123.c
 Formatted  /work/codebase/lankahsu520/utilx9/demo_123.c
 
