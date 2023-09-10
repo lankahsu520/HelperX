@@ -17,6 +17,49 @@
 [watchers-image]: https://img.shields.io/github/watchers/lankahsu520/HelperX.svg
 [watchers-url]: https://github.com/lankahsu520/HelperX/watchers
 
+# 0. Environment
+
+#### svn
+
+```bash
+# install subversion-tools
+$ sudo apt-get --yes install subversion-tools
+```
+
+```bash
+# to set the default editor
+$ export SVN_EDITOR=vim
+```
+
+#### git
+
+```bash
+# install git
+$ sudo apt-get --yes install git
+```
+
+```bash
+# to set the default editor
+$ export GIT_EDITOR=vim
+
+$ git config --global core.editor "vim"
+
+# git diff
+$ export LESS=Rx2
+
+$ git config --global core.pager "less -FRSX"
+```
+
+```bash
+$ vim ~/.gitconfig
+
+$ git config –global user.name "name"
+$ git config –global user.email "email address"
+
+$ git config --global user.email "lankahsu@gmail.com"
+$ git config --global user.name "Lanka Hsu"
+```
+
 # 1. Repository
 
 #### svn
@@ -39,11 +82,6 @@ flowchart LR
 	SVN-Tracked --> |revert|SVN-Untracked
 ```
 > SVN：沒有所謂的 Local Repository。需要一個 SVN Server 擺放 Repository。
-```bash
-# to set the default editor
-$ export SVN_EDITOR=vim
-```
-
 #### git
 
 ```mermaid
@@ -72,23 +110,10 @@ flowchart LR
 ```
 > Git：分別存在 Remote Repository 和 Local Repository。
 ```bash
-$ git config –global user.name "name"
-$ git config –global user.email "email address"
-
-$ git config --global user.email "lankahsu@gmail.com"
-$ git config --global user.name "Lanka Hsu"
-
-
 # Create an empty Git repository or reinitialize an existing one
 $ mkdir HelloWorld
 $ cd HelloWorld
 $ git init
-
-# to set the default editor
-$ export GIT_EDITOR=vim
-
-$ git config --global core.editor "vim"
-
 ```
 
 ## 1.1. Branch
@@ -99,7 +124,6 @@ $ git config --global core.editor "vim"
 >
 > 也因此 svn 可以擷取單一目錄，不用抓取整個 repository，也因此省下不少時間！
 >
-> 
 
 #### git branch
 
@@ -380,6 +404,8 @@ $ svn log | more
 ```bash
 $ git log
 $ git log --oneline
+$ git log --oneline --graph
+$ git log --pretty=reference --graph
 ```
 
 ## 3.4. Ignore Files
@@ -1227,7 +1253,9 @@ alias svn-diff="svn diff $*"
 alias svn-diff2file="svn diff $* > /tmp/diff"
 
 alias svn-stq="svn st -q"
-alias svn-new="svn status | grep -e ^?"
+alias svn-new="svn status --no-ignore | grep -e ^?"
+alias svn-new-I="svn status --no-ignore | grep -e ^I"
+alias svn-new-all="svn status --no-ignore"
 alias svn-st="svn status --no-ignore"
 
 alias svn-external="svn propedit svn:externals"
@@ -1240,12 +1268,17 @@ alias svn-revision="svn info 2>/dev/null | grep Revision | cut -d' ' -f2"
 
 function svn-rm()
 {
-	svn st | grep '^!' | awk '{$1=""; print " --force \""substr($0,2)"@\"" }' | xargs svn delete
+	svn st | grep '^!' | awk '{$1=""; print " --force \""substr($0,2)"@\"" }' | xargs svn delete > /dev/null 2>&1
 }
 
 function svn-add()
 {
-	svn status | grep -e ^? | awk '{$1=""; print "\""substr($0,2)"\"" }' | xargs svn add
+	svn status --no-ignore | grep -e ^? | awk '{$1=""; print "\""substr($0,2)"\"" }' | xargs svn add > /dev/null 2>&1
+}
+
+function svn-add-all()
+{
+	svn status --no-ignore | awk '{$1=""; print "\""substr($0,2)"\"" }' | xargs svn add
 }
 
 function svn-rollback()
@@ -1265,13 +1298,19 @@ function svn-revert()
 		echo $HINT
 	fi
 }
+
+function svn-revert-sh()
+{
+	svn st -q | grep '.sh' | cut -d' ' -f8 | xargs svn revert
+}
 ```
 
 ##### A.2. Git
 
 ```bash
-#** git **
 export GIT_EDITOR=vim
+
+export LESS=Rx2
 
 alias git-push="git push"
 alias git-pull="git pull"
@@ -1284,6 +1323,7 @@ alias git-st="git status $*"
 alias git-blame="git blame"
 
 alias git-log="git log --oneline"
+alias git-log-graph="git log --pretty=reference --graph"
 
 alias git-rev="git log --oneline 2>/dev/null | cut -d' ' -f1 | head -n1"
 
@@ -1292,6 +1332,8 @@ alias git-seturl="git remote set-url origin"
 
 #清除 git reflog
 alias git-reflog="git gc --prune=now"
+
+alias git-prune="git remote prune origin"
 
 function git-addchangs()
 {
