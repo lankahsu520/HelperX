@@ -398,8 +398,7 @@ flowchart TD
 	
 	isboss-->|no|Process-->Subroutine-->Manual--> End
 	Subroutine-->Database
-	input..-> AlternateProcess --> End
-
+	input ..-> AlternateProcess --> End
 ```
 
 ```
@@ -424,7 +423,7 @@ flowchart TD
 	
 	isboss-->|no|Process-->Subroutine-->Manual--> End
 	Subroutine-->Database
-	input..-> AlternateProcess --> End
+	input ..-> AlternateProcess --> End
 ```
 
 ### 5.2.2. [Flowchart Symbols Defined](https://www.breezetree.com/articles/excel-flowchart-shapes/)
