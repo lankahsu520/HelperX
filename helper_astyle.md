@@ -42,9 +42,7 @@ $ astyle --style=gnu --indent=tab demo_123.c
 
 ## 2.1. style=Lanka
 
-```bash
-$ astyle --style=allman --indent=tab -jU -S -H -xV -xU --indent=force-tab -C demo_123.c
-```
+> please check IV.2. A.
 
 ```bash
 $ astyle-ex demo_123.c
