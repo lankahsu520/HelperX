@@ -26,6 +26,52 @@
 
 ### 0.1.2. 失敗、錯誤也得記錄下來
 
+### 0.1.3. Step by Step
+
+> 邏輯要清楚，條理的記下來，雖不是寫論文，但應對要自如。
+
+```mermaid
+flowchart LR
+json1([json1])
+json2([json2])
+json3([txt3])
+json4([json4])
+json5([json5])
+json6([json6])
+jsonA([jsonA])
+cmd1[cmd1]
+cmd2[cmd2]
+cmd3[cmd3]
+cmd4[cmd4]
+cmd5[cmd5]
+cmd6[cmd6]
+cmdA[cmdA]
+
+subgraph v1
+  cmd1 --> json1
+  cmd2 --> json2
+  cmd3 --> json3
+  cmdA --> jsonA
+end
+
+json1-->cmd4
+json2-->cmd4
+json3-->cmd5
+
+subgraph v2
+  cmd4 --> json4
+	cmd5 --> json5
+end
+
+json4-->cmd6
+json5-->cmd6
+
+subgraph v3
+  cmd6 --> json6
+end
+
+```
+
 ## 0.2. 善用版本控管工具
 
 ### 0.2.1. 所有記錄一定要納入版本控管
@@ -549,6 +595,8 @@ mindmap
 > 善用網路上的資源
 
 ## I.3. [SVN vs. Git](https://github.com/lankahsu520/HelperX/blob/master/helper_SVNvsGit.md)
+
+> 版本控管的基本操作一定要知道，不記得上網查。但是不能不會，也不要奢望別人會教你。
 
 ```bash
 $ SVN_USER=mary
