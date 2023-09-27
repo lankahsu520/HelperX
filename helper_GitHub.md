@@ -93,17 +93,6 @@ $ cd HelperX
 $ git pull
 ```
 
-#### D. Replace the Token at the Local Folder
-
-> 當 Token過期，請建立新的Token 如 ghp_e8DfhkewlDgfjwefohmfGofklj23sfljohfF
-
-```bash
-$ cd HelperX
-$ git remote set-url origin https://lankahsu520:ghp_e8DfhkewlDgfjwefohmfGofklj23sfljohfF@github.com/lankahsu520/HelperX.git
-```
-
-# 
-
 ## 1.2. [Use Personal Access Tokens](https://github.com/settings/tokens)
 
 ```mermaid
