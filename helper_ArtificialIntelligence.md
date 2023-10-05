@@ -19,6 +19,10 @@
 
 # 1. Overview
 
+> 我完全不懂 AI (Artificial Intelligence)，基本上你沒辦法從我這邊學到什麼，說是蹭 AI 也行。
+>
+> 只是把生活中的發想記錄下來。
+
 > [維基百科](https://zh.wikipedia.org/zh-tw/人工智能) **人工智慧**（英語：artificial intelligence，縮寫為**AI**）亦稱**智械**、**機器智慧**，指由人製造出來的機器所表現出來的[智慧](https://zh.wikipedia.org/wiki/智慧)。通常人工智慧是指透過普通電腦程式來呈現人類智慧的技術。該詞也指出研究這樣的智慧系統是否能夠實現，以及如何實現。同時，通過[醫學](https://zh.wikipedia.org/wiki/醫學)、[神經科學](https://zh.wikipedia.org/wiki/神經科學)、[機器人學](https://zh.wikipedia.org/wiki/机器人学)及[統計學](https://zh.wikipedia.org/wiki/統計學)等的進步，常態預測則認為人類的很多職業也逐漸被其取代。
 
 # 2. God vs AI
