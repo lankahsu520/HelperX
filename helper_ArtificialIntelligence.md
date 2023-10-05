@@ -106,6 +106,26 @@
 >
 > 而“凡間”中廣泛的應用，多是 [M2M](https://zh.wikipedia.org/zh-tw/M2M)！所以有請各位客官移駕至 [helper_IoT.md](https://github.com/lankahsu520/HelperX/blob/master/helper_IoT.md) 進行相關探討。
 
+## 4.1. API (Application Programming Interface) vs. AI
+
+>差異 ?
+
+```mermaid
+flowchart LR
+	data --> API --> result
+	subgraph BLACKBOX[Black Box]
+		API
+	end
+```
+```mermaid
+flowchart LR
+	data --> API --> result
+	subgraph AI
+		API
+	end
+```
+
+
 # Appendix
 
 # I. Study
