@@ -119,6 +119,10 @@
 
 #### - [helper_ONVIF.md](https://github.com/lankahsu520/HelperX/blob/master/helper_ONVIF.md) - ONVIF helper.
 
+#### - [helper_RAID.md](https://github.com/lankahsu520/HelperX/blob/master/helper_RAID.md) - RAID helper.
+
+> 一般人細究 RAID 是沒有意義，而是要了解自身的需求再評估和應用。
+
 #### - [helper_RaspberryPiOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_RaspberryPiOS.md) - Raspberry Pi OS helper.
 
 #### - [helper_SQLite.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SQLite.md) - SQLite helper.
