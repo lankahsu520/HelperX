@@ -135,7 +135,7 @@
 
 #### - [helper_vi.md](https://github.com/lankahsu520/HelperX/blob/master/helper_vi.md) - vi/vim helper.
 
-#### - [helper_VirtualBox-Ubuntu20.04.md](https://github.com/lankahsu520/HelperX/blob/master/helper_VirtualBox.md) - VirtualBox helper.
+#### - [helper_VirtualBox-Ubuntu20.04.md](https://github.com/lankahsu520/HelperX/blob/master/helper_VirtualBox-Ubuntu20.04.md - VirtualBox helper.
 
 ## 1.2. Repository
 
