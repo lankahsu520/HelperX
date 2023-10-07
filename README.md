@@ -63,6 +63,12 @@
 
 >程式碼格式化（縮排）工具，支援 C/C++、C++/CLI、Objective-C、C# 和 Java。
 
+#### - [helper_BackupAndRAID.md](https://github.com/lankahsu520/HelperX/blob/master/helper_BackupAndRAID.md) - Backup and RAID helper.
+
+> 人們應該是追求資料的健全保存後，再取得效能上的平衡。
+>
+> 而一般人細究 RAID 是沒有意義，要認知自身的需求，評估選擇有利的應用。
+
 #### - [helper_BLE.md](https://github.com/lankahsu520/HelperX/blob/master/helper_BLE.md) - BLE helper.
 
 > BLE 的水很深，這邊只有概要，並且用不同的觀點去分析。
@@ -118,10 +124,6 @@
 > use mosquitto.
 
 #### - [helper_ONVIF.md](https://github.com/lankahsu520/HelperX/blob/master/helper_ONVIF.md) - ONVIF helper.
-
-#### - [helper_RAID.md](https://github.com/lankahsu520/HelperX/blob/master/helper_RAID.md) - RAID helper.
-
-> 一般人細究 RAID 是沒有意義，而是要了解自身的需求再評估和應用。
 
 #### - [helper_RaspberryPiOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_RaspberryPiOS.md) - Raspberry Pi OS helper.
 

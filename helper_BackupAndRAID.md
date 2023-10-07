@@ -1,4 +1,4 @@
-# RAID<br> (**R**edundant **A**rray of **I**ndependent **D**isks)
+# Backup vs. RAID 
 [![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
 [![GitHub license][license-image]][license-url]
 [![GitHub stars][stars-image]][stars-url]
@@ -19,7 +19,11 @@
 
 # 1. Overview
 
-> 一般人細究 RAID 是沒有意義，而是要了解自身的需求再評估和應用。
+> 人們應該是追求資料的健全保存後，再取得效能上的平衡。
+>
+> 而一般人細究 RAID 是沒有意義，要認知自身的需求，評估選擇有利的應用。
+
+# 2. RAID <br> (**R**edundant **A**rray of **I**ndependent **D**isks)
 
 > [維基百科]
 >
@@ -29,19 +33,50 @@
 >
 > 簡單來說，RAID把多個[硬碟](https://zh.wikipedia.org/wiki/硬碟)組合成為一個邏輯硬碟，因此，[作業系統](https://zh.wikipedia.org/wiki/作業系統)只會把它當作一個實體硬碟。RAID常被用在[伺服器](https://zh.wikipedia.org/wiki/伺服器)電腦上，並且常使用完全相同的硬碟作為組合。由於硬碟價格的不斷下降與RAID功能更加有效地與[主機板](https://zh.wikipedia.org/wiki/主機板)整合，它也成為普通使用者的一個選擇，特別是需要大容量儲存空間的工作，如：視訊與音訊製作。
 
-# 2. RAID
+## 2.0. Mind
 
-> 追求速度、容錯或重建、減輕負載。
+> 這邊不討論，硬碟壞了，而要從中把資料提取出來。
 
-#### A. 何時發現錯誤?
+### 2.0.1. 追求目的
 
-> 寫入
-> 讀取
-> 寫入和讀取
 
-#### B. 要錯幾次 ?
+```mermaid
+mindmap
+	RAID
+		速度
+		容錯或重建
+		減輕負載
+		備份
+		愚知和盲從
+```
 
-#### C. 如何重建 ?
+
+
+### 2.0.2. 當錯誤發生時
+
+> 資料和硬碟是重點，其它不在此項考慮（如電源燒壞，螢幕不亮）
+>
+> 注意：假設情況如由 N 顆碟組成的 RAID，此時壞掉一顆硬碟，你將可能需另外準備 N 顆新的硬碟。
+>
+> M=N
+
+```mermaid
+mindmap
+	Fail
+		如何發現錯誤
+			寫入
+			讀取
+			寫入和讀取
+		誰來重建
+			單兵
+			專業團隊
+		硬碟資源
+			同型號停產
+			舊硬碟處置["舊硬碟*(N-1)"]
+			新硬碟準備["新硬碟*M"]
+			
+
+```
 
 ## 2.1. RAID 0
 
@@ -67,7 +102,7 @@
 >
 > 其中一台硬碟機發生問題，只要另一台仍為正常狀態，便可以維持其RAID 1功能正常運作。
 
->只要不是兩顆同時壞，只要更換壞掉的那顆，將資料複製就完成重建。相對的很簡單！
+>只要不是兩顆同時壞，更換壞掉的那顆即可，資料複製就可完成重建。相對的很簡單！
 >
 >一般人能排除。
 >
@@ -87,6 +122,14 @@
 
 ## 2.4. RAID 6
 
+>實體 Disk * 4 (up)
+>
+>Physical Drives 1TB + 1TB = 2 TB Logical Drive(Array) + 2 TB Parity Blocks
+>
+>Parity 運算
+>
+>同時發生兩台硬碟機故障時，也能夠容許、並維持磁碟陣列持續正常運作，儲存、寫入資料不受影響，實際上不會因為壞兩台硬碟，而導致整組 RAID 6 Offline 的情況。
+
 ## 2.5. RAID 7
 
 ## 2.6. RAID 01
@@ -97,6 +140,24 @@
 
 ## 2.9. RAID 60
 
+## 2.X. RAID 迷思
+
+> 一般人常有的迷思，並不是說使用 RAID 就萬能，真的有如神助 ?
+
+#### A. 速度真的比較快 ?
+
+#### B. 真的比較保險 ?
+
+#### C. 有可能要求救於專業的『[RAID資料救援](https://www.linwei.com.tw/process-detail/raid_diska/)』（因為文章是引用它們的，所以就幫它們打廣告）。
+
+#### D. 出事了，可能附帶的成本更加沉重！（專業的不見得是好的 ） 
+
+#### E. 空間的使用量一定變少！
+
+#### F. RAID 不等同於是備份。
+
+# 3. Backup
+>**備份**（英語：backup），在[資訊科技](https://zh.wikipedia.org/wiki/信息技术)與[資料管理](https://zh.wikipedia.org/wiki/数据管理)領域，指將[檔案系統](https://zh.wikipedia.org/wiki/文件系统)或[資料庫](https://zh.wikipedia.org/wiki/数据库)系統中的資料加以[複製](https://zh.wikipedia.org/wiki/复制)；一旦發生災難或錯誤操作時，得以方便且及時地恢復系統的有效資料和正常運作。重要資料應當[異地備援](https://zh.wikipedia.org/wiki/異地備援)，降低風險。
 
 
 # Appendix
@@ -110,6 +171,8 @@
 ## I.3. [RAID 1是什麼？一篇就理解架構與原理（2022最新）](https://www.linwei.com.tw/forum-detail/12/)
 
 ## I.4. [RAID 5 是什麼？一篇搞懂其原理與架構（2022年最新）](https://www.linwei.com.tw/forum-detail/11/)
+
+## I.5. [RAID 6 是什麼？帶你了解其原理與架構（2022年最新）](https://www.linwei.com.tw/forum-detail/52/)
 
 # II. Debug
 
