@@ -25,7 +25,7 @@
 
 # 2. RAID <br> (**R**edundant **A**rray of **I**ndependent **D**isks)
 
-> [維基百科]
+> [[維基百科] RAID](https://zh.wikipedia.org/zh-tw/RAID)
 >
 > **容錯式磁碟陣列**（**RAID**, **R**edundant **A**rray of **I**ndependent **D**isks），舊稱**容錯式廉價磁碟陣列**（**R**edundant **A**rray of **I**nexpensive **D**isks），簡稱**磁碟陣列**。利用虛擬化儲存技術把多個硬碟組合起來，成為一個或多個硬碟陣列組，目的為提升效能或資料冗餘，或是兩者同時提升。
 >
@@ -47,8 +47,8 @@ mindmap
 		容錯或重建
 		自動化
 			備份功能
-		獨立設備["獨立設備 (NAS / 電腦)"]
-			減輕負載 ?
+		減輕負載 ?
+			獨立設備["獨立設備 (NAS / 電腦)"]
 		硬碟空間
 		愚知和盲從
 ```
@@ -165,9 +165,101 @@ mindmap
 
 # 3. Backup
 
->[維基百科]
+>[[維基百科] 備份](https://zh.wikipedia.org/zh-tw/備份)
 >
 >**備份**（英語：backup），在[資訊科技](https://zh.wikipedia.org/wiki/信息技术)與[資料管理](https://zh.wikipedia.org/wiki/数据管理)領域，指將[檔案系統](https://zh.wikipedia.org/wiki/文件系统)或[資料庫](https://zh.wikipedia.org/wiki/数据库)系統中的資料加以[複製](https://zh.wikipedia.org/wiki/复制)；一旦發生災難或錯誤操作時，得以方便且及時地恢復系統的有效資料和正常運作。重要資料應當[異地備援](https://zh.wikipedia.org/wiki/異地備援)，降低風險。
+
+## 3.1. 完全備份 Full Backup
+
+> 假設今天是 20230931
+
+```mermaid
+flowchart TD
+	subgraph Full
+		direction LR
+		LongTimeAgo-20230931
+	end
+```
+
+## 3.2. 增量備份 Incremental Backup
+
+> base on 3.1. 的完全備份後，每日進行備份
+
+```mermaid
+flowchart TD
+	subgraph Inc6
+		direction LR
+		20231006
+	end
+	subgraph Inc5
+		direction LR
+		20231005
+	end
+	subgraph Inc4
+		direction LR
+		20231004
+	end
+	subgraph Inc3
+		direction LR
+		20231003
+	end
+	subgraph Inc2
+		direction LR
+		20231002
+	end
+	subgraph Inc1
+		direction LR
+		20231001
+	end
+```
+
+## 3.3. 差異備份 Differential Backup
+
+> base on 3.1. 的完全備份後，每日進行備份
+
+```mermaid
+flowchart TD
+	subgraph Diff6
+		direction LR
+		20231006-6[20231006]
+		20231005-6[20231005]
+		20231004-6[20231004]
+		20231003-6[20231003]
+		20231002-6[20231002]
+		20231001-6[20231001]
+	end
+	subgraph IDiff5
+		direction LR
+		20231005-5[20231005]
+		20231004-5[20231004]
+		20231003-5[20231003]
+		20231002-5[20231002]
+		20231001-5[20231001]
+	end
+	subgraph Diff4
+		direction LR
+		direction LR
+		20231004-4[20231004]
+		20231003-4[20231003]
+		20231002-4[20231002]
+		20231001-4[20231001]
+	end
+	subgraph Diff3
+		direction LR
+		20231003-3[20231003]
+		20231002-3[20231002]
+		20231001-3[20231001]
+	end
+	subgraph Diff2
+		direction LR
+		20231002-2[20231002]
+		20231001-2[20231001]
+	end
+	subgraph Diff1
+		direction LR
+		20231001-1[20231001]
+	end
+```
 
 
 # Appendix
