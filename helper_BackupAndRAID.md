@@ -153,12 +153,15 @@ mindmap
 #### D. 真的比較保險 ?
 
 #### E. 出事了，可能附帶的成本更加沉重！
->專業的不見得是好的
+>專業的不見得是好的。
 
-#### F. 有可能要求救於專業的『[RAID資料救援](https://www.linwei.com.tw/process-detail/raid_diska/)』
+#### F. 硬碟停產，全部是否要淘汰換新 ?
+
+#### G. 有可能要求救於專業的『[RAID資料救援](https://www.linwei.com.tw/process-detail/raid_diska/)』
 >因為文章是引用它們的，所以就幫它們打廣告。
 
 # 3. Backup
+
 >[維基百科]
 >
 >**備份**（英語：backup），在[資訊科技](https://zh.wikipedia.org/wiki/信息技术)與[資料管理](https://zh.wikipedia.org/wiki/数据管理)領域，指將[檔案系統](https://zh.wikipedia.org/wiki/文件系统)或[資料庫](https://zh.wikipedia.org/wiki/数据库)系統中的資料加以[複製](https://zh.wikipedia.org/wiki/复制)；一旦發生災難或錯誤操作時，得以方便且及時地恢復系統的有效資料和正常運作。重要資料應當[異地備援](https://zh.wikipedia.org/wiki/異地備援)，降低風險。
