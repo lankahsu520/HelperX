@@ -56,7 +56,7 @@ mindmap
 
 > 資料和硬碟是重點，其它不在此項考慮（如電源燒壞，螢幕不亮）
 >
-> 注意：假設情況如由 N 顆碟組成的 RAID，此時壞掉一顆硬碟，你將可能需另外準備 N 顆新的硬碟。
+> 注意：假設情況如由 N 顆碟組成的 RAID，此時壞掉一顆硬碟，你將可能需另外準備 M 顆新的硬碟。
 >
 > M=N
 
@@ -92,7 +92,7 @@ mindmap
 
 ## 2.2. RAID 1
 
-> 實體 Disk * 2
+> 實體 Disk * 2^n (n>=1)
 >
 > Physical Drives 1TB + 1TB = 1TB Logical Drive(Array)
 >
@@ -144,19 +144,23 @@ mindmap
 
 > 一般人常有的迷思，並不是說使用 RAID 就萬能，真的有如神助 ?
 
-#### A. 速度真的比較快 ?
+#### A. RAID 不等同於是備份。
 
-#### B. 真的比較保險 ?
+#### B. 空間的使用量一定變少！
 
-#### C. 有可能要求救於專業的『[RAID資料救援](https://www.linwei.com.tw/process-detail/raid_diska/)』（因為文章是引用它們的，所以就幫它們打廣告）。
+#### C. 速度真的比較快 ?
 
-#### D. 出事了，可能附帶的成本更加沉重！（專業的不見得是好的 ） 
+#### D. 真的比較保險 ?
 
-#### E. 空間的使用量一定變少！
+#### E. 出事了，可能附帶的成本更加沉重！
+>專業的不見得是好的
 
-#### F. RAID 不等同於是備份。
+#### F. 有可能要求救於專業的『[RAID資料救援](https://www.linwei.com.tw/process-detail/raid_diska/)』
+>因為文章是引用它們的，所以就幫它們打廣告。
 
 # 3. Backup
+>[維基百科]
+>
 >**備份**（英語：backup），在[資訊科技](https://zh.wikipedia.org/wiki/信息技术)與[資料管理](https://zh.wikipedia.org/wiki/数据管理)領域，指將[檔案系統](https://zh.wikipedia.org/wiki/文件系统)或[資料庫](https://zh.wikipedia.org/wiki/数据库)系統中的資料加以[複製](https://zh.wikipedia.org/wiki/复制)；一旦發生災難或錯誤操作時，得以方便且及時地恢復系統的有效資料和正常運作。重要資料應當[異地備援](https://zh.wikipedia.org/wiki/異地備援)，降低風險。
 
 
