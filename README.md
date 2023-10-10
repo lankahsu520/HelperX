@@ -51,7 +51,7 @@
 >
 > 還有就算把所有的知識學會，你也不會成為賈伯斯（Steve Jobs），你也只能把工作（jobs）做順！
 
-## 1.1. Topic
+## 1.1. Startup
 
 #### - [helper_ArtificialIntelligence.md](https://github.com/lankahsu520/HelperX/blob/master/helper_ArtificialIntelligence.md) - ArtificialIntelligence helper.
 
@@ -148,6 +148,22 @@
 #### - [helper_SoftwareEnginnerX9.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SoftwareEnginnerX9.md) - Software Engineer helper.
 
 >Please read this md at first !!! It is very important.
+
+#### - [helper_SDKAndCodebase.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SDKAndCodebase.md) - SDK and Codebase helper.
+
+>在專案開啟時，都會指派成員先去研究其可行性，當然有 SDK 時，就要先進行彙整、編譯和測試。以下就是一個很糟的專案案例。
+>
+>我：「你最近研究的東西相關的文件放那？」
+>
+>先遣隊：「都在官網提供的 GitHub」
+>
+>我：「那要從那開始 ?」
+>
+>先遣隊：「官網都有寫」
+>
+>我：「那 SDK，又放在那？編的如何？」
+>
+>先遣隊：「官網都有，你自己不會抓哦！」
 
 #### - [helper_DBus.md](https://github.com/lankahsu520/HelperX/blob/master/helper_DBus.md) - dbus helper.
 
