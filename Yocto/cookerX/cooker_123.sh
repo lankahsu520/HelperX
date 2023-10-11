@@ -1,6 +1,6 @@
 #!/bin/sh
 
-HINT="$0 {all|cook|build|dry-run|generate|shell|clean|distclean|update|ls|pull}"
+HINT="$0 {all|cook|build|dry-run|generate|shell|clean|distclean|update|init|ls|pull}"
 HINT+="\nExample:"
 HINT+="\n\t init + update + generate + cook, check: $0 all"
 HINT+="\n\t init + update + generate + cook: $0 cook"
@@ -26,6 +26,8 @@ TEE_ARG=""
 INTERACTIVE=""
 
 COOKER_MENU="$PJ_COOKER_MENU_DIR/$PJ_COOKER_MENU"
+COOKER_VERBOSE="-v"
+#COOKER_DRY="-n"
 
 BUILD_SCRIPT="build-script.sh"
 
@@ -79,8 +81,8 @@ cfg_fn()
 
 	[ -f .cookerconfig_bak ] || (cp .cookerconfig .cookerconfig_bak;)
 
-	export YOCTO_DOWNLOADS=`realpath $PWD/$PJ_YOCTO_DOWNLOADS`
-	export YOCTO_SSTATE=`realpath $PWD/$PJ_YOCTO_SSTATE`
+	export YOCTO_DOWNLOADS=`realpath $PJ_YOCTO_DOWNLOADS`
+	export YOCTO_SSTATE=`realpath $PJ_YOCTO_SSTATE`
 	jq . .cookerconfig_bak | jq ".menu=\"`pwd`/$PJ_COOKER_MENU_DIR/$PJ_COOKER_MENU\"" | jq ".[\"layer-dir\"]=\"$PJ_YOCTO_LAYERS\"" | jq ".[\"build-dir\"]=\"$PJ_YOCTO_BUILDS\"" | jq ".[\"sstate-dir\"]=\"$YOCTO_SSTATE\"" | jq ".[\"dl-dir\"]=\"$YOCTO_DOWNLOADS\"" | jq -c . > .cookerconfig
 
 	return 0
@@ -104,11 +106,20 @@ update_fn()
 	return 0
 }
 
+init_fn()
+{
+	datetime_fn "${FUNCNAME[0]} ... "
+
+	do_command_fn "cooker $COOKER_DRY $COOKER_VERBOSE init $COOKER_MENU"
+
+	return 0
+}
+
 cook_fn()
 {
 	datetime_fn "${FUNCNAME[0]} ... "
 
-	do_command_fn "cooker cook $COOKER_MENU $PJ_YOCTO_TARGET"
+	do_command_fn "cooker $COOKER_DRY $COOKER_VERBOSE cook $COOKER_MENU $PJ_YOCTO_TARGET"
 
 	return 0
 }
@@ -117,7 +128,7 @@ build_fn()
 {
 	datetime_fn "${FUNCNAME[0]} ... "
 
-	do_command_fn "cooker build"
+	do_command_fn "cooker $COOKER_DRY $COOKER_VERBOSE build $PJ_YOCTO_TARGET"
 
 	return 0
 }
@@ -200,6 +211,9 @@ main_fn()
 		;;
 		update)
 			update_fn
+		;;
+		init)
+			init_fn
 		;;
 		clean)
 			clean_fn

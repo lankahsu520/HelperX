@@ -57,6 +57,7 @@ $ cd /work/YoctoPI3
 $ cooker init ./cooker-menu/pi3-sample-menu.json
 $ cat .cookerconfig
 
+$ cooker init
 $ cooker update
 $ cooker generate
 $ cooker build

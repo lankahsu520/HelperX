@@ -274,6 +274,49 @@ SRCREV = "${@'${AUTOREV}' if d.getVar('BB_EXTRA_SRCREV', 'AUTOINC') \
 
 # II. Debug
 
+## II.1. yocto 裏 BB_FETCH_PREMIRRORONLY  是什麼功用
+
+> [ChatGPT]  yocto 裏 BB_FETCH_PREMIRRORONLY  是什麼功用
+>
+> 在 Yocto Project 中，`BB_FETCH_PREMIRRORONLY` 是一個 BitBake 變數，用於指定哪些軟體包（通常是源代碼 tarballs 或 Git 存儲庫）應該僅使用本地的預先鏡像（pre-mirrors）進行下載，而不是從遠程源進行下載。這對於加速 Yocto 構建過程並減少對外部網絡資源的依賴很有用。
+>
+> `BB_FETCH_PREMIRRORONLY` 的主要功能如下：
+>
+> 1. **本地預先鏡像：** Yocto 開發者可以設置本地預先鏡像，這是一個包含一組源代碼 tarballs 或 Git 存儲庫的本地資源。通常，這些資源是先從外部源（如官方網站或Git存儲庫）下載並儲存在本地預先鏡像中。
+> 2. **提高下載效能：** 設置 `BB_FETCH_PREMIRRORONLY` 可以通知 BitBake 優先使用本地預先鏡像來下載源代碼。這有助於加速 Yocto 構建過程，因為本地下載通常比從遠程源下載更快。
+> 3. **減少對外部網絡的依賴：** 通過僅使用本地預先鏡像，開發者可以減少對外部網絡資源的依賴。這在某些環境中很有用，特別是在網絡連接不穩定或有限的情況下。
+>
+> 使用 `BB_FETCH_PREMIRRORONLY` 變數時，您可以在 Yocto 的 `local.conf` 配置文件中設置它，如下所示：
+>
+> ```json
+> BB_FETCH_PREMIRRORONLY = "1"
+> ```
+>
+> 這將告訴 BitBake 優先使用本地預先鏡像，如果本地沒有所需的資源，則才會嘗試從遠程源下載。
+>
+> 請注意，為了正確使用 `BB_FETCH_PREMIRRORONLY`，您需要確保已設置本地預先鏡像，並在其中包含所需的源代碼 tarballs 或 Git 存儲庫。這通常需要事先下載和緩存這些資源。
+
+## II.2. yocto 裏 BB_NO_NETWORK 是什麼功用
+
+>[ChatGPT]  yocto 裏 BB_NO_NETWORK 是什麼功用
+>
+>在 Yocto Project 中，`BB_NO_NETWORK` 是一個 BitBake 變量，它用於指定是否禁用網絡訪問，特別是在構建嵌入式 Linux 映像時。這個變量的主要功能是允許您控制 BitBake 構建過程中的網絡連接，以適應不同的開發和部署場景。
+>
+>`BB_NO_NETWORK` 的主要功能如下：
+>
+>1. **禁用網絡訪問：** 將 `BB_NO_NETWORK` 設置為 "1" 可以告訴 BitBake 禁用網絡訪問。這意味著 BitBake 不會嘗試從互聯網上下載所需的源代碼、依賴項或鏡像。這對於在沒有互聯網連接的封閉環境中進行構建或在網絡不穩定的情況下進行構建非常有用。
+>2. **離線構建：** 當您需要在沒有網絡連接的情況下進行 Yocto 構建時，可以設置 `BB_NO_NETWORK` 為 "1"。這樣，BitBake 將僅依賴於本地緩存、預先下載的源代碼和預先配置的依賴項。
+>3. **加速構建：** 在某些情況下，開發人員可能希望通過禁用網絡訪問來加快構建過程。這是因為網絡下載操作可能會成為構建的瓶頸，禁用它們可以減少構建時間。
+>4. **鏡像或本地存儲：** 在某些情況下，您可能已經準備好了所需的源代碼、鏡像或依賴項，並希望避免在每次構建時下載它們。設置 `BB_NO_NETWORK` 可以確保 BitBake 使用您提供的本地資源。
+>
+>要在 Yocto 構建中使用 `BB_NO_NETWORK`，您可以將以下內容添加到您的 `local.conf` 配置文件中：
+>
+>```json
+>BB_NO_NETWORK = "1"
+>```
+>
+>請注意，設置 `BB_NO_NETWORK` 為 "1" 可以在某些情況下加快構建，但也可能需要更多的手動管理和預先下載所需的資源。因此，根據您的特定需求和情況，謹慎使用這個選項。
+
 # III. Glossary
 
 # IV. Tool Usage

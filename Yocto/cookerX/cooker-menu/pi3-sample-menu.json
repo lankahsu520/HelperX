@@ -19,7 +19,14 @@
 			"notes": ["The default `core-image-base` image is used for bitbake."],
 			"target": "core-image-base",
 			"layers": ["meta-raspberrypi"],
-			"local.conf": ["MACHINE = 'raspberrypi3' ", "ENABLE_UART = '1' ", "IMAGE_CLASSES += 'extrausers'", "EXTRA_USERS_PARAMS = 'usermod -P 91005476 root;'", "IMAGE_INSTALL += ' dropbear'", "CMDLINE_append += 'quiet' "]
+			"local.conf": [
+				"MACHINE = 'raspberrypi3' "
+				,"ENABLE_UART = '1' "
+				,"IMAGE_CLASSES += 'extrausers'"
+				,"EXTRA_USERS_PARAMS = 'usermod -P 91005476 root;'"
+				,"IMAGE_INSTALL += ' dropbear'"
+				,"CMDLINE_append += 'quiet' "
+			]
 		}
 	}
 }
