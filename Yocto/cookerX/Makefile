@@ -19,25 +19,17 @@ MAKE_ARG=$(filter-out $@,$(MAKECMDGOALS))
 
 .DEFAULT_GOAL = all
 
-.PHONY: all cook cook-clean cook-build dry-run generate toolchain toolchain_pure $(BB_TASKS)
+# .cook-build -> cook-patched -> .cook-update -> .cook-init
+.PHONY: all cook cook-clean cook-build dry-run toolchain toolchain_pure $(BB_TASKS)
 all: cook-build check
 
 cook-clean:
 	@rm -f .cook-*
 
-.unpack:
-	touch $@
-
-.patched: .unpack .generate
-	@if [ -d patches/$(PJ_YOCTO_LAYERS) ]; then \
-		cp -avr patches/$(PJ_YOCTO_LAYERS)/* $(PJ_YOCTO_LAYERS); \
-	fi
-	touch $@
-
 dry-run:
 	./cooker_123.sh dry-run
 
-cook-build: .patched
+cook-build: .cook-patched
 	./cooker_123.sh build
 
 cook:
@@ -47,13 +39,18 @@ cook:
 	./cooker_123.sh init
 	touch $@
 
-.cook-update: .init
+.cook-update: .cook-init
 	./cooker_123.sh update
 	touch $@
 
-# .cook-generate -> .cook-update -> .cook-init
-.cook-generate: .update 
+.cook-generate: .cook-update 
 	./cooker_123.sh generate
+	touch $@
+
+.cook-patched: .cook-generate
+	@if [ -d patches/$(PJ_YOCTO_LAYERS) ]; then \
+		cp -avr patches/$(PJ_YOCTO_LAYERS)/* $(PJ_YOCTO_LAYERS); \
+	fi
 	touch $@
 
 history:
