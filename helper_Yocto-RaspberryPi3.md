@@ -206,9 +206,9 @@ $ ls -al ./builds/build-pi3/tmp/deploy/images/raspberrypi3/core-image-base-raspb
 >
 > 你可以看看 [helper_Docker.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Docker.md)也是有相同情況。
 
-# 6. cookerX
+# 6. [cookerX](https://github.com/lankahsu520/HelperX/tree/master/Yocto/cookerX)
 
-> cookerX is based on [Yocto Cooker](https://github.com/cpb-/yocto-cooker).  pi3-sample-menu.json 使用的版本過舊。
+> [cookerX](https://github.com/lankahsu520/HelperX/tree/master/Yocto/cookerX) is based on [Yocto Cooker](https://github.com/cpb-/yocto-cooker).  pi3-sample-menu.json 使用的版本過舊。
 >
 > | meta              | branch | rev        |
 > | ----------------- | ------ | ---------- |
@@ -228,6 +228,24 @@ $ ls -al builds_lnk/pi3-master_rootfs/
 
 # pi3-master_core-image-base-raspberrypi3.wic.bz2
 $ ls -al images_pi3/pi3-master_core-image-base-raspberrypi3.wic.bz2
+
+```
+
+##### A.1. Build BB
+
+```bash
+$ make build
+BB_TASK=[build], BB=[]
+Example:
+  make listtasks BB=avahi
+  make configure BB=avahi
+  make clean BB=avahi
+  make cleanall BB=avahi
+  make fetch BB=avahi
+  make compile BB=avahi
+  make build BB=avahi
+  make install BB=avahi
+  make package_qa BB=avahi
 
 ```
 
