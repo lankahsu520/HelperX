@@ -11,20 +11,20 @@ BINS_CHECK_yes =
 # USERS_yes
 include mk/user.mk
 
-#make listtasks R=yokisv5
-R ?= yokisv5
-
 BB_TASKS=listtasks configure clean cleanall fetch compile build install package_qa#
-MAKE_ARG=$(filter-out $@,$(MAKECMDGOALS))
+#BB ?= avahi
 
 .DEFAULT_GOAL = all
 
 # .cook-build -> cook-patched -> .cook-update -> .cook-init
-.PHONY: all cook cook-clean cook-build dry-run toolchain toolchain_pure $(BB_TASKS)
+.PHONY: all distclean cook cook-clean cook-build dry-run
 all: cook-build check
 
 cook-clean:
-	@rm -f .cook-*
+	rm -f .cook-*
+
+distclean: cook-clean
+	rm -rf builds
 
 dry-run:
 	./cooker_123.sh dry-run
@@ -36,6 +36,7 @@ cook:
 	./cooker_123.sh cook
 
 .cook-init:
+	# please use cooker_123.sh, dont call "cooker init xxx/xxx.json"
 	./cooker_123.sh init
 	touch $@
 
@@ -53,9 +54,29 @@ cook:
 	fi
 	touch $@
 
-history:
+.PHONY: build-history builds-lnk builds-linker bb-lnk bb-linker toolchain toolchain_pure $(BB_TASKS)
+build-history:
 	@cd builds/build-$(PJ_YOCTO_TARGET) \
 	&& buildhistory-collect-srcrevs -a
+
+builds-lnk:
+	@cd builds_lnk \
+	&& ls -al --color=auto
+
+builds-linker:
+	./builds_linker.sh
+
+bb-lnk:
+	@cd bb_lnk \
+	&& ls -al --color=auto
+
+bb-linker:
+	./bb_linker.sh
+
+bb-list:
+	bitbake -s
+
+linker: bb-linker builds-linker
 
 toolchain:
 	#cooker build -s $(PJ_YOCTO_TARGET)
@@ -65,11 +86,23 @@ toolchain_pure:
 	bitbake meta-toolchain
 
 $(BB_TASKS):
-	@echo "BB_TASK=[$@], R=[$(R)], MAKE_ARG=[$(MAKE_ARG)]"
-ifneq ("$(R)", "")
-	bitbake -c $@ $(R)
+	@echo "BB_TASK=[$@], BB=[$(BB)]"
+ifeq ("$(BB)", "")
+	@echo "Example:"
+	@echo "  make listtasks BB=avahi"
+	@echo "  make configure BB=avahi"
+	@echo "  make clean BB=avahi"
+	@echo "  make cleanall BB=avahi"
+	@echo "  make fetch BB=avahi"
+	@echo "  make compile BB=avahi"
+	@echo "  make build BB=avahi"
+	@echo "  make install BB=avahi"
+	@echo "  make package_qa BB=avahi"
 else
-	@echo "Please input [R]ECIPE !!!"
+	@for BBx in $(BB); do \
+		echo "[bitbake -c $@ $$BBx]"; \
+		bitbake -c $@ $$BBx; \
+	done
 endif
 	@echo
 
