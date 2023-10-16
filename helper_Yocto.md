@@ -317,6 +317,14 @@ SRCREV = "${@'${AUTOREV}' if d.getVar('BB_EXTRA_SRCREV', 'AUTOINC') \
 >
 >請注意，設置 `BB_NO_NETWORK` 為 "1" 可以在某些情況下加快構建，但也可能需要更多的手動管理和預先下載所需的資源。因此，根據您的特定需求和情況，謹慎使用這個選項。
 
+## II.3. Previous bitbake instance shutting down?, waiting to retry...
+
+```bash
+$ find * -name bitbake.lock
+
+$ rm builds/*/bitbake.lock
+```
+
 # III. Glossary
 
 # IV. Tool Usage

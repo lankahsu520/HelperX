@@ -107,6 +107,14 @@ mindmap
 			OpenWrt
 			Yocto
 			crosstool[crosstool-ng]
+		Update
+      Partition
+        Dual Images
+        Single Image
+			tools?
+				flashtool
+				Imager
+				OTA
 		Toolchain
 			Compiler
 				Cross
@@ -165,6 +173,8 @@ stateDiagram-v2
 ## 2.2. SDK to Develop
 
 > 從專案開啟，拿到 SDK 後，就需要花部分人力進行 Codebase 整合，之後進到版本控管後，才有利於開發/測試人員進行開發和測試！
+>
+> 就目前工作的經驗，一般要完成 1st Codebase，至少需要 3*人月。
 
  ```mermaid
 flowchart LR
