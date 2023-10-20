@@ -107,7 +107,34 @@ rsync -av --progress --delete /work/* /work_bak
 
 ```bash
 scp -vr /work/* lanka@192.168.0.99:/work
+```
 
+```bash
+# to keep password into SCP_PASS_AUTO
+# ssh-pass123 lankahsu520
+# sshpp scp -vr /work/* lanka@192.168.0.99:/work
+function sshpp()
+{
+	FILES="$*"
+
+	if [ ! -z "$SCP_PASS_AUTO" ]; then
+		sshpass -p "$SCP_PASS_AUTO" $FILES
+	else 
+		$FILES
+	fi
+}
+
+function ssh-pass123()
+{
+	SCP_PASS="$1"
+
+	if [ ! -z "$SCP_PASS" ]; then
+		export SCP_PASS_AUTO=$SCP_PASS
+	else
+		echo "Please set [SCP_PASS_AUTO]"
+		echo "SCP_PASS_AUTO=$SCP_PASS_AUTO"
+	fi
+}
 ```
 
 ## 1.2. Remove
@@ -472,7 +499,23 @@ echo "Hello World !!!"
 
 ```
 
-#### export — set the export attribute for variables
+#### eval - construct command by concatenating arguments
+
+```bash
+DO_COMMAND="ls -al"
+eval "${DO_COMMAND}"
+```
+
+```bash
+function eval-it()
+{
+	DO_COMMAND="$*"
+	echo "[${DO_COMMAND}]"
+	eval ${DO_COMMAND}
+}
+```
+
+#### export - set the export attribute for variables
 
 ```bash
 export SVN_EDITOR=vim
@@ -580,6 +623,34 @@ sudo -E -b
 # environment
 sudo -E
 
+```
+
+```bash
+# to keep passwoard in $SUDO_PASS_AUTO
+# sudo-pass123 lankahsu520
+# sudoo ls -al
+function sudoo()
+{
+	FILES="$*"
+
+	if [ ! -z "$SUDO_PASS_AUTO" ]; then
+		echo -e "$SUDO_PASS_AUTO" | sudo -S -$FILES
+	else
+		echo "Please set SUDO_PASS_AUTO"
+		sudo $FILES
+	fi
+}
+
+function sudo-pass123()
+{
+	SUDO_PASS="$1"
+
+	if [ ! -z "$SUDO_PASS" ]; then
+		export SUDO_PASS_AUTO=$SUDO_PASS
+	else 
+		echo "SUDO_PASS_AUTO=$SUDO_PASS_AUTO"
+	fi
+}
 ```
 
 #### w - Show who is logged on and what they are doing
