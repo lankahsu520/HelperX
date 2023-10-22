@@ -36,14 +36,14 @@ mindmap
 				RJ45
 				同軸電纜
 			無線
-				Wi-Fi
+				WiFi["Wi-Fi"]
 				ZigBee
-				Z-Wave
+				ZWave["Z-Wave"]
 				thread
 		Protocol
-			TCP/IP
+			TCPIP["TCP/IP"]
 			ZigBee 3.0
-			Z-Wave Plus
+			ZWavePlus["Z-Wave Plus"]
 			thread
 		功能
 ```
@@ -220,7 +220,7 @@ PhoneO <--> |phone line|PhoneM
 #### A.  [OpenThread Border Router (OTBR)](https://openthread.io/guides/border-router)
 
 ```bash
-git clone https://github.com/openthread/ot-br-posix.git
+$ git clone https://github.com/openthread/ot-br-posix.git
 ```
 
 ## 4.5. ZigBee
@@ -231,15 +231,65 @@ git clone https://github.com/openthread/ot-br-posix.git
 
 >[維基百科](https://zh.wikipedia.org/zh-tw/Z-Wave) **Z-Wave**，是一種主要用於[家庭自動化](https://zh.wikipedia.org/wiki/家庭自動化)的[無線](https://zh.wikipedia.org/wiki/无线)通信協議。它是一種網狀網絡，使用低耗能無線電波在設備與設備間進行通信，[[1\]](https://zh.wikipedia.org/zh-tw/Z-Wave#cite_note-1)從而無線控制家中電器和其他設備，例如控制照明、安全系統、恆溫器、窗戶、鎖、游泳池和車庫門開啟器。
 
+## 4.7. Matter
+
+>[維基百科](https://zh.wikipedia.org/wiki/Matter) **Matter**是一項[智慧型家居](https://zh.wikipedia.org/wiki/智能家居)的[開源標準](https://zh.wikipedia.org/wiki/开源标准)，由[連接標準聯盟](https://zh.wikipedia.org/wiki/连接标准联盟)制定、認證、推廣，該標準基於網際網路協定（IP），遵循該標準的智慧型家居裝置、行動應用程式和雲服務能夠進行互聯和通信。
+>
+>2021年5月11日，CHIP專案協定正式命名為「Matter」，ZigBee聯盟也更名為[連接標準聯盟](https://zh.wikipedia.org/wiki/连接标准联盟)（Connectivity Standards Alliance）
+
+A. [Matter](https://github.com/project-chip/connectedhomeip#matter)
+
+> Matter (formerly Project CHIP) creates more connections between more objects, simplifying development for manufacturers and increasing compatibility for consumers, guided by the Connectivity Standards Alliance.
+
+```bash
+$ git clone https://github.com/project-chip/connectedhomeip.git
+```
+
+# 5. Cloud Service
+
+## 5.1. Amazon Alexa
+
+## 5.2. Apple Siri
+
+## 5.3. Google Assistant
+
 # Appendix
 
 # I. Study
 
 ## I.1. [ISP (影像處理) 簡述及調適應用](https://www.synnex.com.cn/component/tech_paper_12.html)
 
+## I.2. [开始使用基于 IP 的智能互联家居 (CHIP)](https://codelabs.developers.google.com/codelabs/chip-get-started?hl=zh-cn#0)
+
+## I.3. [Google公布Project Connected Home over IP計劃，推動智慧家庭技術標準](https://iknow.stpi.narl.org.tw/Post/Read.aspx?PostID=16298)
+
+> 文章發表發表於 2020年1月8日
+>
+> 可以知道時代的眼淚，當初有Weave和Thread這兩套標準。
+>
+> <font color="red">注意：不符合IP通訊協定的傳輸技術如傳統的Zigbee即需要多一個閘道將訊號轉換成IP封包才能傳輸到網際網路</font>
+
+## I.4. [Project Connected Home over IP](https://developers.googleblog.com/2019/12/project-connected-home-over-ip.html)
+
+> December 18, 2019
+
+![](https://3.bp.blogspot.com/-QShQOMiBSAA/XfqwNc1yOxI/AAAAAAAAIew/Mro7PR6cGUEF58hMmc4b9GBLXgB11qB4QCLcBGAsYHQ/s1600/Project%2BConnected%2BHome%2Bover%2BIP%2BProposal%2Bin%2BGraphical%2BForm%2B%2528No%2BLogos%2Bwithout%2BDetail%2Band%2BBackground%2529.jpg)
+
 # II. Debug
 
 # III. Glossary
+
+#### Ethernet (802.3)
+
+#### HAN, Home-Area Network
+
+>[ChatGPT]
+>
+>Home-Area Network（簡稱HAN）是指在家庭或住宅環境中建立的區域網路。這種網路通常用於連接和管理家庭內的各種智能設備和家庭自動化系統，例如智能燈具、恆溫控制器、家庭安全系統、音響設備、電視、家庭電腦等。HAN通常用於實現家庭自動化、監控、娛樂和通信等應用，以提供更好的生活品質和便利性。
+>
+>HAN通常使用各種通信技術，包括無線通信（如Wi-Fi、藍牙、Zigbee等）和有線通信（如乙太網路、電力線通信等），以實現家庭設備之間的連接。這些網絡通常由家庭內的路由器或網絡閘道器管理，並與外部網際網路相連，以實現互聯網訪問。
+>
+>總之，Home-Area Network是在家庭環境中用於連接和管理各種智能設備的局部網路，以實現家庭自動化、娛樂和通信等功能。
 
 #### ISP, Image Signal Processor
 
@@ -261,6 +311,22 @@ git clone https://github.com/openthread/ot-br-posix.git
 >8. **影像穩定化：** 一些 ISP 具有影像穩定化功能，可以減少手持拍攝時的晃動。
 >
 >ISP 在許多現代消費電子設備中都起著關鍵作用，它們通常與相機模塊結合使用，以提供高質量的圖像和視頻捕獲功能。由於對圖像品質和視頻效能的要求不斷增加，ISP 技術也在不斷進化和改進。
+
+#### Project CHIP, Project Connected Home over IP
+
+>是一個組織！是一個組織！是一個組織！
+>
+>[aws] [Project Connected Home over IP](https://developer.amazon.com/en-US/alexa/devices/project-chip)
+>
+>Project Connected Home over IP is a new working group, announced in December, 2019, that plans to develop a new connectivity standard to increase compatibility among smart home products. Amazon is participating in the working group with Apple, Google, and other Zigbee Alliance members. The working group invites everyone in the industry to bring their existing and new ideas to this nascent effort. 
+>
+>[ChatGPT]
+>
+>Project CHIP，全名為「連接家庭超互聯網協議」，是一個開源項目，旨在開發一個統一、可靠和安全的標準，用於智能家居設備和應用。它得到了主要科技公司的支持，旨在為各種物聯網（物聯網）設備，包括智能燈具、恆溫器、鎖等，提供互通性和安全性的共同框架。該項目是連接標準聯盟（Connectivity Standards Alliance，之前稱為Zigbee聯盟）的一部分，並利用Internet Protocol（IP）等技術，以改進設備通信和兼容性。
+
+#### Thread (802.15.4)
+
+#### Wi-Fi (802.11)
 
 # IV. Tool Usage
 
