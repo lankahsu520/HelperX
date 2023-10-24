@@ -193,13 +193,21 @@ PhoneO <--> |phone line|PhoneM
 
 # 4. Protocol
 
-> 這邊匯整出常見的協定，方便大家認識。
+> 一般常說的協定，多是網路通信協定。當然因應需求的不同，也就生出不同的產物。
+>
+> 這邊匯整出常見的協定，方便大家認識。有些不只是 PATH，也是 Protocol。
+
+> <font color="red">非IP型之協定，一定要橋接！</font>
 
 ## 4.1. Bluetooth Low Energy
+
+> <font color="red">非IP型</font>
 
 > [維基百科](https://zh.wikipedia.org/zh-tw/蓝牙低功耗) **藍牙低功耗**（**Bluetooth Low Energy**，或稱**Bluetooth LE**、**BLE**，舊商標**Bluetooth Smart**[[1\]](https://zh.wikipedia.org/zh-tw/蓝牙低功耗#cite_note-1)）也稱**藍牙低能耗**、**低功耗藍牙**，是[藍牙技術聯盟](https://zh.wikipedia.org/wiki/藍牙技術聯盟)設計和銷售的一種[個人區域網路](https://zh.wikipedia.org/wiki/個人區域網絡)技術，旨在用於醫療保健、[運動健身](https://zh.wikipedia.org/wiki/體適能)、信標[[2\]](https://zh.wikipedia.org/zh-tw/蓝牙低功耗#cite_note-2)、安防、家庭娛樂等領域的新興應用。[[3\]](https://zh.wikipedia.org/zh-tw/蓝牙低功耗#cite_note-3)相較[經典藍牙](https://zh.wikipedia.org/wiki/藍牙)，低功耗藍牙旨在保持同等通訊範圍的同時顯著降低功耗和成本。
 
 ## 4.2. Infrared
+
+> <font color="red">非IP型</font>
 
 >[維基百科](https://zh.wikipedia.org/zh-tw/红外线) **紅外線**（英語：Infrared，簡稱IR）是[波長](https://zh.wikipedia.org/wiki/波长)介乎[微波](https://zh.wikipedia.org/wiki/微波)與[可見光](https://zh.wikipedia.org/wiki/可见光)之間的[電磁波](https://zh.wikipedia.org/wiki/电磁波)，其波長在760[奈米](https://zh.wikipedia.org/wiki/奈米)（nm）至1[毫米](https://zh.wikipedia.org/wiki/毫米)（mm）之間，[[1\]](https://zh.wikipedia.org/zh-tw/红外线#cite_note-1)是波長比紅光長的非可見光，對應頻率約是在430 [THz](https://zh.wikipedia.org/wiki/THz)到300 [GHz](https://zh.wikipedia.org/wiki/GHz)的範圍內[[2\]](https://zh.wikipedia.org/zh-tw/红外线#cite_note-2)。室溫下物體所發出的[熱輻射](https://zh.wikipedia.org/wiki/熱輻射)多都在此波段。紅外線於1800年由[威廉·赫歇爾](https://zh.wikipedia.org/wiki/威廉·赫歇爾)首次提出。[地球](https://zh.wikipedia.org/wiki/地球)吸收及發射紅外線[輻射](https://zh.wikipedia.org/wiki/輻射)對[氣候](https://zh.wikipedia.org/wiki/氣候)具影響，現今紅外線亦應用於不同科技領域。
 
@@ -209,9 +217,8 @@ PhoneO <--> |phone line|PhoneM
 
 > [維基百科](https://zh.wikipedia.org/zh-tw/HomeKit) **HomeKit** 是[蘋果公司](https://zh.wikipedia.org/wiki/苹果公司)推出的一個[軟體框架](https://zh.wikipedia.org/wiki/软件框架)，它可以讓使用者使用蘋果裝置對智慧型家居電器進行組態、溝通和控制。透過在HomeKit服務中設計房間、物品和動作，使用者可以透過對[Siri](https://zh.wikipedia.org/wiki/Siri)的簡單語音命令或透過家庭（Home）應用來實現家中的自動動作。[[1\]](https://zh.wikipedia.org/zh-tw/HomeKit#cite_note-1)
 
->嚴格來說 HomeKit 不是通訊協定，它只是一個 Apple 自定義的資料交換格式。只是base on TCP/IP、HTTPS。
+>HomeKit 只是一個 Apple 自定義的資料交換格式，架在TCP/IP，所以沒有網路接口的設備，是不會有 HomeKit。
 >
->也就是說，一個簡單的軟體可以是 HomeKit 裏中的一個 device，單功能的 Zigbee sersor 也可以加入其中， Z-Wave switch 也可以當成一份子。
 
 ## 4.4. Thread
 
@@ -225,9 +232,13 @@ $ git clone https://github.com/openthread/ot-br-posix.git
 
 ## 4.5. ZigBee
 
+> <font color="red">非IP型</font>
+
 >[維基百科](https://zh.wikipedia.org/zh-tw/ZigBee) **ZigBee**，也稱**紫蜂**[[1\]](https://zh.wikipedia.org/zh-tw/ZigBee#cite_note-1)，是一種低速短距離傳輸的[無線網路](https://zh.wikipedia.org/wiki/無線網路)協定，底層是採用[IEEE 802.15.4](https://zh.wikipedia.org/wiki/IEEE_802)標準規範的[媒體存取層](https://zh.wikipedia.org/wiki/媒體存取控制)與[實體層](https://zh.wikipedia.org/wiki/實體層)。主要特色有低速、低耗電、低成本、支援大量網路節點、支援多種[網路拓撲](https://zh.wikipedia.org/wiki/網絡拓撲)、低複雜度、可靠、安全。
 
 ## 4.6. Z-Wave
+
+> <font color="red">非IP型</font>
 
 >[維基百科](https://zh.wikipedia.org/zh-tw/Z-Wave) **Z-Wave**，是一種主要用於[家庭自動化](https://zh.wikipedia.org/wiki/家庭自動化)的[無線](https://zh.wikipedia.org/wiki/无线)通信協議。它是一種網狀網絡，使用低耗能無線電波在設備與設備間進行通信，[[1\]](https://zh.wikipedia.org/zh-tw/Z-Wave#cite_note-1)從而無線控制家中電器和其他設備，例如控制照明、安全系統、恆溫器、窗戶、鎖、游泳池和車庫門開啟器。
 
@@ -237,13 +248,9 @@ $ git clone https://github.com/openthread/ot-br-posix.git
 >
 >2021年5月11日，CHIP專案協定正式命名為「Matter」，ZigBee聯盟也更名為[連接標準聯盟](https://zh.wikipedia.org/wiki/连接标准联盟)（Connectivity Standards Alliance）
 
-A. [Matter](https://github.com/project-chip/connectedhomeip#matter)
+#### - [helper_Matter.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Matter.md) - Matter helper.
 
-> Matter (formerly Project CHIP) creates more connections between more objects, simplifying development for manufacturers and increasing compatibility for consumers, guided by the Connectivity Standards Alliance.
-
-```bash
-$ git clone https://github.com/project-chip/connectedhomeip.git
-```
+> 請見 helper_Matter.md。
 
 # 5. Cloud Service
 
@@ -258,22 +265,6 @@ $ git clone https://github.com/project-chip/connectedhomeip.git
 # I. Study
 
 ## I.1. [ISP (影像處理) 簡述及調適應用](https://www.synnex.com.cn/component/tech_paper_12.html)
-
-## I.2. [开始使用基于 IP 的智能互联家居 (CHIP)](https://codelabs.developers.google.com/codelabs/chip-get-started?hl=zh-cn#0)
-
-## I.3. [Google公布Project Connected Home over IP計劃，推動智慧家庭技術標準](https://iknow.stpi.narl.org.tw/Post/Read.aspx?PostID=16298)
-
-> 文章發表發表於 2020年1月8日
->
-> 可以知道時代的眼淚，當初有Weave和Thread這兩套標準。
->
-> <font color="red">注意：不符合IP通訊協定的傳輸技術如傳統的Zigbee即需要多一個閘道將訊號轉換成IP封包才能傳輸到網際網路</font>
-
-## I.4. [Project Connected Home over IP](https://developers.googleblog.com/2019/12/project-connected-home-over-ip.html)
-
-> December 18, 2019
-
-![](https://3.bp.blogspot.com/-QShQOMiBSAA/XfqwNc1yOxI/AAAAAAAAIew/Mro7PR6cGUEF58hMmc4b9GBLXgB11qB4QCLcBGAsYHQ/s1600/Project%2BConnected%2BHome%2Bover%2BIP%2BProposal%2Bin%2BGraphical%2BForm%2B%2528No%2BLogos%2Bwithout%2BDetail%2Band%2BBackground%2529.jpg)
 
 # II. Debug
 
