@@ -100,6 +100,9 @@ mindmap
 			C, C++
 			Node.js
 			Python
+    Partition
+      Dual Images
+      Single Image
 		Runtime dependency
 			library
 		System integration
@@ -108,13 +111,10 @@ mindmap
 			Yocto
 			crosstool[crosstool-ng]
 		Update
-      Partition
-        Dual Images
-        Single Image
+      OTA
 			tools?
 				flashtool
 				Imager
-				OTA
 		Toolchain
 			Compiler
 				Cross
