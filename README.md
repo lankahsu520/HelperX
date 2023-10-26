@@ -115,6 +115,10 @@
 
 > 身為一個人，建議善用 Markdown 記錄相關筆記，少用 doc。
 
+#### - [helper_Matter.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Matter.md) - Matter helper.
+
+> Matter（以前稱為 Project CHIP，Connected Home over IP）是一種物聯網（IoT）通信協議和平台，致力於促進智能家居設備之間的互操作性和互聯性。
+
 #### - [helper_MultimediaMuxAndDemux.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MultimediaMuxAndDemux.md) - Multimedia Mux and Demux helper
 
 >除了用手機看 YouTube 外，有些基本常識還是補足一下。
