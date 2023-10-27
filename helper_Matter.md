@@ -441,28 +441,72 @@ $ ./scripts/build/build_examples.py \
 
 ```bash
 $ export PJ_GN_TARGET=linux-x64-tests
+
+$ gn gen --check --fail-on-unused-args --export-compile-commands \
+	--root=./ --args=chip_build_tests=true \
+	./build_xxx/linux-x64-tests
 ```
 
 #### A. [lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app)
+
+- linux
+
+```bash
+$ export PJ_GN_TARGET=linux-x64-light
+
+$ gn gen --check --fail-on-unused-args --export-compile-commands \
+	--root=./examples/lighting-app/linux \
+	./build_xxx/linux-x64-light
+
+$ ninja -C ./build_xxx/linux-x64-light
+```
 
 - Silicon Labs
 
 ```bash
 $ export PJ_GN_TARGET=efr32-brd4187c-light
+
+$ gn gen --check --fail-on-unused-args --export-compile-commands \
+	--root=./examples/lighting-app/silabs \
+	'--args=silabs_board="BRD4187C" sl_matter_version_str="v1.1-master-d870e8c5e2-dirty"' \
+	./build_xxx/efr32-brd4187c-light
+
+$ ninja -C ./build_xxx/efr32-brd4187c-light
 ```
 
 ```bash
 $ export PJ_GN_TARGET=efr32-brd4186c-light
+
+$ gn gen --check --fail-on-unused-args --export-compile-commands \
+	--root=./examples/lighting-app/silabs \
+	'--args=silabs_board="BRD4186C" sl_matter_version_str="v1.1-master-d870e8c5e2-dirty"' \
+	./build_xxx/efr32-brd4186c-light
+
+$ ninja -C ./build_xxx/efr32-brd4186c-light
 ```
 
 * Texas Instruments
 
 ```bash
 $ export PJ_GN_TARGET=ti-cc13x2x7_26x2x7-lighting
+
+$ gn gen --check --fail-on-unused-args --export-compile-commands \
+	--root=./examples/lighting-app/cc13x2x7_26x2x7 \
+	'--args=ti_sysconfig_root="/opt/TI/sysconfig_1.15.0" ti_simplelink_board="LP_CC2652R7"' \
+	./build_xxx/ti-cc13x2x7_26x2x7-lighting
+
+$ ninja -C ./build_xxx/ti-cc13x2x7_26x2x7-lighting
 ```
 
 ```bash
 $ export PJ_GN_TARGET=ti-cc13x4_26x4-lighting
+
+$ gn gen --check --fail-on-unused-args --export-compile-commands \
+	--root=./examples/lighting-app/cc13x4_26x4 \
+	'--args=ti_sysconfig_root="/opt/TI/sysconfig_1.15.0" ti_simplelink_board="LP_EM_CC1354P10_6"' \
+	./build_xxx/ti-cc13x4_26x4-lighting
+
+$ ninja -C ./build_xxx/ti-cc13x4_26x4-lighting
 ```
 
 ## 4.3. ?? Virtual Device
