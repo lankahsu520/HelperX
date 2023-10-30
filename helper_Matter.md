@@ -443,11 +443,32 @@ $ ./scripts/build/build_examples.py \
 $ export PJ_GN_TARGET=linux-x64-tests
 
 $ gn gen --check --fail-on-unused-args --export-compile-commands \
-	--root=./ --args=chip_build_tests=true \
+	--root=./ \
+	--args=chip_build_tests=true \
 	./build_xxx/linux-x64-tests
+
+$ gn ls \  --root=./ \  ./build_xxx/linux-x64-light
 ```
 
-#### A. [lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app)
+#### A. [bridge-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/bridge-app)
+
+- linux
+
+```bash
+$ export PJ_GN_TARGET=linux-x64-bridge
+
+$ gn gen --check --fail-on-unused-args --export-compile-commands \
+	--root=./examples/bridge-app/linux \
+	./build_xxx/linux-x64-bridge
+
+$ ninja -C ./build_xxx/linux-x64-light
+
+$ gn ls \
+	--root=./examples/bridge-app/linux \
+	./build_xxx/linux-x64-bridge
+```
+
+#### B. [lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app)
 
 - linux
 
@@ -459,6 +480,10 @@ $ gn gen --check --fail-on-unused-args --export-compile-commands \
 	./build_xxx/linux-x64-light
 
 $ ninja -C ./build_xxx/linux-x64-light
+
+$ gn ls \
+	--root=./examples/bridge-app/linux \
+	./build_xxx/linux-x64-bridge
 ```
 
 - Silicon Labs
@@ -472,6 +497,10 @@ $ gn gen --check --fail-on-unused-args --export-compile-commands \
 	./build_xxx/efr32-brd4187c-light
 
 $ ninja -C ./build_xxx/efr32-brd4187c-light
+
+$ gn ls \
+	--root=./examples/lighting-app/silabs \
+	./build_xxx/efr32-brd4187c-light
 ```
 
 ```bash
@@ -483,6 +512,10 @@ $ gn gen --check --fail-on-unused-args --export-compile-commands \
 	./build_xxx/efr32-brd4186c-light
 
 $ ninja -C ./build_xxx/efr32-brd4186c-light
+
+$ gn ls \
+	--root=./examples/lighting-app/silabs \
+	./build_xxx/efr32-brd4186c-light
 ```
 
 * Texas Instruments
@@ -496,6 +529,10 @@ $ gn gen --check --fail-on-unused-args --export-compile-commands \
 	./build_xxx/ti-cc13x2x7_26x2x7-lighting
 
 $ ninja -C ./build_xxx/ti-cc13x2x7_26x2x7-lighting
+
+$ gn ls \
+	--root=./examples/lighting-app/cc13x2x7_26x2x7 \
+	./build_xxx/ti-cc13x2x7_26x2x7-lighting
 ```
 
 ```bash
@@ -507,9 +544,88 @@ $ gn gen --check --fail-on-unused-args --export-compile-commands \
 	./build_xxx/ti-cc13x4_26x4-lighting
 
 $ ninja -C ./build_xxx/ti-cc13x4_26x4-lighting
+
+$ gn ls \
+	--root=./examples/lighting-app/cc13x4_26x4 \
+	./build_xxx/ti-cc13x4_26x4-lighting
 ```
 
-## 4.3. ?? Virtual Device
+# 5. Target Platform
+
+> 前章節主要是介紹如何編譯，而官網的測試平台為 Raspberry Pi 4；如果考量在 PI4 進行 Native-Compilation 速度過慢等問題，就得在 PC (ubuntu) 上進行 Cross-Compilation，這部分先不討論！
+
+```mermaid
+flowchart TD
+	subgraph PI4-a[Raspberry Pi 4]
+		subgraph Matter-a[Matter]
+			lighting-app[lighting-app]
+		end
+	end
+	subgraph PI4b[Raspberry Pi 4]
+		subgraph Matter-b[Matter]
+			bridge-app
+		end
+	end
+```
+
+## 5.1. Setup PI4 - [Installing prerequisites on Raspberry Pi 4](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#installing-prerequisites-on-raspberry-pi-4)
+
+### 5.1.1. Install Ubuntu *22.04.xx* 64-bit *server* OS  on a micro SD card
+
+![matter002](./images/matter002.png)
+
+### 5.1.2. Installing prerequisites on PI4
+
+> login: ubuntu/ubuntuu
+
+#### A. Install net-tools and ssh server
+
+```bash
+$ sudo apt --yes install net-tools openssh-server
+# to change the hostname
+$ hostname lanka-pi4-8g
+$ sudo reboot
+
+# then you can ssh to connect this PI4
+$ sudo apt update
+$ sudo apt --yes upgrade
+$ sudo apt --yes install git gcc g++ pkg-config libssl-dev libdbus-1-dev \
+	libglib2.0-dev libavahi-client-dev ninja-build python3-venv python3-dev \
+	python3-pip unzip libgirepository1.0-dev libcairo2-dev libreadline-dev
+
+$ sudo apt --yes install avahi-utils
+```
+
+```bash
+$ sudo apt --yes install pi-bluetooth
+$ sudo reboot
+```
+
+#### B. Others
+
+```bash
+# UI builds
+# If building via build_examples.py and -with-ui variant, also install SDL2
+$ sudo apt --yes install libsdl2-dev
+
+```
+
+#### C. Setup Wi-Fi
+
+```bash
+$ sudo vi /etc/systemd/system/dbus-fi.w1.wpa_supplicant1.service
+ExecStart=/sbin/wpa_supplicant -u -s -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
+
+$ sudo vi /etc/wpa_supplicant/wpa_supplicant.conf
+ctrl_interface=DIR=/run/wpa_supplicant
+update_config=1
+
+$ sudo reboot
+```
+
+
+
+# ??? Virtual Device
 
 ```bash
 $ git clone --recurse-submodules https://github.com/project-chip/connectedhomeip.git
@@ -527,7 +643,11 @@ $ ./chef.py -zbr -v0xfff1 -p 0x8000 -d rootnode_onofflight_bbs1b7IaOV -t linux
 $ ./linux/out/rootnode_onofflight_bbs1b7IaOV
 ```
 
+# ??? [ZAP](https://github.com/project-chip/zap)
 
+> ZAP is Zigbee Cluster Library configuration tool and generator. It allows users to configure their ZCL application using web-like interface and then generate the required artifacts for this application, based upon the templates inside a given ZCL SDK.
+
+# ??? [`libfuzzer` unit tests](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#libfuzzer-unit-tests)
 
 # Footnote
 
@@ -587,6 +707,10 @@ $ ./linux/out/rootnode_onofflight_bbs1b7IaOV
 #### NOC, Node Operational Certificate
 
 > 節點操作證書
+
+#### [ZAP](https://github.com/project-chip/zap), [ZCL Advanced Platform](https://github.com/project-chip/zap#zcl-advanced-platform)
+
+> AP is Zigbee Cluster Library configuration tool and generator. It allows users to configure their ZCL application using web-like interface and then generate the required artifacts for this application, based upon the templates inside a given ZCL SDK.
 
 # IV. Tool Usage
 
@@ -783,34 +907,6 @@ Other help topics:
 
 ```bash
 $ ./scripts/build/build_examples.py
-Usage: build_examples.py [OPTIONS] COMMAND1 [ARGS]... [COMMAND2 [ARGS]...]...
-
-Options:
-  --log-level [debug|info|warn|fatal]
-                                  Determines the verbosity of script output.
-  --target TEXT                   Build target(s)
-  --enable-flashbundle            Also generate the flashbundles for the app.
-  --repo TEXT                     Path to the root of the CHIP SDK repository
-                                  checkout.
-  --out-prefix DIRECTORY          Prefix for the generated file output.
-  --pregen-dir DIRECTORY          Directory where generated files have been
-                                  pre-generated.
-  --clean                         Clean output directory before running the
-                                  command
-  --dry-run                       Only print out shell commands that would be
-                                  executed
-  --dry-run-output FILENAME       Where to write the dry run output
-  --no-log-timestamps             Skip timestaps in log output
-  --pw-command-launcher TEXT      Set pigweed command launcher. E.g.: "--pw-
-                                  command-launcher=ccache" for using ccache
-                                  when building examples.
-  --help                          Show this message and exit.
-
-Commands:
-  build    generate and run ninja/make as needed to compile
-  gen      Generate ninja/makefiles (but does not run the compilation)
-  targets  Lists the targets that can be used with the build and gen...
-[ubuntu-x86-RELEASE@msi-vbx connectedhomeip_20231023]$ ./scripts/build/build_examples.py --help
 Usage: build_examples.py [OPTIONS] COMMAND1 [ARGS]... [COMMAND2 [ARGS]...]...
 
 Options:
