@@ -236,6 +236,34 @@ $ pip3 -V
 
 ## I.1. [Day2 - 安裝樹莓派OS](https://ithelp.ithome.com.tw/articles/10235135)
 
+## I.2. [raspios_arm64](https://downloads.raspberrypi.org/raspios_arm64/images/)
+
+> https://downloads.raspberrypi.org/raspios_arm64/images/
+
+```html
+Index of /raspios_arm64/images
+[ICO]	Name	Last modified	Size	Description
+[PARENTDIR]	Parent Directory	 	-	 
+[DIR]	raspios_arm64-2020-05-28/	2020-05-28 06:01	-	 
+[DIR]	raspios_arm64-2020-08-24/	2020-08-24 18:56	-	 
+[DIR]	raspios_arm64-2021-04-09/	2021-04-09 15:57	-	 
+[DIR]	raspios_arm64-2021-05-28/	2021-05-28 16:08	-	 
+[DIR]	raspios_arm64-2021-11-08/	2021-11-08 07:49	-	 
+[DIR]	raspios_arm64-2022-01-28/	2022-01-28 16:53	-	 
+[DIR]	raspios_arm64-2022-04-07/	2022-04-07 12:03	-	 
+[DIR]	raspios_arm64-2022-09-07/	2022-09-07 05:18	-	 
+[DIR]	raspios_arm64-2022-09-26/	2022-09-26 09:37	-	 
+[DIR]	raspios_arm64-2023-02-22/	2023-02-22 11:31	-	 
+[DIR]	raspios_arm64-2023-05-03/	2023-10-10 15:09	-	 
+[DIR]	raspios_arm64-2023-10-10/	2023-10-10 16:13	-	 
+```
+
+## I.3. [ubuntu](https://ubuntu.com/download/raspberry-pi)
+
+> ### Ubuntu 22.04.3 LTS
+>
+> ### Ubuntu Core 22
+
 # II. Debug
 
 # III. Glossary
