@@ -109,13 +109,14 @@ mindmap
 			Buildroot
 			OpenWrt
 			Yocto
-			crosstool[crosstool-ng]
 		Update
       OTA
 			tools?
 				flashtool
 				Imager
 		Toolchain
+			Toolchain generator
+				crosstool[crosstool-ng]
 			Compiler
 				Cross
 				Native
