@@ -316,6 +316,24 @@ $ git clone https://github.com/SiliconLabs/matter.git
 
 > [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[docs](https://github.com/project-chip/connectedhomeip/tree/master/docs)/[guides](https://github.com/project-chip/connectedhomeip/tree/master/docs/guides)/[BUILDING.md](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md)
 
+```mermaid
+flowchart TD
+	subgraph Linux-a[Linux]
+		subgraph Native-a[Native compiler]
+			subgraph Matter-a[Matter SDK]
+				lighting-app[lighting-app]
+			end
+		end
+	end
+	subgraph Linux-b[Linux]
+		subgraph Native-b[Native compiler]
+			subgraph Matter-b[Matter SDK]
+				bridge-app
+			end
+		end
+	end
+```
+
 ### 4.2.1. Installing prerequisites on Linux
 
 ```bash
@@ -581,14 +599,20 @@ flowchart TD
 #### A. Install net-tools and ssh server
 
 ```bash
+# 第一次開機，
+# 一定要 update 和 upgrade
+# 一定要上網；不熟設定 Wi-Fi，就不要鐵齒，請把 RJ45 連上。
+$ sudo apt update
+$ sudo apt --yes upgrade
+
 $ sudo apt --yes install net-tools openssh-server
 # to change the hostname
 $ hostname lanka-pi4-8g
 $ sudo reboot
+```
 
+```bash
 # then you can ssh to connect this PI4
-$ sudo apt update
-$ sudo apt --yes upgrade
 $ sudo apt --yes install git gcc g++ pkg-config libssl-dev libdbus-1-dev \
 	libglib2.0-dev libavahi-client-dev ninja-build python3-venv python3-dev \
 	python3-pip unzip libgirepository1.0-dev libcairo2-dev libreadline-dev
@@ -623,7 +647,29 @@ update_config=1
 $ sudo reboot
 ```
 
+## 5.2. Build on PI4
 
+> use Native compiler on PI4
+
+> Please check the previous chapter !
+
+```mermaid
+flowchart TD
+	subgraph PI4-a[Raspberry Pi 4]
+		subgraph Native-a[Native compiler]
+			subgraph Matter-a[Matter SDK]
+				lighting-app[lighting-app]
+			end
+		end
+	end
+	subgraph PI4-b[Raspberry Pi 4]
+		subgraph Native-b[Native compiler]
+			subgraph Matter-b[Matter SDK]
+				bridge-app
+			end
+		end
+	end
+```
 
 # ??? Virtual Device
 
