@@ -450,74 +450,41 @@ $ docker attach 15948ab15718
 
 # 7. Virtual Machine vs. Container
 
-## 7.1. Virtual Machine
+>[ChatGPT] Docker 和 Virtual Machine  的差別
+>
+>Docker 和虛擬機（Virtual Machine，VM）是兩種不同的虛擬化技術，它們在虛擬化層面和實現方式上有著顯著的差異。
+>
+>### Docker
+>
+>1. **容器化技術：** Docker 是一種容器化平台，基於容器技術。它使用容器來封裝應用程序及其所有依賴項，提供了隔離的運行環境。多個 Docker 容器可以在相同的操作系統內核上運行。
+>2. **輕量級：** Docker 容器非常輕量級，因為它們共享主機的操作系統內核，並且容器之間共享資源，包括文件系統和內存。
+>3. **資源效率：** 由於共享操作系統內核，Docker 容器在資源利用方面更為高效，能夠更快速地啟動和占用更少的系統資源。
+>
+>### 虛擬機（Virtual Machine）
+>
+>1. **虛擬化技術：** 虛擬機（VM）是通過在物理硬件上模擬整個計算機系統，包括虛擬化的 CPU、內存、磁盤和網絡接口，來運行不同的操作系統。每個虛擬機都有自己的操作系統內核。
+>2. **較重量級：** 虛擬機需要額外的資源來運行自己的操作系統，因此更為笨重。每個虛擬機都包含完整的操作系統和應用程序所需的所有庫和依賴項。
+>3. **隔離性：** 虛擬機提供了較高的隔離性，每個虛擬機都運行在自己的獨立空間中，與其他虛擬機相互隔離。
+>
+>### 總結差異
+>
+>- Docker 是更輕量級的容器化技術，它共享操作系統內核並提供了更高的資源利用率。
+>- 虛擬機提供更高級別的隔離，每個虛擬機包含獨立的操作系統和資源。
+>
+>選擇使用 Docker 還是虛擬機取決於應用場景。Docker 適合於構建和部署輕量級的、面向微服務的應用程序，而虛擬機更適合於需要完全隔離和多個操作系統運行的場景。
+
+#### A. Virtual Machine
 
 ![](https://oer.gitlab.io/oer-on-oer-infrastructure/figures/OS/virtual-machines.png)
 
 > image from oer.gitlab.io
 
-## 7.2. Container
+#### B. Container
 
 ![](https://oer.gitlab.io/oer-on-oer-infrastructure/figures/OS/containers.png)
 
 > image from oer.gitlab.io
 
-## 7.3. A binary in low-level language can run on ???
-> 說真的，從上面的圖檔分析；Virtual Machine裏的 Host OS with Hypervisor ，只是把Host OS 和一個manager畫在一起，不就等同於 Host OS + Container manager。Guest OS1 = Env based on kernel of Host OS。
->
-> Docker 在安裝 image 時，不是有個動作叫 pull；VM 部分也有很多預先安裝的〝系統〞放在網路請大家自己抓。所以兩邊都是要安裝的！安裝的！安裝的！
->
-> 討論至此，那最主要的差別就是在 Hardware 的實作程度的範圍。那我可不可以說實作比較差的 VM 就是 Container。當然不能這麼一刀切，繼續看下去。
->
-> 其實這兩張圖畫的太複雜了，沒辦法簡易的說明差別；這裏舉個很簡單的例子：
->
-> $ docker pull node:10.15.3-alpine
->
-> node 很累贅，但還稱不上是一個系統、一個OS，但它完全複製了可執行的環境, 並且在 HOST OS 上〝正確〞執行。
->
-> 從這裏可以得到一個結論，Container 既可以是個 OS 模擬，也可以很簡單的模擬軟體層執行環境。
-> 很重要!很重要!很重要! 看圖就知，像是比較低底層所構建之執行檔，並不能交亙執行！
-> 也因為得知 docker image 是不同的！ (ubuntu run $ docker pull ubuntu ) !=  (Raspberry Pi run $ docker pull ubuntu )
-
-```mermaid
-flowchart LR
-	subgraph Host[Host - Ubuntu 20.04.4 LTS]
-		subgraph Native[Native compiler]
-			gcc[gcc helloworld.c]
-		end
-	end
-
-	subgraph Target[Target - Raspberry Pi]
-		helloworld_run_pi[-bash: ./helloworld: cannot execute binary file: Exec format error]
-		subgraph DockerPIU[Docker - Ubuntu 20.04]
-			helloworld_run_pi_u_docker[bash: ./helloworld: cannot execute binary file: Exec format error]
-		end
-	end
-
-
-	subgraph HostA[Host - Ubuntu 20.04.4 LTS]
-		helloworld_run_host[Hello world !!!]
-		subgraph DockerAU2004[Docker - Ubuntu 20.04]
-			helloworld_run_AU2004_docker[Hello world !!!]
-		end
- 		subgraph DockerAU2204[Docker - Ubuntu 22.04]
-			helloworld_run_AU2204_docker[Hello world !!!]
-		end
-  end
-	
-	gcc --> |run|helloworld_run_host
-	gcc --> |run|helloworld_run_AU2004_docker
-	gcc --> |run|helloworld_run_AU2204_docker
-
-	gcc --> |run|helloworld_run_pi
-	gcc --> |run|helloworld_run_pi_u_docker
-
-```
-```bash
-$ file helloworld
-helloworld: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=18d2f341bfac8c548cedce30a01e9a865ba383f8, for GNU/Linux 3.2.0, not stripped
-
-```
 # Appendix
 
 # I. Study
