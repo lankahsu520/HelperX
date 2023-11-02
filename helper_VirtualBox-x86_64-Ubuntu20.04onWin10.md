@@ -1,4 +1,4 @@
-# VirtualBox
+# VirtualBox-x86_64-Ubuntu20.04onWin10
 [![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
 [![GitHub license][license-image]][license-url]
 [![GitHub stars][stars-image]][stars-url]
@@ -24,7 +24,7 @@
 ```mermaid
 flowchart LR
 	subgraph Host[Host - Windows 10]
-		subgraph Container[Client - Ubuntu 20.04]
+		subgraph Container[Client - x86_64-Ubuntu 20.04]
 		
 		end
 	end
