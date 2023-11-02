@@ -1232,6 +1232,69 @@ ldconfig -p|grep libmpc
 
 # 13. System Handler
 
+#### lshw - list hardware
+
+```bash
+$ sudo lshw -c cpu
+  *-cpu
+       product: Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz
+       vendor: Intel Corp.
+       physical id: 2
+       bus info: cpu@0
+       width: 64 bits
+       capabilities: fpu fpu_exception wp vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx rdtscp x86-64 constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single pti fsgsbase bmi1 avx2 bmi2 invpcid rdseed clflushopt md_clear flush_l1d
+
+$ sudo lshw
+
+```
+
+#### lscpu - display information about the CPU architecture
+
+```bash
+$ lscpu
+Architecture:                       x86_64
+CPU op-mode(s):                     32-bit, 64-bit
+Byte Order:                         Little Endian
+Address sizes:                      39 bits physical, 48 bits virtual
+CPU(s):                             4
+On-line CPU(s) list:                0-3
+Thread(s) per core:                 1
+Core(s) per socket:                 4
+Socket(s):                          1
+NUMA node(s):                       1
+Vendor ID:                          GenuineIntel
+CPU family:                         6
+Model:                              158
+Model name:                         Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz
+Stepping:                           9
+CPU MHz:                            2808.004
+BogoMIPS:                           5616.00
+Hypervisor vendor:                  KVM
+Virtualization type:                full
+L1d cache:                          128 KiB
+L1i cache:                          128 KiB
+L2 cache:                           1 MiB
+L3 cache:                           24 MiB
+NUMA node0 CPU(s):                  0-3
+Vulnerability Gather data sampling: Unknown: Dependent on hypervisor status
+Vulnerability Itlb multihit:        KVM: Mitigation: VMX unsupported
+Vulnerability L1tf:                 Mitigation; PTE Inversion
+Vulnerability Mds:                  Mitigation; Clear CPU buffers; SMT Host state unknown
+Vulnerability Meltdown:             Mitigation; PTI
+Vulnerability Mmio stale data:      Mitigation; Clear CPU buffers; SMT Host state unknown
+Vulnerability Retbleed:             Vulnerable
+Vulnerability Spec rstack overflow: Not affected
+Vulnerability Spec store bypass:    Vulnerable
+Vulnerability Spectre v1:           Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+Vulnerability Spectre v2:           Mitigation; Retpolines, STIBP disabled, RSB filling, PBRSB-eIBRS Not affected
+Vulnerability Srbds:                Unknown: Dependent on hypervisor status
+Vulnerability Tsx async abort:      Not affected
+Flags:                              fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx rdtscp lm constant_tsc rep_good nop
+                                    l xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx rdrand hypervisor lahf_l
+                                    m abm 3dnowprefetch invpcid_single pti fsgsbase bmi1 avx2 bmi2 invpcid rdseed clflushopt md_clear flush_l1d
+
+```
+
 #### sysctl - configure kernel parameters at runtime
 
 ```bash
@@ -1246,11 +1309,26 @@ sudo sysctl -w net.ipv6.conf.lo.disable_ipv6=0
 
 ```
 
+#### uname - print system information
+
+```bash
+$ uname -a
+Linux build20-vbx 5.15.0-87-generic #97~20.04.1-Ubuntu SMP Thu Oct 5 08:25:28 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+
+$ uname -m
+x86_64
+```
+
+#### /proc/cpuinfo
+
+```bash
+cat /proc/cpuinfo
+```
+
 #### /proc/meminfo
 
 ```bash
 cat /proc/meminfo
-
 ```
 
 #### /proc/sys/vm
