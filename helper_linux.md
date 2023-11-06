@@ -417,14 +417,6 @@ kill -SIGTERM helloworld
 
 ```
 
-#### set - set or unset options and positional parameters
-
-```bash
-set -e：在命令返回非零退出狀態碼時自動退出 shell。這意味著，如果命令返回一個錯誤，腳本將會立即停止運行，而不會繼續執行下去。
-set -o pipefail：在使用管道連接多個命令時，如果其中任何一個命令失敗，則整個管道返回失敗。預設情況下，管道只返回最後一個命令的退出狀態碼。使用 set -o pipefail 可以使管道的退出狀態碼反映所有命令的退出狀態。
-
-```
-
 #### shutdown - Halt, power-off or reboot the machine
 
 ```bash
@@ -435,6 +427,8 @@ sudo shutdown -P 20:00
 sudo shutdown -c
 
 ```
+
+
 
 ## 2.1. [Linux crontab 命令](https://www.runoob.com/linux/linux-comm-crontab.html)
 
@@ -1479,6 +1473,27 @@ unalias la
 
 ```bash
 man ls
+
+```
+
+#### set - set or unset options and positional parameters
+
+```bash
+set -e：在命令返回非零退出狀態碼時自動退出 shell。這意味著，如果命令返回一個錯誤，腳本將會立即停止運行，而不會繼續執行下去。
+set -o pipefail：在使用管道連接多個命令時，如果其中任何一個命令失敗，則整個管道返回失敗。預設情況下，管道只返回最後一個命令的退出狀態碼。使用 set -o pipefail 可以使管道的退出狀態碼反映所有命令的退出狀態。
+
+```
+
+#### unset - unset values and attributes of variables and functions
+
+```bash
+export BOSS=lanka
+unset BOSS
+
+helloworld_fn ()
+{
+}
+unset -f helloworld_fn
 
 ```
 
