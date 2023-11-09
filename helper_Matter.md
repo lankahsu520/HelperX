@@ -51,6 +51,31 @@
 
 ![[Architecture Overview](https://github.com/project-chip/connectedhomeip#architecture-overview)](https://project-chip.github.io/connectedhomeip-doc/_images/Matter_Arch_Overview.png)
 
+## 1.2.  Support List
+
+#### A. Android Phone
+
+- [x] [在 Google Home 應用程式中管理支援 Matter 的裝置](https://support.google.com/googlenest/answer/13127223?hl=zh-HK)
+
+> ### 軟硬體需求
+>
+> - Google 帳戶
+> - 家用 Wi-Fi 網路
+> - 如果是使用 [Thread](https://support.google.com/googlenest/answer/9249088) 的裝置，需要搭配 [Thread 邊界路由器](https://support.google.com/googlenest/answer/9249088#google-TBR-list)才能完成設定
+> - 搭載以下版本的手機或平板電腦：
+>   - Android 8.1 以上版本
+>   - Google Play 服務 22.48.14 以上版本
+>   - 藍牙低功耗 (BLE) 4.2 以上版本
+> - 最新版本的 [Google Home 應用程式](https://play.google.com/store/apps/details?id=com.google.android.apps.chromecast.app&hl=zh_tw) ![img](https://lh3.googleusercontent.com/9MpaXj2oIHIZU4JiCl6Nos9Ac3VRocyuFxWcvgwnb7FRVsPTcLXGUdvWP8W8LqReE40=w18)
+> - 支援 Matter 的智慧住宅裝置。如果包裝上有 ![img](https://lh3.googleusercontent.com/3yeJZ0aNtlZqwUfGWY-2Q-AIAnykzH8EOPKwu3XDNSsfdnFIQN6Da5qYou0qXSiX9_4=w180) 標誌，就表示裝置支援 Matter
+> - [支援 Matter 的 Google 中樞裝置](https://support.google.com/googlenest/answer/12391458#matter-app)
+
+#### B. iPhone
+
+- [x] [Matter support in iOS 16](https://developer.apple.com/apple-home/matter/)
+
+- [x] [配對和管理 Matter 配件](https://support.apple.com/zh-tw/102135)
+
 # 2. IoT (Internet of Things)
 
 > 什麼是IoT，請參考 [helper_IoT.md](https://github.com/lankahsu520/HelperX/blob/master/helper_IoT.md) 先建立基本概念。
@@ -337,13 +362,13 @@ flowchart TD
 ### 4.2.1. Installing prerequisites on Linux
 
 ```bash
-$ sudo apt-get install git gcc g++ pkg-config libssl-dev libdbus-1-dev \
+$ sudo apt install -y git gcc g++ pkg-config libssl-dev libdbus-1-dev \
      libglib2.0-dev libavahi-client-dev ninja-build python3-venv python3-dev \
      python3-pip unzip libgirepository1.0-dev libcairo2-dev libreadline-dev
 ```
 
 ```bash
-$ sudo apt install python3.8-venv
+$ sudo apt install -y python3.8-venv
 $ pip install --upgrade pip
 ```
 
@@ -357,6 +382,27 @@ $ ./sysconfig-1.15.0_2826-setup.run
 
 $ export TI_SYSCONFIG_ROOT=/opt/ti/sysconfig_1.15.0
 ```
+
+#### B. gn
+
+```bash
+$ sudo apt install -y clang
+$ clang --version
+clang version 10.0.0-4ubuntu1
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+$ git clone https://gn.googlesource.com/gn
+$ cd gn
+$ python build/gen.py
+$ ninja -C out
+$ sudo cp out/gn /usr/bin
+$ sudo cp out/gn_unittests /usr/bin
+$ gn --version
+2124 (e4702d740906)
+```
+
+
 
 ### 4.2.2. Prepare for building
 
