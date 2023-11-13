@@ -17,17 +17,18 @@
 [watchers-image]: https://img.shields.io/github/watchers/lankahsu520/HelperX.svg
 [watchers-url]: https://github.com/lankahsu520/HelperX/watchers
 
+# 1. Overview
+
 > The Yocto Project (YP) is an open source collaboration project that helps developers create custom Linux-based systems regardless of the hardware architecture.
 
-
-# 1. Environment
+# 2. Environment
 
 ```bash
 $ sudo apt-get install gawk wget git-core diffstat unzip texinfo gcc-multilib build-essential chrpath socat cpio python python3 python3-pip python3-pexpect xz-utils debianutils iputils-ping python3-git python3-jinja2 libegl1-mesa libsdl1.2-dev pylint3 xterm
 
 ```
 
-# 2. [Yocto Cooker](https://github.com/cpb-/yocto-cooker)
+# 3. [Yocto Cooker](https://github.com/cpb-/yocto-cooker)
 
 > Here, we use Cooker to build.
 >
@@ -39,7 +40,7 @@ $ cooker --version
 # 1.3.0
 ```
 
-## 2.1. Cooker Menu - ([pi3-sample-menu.json](https://github.com/cpb-/yocto-cooker/blob/master/sample-menus/pi3-sample-menu.json))
+## 3.1. Cooker Menu - ([pi3-sample-menu.json](https://github.com/cpb-/yocto-cooker/blob/master/sample-menus/pi3-sample-menu.json))
 
 ```bash
 $ mkdir -p /work/YoctoPI3/cooker-menu
@@ -48,7 +49,7 @@ $ curl https://raw.githubusercontent.com/cpb-/yocto-cooker/master/sample-menus/p
 
 $ cd /work/YoctoPI3
 ```
-## 2.2. Building
+## 3.2. Building
 
 #### A. Step by Step
 
@@ -68,7 +69,7 @@ $ cd /work/YoctoPI3
 $ cooker cook ./cooker-menu/pi3-sample-menu.json
 ```
 
-# 3. Customize
+# 4. Customize
 
 > yocto 版本相容性很低，或許目前的版本可以進行客製化；但是其它版本的語法可能就不同了，這個要小心！
 
@@ -79,13 +80,13 @@ $ cd /work/YoctoPI3
 $ cooker shell pi3
 ```
 
-## 3.1. rootfs
+## 4.1. rootfs
 
 ```bash
 $ ls -al ./builds/build-pi3/tmp/work/raspberrypi3-poky-linux-gnueabi/core-image-base/1.0-r0/rootfs/
 ```
 
-## 3.2. Set root's password
+## 4.2. Set root's password
 
 ```bash
 $ vi ./cooker-menu/pi3-sample-menu.json
@@ -110,7 +111,7 @@ $ cat ./builds/build-pi3/tmp/work/raspberrypi3-poky-linux-gnueabi/core-image-bas
 $ cat ./builds/build-pi3/tmp/work/raspberrypi3-poky-linux-gnueabi/core-image-base/1.0-r0/rootfs/etc/shadow
 ```
 
-## 3.3. ssh
+## 4.3. ssh
 
 ```bash
 $ vi ./cooker-menu/pi3-sample-menu.json
@@ -129,7 +130,7 @@ $ vi ./layers/poky/meta/recipes-core/dropbear/dropbear/dropbear.default
 # DROPBEAR_EXTRA_ARGS="-w"
 ```
 
-## 3.4. [create a layer](https://blog.csdn.net/CSDN1013/article/details/111088399)
+## 4.4. [create a layer](https://blog.csdn.net/CSDN1013/article/details/111088399)
 
 ```bash
 $ cd /work/YoctoPI3/layers
@@ -149,7 +150,7 @@ $ yocto-check-layer meta-lanka
 $ rm -rf build
 ```
 
-### 3.4.1. [meta-lanka](https://github.com/lankahsu520/HelperX/tree/master/Yocto/meta-lanka)
+### 4.4.1. [meta-lanka](https://github.com/lankahsu520/HelperX/tree/master/Yocto/meta-lanka)
 
 ```bash
 # check example exist
@@ -170,11 +171,11 @@ example                                               :0.1-r0
 # Then update meta-lanka/recipes-example/example/example_0.1.bb and add meta-lanka/recipes-example/example/files/* 
 ```
 
-### 3.4.2. Update [example_0.1.bb](https://github.com/lankahsu520/HelperX/tree/master/Yocto/meta-lanka/recipes-example/example/example_0.1.bb)
+### 4.4.2. Update [example_0.1.bb](https://github.com/lankahsu520/HelperX/tree/master/Yocto/meta-lanka/recipes-example/example/example_0.1.bb)
 
-### 3.4.3. Add files - [helloworld-123.c and Makefile](https://github.com/lankahsu520/HelperX/tree/master/Yocto/meta-lanka/recipes-example/example/files)
+### 4.4.3. Add files - [helloworld-123.c and Makefile](https://github.com/lankahsu520/HelperX/tree/master/Yocto/meta-lanka/recipes-example/example/files)
 
-### 3.4.4. Install into Image
+### 4.4.4. Install into Image
 
 ```bash
 $ vi ./cooker-menu/pi3-sample-menu.json
@@ -182,9 +183,9 @@ $ vi ./cooker-menu/pi3-sample-menu.json
 # ,"IMAGE_INSTALL:append = ' example'"
 ```
 
-# 4. Run on Raspberry PI
+# 5. Run on Raspberry PI
 
-## 4.1. Burn Image Tools
+## 5.1. Burn Image Tools
 
 #### A. [balenaEtcher](https://www.balena.io/etcher/)
 
@@ -192,13 +193,13 @@ $ vi ./cooker-menu/pi3-sample-menu.json
 
 #### C. [rpi-imager](https://github.com/raspberrypi/rpi-imager)
 
-## 4.2. Get Image at
+## 5.2. Get Image at
 
 ```bash
 $ ls -al ./builds/build-pi3/tmp/deploy/images/raspberrypi3/core-image-base-raspberrypi3.rpi-sdimg
 ```
 
-# 5. QEMU
+# 6. QEMU
 
 > 不建議使用 QEMU。因為在編譯時也是使用不同的軟體包，真實硬體也模擬不出來。
 >
@@ -206,7 +207,7 @@ $ ls -al ./builds/build-pi3/tmp/deploy/images/raspberrypi3/core-image-base-raspb
 >
 > 你可以看看 [helper_Docker.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Docker.md)也是有相同情況。
 
-# 6. [cookerX](https://github.com/lankahsu520/HelperX/tree/master/Yocto/cookerX)
+# 7. [cookerX](https://github.com/lankahsu520/HelperX/tree/master/Yocto/cookerX)
 
 > [cookerX](https://github.com/lankahsu520/HelperX/tree/master/Yocto/cookerX) is based on [Yocto Cooker](https://github.com/cpb-/yocto-cooker).  pi3-sample-menu.json 使用的版本過舊。
 >
