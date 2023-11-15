@@ -1393,10 +1393,36 @@ PASS_ENC=`echo lankahsu520 | base64`; echo "(PASS_ENC: $PASS_ENC)"
 PASS_DEC=`echo $PASS_ENC | base64 -d`; echo "(PASS_DEC: $PASS_DEC)"
 ```
 
+## 14.3. lynis
+
+> 只是一個安全審計工具，就算找出問題後，也沒有相關的修補方式，因此實用性就不高了。
+
+```bash
+sudo apt install -y lynis
+
+sudo lynis update check
+
+# Perform local security scan
+sudo lynis audit system
+```
+
+```bash
+# upgrade
+sudo apt update
+sudo apt upgrade
+# add lynis repository 
+echo "deb https://packages.cisofy.com/community/lynis/deb/ stable main" | sudo tee /etc/apt/sources.list.d/cisofy-lynis.list
+# download the public signing key
+wget -O - https://packages.cisofy.com/keys/cisofy-software-public.key | sudo apt-key add -
+sudo apt update
+sudo apt install -y lynis
+lynis show version
+```
+
 # 15. MTD Handler
 
 ```bash
-sudo apt install mtd-utils
+sudo apt install -y mtd-utils
 
 cat /proc/mtd
 
@@ -1423,10 +1449,123 @@ sudo chkrootkit | grep INFECTED
 
 #### rkhunter - RootKit Hunter
 
+> 掃出後的資訊很多，
+
 ```bash
 sudo apt-get install rkhunter
+
+# 手動更新病毒碼
+sudo rkhunter --propupd
+```
+
+```bash
+$ sudo vi /etc/rkhunter.conf.local
+PKGMGR=DPKG
+# netatalk
+RTKT_FILE_WHITELIST=/bin/ad
+
+```
+
+```bash
+# Check the local system
 sudo rkhunter -c
 
+# Don't wait for a keypress after each test
+sudo rkhunter -c --skip-keypress
+```
+
+```bash
+sudo cat /var/log/rkhunter.log
+```
+
+- [x] /bin/ad
+
+> Warning: 'Spanish' Rootkit                        [ Warning ]
+>           File '/bin/ad' found
+
+```
+# 請先刪除
+sudo apt remove netatalk
+```
+
+## 16.2. ClamAV
+
+```bash
+sudo apt install -y clamav
+sudo apt install -y libclamunrar9
+
+systemctl status clamav-freshclam
+systemctl stop clamav-freshclam
+# 手動更新病毒碼
+sudo freshclam
+systemctl start clamav-freshclam
+
+```
+
+```bash
+# 掃所有檔案
+sudo clamscan -vr /
+
+# 掃所有檔案，Save scan report to FILE
+sudo clamscan -vr --log=~/virus/`date +"%Y%m%d"`.log /
+
+# 掃所有檔案，刪除中毒的檔案
+sudo clamscan -vr --remove /
+
+# 掃所有檔案，搬移中毒的檔案
+sudo clamscan -vr --move=~/virus /
+
+# 掃所有檔案，複製中毒的檔案
+sudo clamscan -vr --copy=~/virus /
+
+# 掃所有檔案，不印出 OK 的檔案
+sudo clamscan -vr -o /
+
+# 掃所有檔案，只顯示中毒的檔案
+sudo clamscan -vr -i /
+
+# 限定深度 3層
+sudo clamscan -vr --max-dir-recursion=3 /
+
+# 針對 checklist.txt 裏指定的檔案
+sudo clamscan -vf checklist.txt
+```
+
+- /etc/clamav/freshclam.conf
+
+```bash
+# freshclam.conf 手冊
+$ man freshclam.conf
+$ cat /etc/clamav/freshclam.conf
+# Automatically created by the clamav-freshclam postinst
+# Comments will get lost when you reconfigure the clamav-freshclam package
+
+DatabaseOwner clamav
+UpdateLogFile /var/log/clamav/freshclam.log
+LogVerbose false
+LogSyslog false
+LogFacility LOG_LOCAL6
+LogFileMaxSize 0
+LogRotate true
+LogTime true
+Foreground false
+Debug false
+MaxAttempts 5
+DatabaseDirectory /var/lib/clamav
+DNSDatabaseInfo current.cvd.clamav.net
+ConnectTimeout 30
+ReceiveTimeout 0
+TestDatabases yes
+ScriptedUpdates yes
+CompressLocalDatabase no
+Bytecode true
+NotifyClamd /etc/clamav/clamd.conf
+# Check for new database 24 times a day
+Checks 24
+DatabaseMirror db.local.clamav.net
+DatabaseMirror database.clamav.net
+
+$ cat  /var/log/clamav/freshclam.log
 ```
 
 # 17. Archive Handler
@@ -1520,6 +1659,8 @@ vim 123
 # I. Study
 
 ## I.1. [Linux 教程](https://www.runoob.com/linux/linux-tutorial.html)
+
+## I.2. [Ubuntu Linux 安裝、使用 ClamAV 防毒軟體 clamscan 掃毒指令教學與範例](https://officeguide.cc/linux-clamav-antivirus-clamscan-installation-configuration-tutorial-examples/)
 
 # II. Debug
 
