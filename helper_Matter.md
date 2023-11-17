@@ -480,6 +480,90 @@ $ ninja -C ${PJ_GN_BUILD_DIR}/${PJ_GN_TARGET} \
 
 >The script `./scripts/build/build_examples.py` provides a uniform build interface into using `gn`, `cmake`, `ninja` and other tools as needed to compile various platforms.
 
+> ameba -> BuildAmebaTarget
+>
+> asr --> BuildASRTarget
+>
+> android -> BuildAndroidTarget
+>
+> bouffalolab -> BuildBouffalolabTarget
+>
+> cc32xx -> Buildcc32xxTarget
+>
+> ti -> BuildCC13x2x7Target
+>
+> ti -> BuildCC13x4Target
+>
+> cyw30739 -> BuildCyw30739Target
+>
+> efr32 -> BuildEfr32Target
+>
+> esp32 -> BuildEsp32Target
+>
+> genio -> BuildGenioTarget
+>
+> HostBoard.NATIVE.PlatformName() -> BuildHostFakeTarget
+>
+> HostBoard.NATIVE.PlatformName() -> BuildHostTarget
+>
+> HostBoard.NATIVE.PlatformName() -> BuildHostTestRunnerTarget
+>
+> imx -> BuildIMXTarget
+>
+> infineon -> BuildInfineonTarget
+>
+> k32w -> BuildK32WTarget
+>
+> mbed -> BuildMbedTarget
+>
+> mw320 -> BuildMW320Target
+>
+> nrf -> BuildNrfTarget
+>
+> nrf -> BuildNrfNativeTarget
+>
+> qpg -> BuildQorvoTarget
+>
+> stm32 -> BuildStm32Target
+>
+> tizen -> BuildTizenTarget
+>
+> telink -> BuildTelinkTarget
+
+```mermaid
+flowchart TB
+	start([start])
+	subgraph target.py[build/build/target.py]
+		Accept["def Accept(self, full_input: str)"]
+		AppendModifier["def AppendModifier(self, name: str, **kargs)"]
+	end
+	subgraph targets.py[build/build/targets.py]
+		subgraph BUILD_TARGETS["BUILD_TARGETS[]"]
+			BuildHostTarget["BuildHostTarget()"]
+		end
+	end
+	subgraph gn.py[build/builders/gn.py]
+		generate_gn[generate]
+	end
+	subgraph host.py[build/builders/host.py]
+		subgraph HostBuilder["class HostBuilder(GnBuilder)"]
+			GnBuildArgs["def GnBuildArgs(self)"]
+			generate_host["def generate(self)"]
+		end
+	end
+	subgraph build_examples.py[build/build_examples.py]
+		main
+		click.option["@click.option"]
+		ValidateTargetNames["def ValidateTargetNames(context, parameter, values)"]
+	end
+	
+	start --> BUILD_TARGETS --> click.option --> main --> ValidateTargetNames
+	ValidateTargetNames --> Accept --> |cmd_generate|generate_host
+	generate_host --> generate_gn
+	generate_gn --> GnBuildArgs
+
+```
+
 ```bash
 # generate and run ninja/make as needed to compile
 $ ./scripts/build/build_examples.py \
@@ -521,11 +605,16 @@ $ gn ls \  --root=./ \  ./build_xxx/linux-x64-light
 ```bash
 $ export PJ_GN_TARGET=linux-x64-bridge
 
+$ ./scripts/build/build_examples.py \
+	--target linux-x64-bridge \
+	--out-prefix ./build_xxx \
+  gen
+# or
 $ gn gen --check --fail-on-unused-args --export-compile-commands \
 	--root=./examples/bridge-app/linux \
 	./build_xxx/linux-x64-bridge
 
-$ ninja -C ./build_xxx/linux-x64-light
+$ ninja -C ./build_xxx/linux-x64-bridge
 
 $ gn ls \
 	--root=./examples/bridge-app/linux \
@@ -539,6 +628,11 @@ $ gn ls \
 ```bash
 $ export PJ_GN_TARGET=linux-x64-light
 
+$ ./scripts/build/build_examples.py \
+	--target linux-x64-light \
+	--out-prefix ./build_xxxx \
+	gen
+# or
 $ gn gen --check --fail-on-unused-args --export-compile-commands \
 	--root=./examples/lighting-app/linux \
 	./build_xxx/linux-x64-light
@@ -547,7 +641,7 @@ $ ninja -C ./build_xxx/linux-x64-light
 
 $ gn ls \
 	--root=./examples/bridge-app/linux \
-	./build_xxx/linux-x64-bridge
+	./build_xxx/linux-x64-light
 ```
 
 - Silicon Labs
