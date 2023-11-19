@@ -480,55 +480,34 @@ $ ninja -C ${PJ_GN_BUILD_DIR}/${PJ_GN_TARGET} \
 
 >The script `./scripts/build/build_examples.py` provides a uniform build interface into using `gn`, `cmake`, `ninja` and other tools as needed to compile various platforms.
 
-> ameba -> BuildAmebaTarget
->
-> asr --> BuildASRTarget
->
-> android -> BuildAndroidTarget
->
-> bouffalolab -> BuildBouffalolabTarget
->
-> cc32xx -> Buildcc32xxTarget
->
-> ti -> BuildCC13x2x7Target
->
-> ti -> BuildCC13x4Target
->
-> cyw30739 -> BuildCyw30739Target
->
-> efr32 -> BuildEfr32Target
->
-> esp32 -> BuildEsp32Target
->
-> genio -> BuildGenioTarget
->
-> HostBoard.NATIVE.PlatformName() -> BuildHostFakeTarget
->
-> HostBoard.NATIVE.PlatformName() -> BuildHostTarget
->
-> HostBoard.NATIVE.PlatformName() -> BuildHostTestRunnerTarget
->
-> imx -> BuildIMXTarget
->
-> infineon -> BuildInfineonTarget
->
-> k32w -> BuildK32WTarget
->
-> mbed -> BuildMbedTarget
->
-> mw320 -> BuildMW320Target
->
-> nrf -> BuildNrfTarget
->
-> nrf -> BuildNrfNativeTarget
->
-> qpg -> BuildQorvoTarget
->
-> stm32 -> BuildStm32Target
->
-> tizen -> BuildTizenTarget
->
-> telink -> BuildTelinkTarget
+##### B.1. target vs function
+
+| target                                 | Build???Target                                 |
+| -------------------------------------- | ---------------------------------------------- |
+| ameba                                  | BuildAmebaTarget                               |
+| asr                                    | BuildASRTarget                                 |
+| android                                | BuildAndroidTarget                             |
+| bouffalolab                            | BuildBouffalolabTarget                         |
+| cc32xx                                 | Buildcc32xxTarget                              |
+| ti                                     | BuildCC13x2x7Target, BuildCC13x4Target         |
+| cyw30739                               | BuildCyw30739Target                            |
+| efr32                                  | BuildEfr32Target                               |
+| esp32                                  | BuildEsp32Target                               |
+| genio                                  | BuildGenioTarget                               |
+| HostBoard.NATIVE.PlatformName()        | BuildHostFakeTarget, BuildHostTestRunnerTarget |
+| HostBoard.NATIVE.PlatformName(), arm64 | BuildHostTarget                                |
+| imx                                    | BuildIMXTarget                                 |
+| infineon                               | BuildInfineonTarget                            |
+| k32w                                   | BuildK32WTarget                                |
+| mbed                                   | BuildMbedTarget                                |
+| mw320                                  | BuildMW320Target                               |
+| nrf                                    | BuildNrfTarget, BuildNrfNativeTarget           |
+| qpg                                    | BuildQorvoTarget                               |
+| stm32                                  | BuildStm32Target                               |
+| tizen                                  | BuildTizenTarget                               |
+| telink                                 | BuildTelinkTarget                              |
+
+##### B.2. Host Flow
 
 ```mermaid
 flowchart TB
@@ -557,6 +536,7 @@ flowchart TB
 		ValidateTargetNames["def ValidateTargetNames(context, parameter, values)"]
 	end
 	
+	BuildHostTarget -..-> AppendModifier
 	start --> BUILD_TARGETS --> click.option --> main --> ValidateTargetNames
 	ValidateTargetNames --> Accept --> |cmd_generate|generate_host
 	generate_host --> generate_gn
