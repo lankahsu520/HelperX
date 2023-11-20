@@ -47,84 +47,6 @@ flowchart LR
 >
 >你可能認為 SDK 已經是前人“整理”出來的，為什麼還需要花時間或心血在上面。但當你吸收完下面的章節就會知道，不同的因素排列組合，就可能有千萬種結果，而前人也只是幫你指出其中一個可能而已。
 
-## 1.1. Platform
-
-> 先決定將在什麼環境上執行
-
-```mermaid
-mindmap
-	Platform
-		Loader
-			BIOS
-			Bootloader
-		Operating system
-			Linux
-			MacOS
-			Windows
-		Processor
-			[64-bit]
-			[32-bit]
-		Endianness
-			[Big-Endian]
-			[Little-Endian]
-		Architecture
-			ARM
-			MIPS
-			INTEL
-		Connecter
-			TTY
-			USB
-			Bluetooth
-		Disk
-			Flash
-			SD card
-			SSD
-```
-
-## 1.2. Software
-
-```mermaid
-mindmap
-	Software
-		Build tools
-			make
-			cmake
-			Shell script
-			Ninja
-			npm
-		Editor
-			Notepad++
-			Keil
-			Eclipse
-		Language
-			C, C++
-			Node.js
-			Python
-    Partition
-      Dual Images
-      Single Image
-		Runtime dependency
-			library
-		System integration
-			Buildroot
-			OpenWrt
-			Yocto
-		Update
-      OTA
-			tools?
-				flashtool
-				Imager
-		Toolchain
-			Toolchain generator
-				crosstool[crosstool-ng]
-			Compiler
-				Cross
-				Native
-			[libxxx-dev]
-```
-
-
-
 # 2. Codebase
 
 >[ChatGPT] Codebase 的功用
@@ -171,7 +93,7 @@ stateDiagram-v2
 	Repository -->End
 ```
 
-## 2.2. SDK to Develop
+## 2.2. SDK to Develop and  Deploy
 
 > 從專案開啟，拿到 SDK 後，就需要花部分人力進行 Codebase 整合，之後進到版本控管後，才有利於開發/測試人員進行開發和測試！
 >
