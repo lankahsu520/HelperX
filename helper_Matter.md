@@ -236,13 +236,149 @@ flowchart LR
 >
 >
 
-# 4. Matter SDK
+# 4. Target Platform Pi4
+
+> 官網使用的測試平台為 Raspberry Pi 4，如果考量在 Pi4 進行 Native-Compilation 速度過慢等問題，就得在 PC (ubuntu) 上進行 Cross-Compilation。至於要如何編譯就讓我們繼續看下去。
+
+```mermaid
+flowchart TD
+	subgraph PI4-a[Raspberry Pi 4]
+		subgraph Matter-a[Matter]
+			lighting-app[lighting-app]
+		end
+	end
+	subgraph PI4b[Raspberry Pi 4]
+		subgraph Matter-b[Matter]
+			bridge-app
+		end
+	end
+```
+
+## 4.1. Install
+
+> [Installing prerequisites on Raspberry Pi 4](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#installing-prerequisites-on-raspberry-pi-4)
+
+### 4.1.1. Burn Ubuntu *22.04.xx* 64-bit *server* OS  on a micro SD card
+
+![matter002](./images/matter002.png)
+
+### 4.1.2. Installing prerequisites on Pi4
+
+> Default login: ubuntu/ubuntu
+
+#### A. Install net-tools and ssh server
+
+```bash
+# 第一次開機，
+# 一定要 update 和 upgrade
+# 一定要上網；不熟設定 Wi-Fi，就不要鐵齒，請把 RJ45 連上。
+$ sudo apt update
+$ sudo apt -y upgrade
+
+$ sudo apt  -y install net-tools openssh-server
+# to change the hostname
+$ hostname lanka-pi4-8g
+
+# set bash as sh
+$ cd /bin; sudo rm sh; sudo ln -s bash sh; ll sh
+lrwxrwxrwx 1 root root 4 Nov 21 09:40 sh -> bash*
+
+$ sudo reboot
+```
+
+```bash
+# then you can ssh to connect this Pi4
+$ sudo apt -y install git gcc g++ pkg-config libssl-dev libdbus-1-dev \
+	libglib2.0-dev libavahi-client-dev ninja-build python3-venv python3-dev \
+	python3-pip unzip libgirepository1.0-dev libcairo2-dev libreadline-dev
+
+$ sudo apt -y install wireless-tools
+
+$ sudo apt -y install avahi-utils
+```
+
+```bash
+$ sudo apt -y install pi-bluetooth
+$ sudo reboot
+```
+
+#### B. Others
+
+```bash
+# UI builds
+# If building via build_examples.py and -with-ui variant, also install SDL2
+$ sudo apt -y install libsdl2-dev
+
+```
+
+#### C. Setup Lan
+
+```bash
+ $ sudo vi /etc/netplan/01-netcfg.yaml
+ network:
+  version: 2
+  ethernets:
+    eth0:
+      dhcp4: true
+
+```
+
+#### D. Setup Wi-Fi
+
+```bash
+$ sudo vi /etc/netplan/50-cloud-init.yaml
+network:
+    version: 2
+    wifis:
+        renderer: networkd
+        wlan0:
+            access-points:
+                Lanka520_2G:
+                    password: 1234567890
+            dhcp4: true
+            optional: true
+
+$ sudo netplan apply
+```
+
+#### ~~D. Setup Wi-Fi~~
+
+```bash
+$ sudo vi /etc/systemd/system/dbus-fi.w1.wpa_supplicant1.service
+ExecStart=/sbin/wpa_supplicant -u -s -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
+
+$ sudo vi /etc/wpa_supplicant/wpa_supplicant.conf
+ctrl_interface=DIR=/run/wpa_supplicant
+update_config=1
+
+$ sudo reboot
+```
+
+## 4.2. Check Kernel Version
+
+```bash
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description:    Ubuntu 22.04.3 LTS
+Release:        22.04
+Codename:       jammy
+
+$ uname -a
+Linux lanka-pi4-8g 5.15.0-1034-raspi #37-Ubuntu SMP PREEMPT Mon Jul 17 10:02:14 UTC 2023 aarch64 aarch64 aarch64 GNU/Linux
+
+$ file /bin/bash
+/bin/bash: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=4dadac332a3aaef2b0eca910734ed6f8834d0b9b, for GNU/Linux 3.7.0, stripped
+
+```
+
+# 5. Matter SDK
 
 >Matter (formerly Project CHIP) creates more connections between more objects, simplifying development for manufacturers and increasing compatibility for consumers, guided by the Connectivity Standards Alliance.
 
-## 4.1. Repository
+## 5.1. Repository
 
-### 4.1.1.  Offical - [connectedhomeip](https://github.com/project-chip/connectedhomeip)
+### 5.1.1.  Offical - [connectedhomeip](https://github.com/project-chip/connectedhomeip)
 
 ```bash
 $ git clone --recurse-submodules https://github.com/project-chip/connectedhomeip.git
@@ -331,13 +467,15 @@ $ git submodule update --init
 25G     ./
 ```
 
-### 4.1.2. [SiliconLabs](https://github.com/SiliconLabs)/**[matter](https://github.com/SiliconLabs/matter)**
+### 5.1.2. [SiliconLabs](https://github.com/SiliconLabs)/**[matter](https://github.com/SiliconLabs/matter)**
+
+> 其實各家晶片廠有 Fork 出相關的 repository，還請各位自行尋找。
 
 ```bash
 $ git clone https://github.com/SiliconLabs/matter.git
 ```
 
-## 4.2. [Building Matter](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#building-matter)
+## 5.2. [Building Matter](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#building-matter)
 
 > [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[docs](https://github.com/project-chip/connectedhomeip/tree/master/docs)/[guides](https://github.com/project-chip/connectedhomeip/tree/master/docs/guides)/[BUILDING.md](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md)
 
@@ -359,7 +497,7 @@ flowchart TD
 	end
 ```
 
-### 4.2.1. Installing prerequisites on Linux
+### 5.2.1. Installing prerequisites on Linux
 
 ```bash
 $ sudo apt install -y git gcc g++ pkg-config libssl-dev libdbus-1-dev \
@@ -402,9 +540,7 @@ $ gn --version
 2124 (e4702d740906)
 ```
 
-
-
-### 4.2.2. Prepare for building
+### 5.2.2. Prepare for building
 
 >因為一開始使用 --recurse-submodules，這邊就只要執行 activate.sh
 
@@ -420,7 +556,7 @@ $ source scripts/activate.sh
 $ source scripts/bootstrap.sh
 ```
 
-### 4.2.3. Building
+### 5.2.3. Building
 
 > 先確定環境是否設定完成，執行 gn
 
@@ -565,7 +701,7 @@ $ ./scripts/build/build_examples.py \
 	gen
 ```
 
-### 4.2.4. [examples](https://github.com/project-chip/connectedhomeip/tree/master/examples)
+### 5.2.4. [examples](https://github.com/project-chip/connectedhomeip/tree/master/examples)
 
 ```bash
 $ export PJ_GN_TARGET=linux-x64-tests
@@ -578,9 +714,9 @@ $ gn gen --check --fail-on-unused-args --export-compile-commands \
 $ gn ls \  --root=./ \  ./build_xxx/linux-x64-light
 ```
 
-#### A. [bridge-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/bridge-app)
+#### A. Linux
 
-- linux
+##### A.1. [bridge-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/bridge-app)
 
 ```bash
 $ export PJ_GN_TARGET=linux-x64-bridge
@@ -601,9 +737,7 @@ $ gn ls \
 	./build_xxx/linux-x64-bridge
 ```
 
-#### B. [lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app)
-
-- linux
+##### A.2. [lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app)
 
 ```bash
 $ export PJ_GN_TARGET=linux-x64-light
@@ -624,7 +758,9 @@ $ gn ls \
 	./build_xxx/linux-x64-light
 ```
 
-- Silicon Labs
+#### B. Silicon Labs
+
+##### B.1. efr32-brd4187c-light
 
 ```bash
 $ export PJ_GN_TARGET=efr32-brd4187c-light
@@ -641,6 +777,8 @@ $ gn ls \
 	./build_xxx/efr32-brd4187c-light
 ```
 
+##### B.2. efr32-brd4186c-light
+
 ```bash
 $ export PJ_GN_TARGET=efr32-brd4186c-light
 
@@ -656,7 +794,9 @@ $ gn ls \
 	./build_xxx/efr32-brd4186c-light
 ```
 
-* Texas Instruments
+#### C. Texas Instruments
+
+##### C.1. ti-cc13x2x7_26x2x7-lighting
 
 ```bash
 $ export PJ_GN_TARGET=ti-cc13x2x7_26x2x7-lighting
@@ -673,6 +813,8 @@ $ gn ls \
 	./build_xxx/ti-cc13x2x7_26x2x7-lighting
 ```
 
+##### C.2. ti-cc13x4_26x4-lighting
+
 ```bash
 $ export PJ_GN_TARGET=ti-cc13x4_26x4-lighting
 
@@ -688,108 +830,7 @@ $ gn ls \
 	./build_xxx/ti-cc13x4_26x4-lighting
 ```
 
-# 5. Target Platform
-
-> 前章節主要是介紹如何編譯，而官網的測試平台為 Raspberry Pi 4；如果考量在 PI4 進行 Native-Compilation 速度過慢等問題，就得在 PC (ubuntu) 上進行 Cross-Compilation，這部分先不討論！
-
-```mermaid
-flowchart TD
-	subgraph PI4-a[Raspberry Pi 4]
-		subgraph Matter-a[Matter]
-			lighting-app[lighting-app]
-		end
-	end
-	subgraph PI4b[Raspberry Pi 4]
-		subgraph Matter-b[Matter]
-			bridge-app
-		end
-	end
-```
-
-## 5.1. Setup PI4 - [Installing prerequisites on Raspberry Pi 4](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#installing-prerequisites-on-raspberry-pi-4)
-
-### 5.1.1. Install Ubuntu *22.04.xx* 64-bit *server* OS  on a micro SD card
-
-![matter002](./images/matter002.png)
-
-### 5.1.2. Installing prerequisites on PI4
-
-> login: ubuntu/ubuntuu
-
-#### A. Install net-tools and ssh server
-
-```bash
-# 第一次開機，
-# 一定要 update 和 upgrade
-# 一定要上網；不熟設定 Wi-Fi，就不要鐵齒，請把 RJ45 連上。
-$ sudo apt update
-$ sudo apt --yes upgrade
-
-$ sudo apt --yes install net-tools openssh-server
-# to change the hostname
-$ hostname lanka-pi4-8g
-$ sudo reboot
-```
-
-```bash
-# then you can ssh to connect this PI4
-$ sudo apt --yes install git gcc g++ pkg-config libssl-dev libdbus-1-dev \
-	libglib2.0-dev libavahi-client-dev ninja-build python3-venv python3-dev \
-	python3-pip unzip libgirepository1.0-dev libcairo2-dev libreadline-dev
-
-$ sudo apt --yes install avahi-utils
-```
-
-```bash
-$ sudo apt --yes install pi-bluetooth
-$ sudo reboot
-```
-
-#### B. Others
-
-```bash
-# UI builds
-# If building via build_examples.py and -with-ui variant, also install SDL2
-$ sudo apt --yes install libsdl2-dev
-
-```
-
-#### C. Setup Wi-Fi
-
-```bash
-$ sudo vi /etc/systemd/system/dbus-fi.w1.wpa_supplicant1.service
-ExecStart=/sbin/wpa_supplicant -u -s -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
-
-$ sudo vi /etc/wpa_supplicant/wpa_supplicant.conf
-ctrl_interface=DIR=/run/wpa_supplicant
-update_config=1
-
-$ sudo reboot
-```
-
-## 5.2. Build on PI4
-
-> use Native compiler on PI4
-
-> Please check the previous chapter !
-
-```mermaid
-flowchart TD
-	subgraph PI4-a[Raspberry Pi 4]
-		subgraph Native-a[Native compiler]
-			subgraph Matter-a[Matter SDK]
-				lighting-app[lighting-app]
-			end
-		end
-	end
-	subgraph PI4-b[Raspberry Pi 4]
-		subgraph Native-b[Native compiler]
-			subgraph Matter-b[Matter SDK]
-				bridge-app
-			end
-		end
-	end
-```
+## 5.3. Cross-Compilation with Clang
 
 # ??? Virtual Device
 
