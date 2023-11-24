@@ -66,6 +66,22 @@ flowchart LR
 >
 >總之，程式碼庫是軟體開發過程中的一個核心元素，它有助於組織、保護、協作和管理您的程式碼，同時提供了版本控制、容錯復原和協作的許多好處。不同的團隊和項目可以選擇不同的程式碼庫工具和流程，以滿足其需求。
 
+- 小故事
+
+> 在專案開啟時，都會指派成員先去研究其可行性，當然有 SDK 時，就要先進行彙整、編譯和測試。以下就是一個很糟的專案案例。
+>
+> 我：「你最近研究的東西相關的文件放那？」
+>
+> 先遣隊：「都在官網提供的 GitHub」
+>
+> 我：「那要從那開始 ?」
+>
+> 先遣隊：「官網都有寫」
+>
+> 我：「那 SDK，又放在那？編的如何？」
+>
+> 先遣隊：「官網都有，你自己不會抓哦！」
+
 ## 2.1. State Diagram
 
 > 從圖中可以知道，第一份 Codebase 是要花費多少功夫才能完成。
@@ -99,7 +115,7 @@ stateDiagram-v2
 >
 > 就目前工作的經驗，一般要完成 1st Codebase，至少需要 3*人月。
 
- ```mermaid
+```mermaid
 flowchart LR
 	Start
 	subgraph Codebase
@@ -150,8 +166,41 @@ flowchart LR
 	
 	Target-->End
 	FW-->End
- ```
+```
 
+# 3. Project vs. Codebase
+
+> Codebase 其實就跟 Project 很像，只是切入的角度不同；有試過一次又一次的說明，建立 Codebase 的重要性，對方還是不得其門而入。
+>
+> 這邊就試著用不同的角度切入，當然所畫之狀態圖只是一個概念，非絕對，每個狀態都有可能造成結束或跳至任何一個狀態。
+
+```mermaid
+stateDiagram-v2
+
+	Start: 專案設立
+	Collect: 搜集資料
+	Summary: 匯整資料
+	DB: 建立檔案
+	Readme: 說明文件
+	Share: 分享情報
+	Assign: 工作分配
+	Schedule: 時間排程
+	Todo: 執行任務
+	End: 完成專案
+
+	Start --> Todo
+	Todo --> Collect
+	Collect --> Summary
+	Summary --> DB
+	DB --> Readme
+	Readme --> Collect
+	Readme --> Share
+	Share --> Assign
+	Assign --> Schedule
+	
+	Schedule --> Todo
+	Schedule --> End
+```
 # Appendix
 
 # I. Study
