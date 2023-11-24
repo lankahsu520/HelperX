@@ -680,82 +680,50 @@ flowchart TB
 
 ```
 
-```bash
-# generate and run ninja/make as needed to compile
-$ ./scripts/build/build_examples.py \
-	--target linux-x64-tests --out-prefix build_xxx \
-	build
-```
-
-> 使用參數如下
-
-```bash
-# generate and run ninja/make as needed to compile
-$ ./scripts/build/build_examples.py \
-	--target ${PJ_GN_TARGET} --out-prefix ${PJ_GN_BUILD_DIR} ${PJ_GN_DRY_RUN} \
-	build
-
-# Generate ninja/makefiles (but does not run the compilation)
-$ ./scripts/build/build_examples.py \
-	--target ${PJ_GN_TARGET} --out-prefix ${PJ_GN_BUILD_DIR} ${PJ_GN_DRY_RUN} \
-	gen
-```
-
 ### 5.2.4. [examples](https://github.com/project-chip/connectedhomeip/tree/master/examples)
-
-```bash
-$ export PJ_GN_TARGET=linux-x64-tests
-
-$ gn gen --check --fail-on-unused-args --export-compile-commands \
-	--root=./ \
-	--args=chip_build_tests=true \
-	./build_xxx/linux-x64-tests
-
-$ gn ls \  --root=./ \  ./build_xxx/linux-x64-light
-```
 
 #### A. Linux
 
-##### A.1. [bridge-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/bridge-app)
-
-```bash
-$ export PJ_GN_TARGET=linux-x64-bridge
-
-$ ./scripts/build/build_examples.py \
-	--target linux-x64-bridge \
-	--out-prefix ./build_xxx \
-  gen
-# or
-$ gn gen --check --fail-on-unused-args --export-compile-commands \
-	--root=./examples/bridge-app/linux \
-	./build_xxx/linux-x64-bridge
-
-$ ninja -C ./build_xxx/linux-x64-bridge
-
-$ gn ls \
-	--root=./examples/bridge-app/linux \
-	./build_xxx/linux-x64-bridge
-```
-
-##### A.2. [lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app)
+##### A.1. [lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app)
 
 ```bash
 $ export PJ_GN_TARGET=linux-x64-light
 
 $ ./scripts/build/build_examples.py \
-	--target linux-x64-light \
-	--out-prefix ./build_xxxx \
+	--target ${PJ_GN_TARGET} \
+	--out-prefix ./build_xxx \
 	gen
 # or
 $ gn gen --check --fail-on-unused-args --export-compile-commands \
 	--root=./examples/lighting-app/linux \
-	./build_xxx/linux-x64-light
+	./build_xxx/${PJ_GN_TARGET}
 
-$ ninja -C ./build_xxx/linux-x64-light
+$ ninja -C ./build_xxx/${PJ_GN_TARGET}
 
 $ gn ls \
 	--root=./examples/bridge-app/linux \
-	./build_xxx/linux-x64-light
+	./build_xxx/${PJ_GN_TARGET}
+```
+
+##### A.2. [bridge-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/bridge-app)
+
+```bash
+$ export PJ_GN_TARGET=linux-x64-bridge
+
+$ ./scripts/build/build_examples.py \
+	--target ${PJ_GN_TARGET} \
+	--out-prefix ./build_xxx \
+  gen
+# or
+$ gn gen --check --fail-on-unused-args --export-compile-commands \
+	--root=./examples/bridge-app/linux \
+	./build_xxx/${PJ_GN_TARGET}
+
+$ ninja -C ./build_xxx/${PJ_GN_TARGET}
+
+$ gn ls \
+	--root=./examples/bridge-app/linux \
+	./build_xxx/${PJ_GN_TARGET}
 ```
 
 #### B. Silicon Labs
@@ -768,13 +736,13 @@ $ export PJ_GN_TARGET=efr32-brd4187c-light
 $ gn gen --check --fail-on-unused-args --export-compile-commands \
 	--root=./examples/lighting-app/silabs \
 	'--args=silabs_board="BRD4187C" sl_matter_version_str="v1.1-master-d870e8c5e2-dirty"' \
-	./build_xxx/efr32-brd4187c-light
+	./build_xxx/${PJ_GN_TARGET}
 
-$ ninja -C ./build_xxx/efr32-brd4187c-light
+$ ninja -C ./build_xxx/${PJ_GN_TARGET}
 
 $ gn ls \
 	--root=./examples/lighting-app/silabs \
-	./build_xxx/efr32-brd4187c-light
+	./build_xxx/${PJ_GN_TARGET}
 ```
 
 ##### B.2. efr32-brd4186c-light
@@ -785,13 +753,13 @@ $ export PJ_GN_TARGET=efr32-brd4186c-light
 $ gn gen --check --fail-on-unused-args --export-compile-commands \
 	--root=./examples/lighting-app/silabs \
 	'--args=silabs_board="BRD4186C" sl_matter_version_str="v1.1-master-d870e8c5e2-dirty"' \
-	./build_xxx/efr32-brd4186c-light
+	./build_xxx/${PJ_GN_TARGET}
 
-$ ninja -C ./build_xxx/efr32-brd4186c-light
+$ ninja -C ./build_xxx/${PJ_GN_TARGET}
 
 $ gn ls \
 	--root=./examples/lighting-app/silabs \
-	./build_xxx/efr32-brd4186c-light
+	./build_xxx/${PJ_GN_TARGET}
 ```
 
 #### C. Texas Instruments
@@ -804,13 +772,13 @@ $ export PJ_GN_TARGET=ti-cc13x2x7_26x2x7-lighting
 $ gn gen --check --fail-on-unused-args --export-compile-commands \
 	--root=./examples/lighting-app/cc13x2x7_26x2x7 \
 	'--args=ti_sysconfig_root="/opt/TI/sysconfig_1.15.0" ti_simplelink_board="LP_CC2652R7"' \
-	./build_xxx/ti-cc13x2x7_26x2x7-lighting
+	./build_xxx/${PJ_GN_TARGET}
 
-$ ninja -C ./build_xxx/ti-cc13x2x7_26x2x7-lighting
+$ ninja -C ./build_xxx/${PJ_GN_TARGET}
 
 $ gn ls \
 	--root=./examples/lighting-app/cc13x2x7_26x2x7 \
-	./build_xxx/ti-cc13x2x7_26x2x7-lighting
+	./build_xxx/${PJ_GN_TARGET}
 ```
 
 ##### C.2. ti-cc13x4_26x4-lighting
@@ -821,16 +789,66 @@ $ export PJ_GN_TARGET=ti-cc13x4_26x4-lighting
 $ gn gen --check --fail-on-unused-args --export-compile-commands \
 	--root=./examples/lighting-app/cc13x4_26x4 \
 	'--args=ti_sysconfig_root="/opt/TI/sysconfig_1.15.0" ti_simplelink_board="LP_EM_CC1354P10_6"' \
-	./build_xxx/ti-cc13x4_26x4-lighting
+	./build_xxx/${PJ_GN_TARGET}
 
-$ ninja -C ./build_xxx/ti-cc13x4_26x4-lighting
+$ ninja -C ./build_xxx/${PJ_GN_TARGET}
 
 $ gn ls \
 	--root=./examples/lighting-app/cc13x4_26x4 \
-	./build_xxx/ti-cc13x4_26x4-lighting
+	./build_xxx/${PJ_GN_TARGET}
 ```
 
-## 5.3. Cross-Compilation with Clang
+## 5.3. Cross-Compilation with Clang on ubuntu x86_64
+
+> Host: ubuntu x86_64
+>
+> Target: Pi4 arm64
+>
+> 請先準備好你的 Toolchain，尤其是裏面的 sysroot，請設定環境變數
+>
+> export SYSROOT_AARCH64=/work/aarch64-linux-gnu
+
+### 5.3.1. [examples](https://github.com/project-chip/connectedhomeip/tree/master/examples)
+
+#### A. aarch64-linux-gnu
+
+##### A.1. [lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app)
+
+```bash
+# 設邊選擇 Pi4 (arm64/aarch64);另外使用 clang進行編譯
+$ export PJ_GN_TARGET=linux-arm64-light-clang
+
+# 設定 SYSROOT_AARCH64
+$ export SYSROOT_AARCH64=/work/aarch64-linux-gnu
+$ echo $SYSROOT_AARCH64
+/work/aarch64-linux-gnu
+
+$ ./scripts/build/build_examples.py \
+	--target ${PJ_GN_TARGET} \
+	--out-prefix ./build_xxx \
+	gen
+# or
+$ PKG_CONFIG_PATH="${SYSROOT_AARCH64}/lib/aarch64-linux-gnu/pkgconfig" \
+	gn gen --check --fail-on-unused-args --export-compile-commands \
+	--root=./examples/lighting-app/linux \
+	'--args=is_clang=true target_cpu="arm64" sysroot="/work/sysroot"' \
+	./build_xxx/${PJ_GN_TARGET}
+
+$ ninja -C ./build_xxx/${PJ_GN_TARGET}
+
+$ gn ls \
+	--root=./examples/bridge-app/linux \
+	./build_xxx/${PJ_GN_TARGET}
+```
+
+```bash
+$ ll build_xxx/linux-arm64-light-clang/chip-lighting-app
+
+```
+
+
+
+
 
 # ??? Virtual Device
 
