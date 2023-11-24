@@ -705,6 +705,12 @@ $ gn ls \
 	./build_xxx/${PJ_GN_TARGET}
 ```
 
+```bash
+$ ll build_xxx/linux-x64-tests/chip-tool
+-rwxrwxr-x 1 lanka lanka 159226400 十一 24 10:51 build_xxx/linux-x64-tests/chip-tool*
+
+```
+
 ##### A.2. [bridge-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/bridge-app)
 
 ```bash
@@ -723,6 +729,27 @@ $ ninja -C ./build_xxx/${PJ_GN_TARGET}
 
 $ gn ls \
 	--root=./examples/bridge-app/linux \
+	./build_xxx/${PJ_GN_TARGET}
+```
+
+##### A.3. linux-x64-tests
+
+```bash
+$ export PJ_GN_TARGET=linux-x64-tests
+
+$ ./scripts/build/build_examples.py \
+	--target ${PJ_GN_TARGET} \
+	--out-prefix ./build_xxx \
+  gen
+# or
+$ gn gen --check --fail-on-unused-args --export-compile-commands \
+	--root=./ \
+	./build_xxx/${PJ_GN_TARGET}
+
+$ ninja -C ./build_xxx/${PJ_GN_TARGET}
+
+$ gn ls \
+	--root=./ \
 	./build_xxx/${PJ_GN_TARGET}
 ```
 
@@ -846,9 +873,56 @@ $ ll build_xxx/linux-arm64-light-clang/chip-lighting-app
 
 ```
 
+# 6. Run
 
+## 6.1. chip-tool and chip-lighting-app
 
+```mermaid
+flowchart BT
+	subgraph Router[Router]
+	end
+	subgraph ubuntu[PC - Ubuntu x86_64]
+		subgraph chip-tool[chip-tool]
+		end
+	end
+	subgraph Pi4[P4 - Ubuntu arm64 22.04.xx 64-bit server]
+		chip-lighting-app[chip-lighting-app]
+	end
+	
+	ubuntu <--> |Lan|Router
+	Pi4 <--> |Lan|Router
+	
+	chip-tool --> |command| chip-lighting-app
+```
 
+#### A. Pi4
+
+```bash
+$ sudo ./chip-lighting-app --wifi
+```
+
+#### B. PC
+
+```bash
+$ export MATTER_PINCODE=20202021
+$ exporr MATTER_NODEID=1
+$ exporr MATTER_EPID=1
+```
+
+```bash
+# Commissioning
+$ sudo ./chip-tool pairing onnetwork $MATTER_NODEID $MATTER_PIN_CODE
+```
+
+```bash
+# toggle
+$ sudo ./chip-tool onoff toggle $MATTER_NODEID $MATTER_EPID
+```
+
+```bash
+# Unpairing
+$ sudo ./chip-tool pairing unpair $MATTER_NODEID
+```
 
 # ??? Virtual Device
 
