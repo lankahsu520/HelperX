@@ -705,12 +705,6 @@ $ gn ls \
 	./build_xxx/${PJ_GN_TARGET}
 ```
 
-```bash
-$ ll build_xxx/linux-x64-tests/chip-tool
--rwxrwxr-x 1 lanka lanka 159226400 十一 24 10:51 build_xxx/linux-x64-tests/chip-tool*
-
-```
-
 ##### A.2. [bridge-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/bridge-app)
 
 ```bash
@@ -734,6 +728,8 @@ $ gn ls \
 
 ##### A.3. linux-x64-tests
 
+> <font color="red"> chip-tool 可以在這邊獲得</font>
+
 ```bash
 $ export PJ_GN_TARGET=linux-x64-tests
 
@@ -751,6 +747,11 @@ $ ninja -C ./build_xxx/${PJ_GN_TARGET}
 $ gn ls \
 	--root=./ \
 	./build_xxx/${PJ_GN_TARGET}
+```
+
+```bash
+$ ll build_xxx/linux-x64-tests/chip-tool
+-rwxrwxr-x 1 lanka lanka 159226400 十一 24 10:51 build_xxx/linux-x64-tests/chip-tool*
 ```
 
 #### B. Silicon Labs
@@ -837,9 +838,11 @@ $ gn ls \
 
 ### 5.3.1. [examples](https://github.com/project-chip/connectedhomeip/tree/master/examples)
 
-#### A. aarch64-linux-gnu
+#### A. linux-arm64-light-clang
 
 ##### A.1. [lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app)
+
+> 記得編譯完成是要放在 Pi4 上執行 
 
 ```bash
 # 設邊選擇 Pi4 (arm64/aarch64);另外使用 clang進行編譯
@@ -870,6 +873,10 @@ $ gn ls \
 
 ```bash
 $ ll build_xxx/linux-arm64-light-clang/chip-lighting-app
+-rwxrwxr-x 1 lanka lanka 54785464 十一 23 13:39 build_xxx/linux-arm64-light-clang/chip-lighting-app*
+
+$ file build_xxx/linux-arm64-light-clang/chip-lighting-app
+build_xxx/linux-arm64-light-clang/chip-lighting-app: ELF 64-bit LSB shared object, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, for GNU/Linux 3.7.0, BuildID[xxHash]=7587b1aefa363654, with debug_info, not stripped
 
 ```
 
