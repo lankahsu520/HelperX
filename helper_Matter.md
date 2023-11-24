@@ -918,7 +918,7 @@ $ exporr MATTER_EPID=1
 
 ```bash
 # Commissioning
-$ sudo ./chip-tool pairing onnetwork $MATTER_NODEID $MATTER_PIN_CODE
+$ sudo ./chip-tool pairing onnetwork $MATTER_NODEID $MATTER_PINCODE
 ```
 
 ```bash
