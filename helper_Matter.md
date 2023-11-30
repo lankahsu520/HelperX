@@ -914,8 +914,8 @@ $ sudo ./chip-lighting-app --wifi
 
 ```bash
 $ export MATTER_PINCODE=20202021
-$ exporr MATTER_NODEID=1
-$ exporr MATTER_EPID=1
+$ export MATTER_NODEID=1
+$ export MATTER_EPID=1
 ```
 
 ```bash
