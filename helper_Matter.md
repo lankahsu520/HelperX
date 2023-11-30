@@ -836,6 +836,8 @@ $ gn ls \
 >
 > export SYSROOT_AARCH64=/work/aarch64-linux-gnu
 
+> sysroot 最簡單的製作方式，就是進到 Target 裏，把 /lib、 /usr/include 和 /usr/lib 把包即可
+
 ### 5.3.1. [examples](https://github.com/project-chip/connectedhomeip/tree/master/examples)
 
 #### A. linux-arm64-light-clang
@@ -861,7 +863,7 @@ $ ./scripts/build/build_examples.py \
 $ PKG_CONFIG_PATH="${SYSROOT_AARCH64}/lib/aarch64-linux-gnu/pkgconfig" \
 	gn gen --check --fail-on-unused-args --export-compile-commands \
 	--root=./examples/lighting-app/linux \
-	'--args=is_clang=true target_cpu="arm64" sysroot="/work/sysroot"' \
+	'--args=is_clang=true target_cpu="arm64" sysroot="/work/aarch64-linux-gnu"' \
 	./build_xxx/${PJ_GN_TARGET}
 
 $ ninja -C ./build_xxx/${PJ_GN_TARGET}
