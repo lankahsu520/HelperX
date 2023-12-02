@@ -198,6 +198,10 @@
 >
 > <font color="red">平常寫程式有良好的習慣，如注意 alloc、free，給初值，使用驗證過的函數等，加上幾行 Debug message(s) ，解決 Compile Errors and Warnings，就能處理至少 95%上的問題。</font>
 
+#### - [helper_Python.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Python.md) - Python helper.
+
+> 不討論如何撰寫 Python 的程式，而是當使用或變動系統的 Python 時，可能發生的問題。
+
 ## 2.2. Repository
 
 #### - [beeX](https://github.com/lankahsu520/beeX)
