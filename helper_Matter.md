@@ -836,6 +836,8 @@ $ gn ls \
 >
 > export SYSROOT_AARCH64=/work/aarch64-linux-gnu
 
+> sysroot 最簡單的製作方式，就是進到 Target 裏，把 /lib、 /usr/include 和 /usr/lib 把包即可
+
 ### 5.3.1. [examples](https://github.com/project-chip/connectedhomeip/tree/master/examples)
 
 #### A. linux-arm64-light-clang
@@ -861,7 +863,7 @@ $ ./scripts/build/build_examples.py \
 $ PKG_CONFIG_PATH="${SYSROOT_AARCH64}/lib/aarch64-linux-gnu/pkgconfig" \
 	gn gen --check --fail-on-unused-args --export-compile-commands \
 	--root=./examples/lighting-app/linux \
-	'--args=is_clang=true target_cpu="arm64" sysroot="/work/sysroot"' \
+	'--args=is_clang=true target_cpu="arm64" sysroot="/work/aarch64-linux-gnu"' \
 	./build_xxx/${PJ_GN_TARGET}
 
 $ ninja -C ./build_xxx/${PJ_GN_TARGET}
@@ -905,30 +907,30 @@ flowchart BT
 #### A. Pi4
 
 ```bash
-$ sudo ./chip-lighting-app --wifi
+$ ./chip-lighting-app --wifi
 ```
 
 #### B. PC
 
 ```bash
 $ export MATTER_PINCODE=20202021
-$ exporr MATTER_NODEID=1
-$ exporr MATTER_EPID=1
+$ export MATTER_NODEID=1
+$ export MATTER_EPID=1
 ```
 
 ```bash
 # Commissioning
-$ sudo ./chip-tool pairing onnetwork $MATTER_NODEID $MATTER_PINCODE
+$ ./chip-tool pairing onnetwork $MATTER_NODEID $MATTER_PINCODE
 ```
 
 ```bash
 # toggle
-$ sudo ./chip-tool onoff toggle $MATTER_NODEID $MATTER_EPID
+$ ./chip-tool onoff toggle $MATTER_NODEID $MATTER_EPID
 ```
 
 ```bash
 # Unpairing
-$ sudo ./chip-tool pairing unpair $MATTER_NODEID
+$ ./chip-tool pairing unpair $MATTER_NODEID
 ```
 
 # ??? Virtual Device
@@ -1274,6 +1276,122 @@ stm32-stm32wb5mm-dk-light
 tizen-arm-{all-clusters,all-clusters-minimal,chip-tool,light,tests}[-no-ble][-no-thread][-no-wifi][-asan][-ubsan]
 telink-{tlsr9518adk80d,tlsr9528a}-{air-quality-sensor,all-clusters,all-clusters-minimal,bridge,contact-sensor,light,light-switch,lock,ota-requestor,pump,pump-controller,resource-monitoring,shell,smoke-co-alarm,temperature-measurement,thermostat,window-covering}[-ota][-dfu][-shell][-rpc][-factory-data][-4mb]
 openiotsdk-{shell,lock}[-mbedtls][-psa]
+
+```
+
+## IV.3. chip-lighting-app
+
+```bash
+$ ./chip-lighting-app --help
+Usage: ./chip-lighting-app [options]
+
+GENERAL OPTIONS
+
+  --ble-device <number>
+       The device number for CHIPoBLE, without 'hci' prefix, can be found by hciconfig.
+
+  --wifi
+       Enable WiFi management via wpa_supplicant.
+
+  --thread
+       Enable Thread management via ot-agent.
+
+  --version <version>
+       The version indication provides versioning of the setup payload.
+
+  --vendor-id <id>
+       The Vendor ID is assigned by the Connectivity Standards Alliance.
+
+  --product-id <id>
+       The Product ID is specified by vendor.
+
+  --custom-flow <Standard = 0 | UserActionRequired = 1 | Custom = 2>
+       A 2-bit unsigned enumeration specifying manufacturer-specific custom flow options.
+
+  --capabilities <None = 0, SoftAP = 1 << 0, BLE = 1 << 1, OnNetwork = 1 << 2>
+       Discovery Capabilities Bitmask which contains information about Device’s available technologies for device discovery.
+
+  --discriminator <discriminator>
+       A 12-bit unsigned integer match the value which a device advertises during commissioning.
+
+  --passcode <passcode>
+       A 27-bit unsigned integer, which serves as proof of possession during commissioning.
+       If not provided to compute a verifier, the --spake2p-verifier-base64 must be provided.
+
+  --spake2p-verifier-base64 <PASE verifier as base64>
+       A raw concatenation of 'W0' and 'L' (67 bytes) as base64 to override the verifier
+       auto-computed from the passcode, if provided.
+
+  --spake2p-salt-base64 <PASE salt as base64>
+       16-32 bytes of salt to use for the PASE verifier, as base64. If omitted, will be generated
+       randomly. If a --spake2p-verifier-base64 is passed, it must match against the salt otherwise
+       failure will arise.
+
+  --spake2p-iterations <PASE PBKDF iterations>
+       Number of PBKDF iterations to use. If omitted, will be 1000. If a --spake2p-verifier-base64 is
+       passed, the iteration counts must match that used to generate the verifier otherwise failure will
+       arise.
+
+  --secured-device-port <port>
+       A 16-bit unsigned integer specifying the listen port to use for secure device messages (default is 5540).
+
+  --unsecured-commissioner-port <port>
+       A 16-bit unsigned integer specifying the port to use for unsecured commissioner messages (default is 5550).
+
+  --secured-commissioner-port <port>
+       A 16-bit unsigned integer specifying the listen port to use for secure commissioner messages (default is 5552). Only valid when app is both device and commissioner
+
+  --commissioner-fabric-id <fabricid>
+       The fabric ID to be used when this device is a commissioner (default in code is 1).
+
+  --command <command-name>
+       A name for a command to execute during startup.
+
+  --PICS <filepath>
+       A file containing PICS items.
+
+  --KVS <filepath>
+       A file to store Key Value Store items.
+
+  --interface-id <interface>
+       A interface id to advertise on.
+
+  --trace_file <file>
+       Output trace data to the provided file.
+  --trace_log <1/0>
+       A value of 1 enables traces to go to the log, 0 disables this (default 0).
+  --trace_decode <1/0>
+       A value of 1 enables traces decoding, 0 disables this (default 0).
+  --cert_error_csr_incorrect_type
+       Configure the CSRResponse to be built with an invalid CSR type.
+  --cert_error_csr_existing_keypair
+       Configure the CSRResponse to be built with a CSR where the keypair already exists.
+  --cert_error_csr_nonce_incorrect_type
+       Configure the CSRResponse to be built with an invalid CSRNonce type.
+  --cert_error_csr_nonce_too_long
+       Configure the CSRResponse to be built with a CSRNonce that is longer than expected.
+  --cert_error_csr_nonce_invalid
+       Configure the CSRResponse to be built with a CSRNonce that does not match the CSRNonce from the CSRRequest.
+  --cert_error_nocsrelements_too_long
+       Configure the CSRResponse to contains an NOCSRElements larger than the allowed RESP_MAX.
+  --cert_error_attestation_signature_incorrect_type
+       Configure the CSRResponse to be build with an invalid AttestationSignature type.
+  --cert_error_attestation_signature_invalid
+       Configure the CSRResponse to be build with an AttestationSignature that does not match what is expected.
+  --enable-key <key>
+       A 16-byte, hex-encoded key, used to validate TestEventTrigger command of Generial Diagnostics cluster
+  --trace-to <destination>
+       Trace destinations, comma separated (json:log, json:<path>, perfetto, perfetto:<path>)
+  --simulate-no-internal-time
+       Time cluster does not use internal platform time
+
+HELP OPTIONS
+
+  -h, --help
+       Print this output and then exit.
+
+  -v, --version
+       Print the version and then exit.
 
 ```
 
