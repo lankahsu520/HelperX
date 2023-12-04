@@ -88,6 +88,12 @@ flowchart LR
 
 ## 1.2. Editing
 
+#### - Delete all Text
+
+```bash
+: 1,$d
+```
+
 #### - Goto the line
 
 ```bash
