@@ -556,6 +556,8 @@ $ source scripts/activate.sh
 $ source scripts/bootstrap.sh
 ```
 
+
+
 ### 5.2.3. Building
 
 > 先確定環境是否設定完成，執行 gn
@@ -680,9 +682,119 @@ flowchart TB
 
 ```
 
+#### C. Setup [Building Android](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/android_building.md#building-android)
+
+> You need Android SDK 26 & NDK 23.2.8568313 downloaded to your machine. Set the `$ANDROID_HOME` environment variable to where the SDK is downloaded and the `$ANDROID_NDK_HOME` environment variable to point to where the NDK package is downloaded. The build also requires `kotlinc` to be in your `$PATH`.
+
+> ### Gradle & JDK Version
+>
+> We are using Gradle 7.1.1 for all android project which does not support Java 17 (https://docs.gradle.org/current/userguide/compatibility.html) while the default JDK version on MacOS for Apple Silicon is 'openjdk 17.0.1' or above.
+
+##### C.1. java
+
+```bash
+$ java -version
+
+Command 'java' not found, but can be installed with:
+
+sudo apt install openjdk-11-jre-headless  # version 11.0.20.1+1-0ubuntu1~20.04, or
+sudo apt install default-jre              # version 2:1.11-72
+sudo apt install openjdk-13-jre-headless  # version 13.0.7+5-0ubuntu1~20.04
+sudo apt install openjdk-16-jre-headless  # version 16.0.1+9-1~20.04
+sudo apt install openjdk-17-jre-headless  # version 17.0.8.1+1~us1-0ubuntu1~20.04
+sudo apt install openjdk-8-jre-headless   # version 8u382-ga-1~20.04.1
+
+$ sudo apt install -y default-jre
+$ java --version
+openjdk 11.0.21 2023-10-17
+OpenJDK Runtime Environment (build 11.0.21+9-post-Ubuntu-0ubuntu120.04)
+OpenJDK 64-Bit Server VM (build 11.0.21+9-post-Ubuntu-0ubuntu120.04, mixed mode, sharing)
+
+```
+
+##### C.2. Android Studio
+
+> [commandlinetools-linux-10406996_latest.zip](https://developer.android.com/studio)
+
+```bash
+$ mkdir -p /work/bin/android
+$ cd /work/bin/android
+# cp android-studio-2023.1.1.26-linux.tar.gz /work/bin/android
+$ tar -zxvf android-studio-2023.1.1.26-linux.tar.gz
+$ cd /work/bin/android/android-studio/bin
+
+# run android studio
+$ ./studio.sh
+$ tree -L 1 ~/.config/Google/AndroidStudio2023.1/
+/home/lanka/.config/Google/AndroidStudio2023.1/
+├── bundled_plugins.txt
+├── options
+├── ssl
+└── updatedBrokenPlugins.db
+
+2 directories, 2 files
+
+$ cd ~/.config/Google/AndroidStudio2023.1/
+$ vi idea.properties
+idea.system.path=/work/bin/android/system
+idea.config.path=/work/bin/android/config
+
+$ ls ~/Android/Sdk/platforms
+android-26  android-34
+
+$ ls ~/Android/Sdk/cmdline-tools/latest/bin/sdkmanager
+$ ls ~/Android/Sdk/ndk
+23.2.8568313  26.1.10909125
+
+$ sudo snap install --classic kotlin
+$ kotlin -version
+Kotlin version 1.7.21-release-272 (JRE 17.0.9+9-Ubuntu-120.04)
+
+```
+- ~/.profile
+```bash
+$ vi ~/.profile
+
+# add
+if [ -d "/work/bin/android/android-studio/bin" ] ; then
+    PATH="/work/bin/android/android-studio/bin:$PATH"
+fi
+
+# add
+if [ -d "$HOME/Android/Sdk" ] ; then
+    PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
+fi
+
+export ANDROID_HOME=$HOME/Android/Sdk
+export ANDROID_NDK_HOME=$HOME/Android/Sdk/ndk/23.2.8568313
+```
+- SDK Manager
+![matter_AndroidStudio01](./images/matter_AndroidStudio01.png)
+- Android 8.0
+![matter_AndroidStudio02](./images/matter_AndroidStudio02.png)
+- Android SDK Command-line Tools
+![matter_AndroidStudio03](./images/matter_AndroidStudio03.png)
+- NDK 23.2.8568313
+![matter_AndroidStudio03a](./images/matter_AndroidStudio03a.png)
+- Android SDK 26.0.0
+![matter_AndroidStudio03b](./images/matter_AndroidStudio03b.png)
+
+- ~~[android-ndk-r26b-linux.zip](https://developer.android.com/ndk/downloads)~~
+
+```bash
+$ mkdir -p /work/bin/android
+$ cd /work/bin/android
+# cp android-ndk-r26b-linux.zip /work/bin/android
+$ unzip android-ndk-r26b-linux.zip
+```
+
+
 ### 5.2.4. [examples](https://github.com/project-chip/connectedhomeip/tree/master/examples)
 
 #### A. Linux
+
+```bash
+```
 
 ##### A.1. [lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app)
 
@@ -703,6 +815,27 @@ $ ninja -C ./build_xxx/${PJ_GN_TARGET}
 $ gn ls \
 	--root=./examples/bridge-app/linux \
 	./build_xxx/${PJ_GN_TARGET}
+```
+
+```bash
+$ tree -L 2  connectedhomeip/examples/lighting-app/linux/
+connectedhomeip/examples/lighting-app/linux/
+├── args.gni
+├── BUILD.gn
+├── build_overrides -> ../../build_overrides
+├── Dockerfile
+├── entrypoint.sh
+├── include
+│   └── CHIPProjectAppConfig.h
+├── LightingAppCommandDelegate.cpp
+├── LightingAppCommandDelegate.h
+├── main.cpp
+├── README.md
+├── third_party
+│   └── connectedhomeip -> ../../../../
+└── with_pw_rpc.gni
+
+4 directories, 10 files
 ```
 
 ##### A.2. [bridge-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/bridge-app)
@@ -748,6 +881,8 @@ $ gn ls \
 	--root=./ \
 	./build_xxx/${PJ_GN_TARGET}
 ```
+
+- build_xxx/linux-x64-tests
 
 ```bash
 $ ll build_xxx/linux-x64-tests/chip-tool
@@ -824,6 +959,36 @@ $ ninja -C ./build_xxx/${PJ_GN_TARGET}
 $ gn ls \
 	--root=./examples/lighting-app/cc13x4_26x4 \
 	./build_xxx/${PJ_GN_TARGET}
+```
+
+#### D. android
+
+##### D.1. [CHIPTool](https://github.com/project-chip/connectedhomeip/tree/master/examples/android/CHIPTool)
+
+```bash
+$ export PJ_GN_TARGET=android-arm64-chip-tool
+
+$ ./scripts/build/build_examples.py \
+	--target ${PJ_GN_TARGET} \
+	--out-prefix ./build_xxx \
+  gen
+# or
+$ gn gen --check --fail-on-unused-args --export-compile-commands \
+	--root=./ \
+	./build_xxx/${PJ_GN_TARGET}
+
+$ ninja -C ./build_xxx/${PJ_GN_TARGET}
+
+$ gn ls \
+	--root=./ \
+	./build_xxx/${PJ_GN_TARGET}
+```
+
+- build_xxx/android-arm64-chip-tool
+
+```bash
+$ ll build_xxx/android-arm64-chip-tool
+-rwxrwxr-x 1 lanka lanka 159226400 十一 24 10:51 build_xxx/linux-x64-tests/chip-tool*
 ```
 
 ## 5.3. Cross-Compilation with Clang on ubuntu x86_64
@@ -906,14 +1071,42 @@ flowchart BT
 
 #### A. Pi4
 
+> --ble-device <number>
+>     The device number for CHIPoBLE, without 'hci' prefix, can be found by hciconfig.
+>
+> --passcode <passcode>
+>     A 27-bit unsigned integer, which serves as proof of possession during commissioning.
+>     If not provided to compute a verifier, the --spake2p-verifier-base64 must be provided.
+>
+> ​    [1..99999998]
+>
+> --interface-id <interface>
+>     A interface id to advertise on.
+
 ```bash
-$ ./chip-lighting-app --wifi
+$ export MATTER_PINCODE=20202021
+$ export MATTER_DISCRIMINATOR=3840
+
+$ hciconfig
+hci0:   Type: Primary  Bus: UART
+        BD Address: D8:3A:DD:0F:4C:8C  ACL MTU: 1021:8  SCO MTU: 64:1
+        UP RUNNING
+        RX bytes:2634 acl:0 sco:0 events:250 errors:0
+        TX bytes:17998 acl:0 sco:0 commands:250 errors:0
+
+#$ ./chip-lighting-app --wifi
+$ sudo ./chip-lighting-app --ble-device 0 --interface-id 0 --passcode $MATTER_PINCODE --discriminator $MATTER_DISCRIMINATOR
+
+$ sudo ./chip-lighting-app --ble-device 0 --interface-id 0
 ```
 
 #### B. PC
 
 ```bash
+# default 20202021
 $ export MATTER_PINCODE=20202021
+$ export MATTER_DISCRIMINATOR=3840
+
 $ export MATTER_NODEID=1
 $ export MATTER_EPID=1
 ```
@@ -932,6 +1125,8 @@ $ ./chip-tool onoff toggle $MATTER_NODEID $MATTER_EPID
 # Unpairing
 $ ./chip-tool pairing unpair $MATTER_NODEID
 ```
+
+## 6.2. [Matter Client Example](https://github.com/project-chip/connectedhomeip/tree/master/examples/chip-tool#command-reference)
 
 # ??? Virtual Device
 
@@ -1008,7 +1203,27 @@ $ ./linux/out/rootnode_onofflight_bbs1b7IaOV
 
 #### C. [Matter Virtual Device Development Environment](https://developers.home.google.com/matter/tools/matter-virtual-device-development-environment)
 
+## I.4. [Matter SDK - nRF Connect SDK 1.1.0](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/matter/index.html)
+
+> nRF
+
+## I.5. [Matter 101](https://github.com/project-chip/connectedhomeip/tree/master/examples/chip-tool#command-reference)
+
+> [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)
+
+## I.6. [Matter over Wi-Fi : Run lighting-app demo](https://community.silabs.com/s/article/Matter-over-Wi-Fi-Run-lighting-app-demo?language=en_US)
+
+> Silicon Labs Community
+
 # II. Debug
+
+## II.1. kotlinc: command not found
+
+```bash
+$ sudo snap install --classic kotlin
+```
+
+
 
 # III. Glossary
 
