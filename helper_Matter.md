@@ -742,7 +742,12 @@ idea.config.path=/work/bin/android/config
 $ ls ~/Android/Sdk/platforms
 android-26  android-34
 
-$ ls ~/Android/Sdk/cmdline-tools/latest/bin/sdkmanager
+# please install cmdline-tools 10.0
+$ ls ~/Android/Sdk/cmdline-tools/
+
+# vi connectedhomeip/scripts/build/builders/android.py
+# replace latest -> 10.0
+
 $ ls ~/Android/Sdk/ndk
 23.2.8568313  26.1.10909125
 
@@ -764,7 +769,7 @@ fi
 if [ -d "$HOME/Android/Sdk" ] ; then
 export ANDROID_HOME=$HOME/Android/Sdk
 export ANDROID_NDK_HOME=$HOME/Android/Sdk/ndk/23.2.8568313
-PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
+PATH="$HOME/Android/Sdk/cmdline-tools/10.0/bin:$PATH"
 fi
 
 ```
