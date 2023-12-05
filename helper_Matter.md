@@ -967,6 +967,7 @@ $ gn ls \
 
 ```bash
 $ export PJ_GN_TARGET=android-arm64-chip-tool
+$ export PJ_GN_BUILD_DIR=./build_xxx/${PJ_GN_TARGET}
 
 $ ./scripts/build/build_examples.py \
 	--target ${PJ_GN_TARGET} \
@@ -984,11 +985,44 @@ $ gn ls \
 	./build_xxx/${PJ_GN_TARGET}
 ```
 
+- to generate apk
+
+```bash
+# connectedhomeip/scripts/build/testdata/dry_run_android-arm64-chip-tool.txt
+# Prepare Native libs android-arm64-chip-tool
+# export PW_PROJECT_ROOT=connectedhomeip
+# export PJ_GN_BUILD_DIR=./build_xxx/${PJ_GN_TARGET}
+mkdir -p ${PW_PROJECT_ROOT}/examples/android/CHIPTool/app/libs/jniLibs/arm64-v8a
+
+cp ${PJ_GN_BUILD_DIR}/lib/jni/arm64-v8a/libCHIPController.so ${PW_PROJECT_ROOT}/examples/android/CHIPTool/app/libs/jniLibs/arm64-v8a/libCHIPController.so
+
+cp ${PJ_GN_BUILD_DIR}/lib/jni/arm64-v8a/libc++_shared.so ${PW_PROJECT_ROOT}/examples/android/CHIPTool/app/libs/jniLibs/arm64-v8a/libc++_shared.so
+
+cp ${PJ_GN_BUILD_DIR}/lib/src/controller/java/CHIPController.jar ${PW_PROJECT_ROOT}/examples/android/CHIPTool/app/libs/CHIPController.jar
+
+cp ${PJ_GN_BUILD_DIR}/lib/src/controller/java/OnboardingPayload.jar ${PW_PROJECT_ROOT}/examples/android/CHIPTool/app/libs/OnboardingPayload.jar
+
+cp ${PJ_GN_BUILD_DIR}/lib/src/platform/android/AndroidPlatform.jar ${PW_PROJECT_ROOT}/examples/android/CHIPTool/app/libs/AndroidPlatform.jar
+
+cp ${PJ_GN_BUILD_DIR}/lib/src/controller/java/libCHIPJson.jar ${PW_PROJECT_ROOT}/examples/android/CHIPTool/app/libs/libCHIPJson.jar
+
+cp ${PJ_GN_BUILD_DIR}/lib/src/controller/java/libCHIPTlv.jar ${PW_PROJECT_ROOT}/examples/android/CHIPTool/app/libs/libCHIPTlv.jar
+
+cp ${PJ_GN_BUILD_DIR}/lib/src/controller/java/CHIPClusters.jar ${PW_PROJECT_ROOT}/examples/android/CHIPTool/app/libs/CHIPClusters.jar
+
+cp ${PJ_GN_BUILD_DIR}/lib/src/controller/java/CHIPClusterID.jar ${PW_PROJECT_ROOT}/examples/android/CHIPTool/app/libs/CHIPClusterID.jar
+
+# Building APP android-arm64-chip-tool
+${PW_PROJECT_ROOT}/examples/android/CHIPTool/gradlew -p ${PW_PROJECT_ROOT}/examples/android/CHIPTool -PmatterBuildSrcDir=${PJ_GN_BUILD_DIR} -PmatterSdkSourceBuild=false -PbuildDir=${PJ_GN_BUILD_DIR} assembleDebug
+
+```
+
 - build_xxx/android-arm64-chip-tool
 
 ```bash
-$ ll build_xxx/android-arm64-chip-tool
--rwxrwxr-x 1 lanka lanka 159226400 十一 24 10:51 build_xxx/linux-x64-tests/chip-tool*
+$ ll build_xxx/android-arm64-chip-tool/outputs/apk/debug/app-debug.apk
+-rw-rw-r-- 1 lanka lanka 66852021 十二  5 22:23 build_xxx/android-arm64-chip-tool/outputs/apk/debug/app-debug.apk
+
 ```
 
 ## 5.3. Cross-Compilation with Clang on ubuntu x86_64
