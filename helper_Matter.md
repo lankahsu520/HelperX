@@ -556,8 +556,6 @@ $ source scripts/activate.sh
 $ source scripts/bootstrap.sh
 ```
 
-
-
 ### 5.2.3. Building
 
 > 先確定環境是否設定完成，執行 gn
@@ -744,9 +742,10 @@ android-26  android-34
 
 # please install cmdline-tools 10.0
 $ ls ~/Android/Sdk/cmdline-tools/
+10.0
 
 # vi connectedhomeip/scripts/build/builders/android.py
-# replace latest -> 10.0
+# replace "latest" -> "10.0"
 
 $ ls ~/Android/Sdk/ndk
 23.2.8568313  26.1.10909125
@@ -1261,8 +1260,6 @@ $ ./linux/out/rootnode_onofflight_bbs1b7IaOV
 ```bash
 $ sudo snap install --classic kotlin
 ```
-
-
 
 # III. Glossary
 
