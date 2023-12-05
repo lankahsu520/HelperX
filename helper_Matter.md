@@ -762,11 +762,11 @@ fi
 
 # add
 if [ -d "$HOME/Android/Sdk" ] ; then
-    PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
-fi
-
 export ANDROID_HOME=$HOME/Android/Sdk
 export ANDROID_NDK_HOME=$HOME/Android/Sdk/ndk/23.2.8568313
+PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
+fi
+
 ```
 - SDK Manager
 ![matter_AndroidStudio01](./images/matter_AndroidStudio01.png)
