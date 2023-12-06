@@ -130,6 +130,9 @@ $ sudo apt remove -y python3.8
 $ pip3 install --upgrade pip
 # or
 $ python3 -m pip install --upgrade pip
+
+# upgrade setup tools
+$ pip3 install wheel setuptools pip --upgrade
 ```
 - Fail
 
@@ -170,7 +173,7 @@ Press <enter> to keep the current choice[*], or type selection number:1
 $ sudo update-alternatives --set python3 /usr/bin/python3.12
 ```
 
-# 5. Virtual Environment
+# 5. Run on Virtual Environment
 
 >建立一個獨立的開發環境，如前章節有提到，現有能穩定執行的套件，不見得匹配最新的的 python3。
 >
@@ -289,15 +292,43 @@ pip 23.3.1 from /work/bin/python/3.12/lib/python3.12/site-packages/pip (python 3
 
 ```
 
-# 6. packages vs pip3
+# 6. Run with PYTHONPATH
+
+## 6.1. Install requirements.txt
+
+```bash
+$ export PYTHON_LIB=`pwd`
+$ pip3 install --target ${PYTHON_LIB}/python -r requirements.txt
+```
+
+- requirements.txt
+
+```bash
+$ cat requirements.txt
+boto3==1.26.123
+
+#https://pypi.org/project/netifaces/
+netifaces==0.11.0
+
+```
+
+## 6.2. Run
+
+```bash
+$ PYTHONPATH=${PYTHON_LIB}/python ./helloworld
+```
+
+# 7. pip3
 
 - [PyPI – the Python Package Index · PyPI](https://pypi.org)
 
-## 6.1. packages
+## 7.1. Install packages
 
 ```bash
-$ pip3 install meson
 $ pip3 install markdown
+
+# for special version
+$ pip3 install meson==1.3.0
 
 $ pip3 list
 Package  Version
@@ -311,7 +342,7 @@ cmake version 3.16.3
 
 ```
 
-## 6.2. Upgrade packages
+## 7.2. Upgrade packages
 
 #### A. outdated
 
@@ -336,7 +367,36 @@ $ pip3 install --upgrade markdown
 $ pip3 install --upgrade cmake
 ```
 
-# 6.1. packages
+# 8. Packages
+
+> 列出常用的
+>
+> [PyPI – the Python Package Index · PyPI](https://pypi.org)
+
+#### -  [boto3](https://pypi.org/project/boto3/)
+>AWS SDK，看關操作請見 [awsP9](https://github.com/lankahsu520/awsP9)
+>
+> [PyPi]  Boto3 is the Amazon Web Services (AWS) Software Development Kit (SDK) for Python, which allows Python developers to write software that makes use of services like Amazon S3 and Amazon EC2. You can find the latest, most up to date, documentation at our doc site, including a list of services that are supported.
+
+#### -  [cmake](https://pypi.org/project/cmake/)
+
+>一個構建工具，看關操作請見 [makeXcmakeXmesonXgn](https://github.com/lankahsu520/makeXcmakeXmesonXgn)
+>
+>[PyPi]  [CMake](http://www.cmake.org/) is used to control the software compilation process using simple platform and compiler independent configuration files, and generate native makefiles and workspaces that can be used in the compiler environment of your choice.
+>
+>The suite of CMake tools were created by Kitware in response to the need for a powerful, cross-platform build environment for open-source projects such as ITK and VTK.
+
+#### -  [meson](https://pypi.org/project/meson/)
+
+> 一個構建工具，看關操作請見 [makeXcmakeXmesonXgn](https://github.com/lankahsu520/makeXcmakeXmesonXgn)
+>
+> [PyPi] Meson is a cross-platform build system designed to be both as fast and as user friendly as possible. It supports many languages and compilers, including GCC, Clang, PGI, Intel, and Visual Studio. Its build definitions are written in a simple non-Turing complete DSL
+
+#### -  [ninja](https://pypi.org/project/ninja/)
+
+> 一個構建工具，看關操作請見 [makeXcmakeXmesonXgn](https://github.com/lankahsu520/makeXcmakeXmesonXgn)
+>
+> [PyPi]  [Ninja](http://www.ninja-build.org/) is a small build system with a focus on speed.
 
 # Appendix
 
@@ -363,7 +423,7 @@ sudo apt install gobject-introspection
 
 ## II.2. ImportError: cannot import name 'six' from 'pkg_resources.extern' (/usr/lib/python3/dist-packages/pkg_resources/extern/__init__.py)
 
->基本上確定 pip3 和 python3 的彼此的版本。
+>pip3 和 python3 版本要匹配。
 
 ```bash
 $ pip3 --version
