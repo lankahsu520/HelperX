@@ -98,7 +98,7 @@ lrwxrwxrwx 1 root root      33  三  13  2020 /usr/bin/x86_64-linux-gnu-python3-
 >
 > e. /usr/lib/python3/dist-packages 裏的更新問題。
 >
-> f. pip3 不能用。
+> f. 更改 python 後 pip3 有可能不能用。
 
 >但是事情總是要解決，建議參考使用 Virtual Environment。
 
@@ -116,8 +116,9 @@ $ sudo add-apt-repository ppa:deadsnakes/ppa
 
 ## 4.2. Upgrade
 
+### 4.2.1. Install Special Version
+
 ```bash
-# 3.8.10 -> 3.12
 $ sudo apt install -y python3.12
 
 # 建議留下來，不要移除
@@ -146,11 +147,12 @@ $ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 $ sudo python3.12 get-pip.py
 ```
 
-#### A. update-alternatives
+### 4.2.2. Use update-alternatives
 
 > 這邊使用 update-alternatives 進行系統調整。
 
 ```bash
+# 3.8.10 -> 3.12
 $ sudo update-alternatives --config python3
 update-alternatives: error: no alternatives for python3
 
@@ -171,6 +173,11 @@ Press <enter> to keep the current choice[*], or type selection number:1
 
 # or
 $ sudo update-alternatives --set python3 /usr/bin/python3.12
+```
+
+```bash
+# to check again
+$ ll /usr/bin/*python3*
 ```
 
 # 5. Run on Virtual Environment
