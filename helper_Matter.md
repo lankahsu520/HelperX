@@ -53,7 +53,7 @@
 
 ## 1.2.  Support List
 
-#### A. Android Phone
+#### A. Google Home and android phone
 
 - [x] [在 Google Home 應用程式中管理支援 Matter 的裝置](https://support.google.com/googlenest/answer/13127223?hl=zh-HK)
 
@@ -70,11 +70,29 @@
 > - 支援 Matter 的智慧住宅裝置。如果包裝上有 ![img](https://lh3.googleusercontent.com/3yeJZ0aNtlZqwUfGWY-2Q-AIAnykzH8EOPKwu3XDNSsfdnFIQN6Da5qYou0qXSiX9_4=w180) 標誌，就表示裝置支援 Matter
 > - [支援 Matter 的 Google 中樞裝置](https://support.google.com/googlenest/answer/12391458#matter-app)
 
-#### B. iPhone
+#### B. Apple Home and  iphone
 
 - [x] [Matter support in iOS 16](https://developer.apple.com/apple-home/matter/)
 
 - [x] [配對和管理 Matter 配件](https://support.apple.com/zh-tw/102135)
+
+## 1.3. Solve what
+
+#### A. 解決<font color="red">互聯互通</font>，不同廠家出產的產品都能亙通。
+
+>原本：小米網關 + 小米設備 + 米家App 來建立<font color="red">"小米"</font>的智慧家庭。
+>
+>目標：Nest Hub + 小米設備 + 三星設備 + tp-link 設備 + Philips 設備 + Google Home 來建立<font color="red">"Lanka"</font>的智慧家庭。
+
+#### B. 設備皆可加入 Google Home 或 Apple Home。
+
+#### C. 廠商不需另外開發手機 application。
+
+## 1.4.  But …
+
+#### A. 都要上雲 ?
+
+#### B. 沒有 Matter hubs 怎麼辦 ?
 
 # 2. IoT (Internet of Things)
 
@@ -232,9 +250,9 @@ flowchart LR
 
 ## 3.2. Matter
 
->
->
->
+### 3.2.1. Matter over Network (TCP、UDP/IP)
+
+### 3.2.2. Matter over thread
 
 # 4. Target Platform Pi4
 
@@ -376,9 +394,13 @@ $ file /bin/bash
 
 >Matter (formerly Project CHIP) creates more connections between more objects, simplifying development for manufacturers and increasing compatibility for consumers, guided by the Connectivity Standards Alliance.
 
+## 5.0. Building Platform PC ubuntu 20.04 x86_64
+
 ## 5.1. Repository
 
 ### 5.1.1.  Offical - [connectedhomeip](https://github.com/project-chip/connectedhomeip)
+
+> Building Host: ubuntu 20.04 x86_64
 
 ```bash
 $ git clone --recurse-submodules https://github.com/project-chip/connectedhomeip.git
@@ -797,9 +819,6 @@ $ unzip android-ndk-r26b-linux.zip
 
 #### A. Linux
 
-```bash
-```
-
 ##### A.1. [lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app)
 
 ```bash
@@ -969,7 +988,9 @@ $ gn ls \
 
 ##### D.1. [CHIPTool](https://github.com/project-chip/connectedhomeip/tree/master/examples/android/CHIPTool)
 
-> 20231206 app-debug.apk 使用測試完很失望。如果只是要測試還是用命令的 chip-tool。
+> 20231206 app-debug.apk 使用測試完很失望。
+>
+> 如果只是要測試還是用命令的 chip-tool。
 
 ```bash
 $ export PJ_GN_TARGET=android-arm64-chip-tool
@@ -1124,8 +1145,8 @@ flowchart BT
 >     A interface id to advertise on.
 
 ```bash
-$ export MATTER_PINCODE=20202021
-$ export MATTER_DISCRIMINATOR=3840
+$ export MATTER_PINCODE=20231206
+$ export MATTER_DISCRIMINATOR=3849
 # <None = 0, SoftAP = 1 << 0, BLE = 1 << 1, OnNetwork = 1 << 2>
 $ export MATTER_DISCOVER=4
 
@@ -1148,8 +1169,9 @@ $ ./chip-lighting-app --ble-device 0 --interface-id 0
 $ sudo cp chip-tool /bin
 
 # default 20202021
-$ export MATTER_PINCODE=20202021
-$ export MATTER_DISCRIMINATOR=3840
+$ export MATTER_PINCODE=20231206
+# default 3840
+$ export MATTER_DISCRIMINATOR=3849
 
 $ export MATTER_NODEID=1
 $ export MATTER_EPID=1
