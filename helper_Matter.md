@@ -969,6 +969,8 @@ $ gn ls \
 
 ##### D.1. [CHIPTool](https://github.com/project-chip/connectedhomeip/tree/master/examples/android/CHIPTool)
 
+> 20231206 app-debug.apk 使用測試完很失望。如果只是要測試還是用命令的 chip-tool。
+
 ```bash
 $ export PJ_GN_TARGET=android-arm64-chip-tool
 $ export PJ_GN_BUILD_DIR=./build_xxx/${PJ_GN_TARGET}
@@ -1085,7 +1087,7 @@ build_xxx/linux-arm64-light-clang/chip-lighting-app: ELF 64-bit LSB shared objec
 
 ```
 
-# 6. Run
+# 6. Run ! Run ! Run !
 
 ## 6.1. chip-tool and chip-lighting-app
 
@@ -1097,17 +1099,17 @@ flowchart BT
 		subgraph chip-tool[chip-tool]
 		end
 	end
-	subgraph Pi4[P4 - Ubuntu arm64 22.04.xx 64-bit server]
+	subgraph Pi4[Pi4 - Ubuntu arm64 22.04.xx 64-bit server]
 		chip-lighting-app[chip-lighting-app]
 	end
 	
 	ubuntu <--> |Lan|Router
 	Pi4 <--> |Lan|Router
 	
-	chip-tool --> |command| chip-lighting-app
+	chip-tool <--> |Matter command| chip-lighting-app
 ```
 
-#### A. Pi4
+#### A. Pi4 - Ubuntu arm64 22.04.xx 64-bit server
 
 > --ble-device <number>
 >     The device number for CHIPoBLE, without 'hci' prefix, can be found by hciconfig.
@@ -1124,6 +1126,8 @@ flowchart BT
 ```bash
 $ export MATTER_PINCODE=20202021
 $ export MATTER_DISCRIMINATOR=3840
+# <None = 0, SoftAP = 1 << 0, BLE = 1 << 1, OnNetwork = 1 << 2>
+$ export MATTER_DISCOVER=4
 
 $ hciconfig
 hci0:   Type: Primary  Bus: UART
@@ -1133,14 +1137,16 @@ hci0:   Type: Primary  Bus: UART
         TX bytes:17998 acl:0 sco:0 commands:250 errors:0
 
 #$ ./chip-lighting-app --wifi
-$ sudo ./chip-lighting-app --ble-device 0 --interface-id 0 --passcode $MATTER_PINCODE --discriminator $MATTER_DISCRIMINATOR
+$ ./chip-lighting-app --ble-device 0 --interface-id 0 --passcode $MATTER_PINCODE --discriminator $MATTER_DISCRIMINATOR
 
-$ sudo ./chip-lighting-app --ble-device 0 --interface-id 0
+$ ./chip-lighting-app --ble-device 0 --interface-id 0
 ```
 
-#### B. PC
+#### B. PC - Ubuntu x86_64
 
 ```bash
+$ sudo cp chip-tool /bin
+
 # default 20202021
 $ export MATTER_PINCODE=20202021
 $ export MATTER_DISCRIMINATOR=3840
@@ -1151,20 +1157,331 @@ $ export MATTER_EPID=1
 
 ```bash
 # Commissioning
-$ ./chip-tool pairing onnetwork $MATTER_NODEID $MATTER_PINCODE
+$ chip-tool pairing onnetwork $MATTER_NODEID $MATTER_PINCODE
 ```
 
 ```bash
 # toggle
-$ ./chip-tool onoff toggle $MATTER_NODEID $MATTER_EPID
+$ chip-tool onoff toggle $MATTER_NODEID $MATTER_EPID
 ```
 
 ```bash
 # Unpairing
-$ ./chip-tool pairing unpair $MATTER_NODEID
+$ chip-tool pairing unpair $MATTER_NODEID
 ```
 
-## 6.2. [Matter Client Example](https://github.com/project-chip/connectedhomeip/tree/master/examples/chip-tool#command-reference)
+## 6.2. Google Home
+```mermaid
+flowchart BT
+	subgraph Google
+		subgraph DeveloperConsole[Google Developer Console]
+			subgraph project[Matter Project]
+				matter20231207
+			end
+		end
+	end
+
+	subgraph Lanka[Lanka Home]
+		subgraph Router[AP Router]
+		end
+		subgraph NestHub[Nest Hub 2]
+		end
+		subgraph android["Android Phone"]
+			direction LR
+			androidversion["Android 8.1 以上版本"]
+			GooglePlay["Google Play 服務 22.48.14 以上版本"]
+			Bluetooth["藍牙低功耗 (BLE) 4.2 以上版本"]
+		end
+		subgraph Pi4[Pi4 - Ubuntu arm64 22.04.xx 64-bit server]
+			chip-lighting-app[chip-lighting-app]
+		end
+	end
+
+	DeveloperConsole<-->|Internet|Router
+	Pi4 <--> |Lan|Router
+	NestHub <--> |Wifi|Router
+	android <--> |Wifi|Router
+```
+### 6.2.1. [支援 Matter 的 Google 裝置](https://support.google.com/googlenest/answer/12391458?hl=zh-Hant&co=GENIE.Platform%3DAndroid)
+
+> ## Matter 如何與 Google 服務搭配運作
+>
+> ### 使用 Google Home 應用程式控制 Matter 裝置
+>
+> 如要透過 Google Home 應用程式或 Google 助理控制支援 Matter 的第三方裝置，你需要可做為 Matter 中樞裝置的 Google 裝置。我們已推出相關軟體更新，因此下列 Google 裝置都能做為 Matter 中樞裝置：
+>
+> - **音箱**：Google Home、Google Home Mini、Nest Mini、Nest Audio
+> - **螢幕**：Nest Hub (第 1 代)、Nest Hub (第 2 代)、Nest Hub Max
+> - **Wi-Fi 路由器**：Nest Wifi Pro (Wi-Fi 6E)
+>
+> 歡迎前往 [Google 商店](https://home.google.com/explore-devices/featured-devices/#google-devices-with-matter)選購上述裝置。
+
+### 6.2.2. [配對 Matter 裝置](https://developers.home.google.com/matter/integration/pair?hl=zh-tw)
+
+> ## 配對限制
+>
+> Matter 裝置只有在特定供應商 ID 和裝置類型的情況下，才能在 Google Home 生態系統中配對。
+>
+> - 測試 VID 無法用於消費者裝置。
+> - 正式版 VID 必須由 Connectivity Standards Alliance (Alliance) 核發。Google 會驗證您是該 VID 的擁有者，之後才能在 Google Home Developer Console 中使用該 VID。此時，您就能為該 VID 建立整合作業。
+> - 為了進行開發和實際測試，必須[在 Developer Console 中建立](https://developers.home.google.com/matter/integration/create?hl=zh-tw)專案，以及與對應 VID 和 PID 組合的整合作業。受試裝置的使用者必須是專案成員，或是被列入實測使用者清單。
+> - 產品必須通過 Alliance 認證，消費者才能使用。
+
+#### A. [ Developer Console 中建立](https://developers.home.google.com/matter/integration/create?hl=zh-tw)專案
+
+> Project: matter20231207
+>
+> Name: lighting
+>
+> Type: Light
+>
+> Vendor Id: 65521 (0xFFF1)
+>
+> Product Id: 32769 (0x8001)
+
+![matter_google_console](./images/matter_google_console.png)
+
+# 7. Deep dive into Matter
+
+## 7.1. [clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)
+
+>[connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/
+>
+>基本設備的組成為 Device  / endpoint / cluster，而 cluster 可視為一項功能
+
+```bash
+$ ls connectedhomeip/src/app/clusters/
+access-control-server                    media-input-server
+account-login-server                     media-playback-server
+administrator-commissioning-server       mode-base-server
+air-quality-server                       mode-select-server
+application-basic-server                 network-commissioning
+application-launcher-server              occupancy-sensor-server
+audio-output-server                      on-off-server
+barrier-control-server                   operational-credentials-server
+basic-information                        operational-state-server
+bindings                                 ota-provider
+bridged-device-basic-information-server  ota-requestor
+channel-server                           power-source-configuration-server
+color-control-server                     power-source-server
+concentration-measurement-server         pump-configuration-and-control-client
+content-launch-server                    pump-configuration-and-control-server
+descriptor                               refrigerator-alarm-server
+diagnostic-logs-server                   resource-monitoring-server
+dishwasher-alarm-server                  sample-mei-server
+door-lock-server                         scenes-server
+ethernet-network-diagnostics-server      smoke-co-alarm-server
+fan-control-server                       software-diagnostics-server
+fault-injection-server                   switch-server
+fixed-label-server                       target-navigator-server
+general-commissioning-server             temperature-control-server
+general-diagnostics-server               test-cluster-server
+group-key-mgmt-server                    thermostat-client
+groups-server                            thermostat-server
+ias-zone-client                          thermostat-user-interface-configuration-server
+ias-zone-server                          thread-network-diagnostics-server
+icd-management-server                    time-format-localization-server
+identify-server                          time-synchronization-server
+keypad-input-server                      user-label-server
+laundry-washer-controls-server           wake-on-lan-server
+level-control                            wifi-network-diagnostics-server
+localization-configuration-server        window-covering-server
+low-power-server
+
+```
+
+### 7.1.1. [on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)
+
+>[connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/[on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/on-off-server)/
+
+```bash
+chip-tool onoff toggle $MATTER_NODEID $MATTER_EPID
+
+chip-tool onoff on $MATTER_NODEID $MATTER_EPID
+chip-tool onoff off $MATTER_NODEID $MATTER_EPID
+```
+
+```bash
+Usage:
+  chip-tool onoff command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * off                                                                               |
+  | * on                                                                                |
+  | * toggle                                                                            |
+  | * off-with-effect                                                                   |
+  | * on-with-recall-global-scene                                                       |
+  | * on-with-timed-off                                                                 |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * force-write                                                                       |
+  | * write                                                                             |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * subscribe-event-by-id                                                             |
+  +-------------------------------------------------------------------------------------+
+
+```
+
+#### A. [on-off-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/on-off-server/on-off-server.cpp)
+
+> [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/[on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/on-off-server)/[on-off-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/on-off-server/on-off-server.cpp)
+
+## 7.2. Pair
+
+### 7.2.1. passcode and discriminator
+
+#### A. [CHIPDeviceConfig.h](https://github.com/project-chip/connectedhomeip/blob/master/src/include/platform/CHIPDeviceConfig.h)
+
+> [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[include](https://github.com/project-chip/connectedhomeip/tree/master/src/include)/[platform](https://github.com/project-chip/connectedhomeip/tree/master/src/include/platform)/[CHIPDeviceConfig.h](https://github.com/project-chip/connectedhomeip/blob/master/src/include/platform/CHIPDeviceConfig.h)
+>
+> 預設值在此
+
+```c++
+/**
+ * @def CHIP_DEVICE_CONFIG_USE_TEST_SETUP_PIN_CODE
+ *
+ * @brief
+ *   Test Spake2p passcode to use if actual passcode value is not provisioned in the device memory.
+ */
+#ifndef CHIP_DEVICE_CONFIG_USE_TEST_SETUP_PIN_CODE
+#define CHIP_DEVICE_CONFIG_USE_TEST_SETUP_PIN_CODE 20202021
+#endif
+
+/**
+ * @def CHIP_DEVICE_CONFIG_USE_TEST_SETUP_DISCRIMINATOR
+ *
+ * @brief
+ *   Test setup discriminator to use if actual discriminator value is not provisioned in the device memory.
+ */
+#ifndef CHIP_DEVICE_CONFIG_USE_TEST_SETUP_DISCRIMINATOR
+#define CHIP_DEVICE_CONFIG_USE_TEST_SETUP_DISCRIMINATOR 0xF00
+#endif
+
+```
+#### B. [GenericConfigurationManagerImpl.ipp](https://github.com/project-chip/connectedhomeip/blob/master/src/include/platform/internal/GenericConfigurationManagerImpl.ipp)
+> [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[include](https://github.com/project-chip/connectedhomeip/tree/master/src/include)/[platform](https://github.com/project-chip/connectedhomeip/tree/master/src/include/platform)/[internal](https://github.com/project-chip/connectedhomeip/tree/master/src/include/platform/internal)/[GenericConfigurationManagerImpl.ipp](https://github.com/project-chip/connectedhomeip/blob/master/src/include/platform/internal/GenericConfigurationManagerImpl.ipp)
+>
+> GetSetupPasscode 取得 Passcode
+>
+> GetSetupDiscriminator 取得 Discriminator
+
+```c++
+template <class ConfigClass>
+CHIP_ERROR LegacyTemporaryCommissionableDataProvider<ConfigClass>::GetSetupPasscode(uint32_t & setupPasscode)
+{
+    CHIP_ERROR err;
+
+    err = mGenericConfigManager.ReadConfigValue(ConfigClass::kConfigKey_SetupPinCode, setupPasscode);
+#if defined(CHIP_DEVICE_CONFIG_USE_TEST_SETUP_PIN_CODE) && CHIP_DEVICE_CONFIG_USE_TEST_SETUP_PIN_CODE
+    if (err == CHIP_DEVICE_ERROR_CONFIG_NOT_FOUND)
+    {
+        setupPasscode = CHIP_DEVICE_CONFIG_USE_TEST_SETUP_PIN_CODE;
+        err           = CHIP_NO_ERROR;
+    }
+#endif // defined(CHIP_DEVICE_CONFIG_USE_TEST_SETUP_PIN_CODE) && CHIP_DEVICE_CONFIG_USE_TEST_SETUP_PIN_CODE
+    SuccessOrExit(err);
+
+exit:
+    return err;
+}
+
+template <class ConfigClass>
+CHIP_ERROR LegacyTemporaryCommissionableDataProvider<ConfigClass>::GetSetupDiscriminator(uint16_t & setupDiscriminator)
+{
+    CHIP_ERROR err;
+    uint32_t val;
+
+    err = mGenericConfigManager.ReadConfigValue(ConfigClass::kConfigKey_SetupDiscriminator, val);
+#if defined(CHIP_DEVICE_CONFIG_USE_TEST_SETUP_DISCRIMINATOR) && CHIP_DEVICE_CONFIG_USE_TEST_SETUP_DISCRIMINATOR
+    if (err == CHIP_DEVICE_ERROR_CONFIG_NOT_FOUND)
+    {
+        val = CHIP_DEVICE_CONFIG_USE_TEST_SETUP_DISCRIMINATOR;
+        err = CHIP_NO_ERROR;
+    }
+#endif // defined(CHIP_DEVICE_CONFIG_USE_TEST_SETUP_DISCRIMINATOR) && CHIP_DEVICE_CONFIG_USE_TEST_SETUP_DISCRIMINATOR
+    SuccessOrExit(err);
+
+    setupDiscriminator = static_cast<uint16_t>(val);
+
+exit:
+    return err;
+}
+
+```
+#### C. [CommissionableInit.cpp](https://github.com/project-chip/connectedhomeip/blob/master/examples/platform/linux/CommissionableInit.cpp)
+> [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[examples](https://github.com/project-chip/connectedhomeip/tree/master/examples)/[platform](https://github.com/project-chip/connectedhomeip/tree/master/examples/platform)/[linux](https://github.com/project-chip/connectedhomeip/tree/master/examples/platform/linux)/[CommissionableInit.cpp](https://github.com/project-chip/connectedhomeip/blob/master/examples/platform/linux/CommissionableInit.cpp)
+>
+> 如果啟動時沒有設定，如
+>
+> --passcode 20202021 --discriminator 3840
+
+```c++
+CHIP_ERROR InitCommissionableDataProvider(LinuxCommissionableDataProvider & provider, LinuxDeviceOptions & options)
+{
+    chip::Optional<uint32_t> setupPasscode;
+
+    if (options.payload.setUpPINCode != 0)
+    {
+        setupPasscode.SetValue(options.payload.setUpPINCode);
+    }
+    else if (!options.spake2pVerifier.HasValue())
+    {
+        uint32_t defaultTestPasscode = 0;
+        chip::DeviceLayer::TestOnlyCommissionableDataProvider TestOnlyCommissionableDataProvider;
+        VerifyOrDie(TestOnlyCommissionableDataProvider.GetSetupPasscode(defaultTestPasscode) == CHIP_NO_ERROR);
+
+        ChipLogError(Support,
+                     "*** WARNING: Using temporary passcode %u due to no neither --passcode or --spake2p-verifier-base64 "
+                     "given on command line. This is temporary and will disappear. Please update your scripts "
+                     "to explicitly configure onboarding credentials. ***",
+                     static_cast<unsigned>(defaultTestPasscode));
+        setupPasscode.SetValue(defaultTestPasscode);
+        options.payload.setUpPINCode = defaultTestPasscode;
+    }
+    else
+    {
+        // Passcode is 0, so will be ignored, and verifier will take over. Onboarding payload
+        // printed for debug will be invalid, but if the onboarding payload had been given
+        // properly to the commissioner later, PASE will succeed.
+    }
+
+    if (options.discriminator.HasValue())
+    {
+        options.payload.discriminator.SetLongValue(options.discriminator.Value());
+    }
+    else
+    {
+        uint16_t defaultTestDiscriminator = 0;
+        chip::DeviceLayer::TestOnlyCommissionableDataProvider TestOnlyCommissionableDataProvider;
+        VerifyOrDie(TestOnlyCommissionableDataProvider.GetSetupDiscriminator(defaultTestDiscriminator) == CHIP_NO_ERROR);
+
+        ChipLogError(Support,
+                     "*** WARNING: Using temporary test discriminator %u due to --discriminator not "
+                     "given on command line. This is temporary and will disappear. Please update your scripts "
+                     "to explicitly configure discriminator. ***",
+                     static_cast<unsigned>(defaultTestDiscriminator));
+        options.payload.discriminator.SetLongValue(defaultTestDiscriminator);
+    }
+
+    // Default to minimum PBKDF iterations
+    uint32_t spake2pIterationCount = chip::Crypto::kSpake2p_Min_PBKDF_Iterations;
+    if (options.spake2pIterations != 0)
+    {
+        spake2pIterationCount = options.spake2pIterations;
+    }
+    ChipLogError(Support, "PASE PBKDF iterations set to %u", static_cast<unsigned>(spake2pIterationCount));
+
+    return provider.Init(options.spake2pVerifier, options.spake2pSalt, spake2pIterationCount, setupPasscode,
+                         options.payload.discriminator.GetLongValue());
+}
+
+```
 
 # ??? Virtual Device
 
@@ -1237,21 +1554,17 @@ $ ./linux/out/rootnode_onofflight_bbs1b7IaOV
 
 >上次更新时间：5月 14, 2021
 
-#### B. [Build a Matter virtual device](https://developers.home.google.com/codelabs/matter-device-virtual#0)
+#### B. Developer Center / [Build a Matter virtual device](https://developers.home.google.com/codelabs/matter-device-virtual#0)
 
-#### C. [Matter Virtual Device Development Environment](https://developers.home.google.com/matter/tools/matter-virtual-device-development-environment)
+#### C. Developer Center / [Matter Virtual Device Development Environment](https://developers.home.google.com/matter/tools/matter-virtual-device-development-environment)
+
+#### D. [Matter over Wi-Fi : Run lighting-app demo](https://community.silabs.com/s/article/Matter-over-Wi-Fi-Run-lighting-app-demo?language=en_US)
+
+> Silicon Labs Community
 
 ## I.4. [Matter SDK - nRF Connect SDK 1.1.0](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/matter/index.html)
 
 > nRF
-
-## I.5. [Matter 101](https://github.com/project-chip/connectedhomeip/tree/master/examples/chip-tool#command-reference)
-
-> [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)
-
-## I.6. [Matter over Wi-Fi : Run lighting-app demo](https://community.silabs.com/s/article/Matter-over-Wi-Fi-Run-lighting-app-demo?language=en_US)
-
-> Silicon Labs Community
 
 # II. Debug
 
@@ -1462,7 +1775,7 @@ Other help topics:
   switches: Show available command-line switches.
 ```
 
-## IV.2. [`build_examples.py`](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#using-build_examplespy)
+## IV.2. [`build_examples.py`](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#using-build_examplespy) Usage
 
 ```bash
 $ ./scripts/build/build_examples.py
@@ -1530,7 +1843,7 @@ openiotsdk-{shell,lock}[-mbedtls][-psa]
 
 ```
 
-## IV.3. chip-lighting-app
+## IV.3. chip-lighting-app Usage
 
 ```bash
 $ ./chip-lighting-app --help
@@ -1645,6 +1958,149 @@ HELP OPTIONS
        Print the version and then exit.
 
 ```
+
+## IV.4. chip-tool Usage
+
+```bash
+$ chip-tool --help
+[1701937024.842395][192594:192594] CHIP:TOO: Unknown cluster or command set: --help
+Usage:
+  chip-tool cluster_name command_name [param1 param2 ...]
+or:
+  chip-tool command_set_name command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Clusters:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * accesscontrol                                                                     |
+  | * accountlogin                                                                      |
+  | * actions                                                                           |
+  | * activatedcarbonfiltermonitoring                                                   |
+  | * administratorcommissioning                                                        |
+  | * airquality                                                                        |
+  | * applicationbasic                                                                  |
+  | * applicationlauncher                                                               |
+  | * audiooutput                                                                       |
+  | * ballastconfiguration                                                              |
+  | * barriercontrol                                                                    |
+  | * basicinformation                                                                  |
+  | * binaryinputbasic                                                                  |
+  | * binding                                                                           |
+  | * booleanstate                                                                      |
+  | * bridgeddevicebasicinformation                                                     |
+  | * carbondioxideconcentrationmeasurement                                             |
+  | * carbonmonoxideconcentrationmeasurement                                            |
+  | * channel                                                                           |
+  | * colorcontrol                                                                      |
+  | * contentlauncher                                                                   |
+  | * descriptor                                                                        |
+  | * diagnosticlogs                                                                    |
+  | * dishwasheralarm                                                                   |
+  | * dishwashermode                                                                    |
+  | * doorlock                                                                          |
+  | * electricalmeasurement                                                             |
+  | * ethernetnetworkdiagnostics                                                        |
+  | * fancontrol                                                                        |
+  | * faultinjection                                                                    |
+  | * fixedlabel                                                                        |
+  | * flowmeasurement                                                                   |
+  | * formaldehydeconcentrationmeasurement                                              |
+  | * generalcommissioning                                                              |
+  | * generaldiagnostics                                                                |
+  | * groupkeymanagement                                                                |
+  | * groups                                                                            |
+  | * hepafiltermonitoring                                                              |
+  | * icdmanagement                                                                     |
+  | * identify                                                                          |
+  | * illuminancemeasurement                                                            |
+  | * keypadinput                                                                       |
+  | * laundrywashercontrols                                                             |
+  | * laundrywashermode                                                                 |
+  | * levelcontrol                                                                      |
+  | * localizationconfiguration                                                         |
+  | * lowpower                                                                          |
+  | * mediainput                                                                        |
+  | * mediaplayback                                                                     |
+  | * modeselect                                                                        |
+  | * networkcommissioning                                                              |
+  | * nitrogendioxideconcentrationmeasurement                                           |
+  | * occupancysensing                                                                  |
+  | * onoff                                                                             |
+  | * onoffswitchconfiguration                                                          |
+  | * operationalcredentials                                                            |
+  | * operationalstate                                                                  |
+  | * otasoftwareupdateprovider                                                         |
+  | * otasoftwareupdaterequestor                                                        |
+  | * ozoneconcentrationmeasurement                                                     |
+  | * pm10concentrationmeasurement                                                      |
+  | * pm1concentrationmeasurement                                                       |
+  | * pm25concentrationmeasurement                                                      |
+  | * powersource                                                                       |
+  | * powersourceconfiguration                                                          |
+  | * pressuremeasurement                                                               |
+  | * proxyconfiguration                                                                |
+  | * proxydiscovery                                                                    |
+  | * proxyvalid                                                                        |
+  | * pulsewidthmodulation                                                              |
+  | * pumpconfigurationandcontrol                                                       |
+  | * radonconcentrationmeasurement                                                     |
+  | * refrigeratoralarm                                                                 |
+  | * refrigeratorandtemperaturecontrolledcabinetmode                                   |
+  | * relativehumiditymeasurement                                                       |
+  | * rvccleanmode                                                                      |
+  | * rvcoperationalstate                                                               |
+  | * rvcrunmode                                                                        |
+  | * samplemei                                                                         |
+  | * scenes                                                                            |
+  | * smokecoalarm                                                                      |
+  | * softwarediagnostics                                                               |
+  | * switch                                                                            |
+  | * targetnavigator                                                                   |
+  | * temperaturecontrol                                                                |
+  | * temperaturemeasurement                                                            |
+  | * thermostat                                                                        |
+  | * thermostatuserinterfaceconfiguration                                              |
+  | * threadnetworkdiagnostics                                                          |
+  | * timeformatlocalization                                                            |
+  | * timesynchronization                                                               |
+  | * totalvolatileorganiccompoundsconcentrationmeasurement                             |
+  | * unitlocalization                                                                  |
+  | * unittesting                                                                       |
+  | * userlabel                                                                         |
+  | * wakeonlan                                                                         |
+  | * wifinetworkdiagnostics                                                            |
+  | * windowcovering                                                                    |
+  +-------------------------------------------------------------------------------------+
+
+  +-------------------------------------------------------------------------------------+
+  | Command sets:                                                                       |
+  +-------------------------------------------------------------------------------------+
+  | * any                                                                               |
+  |   - Commands for sending IM messages based on cluster id, not cluster name.         |
+  | * delay                                                                             |
+  |   - Commands for waiting for something to happen.                                   |
+  | * discover                                                                          |
+  |   - Commands for device discovery.                                                  |
+  | * groupsettings                                                                     |
+  |   - Commands for manipulating group keys and memberships for chip-tool itself.      |
+  | * pairing                                                                           |
+  |   - Commands for commissioning devices.                                             |
+  | * payload                                                                           |
+  |   - Commands for parsing and generating setup payloads.                             |
+  | * sessionmanagement                                                                 |
+  |   - Commands for managing CASE and PASE session state.                              |
+  | * subscriptions                                                                     |
+  |   - Commands for shutting down subscriptions.                                       |
+  | * interactive                                                                       |
+  |   - Commands for starting long-lived interactive modes.                             |
+  | * storage                                                                           |
+  |   - Commands for managing persistent data stored by chip-tool.                      |
+  +-------------------------------------------------------------------------------------+
+[1701937024.842601][192594:192594] CHIP:TOO: Run command failure: examples/chip-tool/commands/common/Commands.cpp:238: Error 0x0000002F
+
+```
+
+#### A. [Command Reference](https://github.com/project-chip/connectedhomeip/tree/master/examples/chip-tool#command-reference)
 
 # Author
 
