@@ -71,6 +71,26 @@ $ echo JSON_ABC | jq -c .
 
 ```
 
+```bash
+# format *.json ->  *.json-bak
+#** jq Handler **
+function jqformater()
+{
+	HINT="Usage: ${FUNCNAME[0]} <file>\nExample:\n	${FUNCNAME[0]} *.json"
+	FILE1="$*"
+
+	if [ ! -z "$FILE1" ]; then
+		for file in $FILE1; do
+			DO_COMMAND="(jq . $file > $file-new ;)"
+			echo "[$DO_COMMAND]"
+			sh -c "$DO_COMMAND"
+		done
+	else
+		echo -e $HINT
+	fi
+}
+```
+
 #### - A Particular Field
 
 ```bash
