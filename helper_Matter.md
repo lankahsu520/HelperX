@@ -1265,6 +1265,60 @@ flowchart BT
 
 # 7. Deep dive into Matter
 
+## 7.0. Data Model
+
+### 7.0.1. Elements of Matter
+
+```mermaid
+flowchart BT
+	subgraph Matter[Matter Device - Node]
+		subgraph Endpoint["Endpoint(s) (Device Type)"]
+			subgraph Cluster["Cluster(s)"]
+				Attribute["Attribute(s)"]
+				Command["Command(s)"]
+			end
+		end
+	end
+
+```
+
+### 7.0.2. Examples of Devices
+
+#### A. Dimmable Light & On/Off Light
+
+> 此範例有2 * Endpoints；
+>
+> 1 Endpoint 的 Device Type: Dimmable Light
+>
+> 2 Endpoint 的 Device Type: On/Off Light
+
+```mermaid
+flowchart BT
+	subgraph Matter[Matter Device - Node]
+		direction LR
+		subgraph Endpoint0["Endpoint 0 (Reserrved)"]
+		end
+		subgraph Endpoint1["Endpoint 1 (Device Type: Dimmable Light)"]
+			subgraph Cluster1a["Cluster: On/Off"]
+				Attribute1a["Attributes: On/Off"]
+				Command1b["Commands: On, Off, Toggle"]
+			end
+			subgraph Cluster1b["Cluster: Level Control"]
+				Attribute1b["Attributes: CurrentLevel"]
+				Command1b["Commands: MoveToLevel"]
+			end
+		end
+		subgraph Endpoint2["Endpoint 2 (Device Type: On/Off Light)"]
+			subgraph Cluster2["Cluster: On/Off"]
+				Attribute2["Attributes: On/Off"]
+				Command2["Commands: On, Off, Toggle"]
+			end
+		end
+	end
+
+```
+
+
 ## 7.1. [clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)
 
 >[connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/
@@ -1312,7 +1366,7 @@ low-power-server
 
 ```
 
-### 7.1.1. [on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)
+### 7.1.1. [on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters) - <font color="red">開 / 關 (On / Off) 功能</font>
 
 >[connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/[on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/on-off-server)/
 
@@ -1353,6 +1407,10 @@ Usage:
 #### A. [on-off-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/on-off-server/on-off-server.cpp)
 
 > [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/[on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/on-off-server)/[on-off-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/on-off-server/on-off-server.cpp)
+
+### 7.1.2. [level-control](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/level-control) - <font color="red">調光器 (Dimmer) 功能</font>
+
+> [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/[level-control](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/level-control)/
 
 ## 7.2. Pair
 
@@ -1538,11 +1596,13 @@ $ ./linux/out/rootnode_onofflight_bbs1b7IaOV
 
 # I. Study
 
-## I.0. [Matter Specifications](https://csa-iot.org/developer-resource/specifications-download-request/)
+## I.1. [Connectivity Standards Alliance](http://csa-iot.org/)
 
-## I.1. [Matter - The Foundation for Connected Things](https://csa-iot.org/all-solutions/matter/)
+>csa 組織
 
-> csa 組織
+#### A. [Matter Specifications](https://csa-iot.org/developer-resource/specifications-download-request/)
+
+#### B. [Matter - The Foundation for Connected Things](https://csa-iot.org/all-solutions/matter/)
 
 ## I.2. 一些介紹
 
@@ -1584,9 +1644,15 @@ $ ./linux/out/rootnode_onofflight_bbs1b7IaOV
 
 > Silicon Labs Community
 
-## I.4. [Matter SDK - nRF Connect SDK 1.1.0](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/matter/index.html)
+## I.4. Vender
+
+#### A. [Matter SDK - nRF Connect SDK 1.1.0](https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/matter/index.html)
 
 > nRF
+
+#### B. [Espressif Matter](https://blog.espressif.com/matter-38ccf1d60bcd)
+
+> [Espressif Systems: Wireless SoCs, Software, Cloud and AIoT ...](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjrhqadmYKDAxWMB4gKHSVxAm0QFnoECCAQAQ&url=https%3A%2F%2Fwww.espressif.com%2F&usg=AOvVaw2L2FPr4JQ8VfDBFQU7YXS0&opi=89978449)
 
 # II. Debug
 
