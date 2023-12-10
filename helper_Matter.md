@@ -88,6 +88,16 @@
 
 #### C. 廠商不需另外開發手機 application。
 
+#### D. Matter Security
+
+>一般會相信 Google 生態圈 or Apple 生態圈安全，還是 Lanka  生態圈安全？
+>
+>有 CSA 後面掛保證，就可以省掉這些疑問。
+
+>此安全並不保證，Local 端的安全；如Matter Hub 或 Matter Bridge 下的設備，並不是都是使用 Matter 溝通，有可能是 Wi-Fi、 Zigbee or Z-Wave 等。
+>
+>另外無線設備有個很致命的問題，如有外力強佔某個無線波段，各位想想會怎麼樣？
+
 ## 1.4.  But …
 
 #### A. 都要上雲 ?
@@ -394,7 +404,15 @@ $ file /bin/bash
 
 >Matter (formerly Project CHIP) creates more connections between more objects, simplifying development for manufacturers and increasing compatibility for consumers, guided by the Connectivity Standards Alliance.
 
-## 5.0. Building Platform PC ubuntu 20.04 x86_64
+## 5.0. Building Platform
+
+#### A. PC ubuntu 20.04 x86_64
+
+> 取得容易，設備等級高、容量大，編譯速度快。
+
+#### B. Pi4
+
+>時間很多的軟體工程師可以選擇此方式。
 
 ## 5.1. Repository
 
@@ -814,8 +832,61 @@ $ cd /work/bin/android
 $ unzip android-ndk-r26b-linux.zip
 ```
 
+## 5.3. Cross-Compilation with Clang on ubuntu x86_64
 
-### 5.2.4. [examples](https://github.com/project-chip/connectedhomeip/tree/master/examples)
+> Host: ubuntu x86_64
+>
+> Target: Pi4 arm64
+>
+> 請先準備好你的 Toolchain，尤其是裏面的 sysroot，請設定環境變數
+>
+> export SYSROOT_AARCH64=/work/aarch64-linux-gnu
+
+> sysroot 最簡單的製作方式，就是進到 Target 裏，把 /lib、 /usr/include 和 /usr/lib 把包即可
+
+#### A. linux-arm64-light-clang
+
+##### A.1. [lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app)
+
+> 記得編譯完成是要放在 Pi4 上執行 
+
+```bash
+# 設邊選擇 Pi4 (arm64/aarch64);另外使用 clang進行編譯
+$ export PJ_GN_TARGET=linux-arm64-light-clang
+
+# 設定 SYSROOT_AARCH64
+$ export SYSROOT_AARCH64=/work/aarch64-linux-gnu
+$ echo $SYSROOT_AARCH64
+/work/aarch64-linux-gnu
+
+$ ./scripts/build/build_examples.py \
+	--target ${PJ_GN_TARGET} \
+	--out-prefix ./build_xxx \
+	gen
+# or
+$ PKG_CONFIG_PATH="${SYSROOT_AARCH64}/lib/aarch64-linux-gnu/pkgconfig" \
+	gn gen --check --fail-on-unused-args --export-compile-commands \
+	--root=./examples/lighting-app/linux \
+	'--args=is_clang=true target_cpu="arm64" sysroot="/work/aarch64-linux-gnu"' \
+	./build_xxx/${PJ_GN_TARGET}
+
+$ ninja -C ./build_xxx/${PJ_GN_TARGET}
+
+$ gn ls \
+	--root=./examples/bridge-app/linux \
+	./build_xxx/${PJ_GN_TARGET}
+```
+
+```bash
+$ ll build_xxx/linux-arm64-light-clang/chip-lighting-app
+-rwxrwxr-x 1 lanka lanka 54785464 十一 23 13:39 build_xxx/linux-arm64-light-clang/chip-lighting-app*
+
+$ file build_xxx/linux-arm64-light-clang/chip-lighting-app
+build_xxx/linux-arm64-light-clang/chip-lighting-app: ELF 64-bit LSB shared object, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, for GNU/Linux 3.7.0, BuildID[xxHash]=7587b1aefa363654, with debug_info, not stripped
+
+```
+
+## 5.4. CHIP [examples](https://github.com/project-chip/connectedhomeip/tree/master/examples)
 
 #### A. Linux
 
@@ -1052,62 +1123,6 @@ $ ll build_xxx/android-arm64-chip-tool/outputs/apk/debug/app-debug.apk
 
 ```
 
-## 5.3. Cross-Compilation with Clang on ubuntu x86_64
-
-> Host: ubuntu x86_64
->
-> Target: Pi4 arm64
->
-> 請先準備好你的 Toolchain，尤其是裏面的 sysroot，請設定環境變數
->
-> export SYSROOT_AARCH64=/work/aarch64-linux-gnu
-
-> sysroot 最簡單的製作方式，就是進到 Target 裏，把 /lib、 /usr/include 和 /usr/lib 把包即可
-
-### 5.3.1. [examples](https://github.com/project-chip/connectedhomeip/tree/master/examples)
-
-#### A. linux-arm64-light-clang
-
-##### A.1. [lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app)
-
-> 記得編譯完成是要放在 Pi4 上執行 
-
-```bash
-# 設邊選擇 Pi4 (arm64/aarch64);另外使用 clang進行編譯
-$ export PJ_GN_TARGET=linux-arm64-light-clang
-
-# 設定 SYSROOT_AARCH64
-$ export SYSROOT_AARCH64=/work/aarch64-linux-gnu
-$ echo $SYSROOT_AARCH64
-/work/aarch64-linux-gnu
-
-$ ./scripts/build/build_examples.py \
-	--target ${PJ_GN_TARGET} \
-	--out-prefix ./build_xxx \
-	gen
-# or
-$ PKG_CONFIG_PATH="${SYSROOT_AARCH64}/lib/aarch64-linux-gnu/pkgconfig" \
-	gn gen --check --fail-on-unused-args --export-compile-commands \
-	--root=./examples/lighting-app/linux \
-	'--args=is_clang=true target_cpu="arm64" sysroot="/work/aarch64-linux-gnu"' \
-	./build_xxx/${PJ_GN_TARGET}
-
-$ ninja -C ./build_xxx/${PJ_GN_TARGET}
-
-$ gn ls \
-	--root=./examples/bridge-app/linux \
-	./build_xxx/${PJ_GN_TARGET}
-```
-
-```bash
-$ ll build_xxx/linux-arm64-light-clang/chip-lighting-app
--rwxrwxr-x 1 lanka lanka 54785464 十一 23 13:39 build_xxx/linux-arm64-light-clang/chip-lighting-app*
-
-$ file build_xxx/linux-arm64-light-clang/chip-lighting-app
-build_xxx/linux-arm64-light-clang/chip-lighting-app: ELF 64-bit LSB shared object, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, for GNU/Linux 3.7.0, BuildID[xxHash]=7587b1aefa363654, with debug_info, not stripped
-
-```
-
 # 6. Run ! Run ! Run !
 
 ## 6.1. chip-tool and chip-lighting-app
@@ -1282,6 +1297,24 @@ flowchart BT
 
 ```
 
+#### A. Endpoint 0
+
+> 參考連結 [Matter: Clusters, Attributes, Commands](https://blog.espressif.com/matter-clusters-attributes-commands-82b8ec1640a0)
+
+> 針對 node 的描述和設定
+
+##### A.1. Basic Information Cluster Server
+
+> Provides basic information about the node, like firmware version, manufacturer etc
+
+##### A.2. ACL Cluster Server
+
+> Provides basic information about the node, like firmware version, manufacturer etc
+
+##### A.3. Network Commissioning Cluster Server
+
+> Provides basic information about the node, like firmware version, manufacturer etc
+
 ### 7.0.2. Examples of Devices
 
 #### A. Dimmable Light & On/Off Light
@@ -1300,18 +1333,20 @@ flowchart BT
 		end
 		subgraph Endpoint1["Endpoint 1 (Device Type: Dimmable Light)"]
 			subgraph Cluster1a["Cluster: On/Off"]
+				direction LR
 				Attribute1a["Attributes: On/Off"]
-				Command1b["Commands: On, Off, Toggle"]
+				Command1a["Commands: On, Off, Toggle, ..."]
 			end
 			subgraph Cluster1b["Cluster: Level Control"]
 				Attribute1b["Attributes: CurrentLevel"]
-				Command1b["Commands: MoveToLevel"]
+				Command1b["Commands: MoveToLevel, ..."]
 			end
 		end
 		subgraph Endpoint2["Endpoint 2 (Device Type: On/Off Light)"]
 			subgraph Cluster2["Cluster: On/Off"]
+				direction LR
 				Attribute2["Attributes: On/Off"]
-				Command2["Commands: On, Off, Toggle"]
+				Command2["Commands: On, Off, Toggle, ..."]
 			end
 		end
 	end
@@ -1319,12 +1354,31 @@ flowchart BT
 ```
 
 
-## 7.1. [clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)
+## 7.1. [Clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)
 
 >[connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/
 >
 >基本設備的組成為 Device  / endpoint / cluster，而 cluster 可視為一項功能
+```mermaid
+flowchart LR
+	subgraph phone[phone]
+		subgraph clusterX[Cluster X]
+  		clientX[Cluster Client]
+		end
+	end
+	subgraph clusterA[Cluster A]
+		clientA[Cluster Client]
+		serverA[Cluster Server]
+	end
+	subgraph clusterB[Cluster B]
+		clientB[Cluster Client]
+		serverB[Cluster Server]
+	end
 
+	clientX <--> serverB
+	clientX <--> serverA
+	clientA <--> serverB
+```
 ```bash
 $ ls connectedhomeip/src/app/clusters/
 access-control-server                    media-input-server
@@ -1598,7 +1652,7 @@ $ ./linux/out/rootnode_onofflight_bbs1b7IaOV
 
 ## I.1. [Connectivity Standards Alliance](http://csa-iot.org/)
 
->csa 組織
+>CSA 組織
 
 #### A. [Matter Specifications](https://csa-iot.org/developer-resource/specifications-download-request/)
 
