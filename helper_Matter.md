@@ -53,7 +53,7 @@
 
 ## 1.2.  Support List
 
-#### A. Google Home and android phone
+### 1.2.1. Google Home and android phone
 
 - [x] [在 Google Home 應用程式中管理支援 Matter 的裝置](https://support.google.com/googlenest/answer/13127223?hl=zh-HK)
 
@@ -70,7 +70,9 @@
 > - 支援 Matter 的智慧住宅裝置。如果包裝上有 ![img](https://lh3.googleusercontent.com/3yeJZ0aNtlZqwUfGWY-2Q-AIAnykzH8EOPKwu3XDNSsfdnFIQN6Da5qYou0qXSiX9_4=w180) 標誌，就表示裝置支援 Matter
 > - [支援 Matter 的 Google 中樞裝置](https://support.google.com/googlenest/answer/12391458#matter-app)
 
-#### B. Apple Home and  iphone
+#### A. [Supported Matter clusters](https://developers.home.google.com/matter/clusters)
+
+### 1.2.2. Apple Home and  iphone
 
 - [x] [Matter support in iOS 16](https://developer.apple.com/apple-home/matter/)
 
@@ -1280,9 +1282,13 @@ flowchart BT
 
 # 7. Deep dive into Matter
 
-## 7.0. Data Model
+## 7.1. Data Model
 
-### 7.0.1. Elements of Matter
+### 7.1.1. Elements of Matter
+
+> 因為曾經有開發 Z-Wave 的經驗，對此定義並不陌生；類似的應用 [mctt_1st.md](https://github.com/lankahsu520/beeX/blob/main/doc/mctt_1st.md)。
+>
+> 在matter 出世之前就曾經將此定義告知過其它工程師，他們都很困擾，為什麼要這麼多階層，一再解釋給他們聽這樣才適合<font color="red">“定址“</font>某項設備的某個功能，不過他們還是沒辦法吸收。
 
 ```mermaid
 flowchart BT
@@ -1296,12 +1302,38 @@ flowchart BT
 	end
 
 ```
+```json
+# 一般人的認知如下，喜歡把所有資料放在同一階層，沒有模組的概念
+{
+  "name": "light"
+	"onoff": 0,
+  "level": 60
+}
 
+# 如果預到排插（延長線）
+{
+  "name": "extension cord"
+	"socket1": 0,
+	"socket2": 1,
+	"socket3": 1,
+}
+
+# 如果預到排插+電流（延長線）
+{
+  "name": "extension cord"
+	"socket1": 0,
+  "current1": 0,
+	"socket2": 1,
+  "current2": 1,
+	"socket3": 1,
+  "current3": 2,
+}
+```
 #### A. Endpoint 0
 
 > 參考連結 [Matter: Clusters, Attributes, Commands](https://blog.espressif.com/matter-clusters-attributes-commands-82b8ec1640a0)
 
-> 針對 node 的描述和設定
+> 主要針對 node 的描述和設定
 
 ##### A.1. Basic Information Cluster Server
 
@@ -1315,15 +1347,15 @@ flowchart BT
 
 > Provides basic information about the node, like firmware version, manufacturer etc
 
-### 7.0.2. Examples of Devices
+### 7.1.2. Examples of Devices
 
 #### A. Dimmable Light & On/Off Light
 
 > 此範例有2 * Endpoints；
 >
-> 1 Endpoint 的 Device Type: Dimmable Light
+> Endpoint 1的 Device Type: Dimmable Light
 >
-> 2 Endpoint 的 Device Type: On/Off Light
+> Endpoint 2 的 Device Type: On/Off Light
 
 ```mermaid
 flowchart BT
@@ -1353,32 +1385,116 @@ flowchart BT
 
 ```
 
+### 7.1.3. Server(s) and Client(s)
 
-## 7.1. [Clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)
-
->[connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/
->
->基本設備的組成為 Device  / endpoint / cluster，而 cluster 可視為一項功能
 ```mermaid
 flowchart LR
 	subgraph phone[phone]
 		subgraph clusterX[Cluster X]
-  		clientX[Cluster Client]
+			clientX[Cluster Client]
 		end
 	end
-	subgraph clusterA[Cluster A]
-		clientA[Cluster Client]
-		serverA[Cluster Server]
+	subgraph nodeA[Node A]
+		subgraph endpointA1["Endpoint 1"]
+			subgraph clusterA1[Cluster A]
+				clientA1[Cluster Client]
+				serverA1[Cluster Server]
+			end
+			subgraph clusterA2[Cluster A]
+				serverA2[Binding Server]
+			end
+		end
 	end
-	subgraph clusterB[Cluster B]
-		clientB[Cluster Client]
-		serverB[Cluster Server]
+	subgraph nodeB[Node B]
+		subgraph endpointB1[Endpoint 1]
+			subgraph clusterB[Cluster B]
+				clientB[Cluster Client]
+				serverB[Cluster Server]
+			end
+		end
 	end
 
 	clientX <--> serverB
-	clientX <--> serverA
-	clientA <--> serverB
+	clientX <--> serverA1
+	clientA1 <--> serverB
 ```
+
+#### A. Synchronous
+
+```mermaid
+flowchart LR
+	subgraph phone[phone]
+		subgraph clusterX[Cluster X]
+			clientX[Cluster Client]
+		end
+	end
+	subgraph nodeA[Node A]
+		subgraph endpointA1["Endpoint 1"]
+			subgraph clusterA1[Cluster A]
+				clientA1[Cluster Client]
+				serverA1[Cluster Server]
+			end
+			subgraph clusterA2[Cluster A]
+				serverA2[Binding Server]
+			end
+		end
+	end
+	subgraph nodeB[Node B]
+		subgraph endpointB1[Endpoint 1]
+			subgraph clusterB[Cluster B]
+				clientB[Cluster Client]
+				serverB[Cluster Server]
+			end
+		end
+	end
+
+	clientX <--> serverB
+	clientX <--> serverA1
+	clientA1 <--> serverB
+```
+
+> 就個人經驗，Response 就只要是一個 ACK，代表有收到命令即可。
+>
+> 並不是所有的設備都有高效能或是通順的網路，另外有些設備是需要處理時間，所以儘量不要讓系統卡住。
+>
+> 不過在 SDK 裏的設計，不確定是如何？或是能變動它？
+
+
+#### B. Asynchronous Notification
+
+```mermaid
+flowchart LR
+	subgraph nodeB[Node B]
+		subgraph endpointB1[Endpoint 1]
+			subgraph clusterB[Cluster B]
+				clientB[Cluster Client]
+				serverB[Cluster Server]
+			end
+		end
+	end
+
+	subgraph nodeA[Node A]
+		subgraph endpointA1["Endpoint 1"]
+			subgraph clusterA1[Cluster A]
+				clientA1[Cluster Client]
+				serverA1[Cluster Server]
+			end
+			subgraph clusterA2[Cluster A]
+				serverA2[Binding Server]
+			end
+		end
+	end
+
+  clientA1 --> |Subscribe|serverB
+	serverB ..-> |Report|clientA1
+
+```
+
+## 7.2. [Clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)
+
+>[connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/
+>
+>基本設備的組成為 Device  / endpoint / cluster，而 cluster 可視為一項功能
 ```bash
 $ ls connectedhomeip/src/app/clusters/
 access-control-server                    media-input-server
@@ -1420,7 +1536,7 @@ low-power-server
 
 ```
 
-### 7.1.1. [on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters) - <font color="red">開 / 關 (On / Off) 功能</font>
+### 7.2.1. 0x0006 [on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters) - <font color="red">開 / 關 (On / Off) 功能</font>
 
 >[connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/[on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/on-off-server)/
 
@@ -1462,13 +1578,13 @@ Usage:
 
 > [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/[on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/on-off-server)/[on-off-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/on-off-server/on-off-server.cpp)
 
-### 7.1.2. [level-control](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/level-control) - <font color="red">調光器 (Dimmer) 功能</font>
+### 7.2.2. 0x0008 [level-control](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/level-control) - <font color="red">調光器 (Dimmer) 功能</font>
 
 > [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/[level-control](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/level-control)/
 
-## 7.2. Pair
+## 7.3. Pair
 
-### 7.2.1. passcode and discriminator
+### 7.3.1. passcode and discriminator
 
 #### A. [CHIPDeviceConfig.h](https://github.com/project-chip/connectedhomeip/blob/master/src/include/platform/CHIPDeviceConfig.h)
 
@@ -1706,7 +1822,9 @@ $ ./linux/out/rootnode_onofflight_bbs1b7IaOV
 
 #### B. [Espressif Matter](https://blog.espressif.com/matter-38ccf1d60bcd)
 
-> [Espressif Systems: Wireless SoCs, Software, Cloud and AIoT ...](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjrhqadmYKDAxWMB4gKHSVxAm0QFnoECCAQAQ&url=https%3A%2F%2Fwww.espressif.com%2F&usg=AOvVaw2L2FPr4JQ8VfDBFQU7YXS0&opi=89978449)
+> [Espressif Systems: Wireless SoCs, Software, Cloud and AIoT ...](https://www.espressif.com/en)
+>
+> 推薦各位閱讀
 
 # II. Debug
 
