@@ -106,7 +106,7 @@ lrwxrwxrwx 1 root root      33  三  13  2020 /usr/bin/x86_64-linux-gnu-python3-
 
 ```bash
 $ sudo apt update
-$ sudo apt upgrade
+$ sudo apt -y upgrade
 
 $ sudo apt install -y software-properties-common
 

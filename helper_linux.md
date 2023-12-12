@@ -1176,37 +1176,60 @@ valgrind-ex helloworld
 sudo apt-get -y update
 sudo apt-get -y upgrade
 
-sudo apt-get -y install subversion-tools
-
-apt-cache search package 搜索包
-
-apt-cache show package 獲取包的相關信息，如說明、大小、版本等
-
-sudo apt-get install package 安裝包
-
-sudo apt-get install package - - reinstall 重新安裝包
-
-sudo apt-get -f install 修覆安裝"-f = ——fix-missing"
-
-sudo apt-get remove package 刪除包
-
-sudo apt-get remove package - - purge 刪除包，包括刪除配置文件等
-
-sudo apt-get dist-upgrade 升級系統
+# 升級系統
+sudo apt-get dist-upgrade
 
 sudo apt-get dselect-upgrade 使用 dselect 升級
 
-apt-cache depends package 了解使用依賴
+# 清理無用的包
+sudo apt-get clean && sudo apt-get autoclean
 
-apt-cache rdepends package 是查看該包被哪些包依賴
+# 檢查是否有損壞的依賴
+sudo apt-get check
 
-sudo apt-get build-dep package 安裝相關的編譯環境
+sudo apt-get -y --fix-missing upgrade
+```
 
-apt-get source package 下載該包的源代碼
+```bash
+# 安裝 subversion-tools
+sudo apt-get -y install subversion-tools
+# 重新安裝 subversion-tools
+sudo apt-get reinstall subversion-tools
 
-sudo apt-get clean && sudo apt-get autoclean 清理無用的包
+# 搜索 subversion-tools
+apt-cache search package subversion-tools
 
-sudo apt-get check 檢查是否有損壞的依賴
+# 獲取 subversion-tools 的相關信息，如說明、大小、版本等
+apt-cache show package subversion-tools
+
+# 修覆安裝 -f = ——fix-missing
+sudo apt-get -f install subversion-tools
+
+# 刪除 subversion-tools
+sudo apt-get remove subversion-tools
+
+# 刪除 subversion-tools，包括刪除配置文件等
+sudo apt-get purge subversion-tools
+
+# 了解 subversion-tools 使用依賴
+apt-cache depends subversion-tools
+
+# 是查看 subversion-tools 被哪些包依賴
+apt-cache rdepends subversion-tools
+
+# 安裝相關的編譯環境
+sudo apt-get build-dep subversion-tools
+
+```
+
+```bash
+$ sudo vi /etc/apt/sources.list
+# replace # deb-src -> deb-src
+
+# 下載該包的源代碼
+apt-get source package
+
+
 ```
 
 #### dpkg - package manager for Debian
