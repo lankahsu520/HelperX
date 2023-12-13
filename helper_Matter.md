@@ -1165,8 +1165,10 @@ flowchart BT
 $ export MATTER_PINCODE=20231206
 $ export MATTER_DISCRIMINATOR=3849
 # <None = 0, SoftAP = 1 << 0, BLE = 1 << 1, OnNetwork = 1 << 2>
-$ export MATTER_DISCOVER=4
+# BLE+OnNetwork
+$ export MATTER_DISCOVER=6
 
+$ export MATTER_BLE_HCI=`hciconfig | grep hci0 | cut -d":" -f1 | cut -d"i" -f 2`
 $ hciconfig
 hci0:   Type: Primary  Bus: UART
         BD Address: D8:3A:DD:0F:4C:8C  ACL MTU: 1021:8  SCO MTU: 64:1
@@ -1174,10 +1176,33 @@ hci0:   Type: Primary  Bus: UART
         RX bytes:2634 acl:0 sco:0 events:250 errors:0
         TX bytes:17998 acl:0 sco:0 commands:250 errors:0
 
-#$ ./chip-lighting-app --wifi
-$ ./chip-lighting-app --ble-device 0 --interface-id 0 --passcode $MATTER_PINCODE --discriminator $MATTER_DISCRIMINATOR
+$ export MATTER_IFACE=eth0
+$ export MATTER_IFACE_ID=`ip link show dev $MATTER_IFACE | grep $MATTER_IFACE | cut -d":" -f1`
 
-$ ./chip-lighting-app --ble-device 0 --interface-id 0
+#$ ./chip-lighting-app --interface-id --ble-device 0 --capabilities 4 --passcode 20231206 --discriminator 3849
+
+$ ./chip-lighting-app \
+ --interface-id $MATTER_IFACE_ID \
+ --ble-device $MATTER_BLE_HCI \
+ --capabilities $MATTER_DISCOVER \
+ --passcode $MATTER_PINCODE \
+ --discriminator $MATTER_DISCRIMINATOR
+```
+
+```bash
+[ "$MATTER_PINCODE" != "" ] && MATTER_PINCODE_ARG="--passcode $MATTER_PINCODE"
+[ "$MATTER_DISCRIMINATOR" != "" ] && MATTER_DISCRIMINATOR_ARG="--discriminator $MATTER_DISCRIMINATOR"
+[ "$MATTER_DISCOVER" != "" ] && MATTER_DISCOVER_ARG="--capabilities $MATTER_DISCOVER"
+[ "$MATTER_BLE_HCI" != "" ] && MATTER_BLE_HCI_ARG="--ble-device $MATTER_BLE_HCI"
+[ "$MATTER_IFACE_ID" != "" ] && MATTER_IFACE_ID_ARG="--interface-id $MATTER_IFACE_ID"
+
+$ ./chip-lighting-app \
+ $MATTER_IFACE_ID_ARG \
+ $MATTER_BLE_HCI_ARG \
+ $MATTER_DISCOVER_ARG
+ $MATTER_PINCODE_ARG \
+ $MATTER_DISCRIMINATOR_ARG
+
 ```
 
 #### B. PC - Ubuntu x86_64
@@ -1582,9 +1607,70 @@ Usage:
 
 > [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/[level-control](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/level-control)/
 
-## 7.3. Pair
+## 7.3. Init & Options
 
-### 7.3.1. passcode and discriminator
+### 7.3.0. Init
+
+#### - [AppMain.cpp](https://github.com/project-chip/connectedhomeip/blob/master/examples/platform/linux/AppMain.cpp)
+
+> [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[examples](https://github.com/project-chip/connectedhomeip/tree/master/examples)/[platform](https://github.com/project-chip/connectedhomeip/tree/master/examples/platform)/[linux](https://github.com/project-chip/connectedhomeip/tree/master/examples/platform/linux)/[AppMain.cpp](https://github.com/project-chip/connectedhomeip/blob/master/examples/platform/linux/AppMain.cpp)
+
+```cpp
+void ChipLinuxAppMainLoop(AppMainLoopImplementation * impl)
+{
+    ...
+    // Init ZCL Data Model and CHIP App Server
+    Server::GetInstance().Init(initParams);
+    ...
+}
+```
+
+#### - [Dnssd.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/server/Dnssd.cpp)
+
+>[connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/server)/[Dnssd.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/server/Dnssd.cpp)
+
+```cpp
+CHIP_ERROR DnssdServer::Advertise(bool commissionableNode, chip::Dnssd::CommissioningMode mode)
+{
+    auto advertiseParameters = chip::Dnssd::CommissionAdvertisingParameters()
+                                   .SetPort(commissionableNode ? GetSecuredPort() : GetUnsecuredPort())
+                                   .SetInterfaceId(GetInterfaceId())
+                                   .EnableIpV4(true);
+    ...
+}
+```
+
+#### - [Server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/server/Server.cpp)
+
+> [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/server)/[Server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/server/Server.cpp)
+
+```cpp
+CHIP_ERROR Server::Init(const ServerInitParams & initParams)
+{
+    ChipLogProgress(AppServer, "Server initializing...");
+    ...
+    app::DnssdServer::Instance().SetInterfaceId(mInterfaceId);
+    ...
+}
+```
+
+### 7.3.1. [Options.cpp](https://github.com/project-chip/connectedhomeip/blob/master/examples/platform/linux/Options.cpp)
+
+> [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[examples](https://github.com/project-chip/connectedhomeip/tree/master/examples)/[platform](https://github.com/project-chip/connectedhomeip/tree/master/examples/platform)/[linux](https://github.com/project-chip/connectedhomeip/tree/master/examples/platform/linux)/[Options.cpp](https://github.com/project-chip/connectedhomeip/blob/master/examples/platform/linux/Options.cpp)
+
+>參數的進入點
+
+#### --interface-id, kDeviceOption_InterfaceId 0x1010
+
+```bash
+initParams.interfaceId = LinuxDeviceOptions::GetInstance().interfaceId;
+```
+
+#### --passcode, kDeviceOption_Passcode 0x1009
+
+## 7.4. Pair
+
+### 7.4.1. passcode and discriminator
 
 #### A. [CHIPDeviceConfig.h](https://github.com/project-chip/connectedhomeip/blob/master/src/include/platform/CHIPDeviceConfig.h)
 
