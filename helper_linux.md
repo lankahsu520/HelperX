@@ -1141,6 +1141,8 @@ ls -al /usr/lib/systemd/user
 
 ls -al /etc/systemd/system
 
+# 當有變更*.service 時，記得
+sudo systemctl daemon-reload
 ```
 
 # 11. Debug Handler
