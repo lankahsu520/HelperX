@@ -139,6 +139,10 @@
 
 #### - [helper_SVNvsGit.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SVNvsGit.md) - SVN vs. Git helper.
 
+> SVN、Git 都是很好的版本控管工具，當然市面上不止這兩種。只是取得一個方便的即可。
+>
+> 曾經有人說：「SVN 的速度比 Git 慢，所以不會去用 SVN」；至於是不是如此，雖然心中已有答案，也不想當場有所爭執。因為版本控管是管東西，而不是管速度的。
+
 #### - [helper_vi.md](https://github.com/lankahsu520/HelperX/blob/master/helper_vi.md) - vi/vim helper.
 
 #### - [helper_VirtualBox-x86_64-Ubuntu20.04onWin10](https://github.com/lankahsu520/HelperX/blob/master/helper_VirtualBox-x86_64-Ubuntu20.04onWin10.md) - VirtualBox helper.
