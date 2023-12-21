@@ -49,7 +49,7 @@ valgrind-3.15.0
 
 > your program is leaking memory in a pointer-based structure. (E.g. if the root node of a binary tree is "definitely lost", all the children will be "indirectly lost".) If you fix the "definitely lost" leaks, the "indirectly lost" leaks should go away.
 
-> 這部分的錯誤，不見得一定要解決。
+> 發生在記憶體記摽宣告後又進行位移，這部分的錯誤，不見得一定要解決。
 
 ## 2.3. possibly lost
 
@@ -61,13 +61,15 @@ valgrind-3.15.0
 
 > your program is probably ok -- it didn't free some memory it could have. This is quite common and often reasonable. Don't use `--show-reachable=yes` if you don't want to see these reports.
 
-> 這部分的錯誤，不見得一定要解決。<font color="red">但是建議要先找到問題點，查看前後文分析。</font>
+> 都是發生在程式結束時未釋放記憶體，有時發生在 share lib，所以不見得可以進行修改。
+>
+> <font color="red">但還是建議要先找到問題點，查看前後文分析。</font>
 
 ## 2.5. suppressed
 
 > a leak error has been suppressed. There are some suppressions in the default suppression files. You can ignore suppressed errors.
 
-# 2. Exmaples
+# 3. Exmaples
 
 #### A. [demo_valgrind.c](https://github.com/lankahsu520/utilx9/blob/main/demo_valgrind.c)
 
