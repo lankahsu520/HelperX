@@ -206,6 +206,10 @@
 
 > 不討論如何撰寫 Python 的程式，而是當使用或變動系統的 Python 時，可能發生的問題。
 
+#### - [helper_valgrind.md](https://github.com/lankahsu520/HelperX/blob/master/helper_valgrind) - valgrind helper.
+
+> <font color="red">平常寫程式有良好的習慣 ! 再以 valgrind 進行輔助，維持軟體品質。</font>
+
 ## 2.2. Repository
 
 #### - [beeX](https://github.com/lankahsu520/beeX)
