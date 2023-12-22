@@ -232,6 +232,14 @@
 
 # 3. Be An Embedded Engineer
 
+> 敢自稱“雲端工程師”，為什麼還跑過來問我 SSH 怎麼用？scp 怎麼用？crontab 怎麼用？web server 怎麼架？甚至 shell script 怎麼寫？
+>
+> 因為身為一位資深的 Embedded Engineer （非只專注特定 MCU）就是什麼都要懂，不管是系統、網路、串流、協定、程式等。不然怎麼有效的安排資源，甚至多方面合作。
+>
+> 如果你只是認為 Embedded Engineer 處理一個小小設備，那就大錯特錯！因為 Embedded Engineer 是來創造宇宙，而雲端工程師卻是遊走在宇宙間。
+>
+> 不過這邊還是語重心長的告知新同學，要賺大錢請往雲端工程師前進！但是平日要對資深的 Embedded Engineer 客氣點，因為你將可能需要他們的協助。
+
 ## 3.1. Topic
 
 #### - [helper_EmbeddedEngineer.md](https://github.com/lankahsu520/HelperX/blob/master/helper_EmbeddedEngineer.md)
