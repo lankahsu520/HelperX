@@ -206,7 +206,6 @@ $EscapeControlCharactersOnReceive off
 
 ```bash
 # to register com.github.lankahsu520, com.github
-
 sudo cp dbusX.conf /etc/dbus-1/system.d
 
 sudo reboot
@@ -214,9 +213,11 @@ sudo reboot
 
 # 4. VBoxManage
 
-## 4.1. modifyhd
+## 4.1. Commands
 
-#### A. Client (Ubuntu 20.04)
+#### A. modifyhd
+
+##### A.1. Client (Ubuntu 20.04)
 
 ```bash
 #!/bin/sh
@@ -230,14 +231,50 @@ zerofree -v $PURGE_DISK
 
 ```
 
-#### B. Host (Windows 10)
+##### A.2. Host (Windows 10)
 
 ```bash
-"C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" modifyhd work_curr.vdi --compact
+$ "C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" modifyhd work_curr.vdi --compact
 
 ```
 
-## 4.1. Virtual Media Manager
+#### B. list
+
+##### B.1. Host (Windows 10)
+
+```bash
+$ "C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" list hdds
+
+UUID:           8f57809e-9a5e-4160-9b08-7c42e80ec070
+Parent UUID:    base
+State:          locked write
+Type:           normal (base)
+Location:       D:\work\VirtualBox\opt_curr.vdi
+Storage format: VDI
+Capacity:       131072 MBytes
+Encryption:     disabled
+
+UUID:           35af928b-87c3-43a7-ab61-4f5f76e57c7e
+Parent UUID:    base
+State:          locked write
+Type:           normal (base)
+Location:       D:\work\VirtualBox\work_curr.vdi
+Storage format: VDI
+Capacity:       524288 MBytes
+Encryption:     disabled
+
+UUID:           9edd1810-e0a9-497c-a400-75fa2b706bdf
+Parent UUID:    base
+State:          locked write
+Type:           normal (base)
+Location:       D:\work\VirtualBox\Ubuntu2004_buildX_curr.vdi
+Storage format: VDI
+Capacity:       131072 MBytes
+Encryption:     disabled
+
+```
+
+## 4.2. Virtual Media Manager
 
 #### A. Add Disk Image
 
