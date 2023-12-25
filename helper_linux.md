@@ -361,6 +361,20 @@ which find
 
 # 2. Task Handler
 
+#### fuser - identify processes using files or sockets
+
+```bash
+$ fuser -mv /work_999/
+                     USER        PID ACCESS COMMAND
+/work_999:           root     kernel mount /
+                     lanka      3939 .rce. systemd
+                     lanka      4770 .rce. bash
+                     lanka      4888 .r.e. bash
+# 刷除佔用的 task
+$ fuser -kv /work_999
+
+```
+
 #### history - GNU History Library
 
 ```bash
@@ -377,6 +391,8 @@ echo $HISTFILE
 # 列出所有行程所開啟的檔案
 sudo lsof -c sftp-server
 
+# 列出所有開啟 /work 的行程
+$ lsof /work
 ```
 
 #### pidof -- find the process ID of a running program.
