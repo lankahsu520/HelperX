@@ -836,6 +836,11 @@ MYMASK=`ifdata -pn $IFACE`
 # 查詢 IP 位址
 ip address
 
+# 查詢 IPv4 位址
+ip -o -4 addr list
+# 查詢 IPv6 位址
+ip -o -6 addr list
+
 MYIP=`ip -o -4 addr list $IFACE | awk '{print $4}' | cut -d/ -f1`
 MYGW=`ip route show 0.0.0.0/0 dev $IFACE | cut -d\  -f3`
 ip -6 route
@@ -848,6 +853,22 @@ sudo ip -6 route add ${ZIPPAN_PREFIX}::/64 via ${ZIPSRV} dev $MYTAP
 sudo ip -6 route del ${ZIPSRV_PREFIX}::/64 dev $MYTAP
 sudo ip -6 route del ${ZIPPAN_PREFIX}::/64 via ${ZIPSRV} dev $MYTAP
 
+```
+
+```bash
+$ ip link show
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 08:00:27:33:73:52 brd ff:ff:ff:ff:ff:ff
+3: enp0s8: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 08:00:27:33:1b:19 brd ff:ff:ff:ff:ff:ff
+4: enp0s9: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 08:00:27:7a:52:5b brd ff:ff:ff:ff:ff:ff
+5: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default
+    link/ether 02:42:c6:06:04:0f brd ff:ff:ff:ff:ff:ff
+
+$ ip link show enp0s3
 ```
 
 #### nslookup - query Internet name servers interactively
