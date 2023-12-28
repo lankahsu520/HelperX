@@ -1307,6 +1307,47 @@ flowchart BT
 
 # 7. Deep dive into Matter
 
+> 主要著重在 linux 上的開發
+
+## 7.0. CTAG
+
+> 要熟悉程式本身，就必須將程式碼加入專案之中，方便查尋。下面列出要收錄的目錄，避免加入一些不必要的程式。
+>
+> 大家的工具不同，而身邊使用的工具是 Source Insight，只要大家習慣自己的工具即可。
+
+```bash
++ examples/chip-tool
+- examples/chip-tool/third_party
+
++ examples/common
+- examples/common/tracing/third_party
+- examples/common/pigweed
+
++ examples/platform/linux
++ examples/placeholder/linux
+- examples/placeholder/linux/third_party
++ examples/providers
+
++ src/
+- src/test_driver
+
++ scripts/
+
+```
+
+>以下是要追尋的 main
+
+```bash
+# 可以先從 lighting-app 開始
++ examples/lighting-app/linux
+- examples/lighting-app/linux/third_party
+
+# 之後開發嵌入式的關係，要對 Z-Wave、ZigBee 進行連結時，就必須加入 bridge-app
++ examples/bridge-app/linux
+- examples/bridge-app/linux/third_party
+
+```
+
 ## 7.1. Data Model
 
 ### 7.1.1. Elements of Matter
