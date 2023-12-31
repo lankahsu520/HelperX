@@ -1696,7 +1696,9 @@ stateDiagram-v2
 
 >Add plugins - Markdown Panel and MarkdownViewer++
 >
->免費的！常當機。
+>功能豐富，開啟速度快，但是在 markdown 這部分會有當機問題。
+>
+>免費的！
 
 > - [x] Edit
 > - [x] View
@@ -1723,6 +1725,8 @@ stateDiagram-v2
 ## V.4. VS Code
 
 >整合性的編輯工具。
+>
+>功能豐富，開啟速度快。
 >
 >免費的！
 >
