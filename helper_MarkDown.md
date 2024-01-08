@@ -35,14 +35,14 @@
 
 ### 1.2.1. 無序清單
 
--   Red
--   Green
--   Blue
+- Red
+- Green
+- Blue
 
 ```
--   Red
--   Green
--   Blue
+- Red
+- Green
+- Blue
 ```
 
 ### 1.2.2. 有序清單
@@ -824,7 +824,7 @@ flowchart LR
 flowchart LR
     A:::someclass --> B --> C
 
-		classDef default fill:#f3f,stroke:#333,stroke-width:4px;
+    classDef default fill:#f3f,stroke:#333,stroke-width:4px;
     classDef someclass fill:#f96
 ```
 
@@ -1678,7 +1678,71 @@ stateDiagram-v2
 
 # V. Tools
 
-## V.1. [typora](https://typora.io)
+> 網路可以找到很多工具，但是真的實用的不多。
+
+## V.1. [Typora](https://typora.io)
+
+> 目前使用的工具。開啟快，支援度高，多視窗。
+>
+> 要花錢買！值得買！
+
+> - [x] Edit
+>- [x] View
+>   - [x] mermaid
+
+![MarkDown_typora](./images/MarkDown_typora.png)
+
+## V.2. [Notepad++](https://notepad-plus-plus.org)
+
+>Add plugins - Markdown Panel and MarkdownViewer++
+>
+>功能豐富，開啟速度快，但是在 markdown 這部分會有當機問題。
+>
+>免費的！
+
+> - [x] Edit
+> - [x] View
+>   - [ ] mermaid
+
+![MarkDown_Notepad++](./images/MarkDown_Notepad++.png)
+
+## V.3. [Opera](https://www.opera.com), [Chrome](https://www.google.com/intl/zh-TW/chrome)
+> 使用網頁瀏覽器開啟。
+>
+> 免費的！
+>
+> Add 擴充功能 [Markdown Viewer](https://chromewebstore.google.com/detail/ckkdlimhmcjmikdlpkmbgfkaikojcbjk)
+
+> - [ ] Edit
+> - [x] View
+>   - [x] mermaid
+>   
+
+![MarkDown_Opera01](./images/MarkDown_Opera01.png)
+-  [Markdown Viewer](https://chromewebstore.google.com/detail/ckkdlimhmcjmikdlpkmbgfkaikojcbjk)
+![MarkDown_Opera02](./images/MarkDown_Opera02.png)
+
+## V.4. VS Code
+
+>整合性的編輯工具。
+>
+>功能豐富，開啟速度快。
+>
+>免費的！
+>
+>Add EXTENSIONS - [markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint) or [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one),
+>
+>​	[Markdown Preview Mermaid Support](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid)
+>
+>​	[Markdown+Math](https://marketplace.visualstudio.com/items?itemName=goessner.mdmath)
+>
+>​	[Markdown Preview Enhanced](https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced)
+
+> - [x] Edit
+>- [x] View
+>   - [x] mermaid
+
+![MarkDown_VSCode01](./images/MarkDown_VSCode01.png)
 
 # Author
 
