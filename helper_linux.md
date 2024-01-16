@@ -472,18 +472,27 @@ sudo systemctl enable cron.service
 
 # 3. Disk Handler
 
+#### df - report file system disk space usage
+
+```bash
+function free-disk()
+{
+	df -h
+}
+```
+
 #### du - estimate file space usage
 ```bash
 function free-folder()
 {
 	du -h --max-depth=$1 $2
 }
+```
 
-function free-disk()
-{
-	df -h
-}
+#### gparted - GNOME Partition Editor for manipulating disk partitions.
 
+```bash
+gparted
 ```
 
 #### mke2fs - create an ext2/ext3/ext4 filesystem
@@ -491,6 +500,14 @@ function free-disk()
 ```bash
 sudo mke2fs /dev/sdb1
 
+```
+
+#### ncdu - NCurses Disk Usage
+
+```bash
+sudo apt install -y ncdu
+
+ncdu -x
 ```
 
 # 4. String Handler
@@ -1288,6 +1305,16 @@ ldconfig -p|grep libmpc
 
 # 13. System Handler
 
+#### htop - process manager
+
+> [你一定用過 htop，但你有看懂每個欄位嗎？](https://medium.com/starbugs/do-you-understand-htop-ffb72b3d5629)
+
+```bash
+$ sudo snap install htop
+$ htop
+
+```
+
 #### lshw - list hardware
 
 ```bash
@@ -1378,28 +1405,184 @@ x86_64
 #### /proc/cpuinfo
 
 ```bash
-cat /proc/cpuinfo
+$ cat /proc/cpuinfo
+processor       : 0
+vendor_id       : GenuineIntel
+cpu family      : 6
+model           : 158
+model name      : Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz
+stepping        : 9
+cpu MHz         : 2808.000
+cache size      : 6144 KB
+physical id     : 0
+siblings        : 4
+core id         : 0
+cpu cores       : 4
+apicid          : 0
+initial apicid  : 0
+fpu             : yes
+fpu_exception   : yes
+cpuid level     : 22
+wp              : yes
+flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single pti fsgsbase bmi1 avx2 bmi2 invpcid rdseed clflushopt md_clear flush_l1d
+bugs            : cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit srbds mmio_stale_data retbleed gds
+bogomips        : 5616.00
+clflush size    : 64
+cache_alignment : 64
+address sizes   : 39 bits physical, 48 bits virtual
+power management:
+
+processor       : 1
+vendor_id       : GenuineIntel
+cpu family      : 6
+model           : 158
+model name      : Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz
+stepping        : 9
+cpu MHz         : 2808.000
+cache size      : 6144 KB
+physical id     : 0
+siblings        : 4
+core id         : 1
+cpu cores       : 4
+apicid          : 1
+initial apicid  : 1
+fpu             : yes
+fpu_exception   : yes
+cpuid level     : 22
+wp              : yes
+flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single pti fsgsbase bmi1 avx2 bmi2 invpcid rdseed clflushopt md_clear flush_l1d
+bugs            : cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit srbds mmio_stale_data retbleed gds
+bogomips        : 5616.00
+clflush size    : 64
+cache_alignment : 64
+address sizes   : 39 bits physical, 48 bits virtual
+power management:
+
+processor       : 2
+vendor_id       : GenuineIntel
+cpu family      : 6
+model           : 158
+model name      : Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz
+stepping        : 9
+cpu MHz         : 2808.000
+cache size      : 6144 KB
+physical id     : 0
+siblings        : 4
+core id         : 2
+cpu cores       : 4
+apicid          : 2
+initial apicid  : 2
+fpu             : yes
+fpu_exception   : yes
+cpuid level     : 22
+wp              : yes
+flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single pti fsgsbase bmi1 avx2 bmi2 invpcid rdseed clflushopt md_clear flush_l1d
+bugs            : cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit srbds mmio_stale_data retbleed gds
+bogomips        : 5616.00
+clflush size    : 64
+cache_alignment : 64
+address sizes   : 39 bits physical, 48 bits virtual
+power management:
+
+processor       : 3
+vendor_id       : GenuineIntel
+cpu family      : 6
+model           : 158
+model name      : Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz
+stepping        : 9
+cpu MHz         : 2808.000
+cache size      : 6144 KB
+physical id     : 0
+siblings        : 4
+core id         : 3
+cpu cores       : 4
+apicid          : 3
+initial apicid  : 3
+fpu             : yes
+fpu_exception   : yes
+cpuid level     : 22
+wp              : yes
+flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single pti fsgsbase bmi1 avx2 bmi2 invpcid rdseed clflushopt md_clear flush_l1d
+bugs            : cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit srbds mmio_stale_data retbleed gds
+bogomips        : 5616.00
+clflush size    : 64
+cache_alignment : 64
+address sizes   : 39 bits physical, 48 bits virtual
+power management:
+
 ```
 
 #### /proc/meminfo
 
 ```bash
-cat /proc/meminfo
+$ cat /proc/meminfo
+MemTotal:        8128112 kB
+MemFree:         4106224 kB
+MemAvailable:    6642780 kB
+Buffers:          134364 kB
+Cached:          2575252 kB
+SwapCached:            0 kB
+Active:           681992 kB
+Inactive:        2988256 kB
+Active(anon):       2872 kB
+Inactive(anon):   970220 kB
+Active(file):     679120 kB
+Inactive(file):  2018036 kB
+Unevictable:           0 kB
+Mlocked:               0 kB
+SwapTotal:       2097148 kB
+SwapFree:        2097148 kB
+Dirty:                 0 kB
+Writeback:             0 kB
+AnonPages:        960636 kB
+Mapped:           507832 kB
+Shmem:             12460 kB
+KReclaimable:     116532 kB
+Slab:             212152 kB
+SReclaimable:     116532 kB
+SUnreclaim:        95620 kB
+KernelStack:       10432 kB
+PageTables:        17908 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:     6161204 kB
+Committed_AS:    5359732 kB
+VmallocTotal:   34359738367 kB
+VmallocUsed:       46064 kB
+VmallocChunk:          0 kB
+Percpu:             5200 kB
+HardwareCorrupted:     0 kB
+AnonHugePages:      2048 kB
+ShmemHugePages:        0 kB
+ShmemPmdMapped:        0 kB
+FileHugePages:         0 kB
+FilePmdMapped:         0 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+Hugetlb:               0 kB
+DirectMap4k:      268224 kB
+DirectMap2M:     8120320 kB
+
 ```
 
 #### /proc/sys/vm
 
 ```bash
-cat /proc/sys/vm/swappiness
-
-cat /proc/sys/vm/dirty_background_ratio
-
-cat /proc/sys/vm/dirty_ratio
-
-cat /proc/sys/vm/dirty_expire_centisecs
-
+$ cat /proc/sys/vm/swappiness
+60
+$ cat /proc/sys/vm/dirty_background_ratio
+10
+$ cat /proc/sys/vm/dirty_ratio
+20
+$ cat /proc/sys/vm/dirty_expire_centisecs
+3000
 # 清除重建 dentry和inode的頻率
-cat /proc/sys/vm/vfs_cache_pressure
+$ $ cat /proc/sys/vm/vfs_cache_pressure
+100
 
 ```
 
@@ -1714,6 +1897,163 @@ ls | xargs cat
 ```bash
 vi 123
 vim 123
+```
+
+# 20. Shell Scripts
+
+#### eval-it
+
+> 把字串當成命令執行
+
+```bash
+#sh -c "$DO_COMMAND"
+function eval-it()
+{
+	DO_COMMAND="$*"
+	echo "[${DO_COMMAND}]"
+	eval ${DO_COMMAND}
+}
+```
+
+```bash
+$ eval-it "echo 123"
+[echo 123]
+123
+```
+
+#### eval-loop
+
+```bash
+function eval-loop()
+{
+	HINT="Usage: ${FUNCNAME[0]} <min> <max> \"<commands>\""
+
+	MIN1="$1"
+	MAX2="$2"
+	COMMAND3="$3"
+
+	if [ ! -z "$COMMAND3" ]; then
+		for i in `seq ${MIN1} ${MAX2}`
+		do
+						#echo "Welcome $i !!!"
+						eval-it "${COMMAND3}$i"
+		done
+	else
+		echo -e $HINT
+	fi
+}
+```
+
+```bash
+$ eval-loop 0 2 "echo "
+[echo 0]
+0
+[echo 1]
+1
+[echo 2]
+2
+```
+
+#### now_fn
+
+> 回傳現在時間
+
+```bash
+now_fn()
+{
+	NOW_t=`date +"%Y%m%d%H%M%S"`
+	return $NOW_t
+}
+```
+
+```bash
+$ now_fn
+$ echo $NOW_t
+20231229092235
+```
+
+# 21. pkg-config
+
+```bash
+$ pkg-config --version
+0.29.1
+```
+
+#### --list-all
+
+> 列出所有的函式庫
+
+```bash
+$ pkg-config --list-all | grep gstreamer
+gstreamer-gl-1.0               GStreamer OpenGL Plugins Libraries - Streaming media framework, OpenGL plugins libraries
+gstreamer-plugins-base-1.0     GStreamer Base Plugins Libraries - Streaming media framework, base plugins libraries
+gstreamer-tag-1.0              GStreamer Tag Library - Tag base classes and helper functions
+gstreamer-1.0                  GStreamer - Streaming media framework
+gstreamer-sdp-1.0              GStreamer SDP Library - SDP helper functions
+gstreamer-controller-1.0       GStreamer controller - Dynamic parameter control for GStreamer elements
+gstreamer-base-1.0             GStreamer base classes - Base classes for GStreamer elements
+gstreamer-pbutils-1.0          GStreamer Base Utils Library - General utility functions
+gstreamer-check-1.0            GStreamer check unit testing - Unit testing helper library for GStreamer modules
+gstreamer-video-1.0            GStreamer Video Library - Video base classes and helper functions
+gstreamer-riff-1.0             GStreamer RIFF Library - RIFF helper functions
+gstreamer-allocators-1.0       GStreamer Allocators Library - Allocators implementation
+gstreamer-fft-1.0              GStreamer FFT Library - FFT implementation
+gstreamer-audio-1.0            GStreamer Audio library - Audio helper functions and base classes
+gstreamer-app-1.0              GStreamer Application Library - Helper functions and base classes for application integration
+gstreamer-net-1.0              GStreamer networking library - Network-enabled GStreamer plug-ins and clocking
+gstreamer-rtsp-1.0             GStreamer RTSP Library - RTSP base classes and helper functions
+gstreamer-rtp-1.0              GStreamer RTP Library - RTP base classes and helper functions
+```
+
+#### --exists
+
+> 確定該函式庫是否存在
+
+```bash
+$ pkg-config --exists gstreamer-1.0 && echo "yes" || echo "no"
+yes
+```
+
+#### --cflags
+
+> 連結該函式庫的 CFLAGS
+
+```bash
+$ pkg-config --cflags gstreamer-1.0
+-pthread -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include
+```
+
+#### --libs
+
+> 連結該函式庫的 LDFLAGS
+
+```bash
+$ pkg-config --libs gstreamer-1.0
+-lgstreamer-1.0 -lgobject-2.0 -lglib-2.0
+```
+
+#### --modversion
+
+> 秀出該函式庫版本號
+
+```bash
+$ pkg-config --modversion gstreamer-1.0
+1.16.3
+
+$ pkg-config 'gstreamer-1.0 >= 1.17' && echo "yes" || echo "no"
+no
+$ pkg-config 'gstreamer-1.0 >= 1.16' && echo "yes" || echo "no"
+yes
+```
+
+#### --print-requires
+
+> 引用該函式庫將需要 depend on ...
+
+```bash
+$ pkg-config --print-requires gstreamer-1.0
+glib-2.0
+gobject-2.0
 ```
 
 # Appendix
