@@ -808,6 +808,8 @@ $ svn co --username lanka http://trac-vbx/svnpi
 
 ## 6.1. SVN
 
+### 6.1.1. Split / Filter Repository
+
 #### A. [Chapter 4. Branching and Merging](https://svnbook.red-bean.com/en/1.7/svn.branchmerge.summary.html)
 
 ```mermaid
@@ -986,7 +988,9 @@ svnadmin load --parent-dir svnnew-include < $SVN_DUMP_FILTER_FILE_EXCLUDE
 
 ```
 
-#### B. [svn:externals](https://svnbook.red-bean.com/zh/1.6/svn.advanced.externals.html)
+### 6.1.2. externals / submodules
+
+#### [svn:externals](https://svnbook.red-bean.com/zh/1.6/svn.advanced.externals.html)
 
 ```bash
 # http://trac-vbx/svnroot/trunk/xbox
@@ -1019,7 +1023,11 @@ $ svn propedit svn:externals ./
 # http://trac-vbx/svnhello/trunk/helloworld
 ```
 
-#### C. svn:executable
+### 6.1.3. propset
+
+> Set *`PROPNAME`* to *`PROPVAL`* on files, directories, or revisions.
+
+#### svn:executable
 
 ```bash
 find * -name "*.exe" | xargs svn propset svn:executable on
@@ -1027,7 +1035,9 @@ find * -name "*.bat" | xargs svn propset svn:executable on
 find * -name "*.dll" | xargs svn propset svn:executable on
 ```
 
-#### D. propdel
+### 6.1.4. propdel
+
+> Remove a property from an item.
 
 ```bash
 svn propdel svn:global-ignores
@@ -1037,7 +1047,9 @@ svn propdel svn:externals
 
 ## 6.2. Git
 
-#### A. Prune tracking branches not on the remote
+### 6.2.1. prune
+
+#### Prune tracking branches not on the remote
 
 ```mermaid
 flowchart LR
