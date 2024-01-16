@@ -59,10 +59,6 @@
 >
 > 只是把生活中的發想記錄下來。
 
-#### - [helper_astyle.md](https://github.com/lankahsu520/HelperX/blob/master/helper_astyle.md) - astyle helper.
-
->程式碼格式化（縮排）工具，支援 C/C++、C++/CLI、Objective-C、C# 和 Java。
-
 #### - [helper_BackupAndRAID.md](https://github.com/lankahsu520/HelperX/blob/master/helper_BackupAndRAID.md) - Backup and RAID helper.
 
 > 人們應該是追求資料的健全保存後，再取得效能上的平衡。
@@ -176,6 +172,10 @@
 >我：「那 SDK，又放在那？編的如何？」
 >
 >先遣隊：「官網都有，你自己不會抓哦！」
+
+#### - [helper_astyle.md](https://github.com/lankahsu520/HelperX/blob/master/helper_astyle.md) - astyle helper.
+
+>程式碼格式化（縮排）工具，支援 C/C++、C++/CLI、Objective-C、C# 和 Java。
 
 #### - [helper_DBus.md](https://github.com/lankahsu520/HelperX/blob/master/helper_DBus.md) - dbus helper.
 
