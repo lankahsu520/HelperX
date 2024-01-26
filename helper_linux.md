@@ -2056,6 +2056,39 @@ glib-2.0
 gobject-2.0
 ```
 
+#### pkg-config-ex
+
+```bash
+function pkg-config-ex()
+{
+	HINT="Usage: ${FUNCNAME[0]} <files>"
+	FILES="$*"
+
+	if [ ! -z "$FILES" ]; then
+		for FILE in ${FILES}; do
+		(
+			DO_COMMAND="pkg-config --variable pc_path pkg-config"
+			eval-it "$DO_COMMAND"
+
+			DO_COMMAND="pkg-config --cflags ${FILE}"
+			eval-it "$DO_COMMAND"
+
+			DO_COMMAND="pkg-config --libs ${FILE}"
+			eval-it "$DO_COMMAND"
+
+			DO_COMMAND="pkg-config --modversion ${FILE}"
+			eval-it "$DO_COMMAND"
+
+			DO_COMMAND="pkg-config --print-requires ${FILE}"
+			eval-it "$DO_COMMAND"
+		)
+		done
+	else
+		echo $HINT
+	fi
+}
+```
+
 # Appendix
 
 # I. Study
