@@ -53,37 +53,37 @@
 
 ## 1.1. Startup
 
-#### - [helper_ArtificialIntelligence.md](https://github.com/lankahsu520/HelperX/blob/master/helper_ArtificialIntelligence.md) - ArtificialIntelligence helper.
+### 1.1.1. [helper_ArtificialIntelligence.md](https://github.com/lankahsu520/HelperX/blob/master/helper_ArtificialIntelligence.md) - ArtificialIntelligence helper.
 
 > 我完全不懂 AI (Artificial Intelligence)，基本上你沒辦法從我這邊學到什麼，說是蹭 AI 也行。
 >
 > 只是把生活中的發想記錄下來。
 
-#### - [helper_BackupAndRAID.md](https://github.com/lankahsu520/HelperX/blob/master/helper_BackupAndRAID.md) - Backup and RAID helper.
+### 1.1.2. [helper_BackupAndRAID.md](https://github.com/lankahsu520/HelperX/blob/master/helper_BackupAndRAID.md) - Backup and RAID helper.
 
 > 人們應該是追求資料的健全保存後，再取得效能上的平衡。
 >
 > 而一般人細究 RAID 是沒有意義，要認知自身的需求，評估選擇有利的應用。
 
-#### - [helper_BLE.md](https://github.com/lankahsu520/HelperX/blob/master/helper_BLE.md) - BLE helper.
+### 1.1.3. [helper_BLE.md](https://github.com/lankahsu520/HelperX/blob/master/helper_BLE.md) - BLE helper.
 
 > BLE 的水很深，這邊只有概要，並且用不同的觀點去分析。
 >
 > 如果你是要實作的話，文件是幫不了你的！請直接找Opensource，而這裏有[BlueZX](https://github.com/lankahsu520/BlueZX) 或許能幫助到你。
 
-#### - [helper_Docker.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Docker.md) - docker helper.
+### 1.1.4. [helper_Docker.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Docker.md) - docker helper.
 
 > docker is useful ? Please make sure that you aren't a low-level programmer or embedded engineer.
 
-#### - [helper_Email.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Email.md) - Email helper.
+### 1.1.5. [helper_Email.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Email.md) - Email helper.
 
 > 我的第一份工作就是寫一套電子報系統，當時的網路速度說有多慢就有多慢（記得不是很清楚，ADSL好像還沒有開始呢），當要發送電子報時，還要選擇冷門時段，不然整個銀行系統都要停擺了。
 
-#### - [helper_GitHub.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitHub.md) - GitHub helper.
+### 1.1.6. [helper_GitHub.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitHub.md) - GitHub helper.
 
 > 善用免費 git 空間。
 
-#### - [helper_GitLabAndCICD.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitLabAndCICD.md) - GitLab helper.
+### 1.1.7. [helper_GitLabAndCICD.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitLabAndCICD.md) - GitLab helper.
 
 > CI/CD is useful ? Please make sure that you aren't a low-level programmer, system integration developer or embedded engineer.
 >
@@ -91,57 +91,57 @@
 >
 > 這時 CI/CD 就是一個很不錯的方法。
 
-#### - [helper_GStreamer.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GStreamer.md) - GStreamer helper.
+### 1.1.8. [helper_GStreamer.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GStreamer.md) - GStreamer helper.
 
-#### - [helper_IoT.md](https://github.com/lankahsu520/HelperX/blob/master/helper_IoT.md) - IoT helper.
+### 1.1.9. [helper_IoT.md](https://github.com/lankahsu520/HelperX/blob/master/helper_IoT.md) - IoT helper.
 
 >IoT 的概念很簡單，不要被一些 “協定” 約束你的想像。也不要被主管 or 業務員的話語所迷惑。只要清楚基本概念既可。
 
-#### - [helper_jq.md](https://github.com/lankahsu520/HelperX/blob/master/helper_jq.md) - jq helper.
+### 1.1.10. [helper_jq.md](https://github.com/lankahsu520/HelperX/blob/master/helper_jq.md) - jq helper.
 
 >JSON 是目前常用的資料格式，jq 提供於簡單的命令列下查詢、編輯，抓取所需之資訊，導入另一個程式使用。
 
-#### - [helper_linux.md](https://github.com/lankahsu520/HelperX/blob/master/helper_linux.md) - linux helper.
+### 1.1.11. [helper_linux.md](https://github.com/lankahsu520/HelperX/blob/master/helper_linux.md) - linux helper.
 
 >某人說「我是雲端工程師，從來沒有學過什麼 linux，為什麼還要去學？」或許他的話沒有錯，出社會後，你能在工作上得心應心，其實就可以了。
 
-#### - [helper_macOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_macOS.md) - macOS helper.
+### 1.1.12. [helper_macOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_macOS.md) - macOS helper.
 
-#### - [helper_MarkDown.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MarkDown.md) - Markdown helper.
+### 1.1.13. [helper_MarkDown.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MarkDown.md) - Markdown helper.
 
 > 身為一個人，建議善用 Markdown 記錄相關筆記，少用 doc。
 
-#### - [helper_Matter.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Matter.md) - Matter helper.
+### 1.1.14. [helper_Matter.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Matter.md) - Matter helper.
 
 > Matter（以前稱為 Project CHIP，Connected Home over IP）是一種物聯網（IoT）通信協議和平台，致力於促進智能家居設備之間的互操作性和互聯性。
 
-#### - [helper_MultimediaMuxAndDemux.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MultimediaMuxAndDemux.md) - Multimedia Mux and Demux helper
+### 1.1.15. [helper_MultimediaMuxAndDemux.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MultimediaMuxAndDemux.md) - Multimedia Mux and Demux helper
 
 >除了用手機看 YouTube 外，有些基本常識還是補足一下。
 
-#### - [helper_MQTT.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MQTT.md) - MQTT helper.
+### 1.1.16. [helper_MQTT.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MQTT.md) - MQTT helper.
 
 > use mosquitto.
 
-#### - [helper_ONVIF.md](https://github.com/lankahsu520/HelperX/blob/master/helper_ONVIF.md) - ONVIF helper.
+### 1.1.17. [helper_ONVIF.md](https://github.com/lankahsu520/HelperX/blob/master/helper_ONVIF.md) - ONVIF helper.
 
-#### - [helper_RaspberryPiOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_RaspberryPiOS.md) - Raspberry Pi OS helper.
+### 1.1.18. [helper_RaspberryPiOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_RaspberryPiOS.md) - Raspberry Pi OS helper.
 
-#### - [helper_SQLite.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SQLite.md) - SQLite helper.
+### 1.1.19. [helper_SQLite.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SQLite.md) - SQLite helper.
 
-#### - [helper_SIPandAsterisk.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SIPandAsterisk.md) - SIP and Asterisk helper.
+### 1.1.20. [helper_SIPandAsterisk.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SIPandAsterisk.md) - SIP and Asterisk helper.
 
 > 如果你選擇 FreePBX 或其它 UI 進行安裝設定前，不妨看看這裏的指引。
 
-#### - [helper_SVNvsGit.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SVNvsGit.md) - SVN vs. Git helper.
+### 1.1.21. [helper_SVNvsGit.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SVNvsGit.md) - SVN vs. Git helper.
 
 > SVN、Git 都是很好的版本控管工具，當然市面上不止這兩種。只是取得一個方便的即可。
 >
 > 曾經有人說：「SVN 的速度比 Git 慢，所以不會去用 SVN」；至於是不是如此，雖然心中已有答案，也不想當場有所爭執。因為版本控管是管東西，而不是管速度的。
 
-#### - [helper_vi.md](https://github.com/lankahsu520/HelperX/blob/master/helper_vi.md) - vi/vim helper.
+### 1.1.22. [helper_vi.md](https://github.com/lankahsu520/HelperX/blob/master/helper_vi.md) - vi/vim helper.
 
-#### - [helper_VirtualBox-x86_64-Ubuntu20.04onWin10](https://github.com/lankahsu520/HelperX/blob/master/helper_VirtualBox-x86_64-Ubuntu20.04onWin10.md) - VirtualBox helper.
+### 1.1.23. [helper_VirtualBox-x86_64-Ubuntu20.04onWin10](https://github.com/lankahsu520/HelperX/blob/master/helper_VirtualBox-x86_64-Ubuntu20.04onWin10.md) - VirtualBox helper.
 
 > Host: win10
 >
@@ -153,11 +153,11 @@
 
 ## 2.1. Topic
 
-#### - [helper_SoftwareEnginnerX9.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SoftwareEnginnerX9.md) - Software Engineer helper.
+### 2.1.1. [helper_SoftwareEnginnerX9.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SoftwareEnginnerX9.md) - Software Engineer helper.
 
 >Please read this md at first !!! It is very important.
 
-#### - [helper_SDKAndCodebase.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SDKAndCodebase.md) - SDK and Codebase helper.
+### 2.1.2. [helper_SDKAndCodebase.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SDKAndCodebase.md) - SDK and Codebase helper.
 
 >在專案開啟時，都會指派成員先去研究其可行性，當然有 SDK 時，就要先進行彙整、編譯和測試。以下就是一個很糟的專案案例。
 >
@@ -173,11 +173,11 @@
 >
 >先遣隊：「官網都有，你自己不會抓哦！」
 
-#### - [helper_astyle.md](https://github.com/lankahsu520/HelperX/blob/master/helper_astyle.md) - astyle helper.
+### 2.1.3. [helper_astyle.md](https://github.com/lankahsu520/HelperX/blob/master/helper_astyle.md) - astyle helper.
 
 >程式碼格式化（縮排）工具，支援 C/C++、C++/CLI、Objective-C、C# 和 Java。
 
-#### - [helper_DBus.md](https://github.com/lankahsu520/HelperX/blob/master/helper_DBus.md) - dbus helper.
+### 2.1.4. [helper_DBus.md](https://github.com/lankahsu520/HelperX/blob/master/helper_DBus.md) - dbus helper.
 
 >本人是用 D-Bus low-level API 來進行對接，主要範例請見 [utilx9](https://github.com/lankahsu520/utilx9)。
 >
@@ -187,7 +187,7 @@
 >
 >所以請大家試著上網查尋看看。
 
-#### - [helper_GCCDebugAndgdb.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GCCDebugAndgdb.md) - GCC and gdb helper.
+### 2.1.5. [helper_GCCDebugAndgdb.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GCCDebugAndgdb.md) - GCC and gdb helper.
 
 > 這邊又有個小故事，雖然沒辦法百分之一百重現，但是大致如下
 >
@@ -202,33 +202,51 @@
 >
 > <font color="red">平常寫程式有良好的習慣，如注意 alloc、free，給初值，使用驗證過的函數等，加上幾行 Debug message(s) ，解決 Compile Errors and Warnings，就能處理至少 95%上的問題。</font>
 
-#### - [helper_Python.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Python.md) - Python helper.
+### 2.1.6. [helper_Python.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Python.md) - Python helper.
 
 > 不討論如何撰寫 Python 的程式，而是當使用或變動系統的 Python 時，可能發生的問題。
 
-#### - [helper_valgrind.md](https://github.com/lankahsu520/HelperX/blob/master/helper_valgrind) - valgrind helper.
+### 2.1.7. [helper_valgrind.md](https://github.com/lankahsu520/HelperX/blob/master/helper_valgrind) - valgrind helper.
 
 > <font color="red">平常寫程式有良好的習慣 ! 再以 valgrind 進行輔助，維持軟體品質。</font>
 
 ## 2.2. Repository
 
-#### - [beeX](https://github.com/lankahsu520/beeX)
+### 2.2.1. [beeX](https://github.com/lankahsu520/beeX)
 
-#### - [BlueZX](https://github.com/lankahsu520/BlueZX)
+> beeX is an open source message handler that implements the MCTT protocol.
 
-#### - [CvsCPPmixer](https://github.com/lankahsu520/CvsCPPmixer)
+### 2.2.2. [BlueZX](https://github.com/lankahsu520/BlueZX)
 
-#### - [GDBusX](https://github.com/lankahsu520/GDBusX)
+> BlueZX is based on BlueZ (bluez-5.56). You can create a noninteractive daemon easily.
 
-#### - [makeXcmakeXmeson](https://github.com/lankahsu520/makeXcmakeXmeson)
+### 2.2.3. [CvsCPPmixer](https://github.com/lankahsu520/CvsCPPmixer)
 
-#### - [pythonX9](https://github.com/lankahsu520/pythonX9)
+> CvsCPPmixer gives an example how to mix C and C++.
 
-#### - [RPiP9](https://github.com/lankahsu520/RPiP9)
+### 2.2.4. [GDBusX](https://github.com/lankahsu520/GDBusX)
 
-#### - [usbHunter](https://github.com/lankahsu520/usbHunter)
+> gdbusx provides simple GDBus APIs.
 
-#### - [utilx9](https://github.com/lankahsu520/utilx9)
+### 2.2.5. [makeXcmakeXmeson](https://github.com/lankahsu520/makeXcmakeXmeson)
+
+> Provide examples for make, cmake, meson and gn.
+
+### 2.2.6. [pythonX9](https://github.com/lankahsu520/pythonX9)
+
+> pythonX9 provides simple APIs - class, debug api, queue/stack api, multicast server/client, state machine api, sysinfo api.
+
+### 2.2.7. [RPiP9](https://github.com/lankahsu520/RPiP9)
+
+> RPiP9 把 Raspberry Pi 上常見的模組搜集而成。
+
+### 2.2.8. [usbHunter](https://github.com/lankahsu520/usbHunter)
+
+> usbHunter is an application that checks usb plugged and unplugged.
+
+### 2.2.9. [utilx9](https://github.com/lankahsu520/utilx9)
+
+> crontab api, queue api, socket server/client, dbus api, http/SOAP/ONVIF client, json api, led api, multicast server/client, ping api, cpu and proc info, ssh client/tunnel, thread api, tty read/writ…
 
 # 3. Be An Embedded Engineer
 
@@ -242,7 +260,7 @@
 
 ## 3.1. Topic
 
-#### - [helper_EmbeddedEngineer.md](https://github.com/lankahsu520/HelperX/blob/master/helper_EmbeddedEngineer.md)
+### 3.1.1. [helper_EmbeddedEngineer.md](https://github.com/lankahsu520/HelperX/blob/master/helper_EmbeddedEngineer.md)
 
 > 當初花了數個周末在家苦思，這一生學到了什麼，走過了什麼路，彙整入八個星期內，不只是想引領一位軟體工程師進嵌入式系統內；另一方面也想從中識別該員的能力。
 >
@@ -252,96 +270,105 @@
 >
 > 「你沒有限制編輯軟體…」聽到這個我是馬上“黃人”問號（現在不能說黑人問號，我講我自己總行吧）？身為一位嵌入式工程師，有的人用 vi，有的人用 Notepad++ 等。一套編輯軟體只要用的順手就好，那裏來的問題。有可能發生問題的部分常在開發 MCU，可我們的主力是 Linux 環境也。 
 
-#### - [helper_FreeRTOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_FreeRTOS.md) - FreeRTOS helper.
+### 3.1.2.  [helper_FreeRTOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_FreeRTOS.md) - FreeRTOS helper.
 
-#### - [helper_UnifySDKandGeckoSDK.md](https://github.com/lankahsu520/HelperX/blob/master/helper_UnifySDKandGeckoSDK.md) - UnifySDK and GeckoSDK helper.
+### 3.1.3. [helper_UnifySDKandGeckoSDK.md](https://github.com/lankahsu520/HelperX/blob/master/helper_UnifySDKandGeckoSDK.md) - UnifySDK and GeckoSDK helper.
 
 > 研究中…
 
 ## 3.2. Repository
 
-#### - [CrossCompilationX](https://github.com/lankahsu520/CrossCompilationX)
+### 3.2.1. [CrossCompilationX](https://github.com/lankahsu520/CrossCompilationX)
 
 > 討論 Cross Compilation 和相關應用，因為東西很多，特別獨立出來，
 
-	- [helper_Buildroot-RaspberryPi3.md](https://github.com/lankahsu520/CrossCompilationX/blob/master/helper_Buildroot-RaspberryPi3.md) - Buildroot-RaspberryPi3 helper
-	- [helper_OpenWrt-RaspberryPi3.md](https://github.com/lankahsu520/CrossCompilationX/blob/master/helper_OpenWrt-RaspberryPi3.md) - helper_OpenWrt-RaspberryPi3 helper
-	- [helper_Yocto.md](https://github.com/lankahsu520/CrossCompilationX/blob/master/helper_Yocto.md) - helper_Yocto helper
-	- [helper_Yocto-RaspberryPi3.md](https://github.com/lankahsu520/CrossCompilationX/blob/master/helper_Yocto-RaspberryPi3.md) - helper_Yocto-RaspberryPi3 helper
+#### A. [helper_Buildroot-RaspberryPi3.md](https://github.com/lankahsu520/CrossCompilationX/blob/master/helper_Buildroot-RaspberryPi3.md) - Buildroot-RaspberryPi3 helper
+
+#### B. [helper_OpenWrt-RaspberryPi3.md](https://github.com/lankahsu520/CrossCompilationX/blob/master/helper_OpenWrt-RaspberryPi3.md) - helper_OpenWrt-RaspberryPi3 helper
+
+#### C. [helper_Yocto.md](https://github.com/lankahsu520/CrossCompilationX/blob/master/helper_Yocto.md) - helper_Yocto helper
+
+#### D. [helper_Yocto-RaspberryPi3.md](https://github.com/lankahsu520/CrossCompilationX/blob/master/helper_Yocto-RaspberryPi3.md) - helper_Yocto-RaspberryPi3 helper
 
 # 4. Be A Cloud Services Collaborator 
 ## 4.1. Amazon(AWS)
 
-#### - [helper_AmazonX9.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonX9.md) - Amazon(AWS) helper.
+### 4.1.1. [helper_AmazonX9.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonX9.md) - Amazon(AWS) helper.
 
 >Please read this md at first !!! It is very important.
 
-#### - [helper_AmazonChime.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonChime.md) - Amazon Chime helper.
+### 4.1.2. [helper_AmazonChime.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonChime.md) - Amazon Chime helper.
 
 >研究中…
 
-#### - [helper_AmazonConnect.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonConnect.md) - Amazon Connect helper.
+### 4.1.3. [helper_AmazonConnect.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonConnect.md) - Amazon Connect helper.
 
 >擱置中…
 
-#### - [helper_AmazonEC2.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonEC2.md) - Amazon EC2 helper.
+### 4.1.4. [helper_AmazonEC2.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonEC2.md) - Amazon EC2 helper.
 
 >一般都是用 Console 設定即可。
 >
 
-#### - helper_AmazonDynamoDB.md - Amazon DynamoDB helper.
+### 4.1.5. helper_AmazonDynamoDB.md - Amazon DynamoDB helper.
 
 >A fast and flexible NoSQL database service for any scale
 >
 >用就對了！請見 [helper_AWS-CLI.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-CLI.md)。
 
-#### - [helper_AmazonKinesisVideoStreams.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonKinesisVideoStreams.md) - Amazon Kinesis Video Streams helper.
+### 4.1.6. [helper_AmazonKinesisVideoStreams.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonKinesisVideoStreams.md) - Amazon Kinesis Video Streams helper.
 
 >已經應用WebRTC。
 
-#### - [helper_AmazonLex.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonLex.md) - Amazon Lex helper.
+### 4.1.7. [helper_AmazonLex.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonLex.md) - Amazon Lex helper.
 
 >擱置中…
 
-#### - helper_AmazonS3.md - Amazon S3 helper.
+### 4.1.8. helper_AmazonS3.md - Amazon S3 helper.
 
 >Store and retrieve any amount of data from anywhere
 >
 >用就對了！請見 [helper_AWS-CLI.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-CLI.md)。
 
-#### - [helper_AVS-Device-SDK.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AVS-Device-SDK.md) - AVS-Device-SDK helper.
+### 4.1.9. [helper_AVS-Device-SDK.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AVS-Device-SDK.md) - AVS-Device-SDK helper.
 
 >已在 Raspberry PI4 和 ubuntu 上實作。
 
-#### - [helper_AWS-CLI.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-CLI.md) - AWS-CLI helper.
+### 4.1.10. [helper_AWS-CLI.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-CLI.md) - AWS-CLI helper.
 
 >提供 command line 的方式與 Amazon  Service 對接。常用 DynamoDB 和 S3。
 
-#### ~~- [helper_AWS-FreePBX.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-FreePBX.md) - FreePBX Server on AWS helper.~~
+### ~~4.1.11. [helper_AWS-FreePBX.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-FreePBX.md) - FreePBX Server on AWS helper.~~
 
 >目前照著網路大作操作後，還是失敗收場，希望有成功之士能告知一二。
 
-#### - [helper_AWS-IAM.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-IAM.md) - AWS-IAM helper.
+### 4.1.12. [helper_AWS-IAM.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-IAM.md) - AWS-IAM helper.
 
 >就是一般使用者；很簡單的介紹，如安裝完 ubuntu 後會先建立 administrator，除 administrator  外就是 IAM。
 >
 >AWS 的手冊常把事情複雜化，而且不使用生活化的名稱來命名，讓人看文件看的很吃力。
 
-#### - [helper_AWS-Lambda.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-Lambda.md) - AWS-Lambda helper.
+### 4.1.13. [helper_AWS-Lambda.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-Lambda.md) - AWS-Lambda helper.
 
 >就是把你的程式碼放在雲端執行。你不用管主機是 Linux, win10 or mac OS，也不用管 CPU 等級，RAM 多大等。相關實作請參考 [LambdaHello](https://github.com/lankahsu520/LambdaHello)。
 
-#### - [helper_AWS-SDK.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-SDK.md) - AWS-SDK helper.
+### 4.1.14. [helper_AWS-SDK.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AWS-SDK.md) - AWS-SDK helper.
 
 >提供一個 API 方式與 Amazon  Service 對接。已實作部分請參考 [awsX9](https://github.com/lankahsu520/awsX9)。
 
 ## 4.2. Repository
 
-#### - [awsP9](https://github.com/lankahsu520/awsP9)
+### 4.2.1. [awsP9](https://github.com/lankahsu520/awsP9)
 
-#### - [awsX9](https://github.com/lankahsu520/awsX9)
+> awsP9 is an api of AWS SDK (Boto3).
 
-#### - [LambdaHello](https://github.com/lankahsu520/LambdaHello)
+### 4.2.2.  [awsX9](https://github.com/lankahsu520/awsX9)
+
+> awsX9 is an api of AWS SDK (C++).
+
+### 4.2.3. [LambdaHello](https://github.com/lankahsu520/LambdaHello)
+
+> It will only tell you how to publish the program to Lambda, invoke your application on Lambda or run on local.
 
 # Author
 
