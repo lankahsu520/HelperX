@@ -160,6 +160,8 @@ update-alternatives: error: no alternatives for python3
 $ sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 2
 $ sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1
 
+$ update-alternatives --list python3
+
 $ sudo update-alternatives --config python3
 There are 2 choices for the alternative python3 (providing /usr/bin/python3).
 
