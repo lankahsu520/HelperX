@@ -1431,3 +1431,11 @@ sip unregister                 -- Unregister (force expiration) a SIP peer from 
 605	不可使用
 ```
 
+# Author
+
+> Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+
+# License
+
+> [HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
+

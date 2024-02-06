@@ -21,7 +21,8 @@
 
 ## 1.1. rtspsrc -> autovideosink
 
-#### Video only
+#### A. Video only
+
 ```mermaid
 flowchart LR
 	rtspsrc[rtspsrc]
@@ -51,7 +52,7 @@ gst-launch-1.0  rtspsrc \
 	! decodebin \
 	! videoconvert ! autovideosink
 ```
-#### Video and Audio
+#### B. Video and Audio
 ```mermaid
 flowchart LR
 	rtspsrc[rtspsrc]
@@ -77,16 +78,16 @@ flowchart LR
 	autovideosink[autovideosink]
 
 	rtspsrc --> udpsink
-	udpsink-. 224.0.0.1:5000 .->udpsrc
+	udpsink ..-> |224.0.0.1:5000| udpsrc
 	udpsrc --> autovideosink
 ```
-#### rtspsrc -> udpsink (Multicast) 
+#### A. rtspsrc -> udpsink (Multicast) 
 ```bash
 gst-launch-1.0 rtspsrc \
 	location=rtsp://192.168.50.21:554 user-id=admin user-pw=admin protocols=4 \
 	! udpsink host=224.0.0.1 port=50000 auto-multicast=true
 ```
-#### udpsrc -> autovideosink
+#### B. udpsrc -> autovideosink
 ```bash
 gst-launch-1.0 -v udpsrc \
 	multicast-group=224.0.0.1 port=50000 auto-multicast=true \
@@ -104,16 +105,16 @@ flowchart LR
 	autovideosink[autovideosink]
 
 	rtspsrc --> udpsink
-	udpsink-. :5000 .->udpsrc
+	udpsink ..-> |:5000| udpsrc
 	udpsrc --> autovideosink
 ```
-#### rtspsrc -> udpsink
+#### A. rtspsrc -> udpsink
 ```bash
 gst-launch-1.0 rtspsrc \
 	location=rtsp://192.168.50.21:554 user-id=admin user-pw=admin protocols=4 \
 	! udpsink host=127.0.0.1 port=50000 sync=false -v
 ```
-#### rtspsrc -> udpsink (x264enc/rtph264pay)
+#### B. rtspsrc -> udpsink (x264enc/rtph264pay)
 
 ```bash
 export VIDEO_PORT="50000"
@@ -125,7 +126,7 @@ gst-launch-1.0 -v rtspsrc \
 	! udpsink host=127.0.0.1 port=$VIDEO_PORT
 ```
 
-#### udpsrc -> autovideosink
+#### C. udpsrc -> autovideosink
 
 ```bash
 export VIDEO_PORT="50000"
@@ -137,8 +138,6 @@ gst-launch-1.0 -v udpsrc \
 	! decodebin \
 	! videoconvert ! autovideosink
 ```
-
-
 
 ## 1.4. rtspsrc -> kvssink
 
@@ -173,10 +172,10 @@ flowchart LR
 	autovideosink[autovideosink]
 
 	appsrc --> udpsink
-	udpsink-. 224.0.0.1:50000 .->udpsrc
+	udpsink ..-> |224.0.0.1:50000| udpsrc
 	udpsrc --> autovideosink
 ```
-#### appsrc (i420) -> udpsink (Multicast, x264enc/rtph264pay) 
+#### A. appsrc (i420) -> udpsink (Multicast, x264enc/rtph264pay) 
 ```bash
 appsrc name=source is-live=TRUE do-timestamp=TRUE block=TRUE max-bytes=-1 emit-signals=TRUE \
 	! videoparse width=720 height=480 format=i420 framerate=20/1 \
@@ -184,7 +183,7 @@ appsrc name=source is-live=TRUE do-timestamp=TRUE block=TRUE max-bytes=-1 emit-s
 	! rtph264pay \
 	! udpsink host=224.0.0.1 port=50000 auto-multicast=true
 ```
-#### udpsrc -> autovideosink
+#### B. udpsrc -> autovideosink
 ```bash
 gst-launch-1.0 -v udpsrc \
 	multicast-group=224.0.0.1 port=50000 auto-multicast=true \
@@ -226,7 +225,7 @@ flowchart LR
 
 	v4l2src --> autovideosink
 ```
-#### v4l2src (not set)
+#### A. v4l2src (not set)
 ```bash
 gst-launch-1.0 v4l2src device=/dev/video0 \
 	! videoconvert \
@@ -236,7 +235,7 @@ gst-launch-1.0 v4l2src device=/dev/video0 \
 	! videoconvert \
 	! autovideosink
 ```
-#### v4l2src (video/x-raw, not set)
+#### B. v4l2src (video/x-raw, not set)
 ```bash
 gst-launch-1.0 v4l2src device=/dev/video0 \
 	! video/x-raw,width=640,height=480,framerate=30/1 \
@@ -248,14 +247,14 @@ gst-launch-1.0 v4l2src device=/dev/video0 \
 	! videoconvert \
 	! autovideosink 
 ```
-#### v4l2src (video/x-raw, YUYV 4:2:2)
+#### C. v4l2src (video/x-raw, YUYV 4:2:2)
 ```bash
 gst-launch-1.0 v4l2src device=/dev/video0 \
 	! video/x-raw,width=640,height=480,framerate=30/1,format=YUY2 \
 	! videoconvert \
 	! autovideosink
 ```
-#### v4l2src (image/jpeg, MJPG) 
+#### D. v4l2src (image/jpeg, MJPG) 
 ```bash
 gst-launch-1.0 -v v4l2src device=/dev/video0 \
 	! image/jpeg, width=640, height=480, framerate=30/1, format=MJPG \
@@ -302,10 +301,10 @@ flowchart LR
 	udpsrc[udpsrc]
     alsasink[alsasink]
 
-	filesrc --> udpsink -. :51000 .-> udpsrc --> alsasink
+	filesrc --> udpsink ..-> |:51000| udpsrc --> alsasink
 ```
 - [rtpL16pay](https://gstreamer.freedesktop.org/documentation/rtp/rtpL16pay.html?gi-language=c)
-#### filesrc (mp3, rtpL16pay) -> udpsink
+#### A. filesrc (mp3, rtpL16pay) -> udpsink
 ```bash
 export UDP_SINK="udpsink host=127.0.0.1 port=51000"
 export UDP_SINK="udpsink host=192.168.56.1 port=51000"
@@ -318,7 +317,7 @@ gst-launch-1.0 filesrc \
 	! rtpL16pay \
 	! $UDP_SINK
 ```
-#### udpsrc -> alsasink
+#### B. udpsrc -> alsasink
 ```bash
 export UDP_SRC="multicast-group=224.0.0.1 port=51000 auto-multicast=true"
 export UDP_SRC="port=51000"
@@ -374,7 +373,7 @@ flowchart LR
 
 	filesrc --> filesink 
 ```
-#### filesrc (wav) -> filesink (pcm, S16BE)
+#### A. filesrc (wav) -> filesink (pcm, S16BE)
 ```bash
 gst-launch-1.0 filesrc \
 	location="./0001.wav" \
@@ -384,7 +383,7 @@ gst-launch-1.0 filesrc \
 	! audio/x-raw,format=S16BE,channels=2,rate=44100 \
 	! filesink location="0001be.pcm"
 ```
-#### filesrc (wav) -> filesink (pcm, S16LE)
+#### B. filesrc (wav) -> filesink (pcm, S16LE)
 ```bash
 gst-launch-1.0 filesrc \
 	location="./0001.wav" \
@@ -394,7 +393,7 @@ gst-launch-1.0 filesrc \
 	! audio/x-raw,format=S16LE,channels=2,rate=44100 \
 	! filesink location="0001le.pcm"
 ```
-#### filesrc (mp3) -> filesink (pcm, S16LE)
+#### C. filesrc (mp3) -> filesink (pcm, S16LE)
 
 ```bash
 gst-launch-1.0 filesrc \
@@ -404,9 +403,21 @@ gst-launch-1.0 filesrc \
 	! audioresample \
 	! audio/x-raw,format=S16LE,channels=2,rate=44100 \
 	! filesink location="BeethovenFurElise.pcm"
+
+gst-launch-1.0 filesrc \
+	location="./BeethovenFurElise.mp3" \
+	! decodebin \
+	! audioconvert \
+	! autoaudiosink
+
+gst-launch-1.0 filesrc \
+	location="./BeethovenFurElise.pcm" \
+	! rawaudioparse format=pcm pcm-format=s16le sample-rate=44100 num-channels=2 \
+	! audioconvert \
+	! autoaudiosink
 ```
 
-#### filesrc (wav) -> filesink (ogg, opusenc)
+#### D. filesrc (wav) -> filesink (ogg, opusenc)
 
 ```bash
 gst-launch-1.0 filesrc \
@@ -418,7 +429,7 @@ gst-launch-1.0 filesrc \
 	! oggmux \
 	! filesink location="0001opus.ogg"
 ```
-#### filesrc (wav) -> filesink (ogg ,vorbisenc)
+#### E. filesrc (wav) -> filesink (ogg ,vorbisenc)
 ```bash
 gst-launch-1.0 filesrc \
 	location="./0001.wav" \
@@ -463,7 +474,7 @@ flowchart LR
 	filesrc --> filesink 
 ```
 - [rawaudioparse](https://gstreamer.freedesktop.org/documentation/rawparse/rawaudioparse.html?gi-language=c)
-#### filesrc (pcm, rawaudioparse) -> filesink (wav)
+#### A. filesrc (pcm, rawaudioparse) -> filesink (wav)
 ```bash
 gst-launch-1.0 filesrc \
 	location=./0001be.pcm \
@@ -480,7 +491,7 @@ gst-launch-1.0 filesrc \
 	! filesink location=BeethovenFurElise.wav
 
 ```
-#### filesrc (pcm, rawaudioparse) -> filesink (ogg, opusenc)
+#### B. filesrc (pcm, rawaudioparse) -> filesink (ogg, opusenc)
 ```bash
 gst-launch-1.0 filesrc \
 	location=./0001be.pcm \
@@ -491,7 +502,7 @@ gst-launch-1.0 filesrc \
 	! oggmux \
 	! filesink location="0001be2opus.ogg"
 ```
-#### filesrc (pcm, audio/x-raw) -> filesink (wav, wavenc)
+#### C. filesrc (pcm, audio/x-raw) -> filesink (wav, wavenc)
 ```bash
 gst-launch-1.0 filesrc \
 	location=./0001le.pcm \
@@ -511,7 +522,7 @@ flowchart LR
 	udpsrc[udpsrc]
     alsasink[???sink]
 
-	filesrc --> udpsink -. :51000 .-> udpsrc --> alsasink
+	filesrc --> udpsink ..-> |:51000| udpsrc --> alsasink
 ```
 - [rtpopuspay](https://gstreamer.freedesktop.org/documentation/rtp/rtpopuspay.html?gi-language=c)
 ### 6.1.1. filesrc (audio) -> udpsink
@@ -522,7 +533,7 @@ export UDP_SINK="udpsink host=192.168.50.9 port=52000"
 export UDP_SINK="udpsink host=192.168.50.51 port=52000"
 export UDP_SINK="udpsink host=224.0.0.1 port=51000 auto-multicast=true"
 ```
-#### filesrc (wav) -> udpsink (opus)
+#### A. filesrc (wav) -> udpsink (opus)
 ```bash
 gst-launch-1.0 filesrc \
 	location=/work/wav/0001.wav \
@@ -532,7 +543,7 @@ gst-launch-1.0 filesrc \
 	! opusenc ! rtpopuspay \
 	! $UDP_SINK
 ```
-#### filesrc (pcm) -> udpsink (opus)
+#### B. filesrc (pcm) -> udpsink (opus)
 ```bash
 gst-launch-1.0 filesrc \
 	location=./0001be.pcm \
@@ -542,7 +553,7 @@ gst-launch-1.0 filesrc \
 	! opusenc ! rtpopuspay \
 	! $UDP_SINK
 ```
-#### filesrc (mp3) -> udpsink (opus)
+#### C. filesrc (mp3) -> udpsink (opus)
 
 ```/bash
 gst-launch-1.0 filesrc \
@@ -556,7 +567,7 @@ gst-launch-1.0 filesrc \
 
 ## 6.2. udpsrc (audio) -> ???sink
 
-#### udpsrc (opus) -> autoaudiosink (pcm, S16LE)
+#### A. udpsrc (opus) -> autoaudiosink (pcm, S16LE)
 ```bash
 export UDP_SRC="multicast-group=224.0.0.1 port=51000 auto-multicast=true"
 export UDP_SRC="port=51000"
@@ -585,7 +596,7 @@ gst-launch-1.0 udpsrc \
 	! audio/x-raw,format=S16LE,channels=2,rate=44100 \
 	! autoaudiosink
 ```
-#### udpsrc (opus) -> filesink (pcm, S16LE)
+#### B. udpsrc (opus) -> filesink (pcm, S16LE)
 ```bash
 gst-launch-1.0 udpsrc \
 	$UDP_SRC \
@@ -609,7 +620,7 @@ flowchart LR
    
     udpsrc --> autoaudiosink
 ```
-#### udpsrc -> autoaudiosink
+#### A. udpsrc -> autoaudiosink
 ```bash
 gst-launch-1.0 -v udpsrc port=50000 \
 	caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H264, payload=(int)96' \
@@ -629,12 +640,12 @@ flowchart LR
 
     uri --> playbin
 ```
-#### http
+#### A. http
 ```bash
 gst-launch-1.0 -v playbin \
 	uri=http://relay.slayradio.org:8000/
 ```
-#### file
+#### B. file
 ```bash
 gst-launch-1.0 -v playbin \
 	uri=file:///work/wav/0001.wav
@@ -642,7 +653,7 @@ gst-launch-1.0 -v playbin \
 
 # 8. rtmpsrc with youtube-dl
 
-#### youtube-dl
+#### A. youtube-dl
 
 ```bash
 #https://github.com/ytdl-org/youtube-dl
@@ -653,7 +664,7 @@ $ youtube-dl --list-formats https://www.youtube.com/watch?v=rSgzrSyQZc0
 $ youtube-dl --format "best[ext=mp4][protocol=https]" --get-url https://www.youtube.com/watch?v=rSgzrSyQZc0
 ```
 
-#### souphttpsrc -> autovideosink
+#### B. souphttpsrc -> autovideosink
 
 ```bash
 gst-launch-1.0 souphttpsrc is-live=true \
@@ -749,9 +760,9 @@ sudo apt install gnome-sound-recorder
 
 # Author
 
-Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+> Created and designed by [Lanka Hsu](lankahsu@gmail.com).
 
 # License
 
-[HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
+> [HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
 
