@@ -108,44 +108,55 @@ sipsess_estab_handler --> call_stream_start
 
 ```mermaid
 flowchart LR
-	video_stream_decode --> video_codec --> video_filter --> video_display
-	
 	subgraph video_codec
-		direction LR
-		vc-encupdh[ac->encupdh]
-		vc-ench[ac->ench]
-		vc-decupdh[ac->decupdh]
-		vc-dech[ac->dech]
-		vc-fmtp_ench[ac->fmtp_ench]
-		vc-fmtp_cmph[ac->fmtp_cmph]
+		vc-encupdh[vc->encupdh]
+		vc-ench[vc->ench]
+		vc-decupdh[vc->decupdh]
+		vc-dech[vc->dech]
+		vc-fmtp_ench[v->fmtp_ench]
+		vc-fmtp_cmph[vc->fmtp_cmph]
 	end
 	subgraph video_filter
-		direction LR
 		vf-encupdh[vf->encupdh]
 		vf-ench[vf->ench]
 		vf-decupdh[vf->decupdh]
 		vf-dech[vf->dech]
 	end
 	subgraph video_display
-		direction LR
 		vd-alloch[vd->alloch]
 		vd-updateh[vd->updateh]
 		vd-disph[vd->disph]
 		vd-hideh[vd->hideh]
 	end
+	subgraph video_stream_decode
+		vidframe[(vidframe)]
+	end
+	subgraph stream_recv_handler
+		mbuf[(mbuf)]
+	end
+
+	stream_recv_handler --> video_stream_decode
+		video_stream_decode --> |1|vc-dech
+		video_stream_decode --> |2|vf-dech
+		video_stream_decode --> |3|vd-disph
+	
 ```
 
 ### 3.1.2. encode ( source --> baresip)
+
 ```mermaid
 flowchart LR
 	subgraph video_codec
 		direction LR
-		vc-encupdh[ac->encupdh]
-		vc-ench[ac->ench]
-		vc-decupdh[ac->decupdh]
-		vc-dech[ac->dech]
-		vc-fmtp_ench[ac->fmtp_ench]
-		vc-fmtp_cmph[ac->fmtp_cmph]
+		vc-encupdh[vc->encupdh]
+		subgraph vc-ench[vc->ench]
+			mbuf[(mbuf)]
+		end
+		vc-decupdh[vc->decupdh]
+		vc-dech[vc->dech]
+		vc-fmtp_ench[vc->fmtp_ench]
+		vc-fmtp_cmph[vc->fmtp_cmph]
+		vc-packetizeh[vc->packetizeh]
 	end
 	subgraph video_filter
 		direction LR
@@ -158,10 +169,26 @@ flowchart LR
 		direction LR
 		vs-alloch[vs->alloch]
 		vs-updateh[vs->updateh]
+		vidframe[(vidframe)]
 	end
-
-	video_source --> vidsrc_packet_handler --> encode_rtp_send --> video_filter --> video_codec
-	vc-encupdh --> packet_handler
+	subgraph vidsrc_st
+		vidsrc-frameh[vidsrc->frameh]
+	end
+	subgraph xxx_thread
+		read_thread
+	end
+	subgraph list_append
+		vtx-sendq[(vtx->sendq)]
+	end
+	subgraph stream_send
+		tx-mb[(tx->mb)]
+	end
+	vs-alloch .-> xxx_thread --> vidsrc-frameh --> vidsrc_frame_handler
+    vidsrc_frame_handler --> encode_rtp_send
+		encode_rtp_send --> |1|vc-packetizeh
+		encode_rtp_send --> |2|vf-ench --> vc-ench --> packet_handler --> list_append
+	
+	vtx-sendq ..-> vidqueue_poll --> stream_send
 ```
 ## 3.2. video_codec
 
@@ -525,6 +552,7 @@ struct vidsrc {
 	vidsrc_alloc_h   *alloch;
 	vidsrc_update_h  *updateh;
 };
+
 ```
 
 #### B. vidsrc.c
@@ -586,12 +614,12 @@ int video_set_source(struct video *v, const char *name, const char *dev)
 
 # 4. audio
 
-## 4.1. decode (baresip -> output)
+## 4.1. decode and encode
+
+### 4.1.1. decode (baresip -> output)
 
 ```mermaid
 flowchart LR
-	aurx_stream_decode --> audio_codec --> audio_filter --> audio_play
-	
 	subgraph audio_codec
 		direction LR
 		ac-decupdh[ac->decupdh]
@@ -604,8 +632,59 @@ flowchart LR
 		af-dech[af->dech]
 	end
 	subgraph audio_play
-		alloch
+		ap-alloch[ap->alloch]
 	end
+	rx-aubuf[(rx->aubuf)]
+	subgraph aubuf_read
+		af-sampv[(af->sampv)]
+	end
+	rx-aubuf[(rx->aubuf)] .-> af-sampv
+	stream_recv_handler --> aurx_stream_decode
+		aurx_stream_decode --> |1|ac-dech
+		aurx_stream_decode --> |2|af-dech
+		aurx_stream_decode --> |3|aubuf_write --> rx-aubuf
+	audio_start --> start_player --> auplay_alloc --> ap-alloch .-> write_thread --> auplay_write_handler --> aubuf_read
+```
+
+### 4.1.2. encode ( source --> baresip)
+
+```mermaid
+flowchart LR
+	subgraph video_codec
+		direction LR
+		vc-encupdh[ac->encupdh]
+		vc-ench[ac->ench]
+		vc-decupdh[ac->decupdh]
+		vc-dech[ac->dech]
+		vc-fmtp_ench[ac->fmtp_ench]
+		vc-fmtp_cmph[ac->fmtp_cmph]
+	end
+	subgraph audio_filter
+		direction LR
+		af-encupdh[af->encupdh]
+		af-ench[af->ench]
+		af-decupdh[af->decupdh]
+		af-dech[af->dech]
+	end
+	subgraph audio_source
+		direction LR
+		as-alloch[as->alloch]
+	end
+	subgraph xxx_thread[play_thread/read_thread]
+		af-sampv[(af->sampv)]
+	end
+	subgraph stream_send
+		tx-mb[(tx->mb)]
+	end
+	ausrc_alloc --> as-alloch .-> xxx_thread
+
+	xxx_thread --> ausrc_read_handler --> poll_aubuf_tx 
+	poll_aubuf_tx --> |1|af-ench
+	poll_aubuf_tx --> |2|encode_rtp_send
+	encode_rtp_send -->|2-1|vc-ench
+		vc-ench .-> tx-mb
+	encode_rtp_send -->|2-2|stream_send --> rtp_send
+
 ```
 
 ## 4.2. audio_codec
@@ -943,16 +1022,24 @@ int audio_set_player(struct audio *a, const char *mod, const char *device)
 
 ```mermaid
 flowchart LR
-	subgraph video_source[video_source]
-		vidsrc[vidsrc.c]
+	subgraph audio_source[audio_source]
+		ausrc[ausrc.c]
 
-		avcapture[avcapture.m] --> vidsrc
-		avformat[avformat.c] --> vidsrc
-		dshow[dshow.cpp] --> vidsrc
-		fakevideo[fakevideo.c] --> vidsrc
-		v4l2[v4l2.c] --> vidsrc
-		vidbridge[vidbridge.c] --> vidsrc
-		x11grab[x11grab.c] --> vidsrc
+		alsa[alsa.c] --> ausrc
+		aubridge[aubridge.c] --> ausrc
+		audiounit[audiounit.c] --> ausrc
+		aufile[aufile.c] --> ausrc
+		ausine[ausine.c] --> ausrc
+		avformat[avformat.c] --> ausrc
+		coreaudio[coreaudio.c] --> ausrc
+		gst[gst.c] --> ausrc
+		i2s[i2s.c] --> ausrc
+		jack[jack.c] --> ausrc
+		opensles[opensles.c] --> ausrc
+		portaudio[portaudio.c] --> ausrc
+		pulse[pulse.c] --> ausrc
+		sndio[sndio.c] --> ausrc
+		winwave[winwave.c] --> ausrc
 
 	end
 ```
