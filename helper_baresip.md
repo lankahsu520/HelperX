@@ -186,7 +186,8 @@ flowchart LR
 	vs-alloch .-> xxx_thread --> vidsrc-frameh --> vidsrc_frame_handler
     vidsrc_frame_handler --> encode_rtp_send
 		encode_rtp_send --> |1|vc-packetizeh
-		encode_rtp_send --> |2|vf-ench --> vc-ench --> packet_handler --> list_append
+		encode_rtp_send --> |2|vf-ench
+		encode_rtp_send --> |3|vc-ench --> packet_handler --> list_append
 	
 	vtx-sendq ..-> vidqueue_poll --> stream_send
 ```
