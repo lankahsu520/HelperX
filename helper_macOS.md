@@ -17,6 +17,10 @@
 [watchers-image]: https://img.shields.io/github/watchers/lankahsu520/HelperX.svg
 [watchers-url]: https://github.com/lankahsu520/HelperX/watchers
 
+# 0. Overview
+
+> 以下只是把曾經處理過的事情記錄下來。
+
 # 1. Upgrade [Mac Mini](https://www.apple.com/tw/mac-mini/)
 
 ## 1.1. mac mini ssd upgrade
@@ -47,24 +51,32 @@
 
 ## 1.2. Install macOS on a new disk
 
+>這邊要特別說明，因為手邊只有一台 macOS（而這台就是這次主要升級的機器），所以要準備 usb * 2；
+>
+>要先將 Big Sur 安至 usbA；再透過 usbA 去產生 usbB (macOS 12 Monterey install)。
+>
+>最後只留下主機 Mac Mimi + usbB，開機進行安裝，手續有點複雜。
+>
+>當然你在拆機前就準備好 usbB，就會比較簡單！
+
 ```mermaid
 flowchart LR
 	subgraph Mac[Mac Mini]
 		SSD[SSD DISK without macOS]
 	end
 	win10[win10]
-	usb_BSur[(usb 64GB up - Big Sur)]
-	usb_install[(usb 32GB up - macOS 12 Monterey install)]
+	usb_BSur[(usbA / usb 64GB up - Big Sur)]
+	usb_install[(usbB / usb 32GB up - macOS 12 Monterey install)]
 ```
 
 ![macOS_12_Monterey](./images/macOS_12_Monterey.png)
 
-### 1.2.1 create a usb (64GB up) with Big Sur
+### 1.2.1 create a usbA (64GB up) with Big Sur
 
 ```mermaid
 flowchart LR
 	BigSur[Big Sur]
-	usb_BSur[(usb 64GB up - Big Sur)]
+	usb_BSur[(usbA / usb 64GB up - Big Sur)]
 	BigSur-->|create|usb_BSur
 
 ```
@@ -77,13 +89,13 @@ flowchart LR
 
 > 這邊最主要是因為 Big Sur在建立開機 USB 時，空間只設定32 GB，於下一章節需要下載可安裝的 Monterey 時會空間不足。 
 
-### 1.2.2. create a usb (32GB up) with macOS 12 Monterey install
+### 1.2.2. create a usbB (32GB up) with macOS 12 Monterey install
 
 ```mermaid
 flowchart LR
 	AppStore[App Store]
-	usb_BSur[(usb 64GB up - Big Sur)]
-	usb_install[(usb 32GB up - macOS 12 Monterey install)]
+	usb_BSur[(usbA / usb 64GB up - Big Sur)]
+	usb_install[(usbB / usb 32GB up - macOS 12 Monterey install)]
 	AppStore-->|macOS 12 Monterey|usb_BSur-->|create|usb_install
 
 ```
@@ -161,7 +173,7 @@ $ chsh -s /bin/zsh
 $ cat /etc/shells
 ```
 
-## 3.3. .bash_profile
+## 3.4. .bash_profile
 
 ```bash
 $ vi .bash_profile
@@ -188,11 +200,11 @@ export TERM=xterm-color
 
 ```
 
+## ~~3.5. Launch Binary with command line arguments~~
 
+#### ~~A. Opera~~
 
-## 3.4. Launch Binary with command line arguments
-
-#### A. Opera
+> ~~幾次系統更新後，已經不支援以下方式~~
 
 ```bash
 $ mv /Applications/Opera.app/Contents/MacOS/Opera /Applications/Opera.app/Contents/MacOS/Operabin
@@ -209,9 +221,15 @@ $ chmod 777 /Applications/Opera.app/Contents/MacOS/Opera
 
 # 4. Package Manager
 
-## 4.1. [Fink](https://www.finkproject.org/download/index.php?phpLang=en)（Prebuild binary code）
+> 這邊常用三組安裝系統
 
-## 4.2. [Homebrew](https://brew.sh/index_nl) (重編且引用系統libs，/usr/local)
+## 4.1. [Fink](https://www.finkproject.org/download/index.php?phpLang=en)
+
+> Prebuild binary code
+
+## 4.2. [Homebrew](https://brew.sh/index_nl)
+
+> 重編且引用系統libs，/usr/local
 
 #### A. Installeer Homebrew
 
@@ -221,13 +239,17 @@ $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/
 
 #### B. [Homebrew Formulae](https://formulae.brew.sh/)
 
-## 4.3. [MacPorts](https://www.macports.org/install.php) (重編且引用私有libs，/opt/local)
+## 4.3. [MacPorts](https://www.macports.org/install.php)
+
+> 重編且引用私有libs，/opt/local
 
 #### A. [Install Xcode](https://guide.macports.org/#installing.xcode)
 
 #### B. [Install and upgrade open source software on macOS.](https://ports.macports.org)
 
 # 5. Packages
+
+> 這邊只是 port 來進行安裝
 
 ```bash
 
@@ -247,8 +269,6 @@ sudo port install youtube-dl
 ```
 
 
-
-
 # Appendix
 
 # I. Study
@@ -264,9 +284,8 @@ sudo port install youtube-dl
 
 # Author
 
-Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+> Created and designed by [Lanka Hsu](lankahsu@gmail.com).
 
 # License
 
-[HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
-
+> [HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
