@@ -114,6 +114,8 @@
 >
 >理想很豐滿，現實很骨感，AI 或許是一個途徑，也或許是個屁；人生短暫，將來的事，誰也說不準，在菩提樹下悟道的釋迦牟尼，不知有沒有夢“道”。
 
+>人類文明升級的關鍵真的只有科技嗎？還是有別的道路可走？
+
 # 4. IoT vs. AI
 
 > 今年2023年，目前市面上號稱 AI 的東西，其實在10 年前，甚至30年前就已經呈現在電影上，然後慢慢的在生活中應用著。所以個人並不會像部分人吹捧後，進行包裝成 AI 的產物。
@@ -176,9 +178,9 @@ flowchart LR
 
 # Author
 
-Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+> Created and designed by [Lanka Hsu](lankahsu@gmail.com).
 
 # License
 
-[HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
+> [HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
 
