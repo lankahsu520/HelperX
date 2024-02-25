@@ -55,7 +55,7 @@
 >
 >要先將 Big Sur 安至 usbA；再透過 usbA 去產生 usbB (macOS 12 Monterey install)。
 >
->最後只留下主機 Mac Mimi + usbB，開機進行安裝，手續有點複雜。
+>最後只留下主機 Mac Mini + usbB，開機進行安裝，手續有點複雜。
 >
 >當然你在拆機前就準備好 usbB，就會比較簡單！
 
