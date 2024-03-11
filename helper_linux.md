@@ -425,6 +425,16 @@ kill -USR1 123
 kill -USR2 123
 ```
 
+#### renice - alter priority of running processes
+
+```bash
+# ID1234, to set priority as 19
+renice 19 1234
+
+# To increase the priority of Lanka's tasks by +1.
+renice +1 -u lanka
+```
+
 #### killall - kill processes by name
 
 ```bash
@@ -443,8 +453,6 @@ sudo shutdown -P 20:00
 sudo shutdown -c
 
 ```
-
-
 
 ## 2.1. [Linux crontab 命令](https://www.runoob.com/linux/linux-comm-crontab.html)
 
@@ -598,6 +606,10 @@ ps -aux | grep helloworld | grep -v grep
 ```bash
 sed -i "s|<user>.*|<user>$WHO</user>|g" $CFG_FILE
 
+# remove line:94
+sed -i '94d' $CFG_FILE
+# add one line "\n" after line:94
+sed -i '94a\\n'
 ```
 
 #### tr - translate or delete characters
@@ -1318,7 +1330,7 @@ $ htop
 #### lshw - list hardware
 
 ```bash
-$ sudo lshw -c cpu
+$ sudo lshw -c cpuster
   *-cpu
        product: Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz
        vendor: Intel Corp.
