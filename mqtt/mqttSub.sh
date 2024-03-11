@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# mosquitto_sub -h 127.0.0.1 -p 1883 -u apple -P apple520     -t 'apple/+/080027A1F836/+/+/+/#'
 RUN_SH=`basename $0`
 HINT="$0 topic"
 PWD=`pwd`
@@ -35,9 +36,29 @@ MQTT_TOPIC="$MQTT_TOPIC_PREFIX/$MQTT_TOPIC_WANT"
 
 MQTT_ARG=""
 
+now_fn()
+{
+	NOW_t=`date +"%Y%m%d%H%M%S"`
+	return $NOW_t
+}
+
+datetime_fn()
+{
+	PROMPT=$1
+
+	if [ "${PROMPT}" = "" ]; then
+		echo
+	else
+		now_fn
+		DO_COMMAND_NOW="echo \"$NOW_t ${RUN_SH}|${PROMPT}\" $TEE_ARG"; sh -c "$DO_COMMAND_NOW"
+	fi
+
+	return 0
+}
+
 die_fn()
 {
-	echo $@
+	datetime_fn "$@"; datetime_fn ""
 	exit 1
 }
 
@@ -73,7 +94,7 @@ start_fn()
 	DO_COMMAND_EXE="$DAEMON"
 	DO_COMMAND="$DO_COMMAND_EXE $MQTT_ARG"
 
-	echo "[$DO_COMMAND]"
+	datetime_fn "${FUNCNAME[0]}:${LINENO}- [$DO_COMMAND]"
 	sh -c "$DO_COMMAND"
 
 	return 0
@@ -81,7 +102,7 @@ start_fn()
 
 showusage_fn()
 {
-	die_fn "$HINT"
+	printf "$HINT"; datetime_fn ""; exit 1
 
 	return 0
 }

@@ -1,4 +1,4 @@
-﻿# MQTT
+# MQTT
 [![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
 [![GitHub license][license-image]][license-url]
 [![GitHub stars][stars-image]][stars-url]
@@ -29,7 +29,6 @@ sudo apt-get install mosquitto
 sudo apt-get install mosquitto-clients
 
 mosquitto -v
-
 ```
 
 ## 1.2. Run
@@ -183,31 +182,37 @@ a/b/c/#
 +/b/c/#
 ```
 
-#### methodid/macid/uuid/nodeid/epid/issueid
-
-```bash
-methodid - 1:event, 2:get, 3: response
-macid - mac address
-uuid - maybe a usb uuid, a group uuid or special function uuid 
-```
+> methodid/macid/uuid/nodeid/epid/issueid
+>
+> methodid - 1:event, 2:get, 3: response
+> macid - mac address
+> uuid - maybe a usb uuid, a group uuid or special function uuid
 
 
 ## 2.2. Subscriber
 
-#### mqttSub.sh
+#### A. mqttSub.sh
 
 ```bash
-./mqttSub.sh '+/080027A1F836/+/+/+/#'
+$ ./mqttSub.sh '+/080027A1F836/+/+/+/#'
+20240311160029 mqttSub.sh|start_fn:97- [mosquitto_sub -h 127.0.0.1 -p 1883 -u apple -P apple520     -t 'apple/+/080027A1F836/+/+/+/#' ]
 
 ```
 ## 2.3. Publisher
 
-#### mqttPub.sh
+#### A. mqttPub.sh
+
+##### A.1. event
 
 ```bash
-./mqttPub.sh "1/080027A1F836/CCC3F3BB/2/0/0001000C" '{"name":"Motion Sensor","val":"idle"}'
-./mqttPub.sh "1/080027A1F836/CCC3F3BB/2/0/0001000C" ''{"name":"Motion Sensor","val":"idle"}'
+$ ./mqttPub.sh "1/080027A1F836/CCC3F3BB/2/0/0001000C" '{"name":"Motion Sensor","val":"idle"}'
+20240311160125 mqttPub.sh|start_fn:98- [mosquitto_pub -h 127.0.0.1 -p 1883 -u apple -P apple520     -t 'apple/1/080027A1F836/CCC3F3BB/2/0/0001000C' -m '{name:Motion Sensor,val:idle}']
 
+$ ./mqttPub.sh "1/080027A1F836/CCC3F3BB/2/0/0001000C" '{"name":"Motion Sensor","val":"idle"}'
+20240311160146 mqttPub.sh|start_fn:98- [mosquitto_pub -h 127.0.0.1 -p 1883 -u apple -P apple520     -t 'apple/1/080027A1F836/CCC3F3BB/2/0/0001000C' -m '{name:Motion Sensor,val:idle}']
+```
+
+```bash
 #** adding ** 
 ./mqttPub.sh "1/080027A1F836/FDFD818A/1/0/00000002" '{}'
 #** removing ** 
@@ -219,14 +224,24 @@ uuid - maybe a usb uuid, a group uuid or special function uuid
 #** switch ** 
 ./mqttPub.sh "1/080027A1F836/FDFD818A/2/0/00092501" '{"tgt_val":255}'
 ./mqttPub.sh "1/080027A1F836/FDFD818A/2/0/00092501" '{"toggle":1}'
-
 #** dimmer ** 
 ./mqttPub.sh "1/080027A1F836/FDFD818A/3/0/00092601" '{"dur":5,"tgt_val":0}'
 ./mqttPub.sh "1/080027A1F836/FDFD818A/3/0/00092601" '{"toggle":1}'
 
+```
+##### A.2. get
+
+```bash
+#** get ** 
 ./mqttPub.sh "2/080027A1F836/FDFD818A" '{}'
+```
+
+##### A.3. response
+
+```bash
 
 ```
+
 # 3. Cert
 
 ```bash
@@ -302,9 +317,9 @@ openssl x509 -noout -modulus -in mqtt.ca | openssl md5
 
 # Author
 
-Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+> Created and designed by [Lanka Hsu](lankahsu@gmail.com).
 
 # License
 
-[HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
+> [HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
 
