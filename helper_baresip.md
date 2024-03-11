@@ -71,7 +71,7 @@ flowchart LR
 	rtp_handler --o handle_rtp --> |rtph|stream_recv_handler
 		stream_recv_handler --> video_stream_decode
 		stream_recv_handler --> aurx_stream_decode
-	rtp_handler --> stream_decode -->handle_rtp
+	rtp_handler --> |jbtype == JBUF_FIXED|stream_decode -->handle_rtp
 	audio_decode --o stream_decode
 ```
 
