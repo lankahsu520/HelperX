@@ -21,8 +21,6 @@
 
 > D-Bus is an [inter-process communication](https://en.wikipedia.org/wiki/Inter-process_communication) (IPC) mechanism.
 
-
-
 # 2. Configuration
 
 ```bash
@@ -41,8 +39,6 @@ sudo cp dbusX.conf /etc/dbus-1/system.d
 
 sudo reboot
 ```
-
-
 
 # 3. System
 
@@ -754,8 +750,6 @@ $ ./dbusXmethod.sh
 
 ```
 
-
-
 # 4. dbusx_456 <--> bluezx_123
 
 ```mermaid
@@ -826,14 +820,27 @@ export BLUEZX_COMMAND="advertise.name&on"
 
 ```
 
-
-
 # Appendix
 
 # I. Study
 ## I.1. [D-Bus](https://en.wikipedia.org/wiki/D-Bus)
 
 # II. Debug
+
+## II.1. The maximum number of active connections for UID 1000 has been reached
+
+```bash
+$ ll /etc/dbus-1/system.d
+# add the below lines
+$ sudo vi dbusX.conf
+<busconfig>
+  ...
+
+  <limit name="max_completed_connections">100000</limit>
+  <limit name="max_incomplete_connections">10000</limit>
+  <limit name="max_connections_per_user">100000</limit>
+</busconfig>
+```
 
 # III. Glossary
 
@@ -899,9 +906,9 @@ $ dbus-daemon --config-file=./system.conf
 
 # Author
 
-Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+> Created and designed by [Lanka Hsu](lankahsu@gmail.com).
 
 # License
 
-[HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
+> [HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
 
