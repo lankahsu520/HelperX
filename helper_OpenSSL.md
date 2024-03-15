@@ -22,11 +22,11 @@
 
 > OpenSSL is a robust, commercial-grade, full-featured Open Source Toolkit for the TLS (formerly SSL), DTLS and QUIC (currently client side only) protocols.
 
-# 2. Cert
+# 2. Create certificates
 
 ## 2.1. [Self-signed certificate](https://en.wikipedia.org/wiki/Self-signed_certificate)
 
-> 自簽署（Self-signed）的 SSL 憑證，未經過第三方機構的核可，提供“加密”連線的交果。
+> 自簽署（Self-signed）的 SSL 憑證，未經過第三方機構的核可，提供“加密”連線的效果。
 
 ### 2.1.1. Generate a keypair using OpenSSL
 
@@ -116,13 +116,26 @@ $ openssl verify -CAfile ./ca/mqtt.ca ./srv/mqtt_srv.crt ./client/mqtt_beex.crt
 ./client/mqtt_beex.crt: OK
 ```
 
-#### B. Show Certs
+
+# 3. Establishing a Secure Connection
+
+> HOSTNAME=192.168.0.9
+> PORT=1883
 
 ```bash
-HOSTNAME=192.168.0.9
-PORT=1883
-openssl s_client -connect $HOSTNAME:$PORT -showcerts
-openssl s_client -connect $HOSTNAME:$PORT -tls1
+$ HOSTNAME=192.168.0.9
+$ PORT=1883
+$ openssl s_client -connect $HOSTNAME:$PORT \
+  -showcerts
+```
+
+```bash
+$ openssl s_client -connect $HOSTNAME:$PORT \
+  -CAfile /work/IoT/mqtt/common/mqtt.ca \
+  -cert /work/IoT/mqtt/common/mqtt_beex.crt \
+  -key /work/IoT/mqtt/common/mqtt_beex.key \
+  -showcerts \
+  -tls1_2
 ```
 
 # Appendix
@@ -162,7 +175,6 @@ error mqtt_beex.crt: verification failed
 ## IV.1. [openssl](https://manpages.ubuntu.com/manpages/focal/en/man1/openssl.1ssl.html) Usage
 
 ```bash
-$ openssl --help
 $ openssl help
 Standard commands
 asn1parse         ca                ciphers           cms
