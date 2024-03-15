@@ -1,4 +1,4 @@
-# MQTT
+# MQTTandMosquitto
 [![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
 [![GitHub license][license-image]][license-url]
 [![GitHub stars][stars-image]][stars-url]
@@ -17,9 +17,47 @@
 [watchers-image]: https://img.shields.io/github/watchers/lankahsu520/HelperX.svg
 [watchers-url]: https://github.com/lankahsu520/HelperX/watchers
 
-# 1. mosquitto
+# 1. Overview
 
-## 1.1. Install
+> [[維基百科] MQTT](https://zh.wikipedia.org/zh-tw/MQTT)
+>
+> **訊息佇列遙測傳輸**（英語：Message Queuing Telemetry Transport，**MQTT**[[1\]](https://zh.wikipedia.org/zh-tw/MQTT#cite_note-1)）是[ISO 標準](https://zh.wikipedia.org/wiki/国际标准化组织)（ISO/IEC PRF 20922）[[2\]](https://zh.wikipedia.org/zh-tw/MQTT#cite_note-ISO-2)下基於[發布（Publish）/訂閱（Subscribe）](https://zh.wikipedia.org/wiki/发布/订阅)範式的訊息協定，可視為「資料傳遞的橋梁」[[3\]](https://zh.wikipedia.org/zh-tw/MQTT#cite_note-#1-3)。它工作在[TCP/IP協定族](https://zh.wikipedia.org/wiki/TCP/IP协议族)上，是為硬體效能低下的遠端裝置以及網路狀況糟糕的情況下而設計的[發布/訂閱](https://zh.wikipedia.org/wiki/发布/订阅)型訊息協定。為此，它需要一個[訊息中介軟體](https://zh.wikipedia.org/w/index.php?title=消息中间件&action=edit&redlink=1)（如[HTTP](https://zh.wikipedia.org/wiki/超文本传输协议)），以解決當前繁重的資料傳輸協定。 [[3\]](https://zh.wikipedia.org/zh-tw/MQTT#cite_note-#1-3)
+
+## 1.1. Network Topology
+
+```mermaid
+flowchart LR
+	subgraph Subscribe
+		mqttSubA[mqttSubA]
+		mqttSubB[mqttSubB]
+	end
+	subgraph Subscribe
+		mqttPubA[mqttPubA]
+		mqttPubB[mqttPubB]
+	end
+	subgraph Server
+		Broker[Broker]
+	end
+	mqttSubA <-.-> |lanka520/#| Broker
+	mqttSubB <-.-> |lanka520/+/+/+/#| Broker
+	mqttPubA --> |lanka520/1/2/3| Broker
+	mqttPubB --> |lanka520/4/5| Broker
+```
+## 1.2. QoS
+
+>[[維基百科] MQTT](https://zh.wikipedia.org/zh-tw/MQTT)
+>
+>- QoS 0：最多一次傳送，即「fire and forget」（只負責傳送，傳送過後就不管資料的傳送情況）。
+>
+>- QoS 1：至少一次傳送（握手2次）；PUBLISH packet與PUBACK packet（確認資料交付）。
+>- QoS 2：正好一次傳送（握手4次）；PUBLISH 、PUBREC封包用於確認收到。如果傳送方沒有收到PUBREC封包，就用DUP標誌重發訊息；如果收到PUBREC封包，就刪除最初的PUBLISH封包，儲存並回覆PUBREL封包。接收方收到PUBREL封包，就回覆PUBCOMP封包並刪除所有相關狀態（保證資料交付成功）。
+
+# 2. Eclipse Mosquitto
+
+> Mosquitto is an open source implementation of a server for version 5.0, 3.1.1, and 3.1 of the MQTT protocol. It also includes a C and C++ client library, and the `mosquitto_pub` and `mosquitto_sub` utilities for publishing and subscribing.
+
+## 2.1. Install
+
 ```bash
 sudo add-apt-repository ppa:mosquitto-dev/mosquitto-ppa
 
@@ -31,9 +69,9 @@ sudo apt-get install mosquitto-clients
 mosquitto -v
 ```
 
-## 1.2. Run
+## 2.2. Run
 
-### 1.2.1. Service
+### 2.2.1. Service
 
 ```bash
 sudo systemctl status mosquitto.service
@@ -46,7 +84,7 @@ sudo systemctl restart mosquitto.service
 journalctl -xe
 ```
 
-### 1.2.2. Daemon
+### 2.2.2. Daemon
 
 ```bash
 /usr/sbin/mosquitto -c /etc/mosquitto/mosquitto.conf
@@ -54,9 +92,9 @@ journalctl -xe
 sudo cat /var/log/mosquitto/mosquitto.log
 ```
 
-## 1.3. Configuration
+## 2.3. Configuration
 
-### 1.3.1. /etc/mosquitto/mosquitto.conf
+### 2.3.1. /etc/mosquitto/mosquitto.conf
 ```bash
 $ ps -aux | grep mosquitto
 mosquit+    1077  0.0  0.0  28108  5644 ?        Ssl  14:06   0:04 /usr/sbin/mosquitto -c /etc/mosquitto/mosquitto.conf
@@ -90,10 +128,10 @@ drwxr-xr-x 5 root root 4096  七  14 22:46 ../
 
 ```
 
-### 1.3.2. /etc/mosquitto/passwd
+### 2.3.2. /etc/mosquitto/passwd
 
 ```bash
-$ sudo mosquitto_passwd -c /etc/mosquitto/passwd lanka 
+$ sudo mosquitto_passwd -c /etc/mosquitto/passwd lanka
 
 $ sudo mosquitto_passwd -b /etc/mosquitto/passwd apple apple520
 
@@ -101,7 +139,7 @@ $ cat /etc/mosquitto/passwd
 
 ```
 
-### 1.3.3. /etc/mosquitto/acl
+### 2.3.3. /etc/mosquitto/acl
 
 ```bash
 $ sudo vi /etc/mosquitto/acl
@@ -118,7 +156,7 @@ topic apple/#
 
 ```
 
-### 1.3.4. /etc/mosquitto/conf.d/default.conf
+### 2.3.4. /etc/mosquitto/conf.d/default.conf
 
 ```bash
 $ sudo vi /etc/mosquitto/conf.d/default.conf
@@ -141,6 +179,10 @@ protocol mqtt
 #certfile /etc/mosquitto/certs/mqtt_srv.crt
 
 require_certificate false
+#tls_version tlsv1
+#tls_version tlsv1.1
+#tls_version tlsv1.2
+#tls_version tlsv1.3
 
 # WS
 listener 8083
@@ -153,7 +195,7 @@ protocol websockets
 
 ```
 
-# 2. Test
+# 3. Test
 ```mermaid
 flowchart LR
 	mqttSubA[mqttSubA]
@@ -166,7 +208,7 @@ flowchart LR
 	mqttPub --> |+/080027A1F836/+/+/+/#| Broker
 ```
 
-## 2.1. Topic
+## 3.1. Topic
 
 ```
 a/b/c/d
@@ -189,20 +231,54 @@ a/b/c/#
 > uuid - maybe a usb uuid, a group uuid or special function uuid
 
 
-## 2.2. Subscriber
+## 3.2. Subscriber
 
-#### A. mqttSub.sh
+#### A. mosquitto_sub
+
+```bash
+# over SSL
+$ mosquitto_sub -h 127.0.0.1 -p 1883 \
+	-u apple -P apple520 \
+	-t 'apple/+/080027A1F836/+/+/+/#' \
+	--cafile /work/IoT/mqtt/common/mqtt.ca \
+	--cert /work/IoT/mqtt/common/mqtt_beex.crt \
+	--key /work/IoT/mqtt/common/mqtt_beex.key \
+	-d -v
+```
+
+#### B. mqttSub.sh
+
+> MQTT_HOST="127.0.0.1"
+>
+> MQTT_PORT="1883"
+>
+> MQTT_USER="apple"
+>
+> MQTT_PASS="apple520"
 
 ```bash
 $ ./mqttSub.sh '+/080027A1F836/+/+/+/#'
 20240311160029 mqttSub.sh|start_fn:97- [mosquitto_sub -h 127.0.0.1 -p 1883 -u apple -P apple520     -t 'apple/+/080027A1F836/+/+/+/#' ]
-
 ```
-## 2.3. Publisher
+## 3.3. Publisher
 
-#### A. mqttPub.sh
+#### A. mosquitto_pub
 
-##### A.1. event
+```bash
+$ mosquitto_pub -h 127.0.0.1 -p 1883 -u apple -P apple520     -t 'apple/1/080027A1F836/CCC3F3BB/2/0/0001000C' -m '{name:Motion Sensor,val:idle}'
+```
+
+#### B. mqttPub.sh
+
+>MQTT_HOST="127.0.0.1"
+>
+>MQTT_PORT="1883"
+>
+>MQTT_USER="apple"
+>
+>MQTT_PASS="apple520"
+
+##### B.1. event
 
 ```bash
 $ ./mqttPub.sh "1/080027A1F836/CCC3F3BB/2/0/0001000C" '{"name":"Motion Sensor","val":"idle"}'
@@ -213,41 +289,32 @@ $ ./mqttPub.sh "1/080027A1F836/CCC3F3BB/2/0/0001000C" '{"name":"Motion Sensor","
 ```
 
 ```bash
-#** adding ** 
+#** adding **
 ./mqttPub.sh "1/080027A1F836/FDFD818A/1/0/00000002" '{}'
-#** removing ** 
+#** removing **
 ./mqttPub.sh "1/080027A1F836/FDFD818A/1/0/00000003" '{}'
-#** aborting ** 
+#** aborting **
 ./mqttPub.sh "1/080027A1F836/FDFD818A/1/0/00000004" '{}'
-#** reseting ** 
+#** reseting **
 ./mqttPub.sh "1/080027A1F836/FDFD818A/1/0/00000008" '{}'
-#** switch ** 
+#** switch **
 ./mqttPub.sh "1/080027A1F836/FDFD818A/2/0/00092501" '{"tgt_val":255}'
 ./mqttPub.sh "1/080027A1F836/FDFD818A/2/0/00092501" '{"toggle":1}'
-#** dimmer ** 
+#** dimmer **
 ./mqttPub.sh "1/080027A1F836/FDFD818A/3/0/00092601" '{"dur":5,"tgt_val":0}'
 ./mqttPub.sh "1/080027A1F836/FDFD818A/3/0/00092601" '{"toggle":1}'
 
 ```
-##### A.2. get
+##### B.2. get
 
 ```bash
-#** get ** 
+#** get **
 ./mqttPub.sh "2/080027A1F836/FDFD818A" '{}'
 ```
 
-##### A.3. response
+##### B.3. response
 
 ```bash
-
-```
-
-# 3. Cert
-
-```bash
-openssl x509 -noout -modulus -in mqtt_beex.crt | openssl md5
-openssl rsa  -noout -modulus -in mqtt_beex.key | openssl md5
-openssl x509 -noout -modulus -in mqtt.ca | openssl md5
 
 ```
 
