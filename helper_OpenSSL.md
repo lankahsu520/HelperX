@@ -146,6 +146,8 @@ $ openssl s_client -connect $HOSTNAME:$PORT \
 
 ## I.2. [建立/購買 SSL 憑證](https://docs.gandi.net/zh-hant/ssl/create/index.html)
 
+## I.3. [如何使用 OpenSSL 簽發中介 CA](https://blog.davy.tw/posts/use-openssl-to-sign-intermediate-ca/)
+
 # II. Debug
 
 ## II.1. error 18 at 0 depth lookup: self signed certificate
