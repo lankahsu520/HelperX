@@ -137,7 +137,7 @@ openssl s_client -connect $HOSTNAME:$PORT -tls1
 
 ## II.1. error 18 at 0 depth lookup: self signed certificate
 
->當 OpenSSL 從 1.1.1g 升級至 1.1.1 時，ca 和 client、server 的 commonName 必須要有差異。
+>當 OpenSSL 從 1.1.1g 升級至 1.1.1h 時，ca 和 client、server 的 commonName 必須要有差異。
 
 ```bash
 $ cd certSelf-signed/install
