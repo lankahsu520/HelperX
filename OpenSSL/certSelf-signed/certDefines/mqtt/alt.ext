@@ -1,0 +1,11 @@
+#authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectAltName=@mqtt_alt_names
+#subjectKeyIdentifier=hash
+
+[mqtt_alt_names]
+DNS.1=localhost
+DNS.2=*.lankahsu520.tw
+IP.1=127.0.0.1
+IP.2=192.168.0.9
