@@ -40,6 +40,8 @@ This is DB Browser for SQLite version 3.11.2.
 ```
 
 # 2. sqlite3
+> Test DB: [Lanka.db](https://github.com/lankahsu520/HelperX/blob/master/SQLite/Lanka.db)
+>
 
 ```bash
 $ sqlite3 Lanka.db
@@ -328,9 +330,9 @@ Possible command line arguments:
 
 # Author
 
-Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+> Created and designed by [Lanka Hsu](lankahsu@gmail.com).
 
 # License
 
-[HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
+> [HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
 
