@@ -44,7 +44,7 @@ eval_fn()
 
 die_fn()
 {
-	datetime_fn "$@"; datetime_fn ""
+	printf "$HINT"; datetime_fn ""; exit 1
 	exit 1
 }
 

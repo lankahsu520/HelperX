@@ -58,7 +58,7 @@ datetime_fn()
 
 die_fn()
 {
-	datetime_fn "$@"; datetime_fn ""
+	printf "$HINT"; datetime_fn ""; exit 1
 	exit 1
 }
 
@@ -92,17 +92,14 @@ start_fn()
 
 	#** COMMAND **
 	DO_COMMAND_EXE="$DAEMON"
-	DO_COMMAND="$DO_COMMAND_EXE $MQTT_ARG"
-
-	datetime_fn "${FUNCNAME[0]}:${LINENO}- [$DO_COMMAND]"
-	sh -c "$DO_COMMAND"
+	eval_fn "${FUNCNAME[0]}:${LINENO}" "$DO_COMMAND_EXE $MQTT_ARG"
 
 	return 0
 }
 
 showusage_fn()
 {
-	printf "$HINT"; datetime_fn ""; exit 1
+	die_fn "$HINT"
 
 	return 0
 }
