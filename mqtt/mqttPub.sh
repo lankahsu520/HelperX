@@ -67,7 +67,7 @@ eval_fn()
 
 die_fn()
 {
-	printf "$HINT"; datetime_fn ""; exit 1
+	datetime_fn "$@"; datetime_fn ""
 	exit 1
 }
 
@@ -108,7 +108,7 @@ start_fn()
 
 showusage_fn()
 {
-	die_fn "$HINT"
+	printf "$HINT"; datetime_fn ""; exit 1
 
 	return 0
 }

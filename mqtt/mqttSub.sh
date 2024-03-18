@@ -56,9 +56,16 @@ datetime_fn()
 	return 0
 }
 
+eval_fn()
+{
+	DO_COMMAND="$2"
+	datetime_fn "$1- [$DO_COMMAND]"
+	eval ${DO_COMMAND}
+}
+
 die_fn()
 {
-	printf "$HINT"; datetime_fn ""; exit 1
+	datetime_fn "$@"; datetime_fn ""
 	exit 1
 }
 
@@ -99,7 +106,7 @@ start_fn()
 
 showusage_fn()
 {
-	die_fn "$HINT"
+	printf "$HINT"; datetime_fn ""; exit 1
 
 	return 0
 }
