@@ -144,6 +144,7 @@ $ git branch -m new-branch new-branch1
 ```
 
 #### git checkout
+
 ```bash
 # List all branch
 $ git branch -a
@@ -163,6 +164,15 @@ $ git tag
 $ git checkout 1.0.0
 # switch back
 $ git switch -
+```
+
+>很重要！很重要！很重要！當要 checkout 或是切換至其它 branch 時，記得 local files 是否有更動且已經將其備份或保留。
+>
+><font color="red">如果需要查看 branch1 和 branch2 的程式碼，建議在硬碟存放兩份。</font>
+
+```bash
+$ git clone -b branch1 http://trac-vbx/gitroot/gitroot.git gitroot-branch1
+$ git clone -b branch2 http://trac-vbx/gitroot/gitroot.git gitroot-branch2
 ```
 
 #### git switch
@@ -1397,9 +1407,9 @@ function git-checkoutb()
 
 # Author
 
-Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+> Created and designed by [Lanka Hsu](lankahsu@gmail.com).
 
 # License
 
-[HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
+> [HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
 
