@@ -1916,6 +1916,11 @@ unset -f helloworld_fn
 ```bash
 ls | xargs cat
 
+$ cd HelperX/mqtt; ls | xargs -t -I {}  cat {}
+cat mqttPub.sh
+...
+cat mqttSub.sh
+...
 ```
 
 # 19. Editor
