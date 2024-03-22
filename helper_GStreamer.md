@@ -857,12 +857,11 @@ flowchart LR
 
 	alsasrc --> rtspsink
 	v4l2src --> rtspsink
-	
 ```
 
 ```bash
 $ cd examples
-$ ./test-launch "( alsasrc ! queue ! audioconvert ! audioresample ! opusenc ! rtpopuspay name=pay1 pt=97  v4l2src device=/dev/video0 ! video/x-raw,width=640,height=480,framerate=30/1 ! queue ! videoconvert ! x264enc ! rtph264pay name=pay0 pt=96 )"
+$ ./test-launch "( alsasrc ! queue ! audioconvert ! audioresample ! opusenc ! rtpopuspay name=pay1 pt=97  v4l2src device=/dev/video0 ! video/x-raw,width=640,height=480,framerate=30/1 ! queue ! videoconvert ! clockoverlay time-format=\"%D %H:%M:%S\" ! x264enc ! rtph264pay name=pay0 pt=96 )"
 
 $ ./test-launch "( autoaudiosrc ! queue ! audioconvert ! audioresample ! opusenc ! rtpopuspay name=pay1 pt=97  v4l2src device=/dev/video0 ! video/x-raw,width=640,height=480,framerate=30/1 ! queue ! videoconvert ! x264enc ! rtph264pay name=pay0 pt=96 )"
 ```
@@ -884,7 +883,7 @@ flowchart LR
 $ cd examples
 $ ./test-launch --gst-debug=0 "( filesrc location="/work/BeethovenFurElise.mp3" ! queue ! decodebin ! audioconvert ! audioresample ! opusenc ! rtpopuspay name=pay1 pt=97  v4l2src device=/dev/video0 ! video/x-raw,width=640,height=480,framerate=30/1 ! queue ! videoconvert ! x264enc ! rtph264pay name=pay0 pt=96 )"
 
-$ ./test-launch --gst-debug=0 "( multifilesrc location="/work/BeethovenFurElise.mp3" loop=true ! queue ! decodebin ! audioconvert ! audioresample ! opusenc ! rtpopuspay name=pay1 pt=97  v4l2src device=/dev/video0 ! video/x-raw,width=640,height=480,framerate=30/1 ! queue ! videoconvert ! x264enc ! rtph264pay name=pay0 pt=96 )"
+$ ./test-launch --gst-debug=0 "( multifilesrc location="/work/BeethovenFurElise.mp3" loop=true ! queue ! decodebin ! audioconvert ! audioresample ! opusenc ! rtpopuspay name=pay1 pt=97  v4l2src device=/dev/video0 ! video/x-raw,width=640,height=480,framerate=30/1 ! queue ! videoconvert ! clockoverlay time-format=\"%D %H:%M:%S\" ! x264enc ! rtph264pay name=pay0 pt=96 )"
 ```
 
 # Appendix
