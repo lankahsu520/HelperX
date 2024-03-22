@@ -233,6 +233,7 @@ gst-launch-1.0 v4l2src device=/dev/video0 \
 
 gst-launch-1.0 v4l2src device=/dev/video0 \
 	! videoconvert \
+	! clockoverlay time-format="%D %H:%M:%S" \
 	! autovideosink
 ```
 #### B. v4l2src (video/x-raw, not set)
@@ -277,9 +278,10 @@ flowchart LR
 gst-launch-1.0 v4l2src device=/dev/video0 \
 	! video/x-raw,width=640,height=480,framerate=30/1 \
 	! videoconvert \
+	! clockoverlay time-format="%D %H:%M:%S" \
   ! x264enc \
   ! rtph264pay \
-  ! udpsink host=127.0.0.1 port=5600
+  ! udpsink host=127.0.0.1 port=50000
 ```
 
 # 5. filesrc
@@ -307,7 +309,7 @@ gst-launch-1.0 filesrc \
 	! pulsesink
 
 gst-launch-1.0 filesrc \
-	location="./BeethovenFurElise.mp3" \
+	location="/work/BeethovenFurElise.mp3" \
 	! decodebin \
 	! audioconvert \
 	! alsasink
@@ -530,9 +532,43 @@ gst-launch-1.0 filesrc \
 	! wavenc \
 	! filesink location=0001le-fail.wav
 ```
-# 6. udpsrc
+# 6. multifilesrc
 
-## 6.1. filesrc (audio) -> udpsink  ⇢ udpsrc -> ???sink
+## 6.1. multifilesrc (mp3) -> alsasink/pulsesink/autoaudiosink
+
+```mermaid
+flowchart LR
+	multifilesrc[multifilesrc]
+	autoaudiosink[alsasink/pulsesink/autoaudiosink]
+
+	multifilesrc --> autoaudiosink
+```
+
+```bash
+gst-launch-1.0 multifilesrc \
+	location="/work/BeethovenFurElise.mp3" \
+	! decodebin \
+	! audioconvert \
+	! alsasink
+
+# loop
+gst-launch-1.0 multifilesrc \
+	location="/work/BeethovenFurElise.mp3" loop=true \
+	! decodebin \
+	! audioconvert \
+	! alsasink
+
+gst-launch-1.0 multifilesrc \
+	location="/work/BeethovenFurElise.mp3" \
+	! decodebin \
+	! audioconvert \
+	! opusenc \
+	! alsasink
+```
+
+# 7. udpsrc
+
+## 7.1. filesrc (audio) -> udpsink  ⇢ udpsrc -> ???sink
 
 ```mermaid
 flowchart LR
@@ -544,7 +580,7 @@ flowchart LR
 	filesrc --> udpsink ..-> |:51000| udpsrc --> alsasink
 ```
 - [rtpopuspay](https://gstreamer.freedesktop.org/documentation/rtp/rtpopuspay.html?gi-language=c)
-### 6.1.1. filesrc (audio) -> udpsink
+### 7.1.1. filesrc (audio) -> udpsink
 ```
 export UDP_SINK="udpsink host=127.0.0.1 port=51000"
 export UDP_SINK="udpsink host=192.168.56.1 port=51000"
@@ -584,7 +620,7 @@ gst-launch-1.0 filesrc \
 	! $UDP_SINK
 ```
 
-## 6.2. udpsrc (audio) -> ???sink
+## 7.2. udpsrc (audio) -> ???sink
 
 #### A. udpsrc (opus) -> autoaudiosink (pcm, S16LE)
 ```bash
@@ -627,7 +663,7 @@ gst-launch-1.0 udpsrc \
 	! audio/x-raw,format=S16LE,channels=2,rate=44100 \
 	! filesink location="0001le.pcm"
 ```
-## 6.3. Video/Audio -> udpsink ⇢ udpsrc -> autoaudiosink
+## 7.3. Video/Audio -> udpsink ⇢ udpsrc -> autoaudiosink
 ```mermaid
 flowchart LR
 	udpsink[udpsink]
@@ -651,7 +687,7 @@ gst-launch-1.0 -v udpsrc port=50000 \
 	! opusdec \
 	! autoaudiosink
 ```
-# 7. playbin
+# 8. playbin
 ```mermaid
 flowchart LR
 	uri[(http://relay.slayradio.org:800)]
@@ -670,7 +706,7 @@ gst-launch-1.0 -v playbin \
 	uri=file:///work/wav/0001.wav
 ```
 
-# 8. rtmpsrc with youtube-dl
+# 9. rtmpsrc with youtube-dl
 
 #### A. youtube-dl
 
@@ -691,8 +727,8 @@ gst-launch-1.0 souphttpsrc is-live=true \
 	! decodebin ! videoconvert ! autovideosink
 ```
 
-# 9. alsasrc
-## 9.1. alsasrc -> filesink
+# 10. alsasrc
+## 10.1. alsasrc -> filesink
 ```mermaid
 flowchart LR
 	alsasrc[alsasrc]
@@ -708,7 +744,60 @@ gst-launch-1.0 alsasrc \
 	! oggmux \
 	! filesink location="0001vorbis.ogg"
 ```
-# 10. rtspsink
+## 10.2. alsasrc -> autoaudiosink
+```mermaid
+flowchart LR
+	alsasrc[alsasrc]
+	autoaudiosink[autoaudiosink]
+
+	alsasrc --> autoaudiosink
+```
+```bash
+gst-launch-1.0 alsasrc \
+	! queue \
+	! audioconvert \
+	! audioresample \
+	! autoaudiosink
+```
+
+# 11. audiotestsrc
+
+## 11.1. audiotestsrc -> autovideosink
+
+```mermaid
+flowchart LR
+	audiotestsrc[audiotestsrc]
+	autoaudiosink[autoaudiosink]
+
+	audiotestsrc --> autoaudiosink
+```
+
+```bash
+$ gst-launch-1.0 audiotestsrc \
+	! audioconvert \
+	! autoaudiosink
+```
+
+# 12. autoaudiosrc
+
+## 12.1. autoaudiosrc -> autovideosink
+
+```mermaid
+flowchart LR
+	autoaudiosrc[autoaudiosrc]
+	autoaudiosink[autoaudiosink]
+
+	autoaudiosrc --> autoaudiosink
+```
+
+```bash
+$ gst-launch-1.0 autoaudiosrc \
+	! audioconvert \
+	! audioresample \
+	! autoaudiosink
+```
+
+# 13. rtspsink
 
 > [gst-rtsp-server](https://github.com/GStreamer/gst-rtsp-server)
 >
@@ -722,7 +811,7 @@ $ cd build_xxx
 $ ninja
 ```
 
-## 10.1. videotestsrc -> rtspsink
+## 13.1. videotestsrc -> rtspsink
 
 ```mermaid
 flowchart LR
@@ -744,7 +833,7 @@ $ gst-launch-1.0 rtspsrc \
 	! videoconvert ! autovideosink
 ```
 
-## 10.2. v4l2src -> rtspsink
+## 13.2. v4l2src -> rtspsink
 
 ```mermaid
 flowchart LR
@@ -757,6 +846,45 @@ flowchart LR
 ```bash
 $ cd examples
 $ ./test-launch "( v4l2src device=/dev/video0 ! video/x-raw,width=640,height=480,framerate=30/1 ! videoconvert ! x264enc ! rtph264pay name=pay0 pt=96 )"
+```
+
+## 13.3. alsasrc/autoaudiosrc and v4l2src -> rtspsink
+```mermaid
+flowchart LR
+	alsasrc[alsasrc/autoaudiosrc]
+	v4l2src[v4l2src]
+	rtspsink[rtspsink]
+
+	alsasrc --> rtspsink
+	v4l2src --> rtspsink
+	
+```
+
+```bash
+$ cd examples
+$ ./test-launch "( alsasrc ! queue ! audioconvert ! audioresample ! opusenc ! rtpopuspay name=pay1 pt=97  v4l2src device=/dev/video0 ! video/x-raw,width=640,height=480,framerate=30/1 ! queue ! videoconvert ! x264enc ! rtph264pay name=pay0 pt=96 )"
+
+$ ./test-launch "( autoaudiosrc ! queue ! audioconvert ! audioresample ! opusenc ! rtpopuspay name=pay1 pt=97  v4l2src device=/dev/video0 ! video/x-raw,width=640,height=480,framerate=30/1 ! queue ! videoconvert ! x264enc ! rtph264pay name=pay0 pt=96 )"
+```
+
+## 13.4  filesrc/multifilesrc and v4l2src -> rtspsink
+```mermaid
+flowchart LR
+	filesrc[filesrc/multifilesrc]
+	v4l2src[v4l2src]
+	rtspsink[rtspsink]
+
+	filesrc --> rtspsink
+	v4l2src --> rtspsink
+	
+```
+
+
+```bash
+$ cd examples
+$ ./test-launch --gst-debug=0 "( filesrc location="/work/BeethovenFurElise.mp3" ! queue ! decodebin ! audioconvert ! audioresample ! opusenc ! rtpopuspay name=pay1 pt=97  v4l2src device=/dev/video0 ! video/x-raw,width=640,height=480,framerate=30/1 ! queue ! videoconvert ! x264enc ! rtph264pay name=pay0 pt=96 )"
+
+$ ./test-launch --gst-debug=0 "( multifilesrc location="/work/BeethovenFurElise.mp3" loop=true ! queue ! decodebin ! audioconvert ! audioresample ! opusenc ! rtpopuspay name=pay1 pt=97  v4l2src device=/dev/video0 ! video/x-raw,width=640,height=480,framerate=30/1 ! queue ! videoconvert ! x264enc ! rtph264pay name=pay0 pt=96 )"
 ```
 
 # Appendix
