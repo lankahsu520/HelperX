@@ -263,6 +263,25 @@ gst-launch-1.0 -v v4l2src device=/dev/video0 \
 	! autovideosink
 ```
 
+## 4.1. v4l2src -> udpsink
+
+```mermaid
+flowchart LR
+	v4l2src[v4l2src]
+	udpsink[udpsink]
+
+	v4l2src --> udpsink
+```
+
+```bash
+gst-launch-1.0 v4l2src device=/dev/video0 \
+	! video/x-raw,width=640,height=480,framerate=30/1 \
+	! videoconvert \
+  ! x264enc \
+  ! rtph264pay \
+  ! udpsink host=127.0.0.1 port=5600
+```
+
 # 5. filesrc
 
 ## 5.1. filesrc (mp3) -> alsasink/pulsesink/autoaudiosink
@@ -689,6 +708,57 @@ gst-launch-1.0 alsasrc \
 	! oggmux \
 	! filesink location="0001vorbis.ogg"
 ```
+# 10. rtspsink
+
+> [gst-rtsp-server](https://github.com/GStreamer/gst-rtsp-server)
+>
+> RTSP server based on GStreamer. This module has been merged into the main GStreamer repo for further development.
+
+```bash
+$ git clone https://github.com/GStreamer/gst-rtsp-server.git
+$ mkdir build_xxx
+$ meson setup build_xxx
+$ cd build_xxx
+$ ninja
+```
+
+## 10.1. videotestsrc -> rtspsink
+
+```mermaid
+flowchart LR
+	videotestsrc[videotestsrc]
+	rtspsink[rtspsink]
+
+	videotestsrc --> rtspsink
+```
+
+```bash
+$ cd examples
+$ ./test-launch "( videotestsrc ! x264enc ! rtph264pay name=pay0 pt=96 )"
+```
+
+```bash
+$ gst-launch-1.0 rtspsrc \
+	location=rtsp://192.168.50.28:8554/test \
+	! decodebin \
+	! videoconvert ! autovideosink
+```
+
+## 10.2. v4l2src -> rtspsink
+
+```mermaid
+flowchart LR
+	v4l2src[v4l2src]
+	rtspsink[rtspsink]
+
+	v4l2src --> rtspsink
+```
+
+```bash
+$ cd examples
+$ ./test-launch "( v4l2src device=/dev/video0 ! video/x-raw,width=640,height=480,framerate=30/1 ! videoconvert ! x264enc ! rtph264pay name=pay0 pt=96 )"
+```
+
 # Appendix
 
 # I. Study
