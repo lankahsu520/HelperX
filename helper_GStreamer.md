@@ -797,7 +797,47 @@ $ gst-launch-1.0 autoaudiosrc \
 	! autoaudiosink
 ```
 
-# 13. rtspsink
+# 13. [libcamerasrc](https://libcamera.org/index.html)
+
+> https://git.libcamera.org/libcamera/libcamera.git
+
+```bash
+$ git clone https://git.libcamera.org/libcamera/libcamera.git
+$ cd libcamera
+$ mkdir build_xxx
+$ meson setup build_xxx
+$ ninja -C build_xxx
+$ ninja -C build_xxx install
+```
+
+## 13.1. libcamerasrc -> filesink
+```mermaid
+flowchart LR
+	libcamerasrc[libcamerasrc]
+	filesink[filesink]
+
+	libcamerasrc --> filesink
+```
+
+```bash
+# x264enc
+$ gst-launch-1.0 libcamerasrc \
+ ! video/x-raw,width=640,height=480,framerate=30/1 \
+ ! videoconvert \
+ ! x264enc \
+ ! queue \
+ ! filesink location=libcamerasrc-x264.h264
+
+# v4l2h264enc
+$ gst-launch-1.0 libcamerasrc \
+ ! video/x-raw,width=640,height=480,framerate=30/1 \
+ ! videoconvert \
+ ! v4l2h264enc \
+ ! queue \
+ ! filesink location=libcamerasrc-v4l2.h264
+```
+
+# 14. To rtspsink
 
 > [gst-rtsp-server](https://github.com/GStreamer/gst-rtsp-server)
 >
@@ -805,13 +845,14 @@ $ gst-launch-1.0 autoaudiosrc \
 
 ```bash
 $ git clone https://github.com/GStreamer/gst-rtsp-server.git
+$ cd gst-rtsp-server
 $ mkdir build_xxx
 $ meson setup build_xxx
-$ cd build_xxx
-$ ninja
+$ ninja -C build_xxx
+$ ninja -C build_xxx install
 ```
 
-## 13.1. videotestsrc -> rtspsink
+## 14.1. videotestsrc -> rtspsink
 
 ```mermaid
 flowchart LR
@@ -833,7 +874,7 @@ $ gst-launch-1.0 rtspsrc \
 	! videoconvert ! autovideosink
 ```
 
-## 13.2. v4l2src -> rtspsink
+## 14.2. v4l2src -> rtspsink
 
 ```mermaid
 flowchart LR
@@ -848,7 +889,7 @@ $ cd examples
 $ ./test-launch "( v4l2src device=/dev/video0 ! video/x-raw,width=640,height=480,framerate=30/1 ! videoconvert ! x264enc ! rtph264pay name=pay0 pt=96 )"
 ```
 
-## 13.3. alsasrc/autoaudiosrc and v4l2src -> rtspsink
+## 14.3. alsasrc/autoaudiosrc and v4l2src -> rtspsink
 ```mermaid
 flowchart LR
 	alsasrc[alsasrc/autoaudiosrc]
@@ -866,7 +907,7 @@ $ ./test-launch "( alsasrc ! queue ! audioconvert ! audioresample ! opusenc ! rt
 $ ./test-launch "( autoaudiosrc ! queue ! audioconvert ! audioresample ! opusenc ! rtpopuspay name=pay1 pt=97  v4l2src device=/dev/video0 ! video/x-raw,width=640,height=480,framerate=30/1 ! queue ! videoconvert ! x264enc ! rtph264pay name=pay0 pt=96 )"
 ```
 
-## 13.4  filesrc/multifilesrc and v4l2src -> rtspsink
+## 14.4  filesrc/multifilesrc and v4l2src -> rtspsink
 ```mermaid
 flowchart LR
 	filesrc[filesrc/multifilesrc]
@@ -896,7 +937,7 @@ $ ./test-launch --gst-debug=0 "( multifilesrc location="/work/BeethovenFurElise.
 
 # IV. Tool Usage
 
-## IV.1. gst-launch-1.0
+## IV.1. gst-launch-1.0 Usage
 
 ```bash
 $ gst-launch-1.0 --help
@@ -918,6 +959,32 @@ Application Options:
   -f, --no-fault                    Do not install a fault handler
   -e, --eos-on-shutdown             Force EOS on sources before shutting the pipeline down
   --version                         Print version information and exit
+```
+
+## IV.2. gst-inspect-1.0 Usage
+
+```bash
+$ gst-inspect-1.0 --help
+Usage:
+  gst-inspect-1.0 [OPTION…] [ELEMENT-NAME | PLUGIN-NAME]
+
+Help Options:
+  -h, --help                           Show help options
+  --help-all                           Show all help options
+  --help-gst                           Show GStreamer Options
+
+Application Options:
+  -a, --print-all                      Print all elements
+  -b, --print-blacklist                Print list of blacklisted files
+  --print-plugin-auto-install-info     Print a machine-parsable list of features the specified plugin or all plugins provide.
+                                       Useful in connection with external automatic plugin installation mechanisms
+  --plugin                             List the plugin contents
+  -t, --types                          A slashes ('/') separated list of types of elements (also known as klass) to list. (unordered)
+  --exists                             Check if the specified element or plugin exists
+  --atleast-version                    When checking if an element or plugin exists, also check that its version is at least the version specified
+  -u, --uri-handlers                   Print supported URI schemes, with the elements that implement them
+  --no-colors                          Disable colors in output. You can also achieve the same by setting'GST_INSPECT_NO_COLORS' environment variable to any value.
+  --version                            Print version information and exit
 ```
 
 # V. gstreamer1.0
