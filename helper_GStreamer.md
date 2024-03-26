@@ -944,44 +944,41 @@ flowchart LR
 $ cd build_xxx/examples
 $ ./test-video
 stream ready at rtsp://127.0.0.1:8554/test
-```
 
-```bash
-gst-launch-1.0 rtspsrc \
-	location="rtsp://127.0.0.1:8554/test" name=src \
-	src. ! queue ! decodebin ! videoconvert ! autovideosink \
-	src. ! queue ! decodebin ! audioconvert ! audioresample ! autoaudiosink
-```
+# audio + video -> rtspsink
+$ ./test-launch "( \
+	audiotestsrc \
+	! audioconvert \
+	! audioresample \
+	! opusenc \
+	! rtpopuspay name=pay1 pt=97 \
+	videotestsrc \
+	! x264enc \
+	! rtph264pay name=pay0 pt=96 \
+	)"
 
-## 14.2. videotestsrc -> rtspsink
-
-> use test-launch
-
-```mermaid
-flowchart LR
-	videotestsrc[videotestsrc]
-	rtspsink[rtspsink]
-
-	videotestsrc --> rtspsink
-```
-
-```bash
-$ cd build_xxx/examples
+# video -> rtspsink
 $ ./test-launch "( \
 	videotestsrc \
 	! x264enc \
 	! rtph264pay name=pay0 pt=96 \
 	)"
+stream ready at rtsp://127.0.0.1:8554/test
 ```
 
 ```bash
 $ gst-launch-1.0 rtspsrc \
-	location=rtsp://192.168.50.28:8554/test \
+	location="rtsp://127.0.0.1:8554/test" name=src \
+	src. ! queue ! decodebin ! videoconvert ! autovideosink \
+	src. ! queue ! decodebin ! audioconvert ! audioresample ! autoaudiosink
+
+$ gst-launch-1.0 rtspsrc \
+	location=rtsp://127.0.0.1:8554/test \
 	! decodebin \
 	! videoconvert ! autovideosink
 ```
 
-## 14.3. v4l2src/libcamerasrc -> |???| rtspsink
+## 14.2. v4l2src/libcamerasrc -> |???| rtspsink
 
 #### A. v4l2src/libcamerasrc -> |x264enc| rtspsink
 
@@ -994,7 +991,7 @@ flowchart LR
 ```
 
 ```bash
-$ export CAMERA_DEVICE=/dev/video1
+$ export CAMERA_DEVICE=/dev/video0
 $ cd build_xxx/examples
 $ ./test-launch --gst-debug=1 "( \
 	v4l2src device=$CAMERA_DEVICE \
@@ -1032,6 +1029,7 @@ $ gst-launch-1.0 -v udpsrc \
 	! videoconvert \
 	! autovideosink
 
+export CAMERA_DEVICE=/dev/video11
 # 如果沒有 repeat_sequence_header=1。你就必須先啟動上面的接收指令 
 $ gst-launch-1.0 -e libcamerasrc \
 	! videoconvert \
@@ -1044,7 +1042,7 @@ $ gst-launch-1.0 -e libcamerasrc \
  	! udpsink host=127.0.0.1 port=50000
 ```
 
-> always hang at 1st frame
+> always hang at 1st frame，穩定度不高，時好時壞
 
 ```bash
 $ ./test-launch --gst-debug=3 "( \
@@ -1070,7 +1068,7 @@ $ ./test-launch --gst-debug=2 "( \
 	)"
 ```
 
-## 14.4. alsasrc/autoaudiosrc and v4l2src -> rtspsink
+## 14.3. alsasrc/autoaudiosrc and v4l2src -> rtspsink
 
 ```mermaid
 flowchart LR
@@ -1083,7 +1081,7 @@ flowchart LR
 ```
 
 ```bash
-$ export CAMERA_DEVICE=/dev/video1
+$ export CAMERA_DEVICE=/dev/video0
 $ cd build_xxx/examples
 $ ./test-launch --gst-debug=1 "( \
 	alsasrc \
@@ -1112,7 +1110,6 @@ $ ./test-launch --gst-debug=1 "( \
 	! video/x-raw,width=640,height=480,framerate=30/1 \
 	! queue \
 	! videoconvert \
-	! clockoverlay time-format=\"%D %H:%M:%S\" \
 	! x264enc \
 	! rtph264pay name=pay0 pt=96 \
 	)"
