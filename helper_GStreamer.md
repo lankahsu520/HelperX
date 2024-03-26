@@ -211,8 +211,13 @@ flowchart LR
 	videotestsrc --> autovideosink
 ```
 ```bash
-gst-launch-1.0 videotestsrc ! autovideosink
-gst-launch-1.0 videotestsrc ! ximagesink
+gst-launch-1.0 videotestsrc \
+	! clockoverlay time-format=\"%D %H:%M:%S\" \
+	! autovideosink
+
+gst-launch-1.0 videotestsrc \
+	! clockoverlay time-format=\"%D %H:%M:%S\" \
+	! ximagesink
 ```
 
 # 4. v4l2src
@@ -265,7 +270,9 @@ gst-launch-1.0 -v v4l2src device=/dev/video0 \
 	! autovideosink
 ```
 
-## 4.1. v4l2src -> udpsink
+## 4.1. v4l2src -> udpsink/multiudpsink
+
+#### A. v4l2src -> udpsink
 
 ```mermaid
 flowchart LR
@@ -285,6 +292,24 @@ gst-launch-1.0 v4l2src device=/dev/video0 \
   ! udpsink host=127.0.0.1 port=50000
 ```
 
+#### B. v4l2src -> multiudpsink
+```mermaid
+flowchart LR
+	v4l2src[v4l2src]
+	multiudpsink[multiudpsink]
+
+	v4l2src --> multiudpsink
+```
+
+```bash
+gst-launch-1.0 v4l2src device=/dev/video0 \
+	! videoconvert \
+	! video/x-raw,width=640,height=480,framerate=30/1 \
+	! clockoverlay time-format="%D %H:%M:%S" \
+  ! x264enc \
+  ! rtph264pay \
+  ! multiudpsink clients=192.168.0.2:50000,192.168.0.3:50000,192.168.0.4:50000
+```
 # 5. filesrc
 
 ## 5.1. filesrc -> alsasink/pulsesink/autoaudiosink
@@ -335,6 +360,7 @@ flowchart LR
 export UDP_SINK="udpsink host=127.0.0.1 port=51000"
 export UDP_SINK="udpsink host=192.168.56.1 port=51000"
 export UDP_SINK="udpsink host=224.0.0.1 port=51000 auto-multicast=true"
+export MUSIC_FILE="/work/BeethovenFurElise.mp3"
 
 gst-launch-1.0 filesrc \
 	location=$MUSIC_FILE \
@@ -531,13 +557,6 @@ gst-launch-1.0 multifilesrc \
 	! decodebin \
 	! audioconvert \
 	! alsasink
-
-gst-launch-1.0 multifilesrc \
-	location="/work/BeethovenFurElise.mp3" \
-	! decodebin \
-	! audioconvert \
-	! opusenc \
-	! alsasink
 ```
 
 # 7. udpsrc
@@ -553,7 +572,8 @@ flowchart LR
 
 	filesrc --> udpsink ..-> |:51000| udpsrc --> alsasink
 ```
-- [rtpopuspay](https://gstreamer.freedesktop.org/documentation/rtp/rtpopuspay.html?gi-language=c)
+> [rtpopuspay](https://gstreamer.freedesktop.org/documentation/rtp/rtpopuspay.html?gi-language=c)
+
 ### 7.1.1. filesrc (audio) -> udpsink
 ```
 export UDP_SINK="udpsink host=127.0.0.1 port=51000"
@@ -649,14 +669,31 @@ flowchart LR
    
     udpsrc --> autoaudiosink
 ```
-#### A. udpsrc -> autoaudiosink
+#### A. audiotestsrc and videotestsrc  -> udpsink
+
+```bash
+gst-launch-1.0 audiotestsrc \
+	! audioconvert \
+	! audioresample \
+	! opusenc \
+	! rtpopuspay \
+	! udpsink host=127.0.0.1 port=51000 \
+	videotestsrc \
+	! clockoverlay time-format=\"%D %H:%M:%S\" \
+	! x264enc \
+	! rtph264pay \
+	! udpsink host=127.0.0.1 port=50000
+```
+
+#### B. udpsrc -> autoaudiosink
+
 ```bash
 gst-launch-1.0 -v udpsrc port=50000 \
-	caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H264, payload=(int)96' \
+	! application/x-rtp,payload=96 \
 	! rtph264depay \
 	! decodebin ! videoconvert ! autovideosink \
 	udpsrc port=51000 \
-	! application/x-rtp,payload=96,encoding-name=OPUS \
+	! application/x-rtp,payload=97,encoding-name=OPUS \
 	! rtpopusdepay  \
 	! opusdec \
 	! autoaudiosink
@@ -677,7 +714,7 @@ gst-launch-1.0 -v playbin \
 #### B. file
 ```bash
 gst-launch-1.0 -v playbin \
-	uri=file:///work/wav/0001.wav
+	uri=file:///work/BeethovenFurElise.mp3
 ```
 
 # 9. rtmpsrc with youtube-dl
@@ -1020,28 +1057,6 @@ $ ./test-launch --gst-debug=1 "( \
 $ v4l2-ctl -L -d /dev/video11
 ```
 
-```bash
-$ gst-launch-1.0 -v udpsrc \
-	port=50000 \
-	caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H264, payload=(int)96' \
-	! rtph264depay \
-	! decodebin \
-	! videoconvert \
-	! autovideosink
-
-export CAMERA_DEVICE=/dev/video11
-# 如果沒有 repeat_sequence_header=1。你就必須先啟動上面的接收指令 
-$ gst-launch-1.0 -e libcamerasrc \
-	! videoconvert \
-	! video/x-raw,width=640,height=480,framerate=30/1,format=I420 \
-	! clockoverlay time-format=\"%D %H:%M:%S\" \
-	! v4l2h264enc extra-controls="controls,repeat_sequence_header=1" \
-	! 'video/x-h264,stream-format=byte-stream,level=(string)4,profile=baseline' \
-	! queue \
-	! rtph264pay \
- 	! udpsink host=127.0.0.1 port=50000
-```
-
 > always hang at 1st frame，穩定度不高，時好時壞
 
 ```bash
@@ -1062,10 +1077,35 @@ $ ./test-launch --gst-debug=2 "( \
 	! video/x-raw,width=640,height=480,framerate=30/1,format=I420 \
 	! clockoverlay time-format=\"%D %H:%M:%S\" \
 	! v4l2h264enc output-io-mode=2 extra-controls=\"controls,force_key_frame=1,video_b_frames=1,h264_i_frame_period=1,repeat_sequence_header=1\" \
-	! video/x-h264,stream-format=byte-stream,level=(string)4,profile=baseline \
-  ! queue \
+	! 'video/x-h264,stream-format=byte-stream,level=(string)4,profile=baseline' \
+	! queue \
 	! rtph264pay name=pay0 pt=96 \
 	)"
+```
+
+##### B.1. v4l2src/libcamerasrc -> |v4l2h264enc| udpsink
+
+```bash
+$ gst-launch-1.0 -v udpsrc \
+	port=50000 \
+	caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H264, payload=(int)96' \
+	! rtph264depay \
+	! decodebin \
+	! videoconvert \
+	! autovideosink
+
+# 如果沒有 repeat_sequence_header=1。你就必須先啟動上面的接收指令
+$ gst-launch-1.0 -e libcamerasrc \
+	! videoconvert \
+	! video/x-raw,width=640,height=480,framerate=30/1,format=I420 \
+	! clockoverlay time-format=\"%D %H:%M:%S\" \
+	! v4l2h264enc extra-controls="controls,repeat_sequence_header=1" \
+	! 'video/x-h264,stream-format=byte-stream,level=(string)4,profile=baseline' \
+	! queue \
+	! rtph264pay \
+ 	! udpsink host=127.0.0.1 port=50000
+ 	! multiudpsink clients=192.168.50.72:50000
+
 ```
 
 ## 14.3. alsasrc/autoaudiosrc and v4l2src -> rtspsink
