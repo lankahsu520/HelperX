@@ -1084,7 +1084,7 @@ $ gst-launch-1.0 -v filesrc \
 
 # 13. [gst-rtsp-server](https://github.com/GStreamer/gst-rtsp-server)
 
-> RTSP server based on GStreamer. This module has been merged into the main GStreamer repo for further development.
+> RTSP server based on GStreamer (>= 1.19). This module has been merged into the main GStreamer repo for further development.
 
 ```bash
 $ git clone https://github.com/GStreamer/gst-rtsp-server.git
