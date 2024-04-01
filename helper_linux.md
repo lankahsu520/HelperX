@@ -497,6 +497,12 @@ function free-folder()
 }
 ```
 
+#### e2fsck - check a Linux ext2/ext3/ext4 file system
+
+```bash
+e2fsck -f /dev/sdd1
+```
+
 #### gparted - GNOME Partition Editor for manipulating disk partitions.
 
 ```bash
@@ -516,6 +522,17 @@ sudo mke2fs /dev/sdb1
 sudo apt install -y ncdu
 
 ncdu -x
+```
+
+#### tune2fs - adjust tunable filesystem parameters on ext2/ext3/ext4 filesystems
+
+> 當複製虛擬機的硬碟時（如使用 VirtualBox 的 *.vdi），雖然在 * .vbox 會產生不同的 uuid，但是實際 vdi 裏的 uuid 的同一份。當 linux 對其進行  mount 動作時，會有對應的問題。 
+
+```bash
+# 要先執行 e2fsck
+e2fsck -f /dev/sdd1
+uuidgen | xargs tune2fs /dev/sdd1 -U
+
 ```
 
 # 4. String Handler
@@ -1856,17 +1873,25 @@ cat helloworld.tar.gz.enc | openssl enc -aes-256-cbc -d > helloworld.tar.gz
 
 ```
 
-#### zip - package and compress (archive) files
-
-```bash
-zip -r helloworld.zip helloworld
-
-```
-
 #### unzip - list, test and extract compressed files in a ZIP archive
 
 ```bash
 unzip helloworld.zip
+
+```
+
+#### uuidgen - create a new UUID value
+
+```bash
+$ uuidgen
+a9d92443-354b-47aa-a216-e60bbf73a94c
+
+```
+
+#### zip - package and compress (archive) files
+
+```bash
+zip -r helloworld.zip helloworld
 
 ```
 
