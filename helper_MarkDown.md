@@ -127,6 +127,38 @@
 | A888888888 | Mary      | Wife |
 |            |           |      |
 
+## 2.1. 表格合併
+
+> Markdown 語法是不支援合併，只能使用 html
+
+<table>
+  <tr>
+    <th>id</th>
+    <th>h1</th>
+    <th>h2</th>
+    <th>h3</th>
+  </tr>
+  <tr>
+    <td>r1</td>
+    <td colspan="2">r1,h1-2</td>
+    <td rowspan="2">r1-2,h3</td>
+  </tr>
+  <tr>
+    <td>r2</td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>r3</td>
+    <td colspan="2" rowspan="2">r3-4,h1-2</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>r4</td>
+    <td></td>
+  </tr>
+</table>
+
 # 3. 格式
 
 > **粗體**
