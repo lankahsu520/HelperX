@@ -1,5 +1,4 @@
 # [FreeRTOS](https://www.freertos.org/index.html)
-
 [![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
 [![GitHub license][license-image]][license-url]
 [![GitHub stars][stars-image]][stars-url]
@@ -80,11 +79,35 @@ xTaskCreateRestricted
 xTaskCreateRestrictedStatic
   
 xPortIsInsideInterrupt
+
+TaskHandle_t xHandle = xTaskGetCurrentTaskHandle();
+vTaskDelete(xHandle);
+```
+
+```c
+static void esp_mqtt_task(void *pv)
+{
+	...
+    vTaskDelete(NULL); // kill self
+}
+
+esp_err_t esp_mqtt_client_start(esp_mqtt_client_handle_t client)
+{
+	...
+    if (xTaskCreate(esp_mqtt_task, "mqtt_task", client->config->task_stack, client, client->config->task_prio, &client->task_handle) != pdTRUE) {
+        ESP_LOGE(TAG, "Error create mqtt task");
+        err = ESP_FAIL;
+    }
+	...
+}
 ```
 
 ## 3.3. System Tools
 
 #### log
+
+```c
+```
 
 
 
@@ -129,6 +152,17 @@ uint32_t sys_random(void)
 
 #### sleep
 
+> 1 (hour) = 60 (min) = 3600 (sec)
+>
+> 1 (sec) = 1000ms (ms) = 1,000,000 (us) = 1,000,000,000 (ns) = 1,000,000,000 (ps)
+
+```c
+void vTaskDelay( const TickType_t xTicksToDelay )
+
+// 必須將 ms 轉成 tick
+uint32_t 2secs = 2000 / portTICK_PERIOD_MS // 2 seconds -> ticks
+```
+
 ```c
 void sys_msleep(uint32_t u32_ms)
 {
@@ -172,6 +206,20 @@ sequenceDiagram
 
 > [FreeRTOS --（14）队列管理之概述](https://blog.csdn.net/zhoutaopower/article/details/107221175)
 
+>[ChatGPT] RTOS queue 的功用
+>
+>
+>RTOS（Real-Time Operating System）中的隊列（Queue）是一種用於任務之間通信和數據傳輸的數據結構。隊列允許一個任務（或中斷服務例程）放置數據，而另一個任務從隊列中取出數據。這種通信方式是線程安全的，因此適用於多任務環境。
+>
+>隊列的主要功能包括：
+>
+>1. **數據傳輸**：允許一個任務將數據放置到隊列中，而另一個任務從隊列中取出數據，實現了數據在任務之間的傳遞。
+>2. **同步**：隊列還可以用於同步任務的執行，例如一個任務等待隊列中有數據可用，另一個任務在隊列中放置數據，這樣就實現了任務之間的同步。
+>3. **數據緩沖**：隊列可以用作數據緩沖區，允許任務在不同的速率下生產和消費數據。
+>4. **事件通知**：任務可以等待某些特定的事件發生，當事件發生時，將數據放入隊列並通知等待的任務。
+>
+>總的來說，隊列在RTOS中起著重要的作用，使得任務之間的通信和同步更加簡單和可靠。
+
 ```c
 xQueueCreate
 xQueueCreateStatic
@@ -196,12 +244,28 @@ xQueueCRReceiveFromISR
 xQueueCRReceive
 ```
 
-
-
 ```mermaid
 flowchart LR
-	xQueue([xQueue])
-	TaskA--> xQueue --> TaskB
+	subgraph taskA
+		queue_t[[queue in task]]
+	end
+	subgraph taskB
+		queue_b[[queue in task]]
+	end
+	subgraph interrupt
+		queue_i[[queue in interrupt]]
+	end
+
+	interrupt ..-> |xQueueSendFromISR|queue_t
+	queue_b ..-> |xQueueReceiveFromISR|interrupt
+	taskB ..-> |xQueueSend|queue_t
+	taskA ..-> |xQueueSend|queue_b
+
+	classDef Red     fill:#FF0000
+	classDef Yellow  fill:#FFFF00
+	class task Yellow
+	class interrupt Red
+
 ```
 
 ## 3.6. Mutex & Semaphore
@@ -329,3 +393,10 @@ sequenceDiagram
 
 # IV. Tool Usage
 
+# Author
+
+> Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+
+# License
+
+> [HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
