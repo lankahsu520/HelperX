@@ -426,8 +426,7 @@ $ sudo apt remove gobject-introspection
 $ g-ir-scanner --version
 Command 'g-ir-scanner' not found, but can be installed with:
 
-sudo apt install gobject-introspection
-
+$ sudo apt install gobject-introspection
 ```
 
 ## II.2. ImportError: cannot import name 'six' from 'pkg_resources.extern' (/usr/lib/python3/dist-packages/pkg_resources/extern/__init__.py)
@@ -443,6 +442,54 @@ Traceback (most recent call last):
     from pkg_resources.extern import six
 ImportError: cannot import name 'six' from 'pkg_resources.extern' (/usr/lib/python3/dist-packages/pkg_resources/extern/__init__.py)
 
+```
+
+## II.3. ModuleNotFoundError: No module named 'distutils.util'
+
+> 此問題常發生在更換 python 版本時，只安裝了主體，其它套件忘了安裝
+
+```bash
+$ export PJ_PYTHON_VER=`python -c 'import sys; print("{0[0]}.{0[1]}".format(sys.version_info))'`
+$ echo $PJ_PYTHON_VER
+3.10
+
+$ sudo apt install -y python${PJ_PYTHON_VER}-distutils
+```
+
+## II.4. ModuleNotFoundError: No module named 'virtualenv'
+
+> 此問題常發生在更換 python 版本時，只安裝了主體，其它套件忘了安裝
+
+```bash
+$ export PJ_PYTHON_VER=`python -c 'import sys; print("{0[0]}.{0[1]}".format(sys.version_info))'`
+$ echo $PJ_PYTHON_VER
+3.10
+
+#
+$ pip install virtualenv
+# or 有時 pip 無法順利安裝時
+$ sudo apt install -y python${PJ_PYTHON_VER}-venv
+
+$ virtualenv --version
+virtualenv 20.25.3 from /home/lanka/.local/lib/python3.10/site-packages/virtualenv/__init__.py
+```
+
+## II.5. ImportError: cannot import name 'html5lib' from 'pip._vendor' (/usr/lib/python3/dist-packages/pip/_vendor/__init__.py)
+
+```bash
+$ curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10
+```
+
+## II.6. ModuleNotFoundError: No module named 'cmake'
+
+```bash
+$ pip install cmake
+```
+
+## II.7. ModuleNotFoundError: No module named 'ninja'
+
+```bash
+$ pip install ninja
 ```
 
 # III. Glossary
@@ -617,9 +664,9 @@ General Options:
 
 # Author
 
-Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+> Created and designed by [Lanka Hsu](lankahsu@gmail.com).
 
 # License
 
-[HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
+> [HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
 
