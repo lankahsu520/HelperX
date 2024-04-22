@@ -476,8 +476,15 @@ virtualenv 20.25.3 from /home/lanka/.local/lib/python3.10/site-packages/virtuale
 
 ## II.5. ImportError: cannot import name 'html5lib' from 'pip._vendor' (/usr/lib/python3/dist-packages/pip/_vendor/__init__.py)
 
+> pip 和 python 的版本要達成一致
+
 ```bash
-$ curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10
+$ export PJ_PYTHON_VER=`python -c 'import sys; print("{0[0]}.{0[1]}".format(sys.version_info))'`
+$ curl -sS https://bootstrap.pypa.io/get-pip.py | python${PJ_PYTHON_VER}
+
+# 有時試著移除 ~/.local/lib/python${PJ_PYTHON_VER}
+$ echo $PJ_PYTHON_VER
+$ mv ~/.local/lib/python${PJ_PYTHON_VER} ~/.local/lib/python${PJ_PYTHON_VER}-bak
 ```
 
 ## II.6. ModuleNotFoundError: No module named 'cmake'
