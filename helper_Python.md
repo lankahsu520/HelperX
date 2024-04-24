@@ -480,11 +480,14 @@ virtualenv 20.25.3 from /home/lanka/.local/lib/python3.10/site-packages/virtuale
 
 ```bash
 $ export PJ_PYTHON_VER=`python -c 'import sys; print("{0[0]}.{0[1]}".format(sys.version_info))'`
-$ curl -sS https://bootstrap.pypa.io/get-pip.py | python${PJ_PYTHON_VER}
 
 # 有時試著移除 ~/.local/lib/python${PJ_PYTHON_VER}
 $ echo $PJ_PYTHON_VER
 $ mv ~/.local/lib/python${PJ_PYTHON_VER} ~/.local/lib/python${PJ_PYTHON_VER}-bak
+
+# reinstall pip
+$ curl -sS https://bootstrap.pypa.io/get-pip.py | python${PJ_PYTHON_VER}
+
 ```
 
 ## II.6. ModuleNotFoundError: No module named 'cmake'
@@ -498,6 +501,10 @@ $ pip install cmake
 ```bash
 $ pip install ninja
 ```
+
+## II.8. DEPRECATION: dblatex 0.3.11py3 has a non-standard version number. pip 24.1 will enforce this behaviour change.
+
+>類似的問題常發生，dblatex 0.3.11py3 為特別版本；不見得要解決。
 
 # III. Glossary
 
