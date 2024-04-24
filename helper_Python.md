@@ -1,4 +1,5 @@
 # [Python](https://www.python.org)
+
 [![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
 [![GitHub license][license-image]][license-url]
 [![GitHub stars][stars-image]][stars-url]
@@ -102,7 +103,7 @@ lrwxrwxrwx 1 root root      33  三  13  2020 /usr/bin/x86_64-linux-gnu-python3-
 
 >但是事情總是要解決，建議參考使用 Virtual Environment。
 
-## 4.1. Add apt-repository
+## 4.1. Add apt-repository for Ubuntu 20.04
 
 ```bash
 $ sudo apt update
@@ -119,11 +120,81 @@ $ sudo add-apt-repository ppa:deadsnakes/ppa
 ### 4.2.1. Install Special Version
 
 ```bash
-$ sudo apt install -y python3.12
+$ sudo apt install -y python3.10-full
+```
 
-# 建議留下來，不要移除
-$ sudo apt remove -y python3.8
+### 4.2.2. Use update-alternatives
 
+> 這邊使用 update-alternatives 進行系統調整。
+
+```bash
+# 3.8.10 -> 3.10
+$ sudo update-alternatives --config python3
+update-alternatives: error: no alternatives for python3
+
+$ ll /usr/bin/python3.*
+
+# --install <link> <name> <path> <priority>
+# /usr/bin/python3
+$ sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 2
+$ sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1
+# /usr/bin/python
+$ sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.8 2
+$ sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.10 1
+
+$ ll /etc/alternatives/python*
+lrwxrwxrwx 1 root root 18  四  24 13:20 /etc/alternatives/python -> /usr/bin/python3.8*
+lrwxrwxrwx 1 root root 18  四  24 13:17 /etc/alternatives/python3 -> /usr/bin/python3.8*
+
+$ update-alternatives --list python
+/usr/bin/python3.8
+
+$ update-alternatives --list python3
+/usr/bin/python3.10
+/usr/bin/python3.8
+
+$ sudo update-alternatives --config python
+There are 2 choices for the alternative python (providing /usr/bin/python).
+
+  Selection    Path                 Priority   Status
+------------------------------------------------------------
+* 0            /usr/bin/python3.8    2         auto mode
+  1            /usr/bin/python3.10   1         manual mode
+  2            /usr/bin/python3.8    2         manual mode
+
+Press <enter> to keep the current choice[*], or type selection number: 1
+update-alternatives: using /usr/bin/python3.10 to provide /usr/bin/python (python) in manual mode
+
+$ sudo update-alternatives --config python3
+There are 2 choices for the alternative python3 (providing /usr/bin/python3).
+
+  Selection    Path                 Priority   Status
+------------------------------------------------------------
+  0            /usr/bin/python3.10   2         auto mode
+  1            /usr/bin/python3.10   2         manual mode
+* 2            /usr/bin/python3.8    1         manual mode
+
+Press <enter> to keep the current choice[*], or type selection number: 1
+update-alternatives: using /usr/bin/python3.10 to provide /usr/bin/python3 (python3) in manual mode
+
+```
+
+```bash
+# to check again
+$ ll /usr/bin/*python*
+```
+
+### 4.2.3. Install PIP for python x.xx
+
+```bash
+$ export PJ_PYTHON_VER=`python -c 'import sys; print("{0[0]}.{0[1]}".format(sys.version_info))'`
+
+# 有時試著移除 ~/.local/lib/python${PJ_PYTHON_VER}
+$ echo $PJ_PYTHON_VER
+$ mv ~/.local/lib/python${PJ_PYTHON_VER} ~/.local/lib/python${PJ_PYTHON_VER}-bak
+
+# reinstall pip
+$ curl -sS https://bootstrap.pypa.io/get-pip.py | python${PJ_PYTHON_VER}
 ```
 
 ```bash
@@ -135,74 +206,29 @@ $ python3 -m pip install --upgrade pip
 # upgrade setup tools
 $ pip3 install wheel setuptools pip --upgrade
 ```
-- Fail
 
-```bash
-# Please don't do these
-$ sudo apt remove --purge python3-apt
-$ sudo apt autoclean
-$ sudo apt install -y python3-apt
-$ sudo apt install -y python3.12-distutils
-$ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-$ sudo python3.12 get-pip.py
-```
+# 5. Run helloworld.py
 
-### 4.2.2. Use update-alternatives
-
-> 這邊使用 update-alternatives 進行系統調整。
-
-```bash
-# 3.8.10 -> 3.12
-$ sudo update-alternatives --config python3
-update-alternatives: error: no alternatives for python3
-
-# --install <link> <name> <path> <priority>
-$ sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 2
-$ sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1
-
-$ update-alternatives --list python3
-
-$ sudo update-alternatives --config python3
-There are 2 choices for the alternative python3 (providing /usr/bin/python3).
-
-  Selection    Path                 Priority   Status
-------------------------------------------------------------
-  0            /usr/bin/python3.8    2         auto mode
-  1            /usr/bin/python3.12   1         manual mode
-* 2            /usr/bin/python3.8    2         manual mode
-
-Press <enter> to keep the current choice[*], or type selection number:1
-
-# or
-$ sudo update-alternatives --set python3 /usr/bin/python3.12
-```
-
-```bash
-# to check again
-$ ll /usr/bin/*python3*
-```
-
-# 5. Run on Virtual Environment
+## 5.1. Run on Virtual Environment
 
 >建立一個獨立的開發環境，如前章節有提到，現有能穩定執行的套件，不見得匹配最新的的 python3。
 >
 
-## 5.1. Create A Virtual Environment
+### 5.1.1. Create A Virtual Environment
 
 ```bash
-# install python3 Virtual Environment
-$ pip3 install virtualenv
-```
-#### A. 3.12
+$ sudo apt install -y python3.10-full
+$ which python3.10
+/usr/bin/python3.10
 
-```bash
-$ sudo apt install -y python3.12
-$ which python3.12
-/usr/bin/python3.12
+# install python Virtual Environment
+$ pip install virtualenv
+$ pip install --upgrade setuptools
 
-$ mkdir -p /work/bin/python/3.12
-$ cd /work/bin/python/3.12; virtualenv --python=python3.12 .
-$ cd /work/bin/python/3.12; tree -L 2 ./
+$ mkdir -p /work/bin/python/3.10
+# create A Virtual Environment in /work/bin/python/3.10
+$ cd /work/bin/python/3.10; virtualenv --python=python3.10 .
+$ cd /work/bin/python/3.10; tree -L 2 ./
 ./
 ├── bin
 │   ├── activate
@@ -213,107 +239,90 @@ $ cd /work/bin/python/3.12; tree -L 2 ./
 │   ├── activate_this.py
 │   ├── pip
 │   ├── pip3
-│   ├── pip-3.12
-│   ├── pip3.12
-│   ├── python -> /usr/bin/python3.12
+│   ├── pip-3.10
+│   ├── pip3.10
+│   ├── python -> /usr/bin/python3.10
 │   ├── python3 -> python
-│   └── python3.12 -> python
-├── lib
-│   └── python3.12
-└── pyvenv.cfg
-
-3 directories, 14 files
-
-```
-#### b. 3.9
-
-```bash
-$ sudo apt install -y python3.9
-$ which python3.9
-/usr/bin/python3.9
-
-$ mkdir -p /work/bin/python/3.9
-$ cd /work/bin/python/3.9; virtualenv --python=python3.9 .
-$ cd /work/bin/python/3.9; tree -L 2 ./
-./
-├── bin
-│   ├── activate
-│   ├── activate.csh
-│   ├── activate.fish
-│   ├── activate.nu
-│   ├── activate.ps1
-│   ├── activate_this.py
-│   ├── pip
-│   ├── pip3
-│   ├── pip-3.9
-│   ├── pip3.9
-│   ├── python -> /usr/bin/python3.9
-│   ├── python3 -> python
-│   ├── python3.9 -> python
+│   ├── python3.10 -> python
 │   ├── wheel
 │   ├── wheel3
-│   ├── wheel-3.9
-│   └── wheel3.9
+│   ├── wheel-3.10
+│   └── wheel3.10
 ├── lib
-│   └── python3.9
+│   └── python3.10
 └── pyvenv.cfg
 
 3 directories, 18 files
 
 ```
 
-
-## 5.2. Enter Virtual Environment
+### 5.1.2. Enter Virtual Environment
 
 ```bash
-$ . /work/bin/python/3.12/bin/activate
-(3.12) $ pip3 list
-Package Version
-------- -------
-pip     23.3.1
+$ . /work/bin/python/3.10/bin/activate
+(3.10) $ pip3 list
+Package    Version
+---------- -------
+pip        24.0
+setuptools 69.5.1
+wheel      0.43.0
 
 ```
 
 ><font color="red">環境變數將會被影響</font>
 >
->PS1="(3.12) \\[\\e]0;\\u@\\h: \\w\\a\\]\${debian_chroot:+(\$debian_chroot)}\\u@\\h:\\w\\\$ "
+>PS1="(3.10) \\[\\e]0;\\u@\\h: \\w\\a\\]\${debian_chroot:+(\$debian_chroot)}\\u@\\h:\\w\\\$ "
 >
->PATH="/work/python/3.12/bin:/home/lanka/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+>PATH="/work/python/3.10/bin:/home/lanka/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
 >
->VIRTUAL_ENV="/work/python/3.12"
+>VIRTUAL_ENV="/work/python/3.10"
 >
->VIRTUAL_ENV_PROMPT="3.12"
-
-#### A. 3.12
+>VIRTUAL_ENV_PROMPT="3.10"
 
 ```bash
 $ python --version
-Python 3.12.0
+Python 3.10.14
 $ pip3 --version
-pip 23.3.1 from /work/bin/python/3.12/lib/python3.12/site-packages/pip (python 3.12)
+pip 24.0 from /work/bin/python/3.10/lib/python3.10/site-packages/pip (python 3.10)
 
 ```
 
-## 5.3. Leave Virtual Environment
-
 ```bash
-(3.12) $ deactivate
+$ pip install netifaces
 
+$ cd /work
+$ vi helloworld.py
+import sys
+import netifaces
+
+def main(argv):
+	print(netifaces.interfaces())
+
+if __name__ == "__main__":
+	main(sys.argv[0:])
+
+$ python helloworld.py 
 ```
 
-# 6. Run with PYTHONPATH
-
-## 6.1. Install requirements.txt
+### 5.1.3. Leave Virtual Environment
 
 ```bash
-$ export PYTHON_LIB=`pwd`
-$ pip3 install --target ${PYTHON_LIB}/python -r requirements.txt
+(3.10) $ deactivate
+```
+
+## 5.2. Run with PYTHONPATH
+
+### 5.2.1. Install requirements.txt
+
+```bash
+$ export PYTHON_LIB="/work/python"
+$ pip3 install --target ${PYTHON_LIB} -r requirements.txt
 ```
 
 - requirements.txt
 
 ```bash
-$ cat requirements.txt
+$ vi requirements.txt
 boto3==1.26.123
 
 #https://pypi.org/project/netifaces/
@@ -321,17 +330,17 @@ netifaces==0.11.0
 
 ```
 
-## 6.2. Run
+### 5.2.2. Run
 
 ```bash
-$ PYTHONPATH=${PYTHON_LIB}/python ./helloworld
+$ (export PYTHONPATH="/work/python"; python ./helloworld.py)
 ```
 
-# 7. pip3
+# 6. Packages
 
-- [PyPI – the Python Package Index · PyPI](https://pypi.org)
+>  [PyPI – the Python Package Index · PyPI](https://pypi.org)
 
-## 7.1. Install packages
+## 6.1. Install packages
 
 ```bash
 $ pip3 install markdown
@@ -351,7 +360,7 @@ cmake version 3.16.3
 
 ```
 
-## 7.2. Upgrade packages
+## 6.2. Upgrade packages
 
 #### A. outdated
 
@@ -376,7 +385,15 @@ $ pip3 install --upgrade markdown
 $ pip3 install --upgrade cmake
 ```
 
-# 8. Packages
+## 6.3. Packages List
+
+```bash
+$ ll /usr/lib/python3/dist-packages
+$ export PJ_PYTHON_VER=`python -c 'import sys; print("{0[0]}.{0[1]}".format(sys.version_info))'`; echo $PJ_PYTHON_VER
+$ ll ~/.local/lib/python${PJ_PYTHON_VER}
+
+$ pip list
+```
 
 > 列出常用的
 >
@@ -505,6 +522,35 @@ $ pip install ninja
 ## II.8. DEPRECATION: dblatex 0.3.11py3 has a non-standard version number. pip 24.1 will enforce this behaviour change.
 
 >類似的問題常發生，dblatex 0.3.11py3 為特別版本；不見得要解決。
+
+## II.9. ModuleNotFoundError: No module named 'apt_pkg'
+
+```bash
+# for python3.8
+$ sudo apt install -y python3-apt
+$ cd /usr/lib/python3/dist-packages
+$ ll apt*.so
+-rw-r--r-- 1 root root  365464  三  14  2023 apt_inst.cpython-38d-x86_64-linux-gnu.so
+-rw-r--r-- 1 root root   60080  三  14  2023 apt_inst.cpython-38-x86_64-linux-gnu.so
+-rw-r--r-- 1 root root 3394768  三  14  2023 apt_pkg.cpython-38d-x86_64-linux-gnu.so
+-rw-r--r-- 1 root root  359376  三  14  2023 apt_pkg.cpython-38-x86_64-linux-gnu.so
+$ sudo ln -s apt_pkg.cpython-38d-x86_64-linux-gnu.so apt_pkg.so
+```
+
+```bash
+# for python3.10 and Ubuntu 20.04.6
+$ lsb_release -a | grep Description
+No LSB modules are available.
+Description:    Ubuntu 20.04.6 LTS
+# https://launchpad.net/python-apt
+# download python-apt_2.0.0ubuntu0.20.04.6.tar.xz
+$ tar xvf python-apt_2.0.0ubuntu0.20.04.6.tar.xz
+$ cd python-apt_2.0.0ubuntu0.20.04.6
+$ sudo apt-get install libapt-pkg-dev
+$ python setup.py build
+$ cd build/lib.linux-x86_64-cpython-310
+$ sudo cp *.so /usr/lib/python3/dist-packages
+```
 
 # III. Glossary
 
