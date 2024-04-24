@@ -59,7 +59,7 @@
 >
 > 只是把生活中的發想記錄下來。
 
-### 1.1.2. [helper_BackupAndRAID.md](https://github.com/lankahsu520/HelperX/blob/master/helper_BackupAndRAID.md) - Backup and RAID helper.
+### 1.1.2. [helper_BackupvsRAID.md](https://github.com/lankahsu520/HelperX/blob/master/helper_BackupvsRAID.md) - Backup vs. RAID helper.
 
 > 人們應該是追求資料的健全保存後，再取得效能上的平衡。
 >
@@ -83,7 +83,7 @@
 
 > 善用免費 git 空間。
 
-### 1.1.7. [helper_GitLabAndCICD.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitLabAndCICD.md) - GitLab helper.
+### 1.1.7. [helper_GitLabandCICD.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitLabandCICD.md) - GitLab helper.
 
 > CI/CD is useful ? Please make sure that you aren't a low-level programmer, system integration developer or embedded engineer.
 >
@@ -115,7 +115,7 @@
 
 > Matter（以前稱為 Project CHIP，Connected Home over IP）是一種物聯網（IoT）通信協議和平台，致力於促進智能家居設備之間的互操作性和互聯性。
 
-### 1.1.15. [helper_MultimediaMuxAndDemux.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MultimediaMuxAndDemux.md) - Multimedia Mux and Demux helper
+### 1.1.15. [helper_MultimediaMuxandDemux.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MultimediaMuxandDemux.md) - Multimedia Mux and Demux helper
 
 >除了用手機看 YouTube 外，有些基本常識還是補足一下。
 
@@ -159,7 +159,7 @@
 
 >Please read this md at first !!! It is very important.
 
-### 2.1.2. [helper_SDKAndCodebase.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SDKAndCodebase.md) - SDK and Codebase helper.
+### 2.1.2. [helper_SDKvsCodebase.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SDKvsCodebase.md) - SDK vs. Codebase helper.
 
 >在專案開啟時，都會指派成員先去研究其可行性，當然有 SDK 時，就要先進行彙整、編譯和測試。以下就是一個很糟的專案案例。
 >
@@ -189,7 +189,7 @@
 >
 >所以請大家試著上網查尋看看。
 
-### 2.1.5. [helper_GCCDebugAndgdb.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GCCDebugAndgdb.md) - GCC and gdb helper.
+### 2.1.5. [helper_GCCDebugandgdb.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GCCDebugandgdb.md) - GCC and gdb helper.
 
 > 這邊又有個小故事，雖然沒辦法百分之一百重現，但是大致如下
 >
@@ -272,7 +272,7 @@
 >
 > 「你沒有限制編輯軟體…」聽到這個我是馬上“黃人”問號（現在不能說黑人問號，我講我自己總行吧）？身為一位嵌入式工程師，有的人用 vi，有的人用 Notepad++ 等。一套編輯軟體只要用的順手就好，那裏來的問題。有可能發生問題的部分常在開發 MCU，可我們的主力是 Linux 環境也。 
 
-### 3.1.2.  [helper_FreeRTOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_FreeRTOS.md) - FreeRTOS helper.
+### 3.1.2.  [helper_ESPandFreeRTOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_FreeRTOS.md) - ESP and FreeRTOS helper.
 
 ### 3.1.3. [helper_UnifySDKandGeckoSDK.md](https://github.com/lankahsu520/HelperX/blob/master/helper_UnifySDKandGeckoSDK.md) - UnifySDK and GeckoSDK helper.
 

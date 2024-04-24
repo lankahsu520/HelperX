@@ -22,7 +22,7 @@
 
 >一般嵌入式系統開發，都是從 [NXP](https://www.nxp.com)、[SILICON](https://www.silabs.com) 或 [MediaTek](https://www.mediatek.tw) 等晶片廠購買開發板，進而取得相對應的 SDK，再加入自主的想法來進行開發。
 >
->就我在嵌入式系統打滾多年的經驗，就算集齊 SDK + EVK + Specification + User guide，你也不可能招喚神龍，哈哈，說笑了！
+>就本人在嵌入式系統打滾多年的經驗，就算集齊 SDK + EVK + Specification + User guide，你也不可能招喚神龍，哈哈，說笑了！
 >
 >其實是距離建立第一份 Codebase 還有一大段的路要走。
 >
@@ -220,8 +220,8 @@ stateDiagram-v2
 
 # Author
 
-Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+> Created and designed by [Lanka Hsu](lankahsu@gmail.com).
 
 # License
 
-[HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
+> [HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
