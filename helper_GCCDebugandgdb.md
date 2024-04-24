@@ -1,4 +1,4 @@
-# GCC、Debug and gdb
+# GCC Debug and gdb
 [![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
 [![GitHub license][license-image]][license-url]
 [![GitHub stars][stars-image]][stars-url]
@@ -831,9 +831,9 @@ Report bugs to "<http://www.gnu.org/software/gdb/bugs/>".
 
 # Author
 
-Created and designed by [Lanka Hsu](lankahsu@gmail.com).
+> Created and designed by [Lanka Hsu](lankahsu@gmail.com).
 
 # License
 
-[HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
+> [HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
 

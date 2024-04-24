@@ -1,4 +1,4 @@
-# [FreeRTOS](https://www.freertos.org/index.html)
+# ESP and [FreeRTOS](https://www.freertos.org/index.html)
 [![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
 [![GitHub license][license-image]][license-url]
 [![GitHub stars][stars-image]][stars-url]
@@ -60,6 +60,84 @@ flowchart TD
 
 ![tskstate](./FreeRTOS/tskstate.gif)
 
+## 2.3. Memory Allocation
+
+>ESP 本體是使用 FreeRTOS 沒錯，但是在記憶體管理採用 multi_heap，之間有什麼不同，本人很坦然的承認“不知道”。當然各位手邊的設備，也有可能不是完全使用 FreeRTOS 的記憶體管理方式。
+>
+>但是軟體開發，沒什麼大道理。只要注意剩餘空間，勿佔用過多的空間而不用，每用完空間後記得釋放即可。就好像開發 linux 的程式時，也不會特別在意其擺放位置，
+
+>以下內容取自於 [Introduction to RTOS - Solution to Part 4 (Memory Management](https://www.digikey.com/en/maker/projects/introduction-to-rtos-solution-to-part-4-memory-management/6d4dfcaa1ff84f57a2098da8e6401d9c)
+
+![Memory Allocation](https://www.digikey.com/maker-media/60c3b8b7-f4af-4a07-b139-0acae5a846fb)
+
+![RTOS Memory Allocation](https://www.digikey.com/maker-media/b9d52446-ebca-4ae5-9e8d-9a4a035d1e4d)
+
+> 以下內容取自於 [Dynamic Memory Management](https://www.codeinsideout.com/blog/freertos/memory/#dynamic-memory-management)
+
+![Memory Heap in RTOS](https://www.codeinsideout.com/blog/freertos/memory/rtos_memory_layout.drawio.svg)
+
+### 2.3.1. HEAP 1,2,3,4,5
+
+> 以下內容取自於 [FreeRTOS Heap_1、Heap_2、Heap_3、Heap_4、Heap_5的区别](https://blog.csdn.net/qq_21513281/article/details/121243362)
+
+> #define configAPPLICATION_ALLOCATED_HEAP 1
+
+#### A. Heap_1
+
+> - [x] configTOTAL_HEAP_SIZE in FreeRTOSConfig.h
+
+> - [x] pvPortMalloc()
+> - [ ] vPortFree()
+
+![Heap_1](https://img-blog.csdnimg.cn/450408a0fbf44d1cbf15f40be26a242b.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA6YCD6LeRZGXmnKjlgbY=,size_20,color_FFFFFF,t_70,g_se,x_16)
+
+#### B. Heap_2
+
+> Heap_2 不會整合相鄰的空閒空間，而 Heap_4 可以。所以不同空間大小進行多次 alloc 和 free，會造成空間破碎。
+
+> - [x] configTOTAL_HEAP_SIZE in FreeRTOSConfig.h
+
+> - [x] pvPortMalloc()
+> - [x] vPortFree()
+
+![Heap_2](https://img-blog.csdnimg.cn/56b610fdd8374cc5a546293f0ecf810c.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA6YCD6LeRZGXmnKjlgbY=,size_19,color_FFFFFF,t_70,g_se,x_16)
+
+#### C. Heap_3
+
+> 使用大小將決定於 linker。
+
+> - [ ] configTOTAL_HEAP_SIZE in FreeRTOSConfig.h
+
+> - [x] malloc()
+> - [x] free()
+
+#### D. Heap_4
+
+> Heap_4 會整合相鄰的空閒空間，而 Heap_2 不會。
+>
+> Heap_4 使用空間要連續的區塊，而 Heap_5 使用映射，所以不用。
+
+> - [x] configTOTAL_HEAP_SIZE in FreeRTOSConfig.h
+
+> - [x] pvPortMalloc()
+> - [x] vPortFree()
+> - [x] malloc()
+> - [x] free()
+
+#### E. Heap_5
+
+> Heap_5 使用映射，所以不用連續的空間。
+
+> - [x] configTOTAL_HEAP_SIZE in FreeRTOSConfig.h
+
+> - [x] pvPortMalloc()
+> - [x] vPortFree()
+> - [x] malloc()
+> - [x] free()
+> - [x] vPortDefineHeapRegions
+
+### 2.3.2. multi_heap
+
 # 3. [API Reference](https://www.freertos.org/a00106.html)
 
 ## 3.1. FreeRTOSConfig.h
@@ -107,9 +185,8 @@ esp_err_t esp_mqtt_client_start(esp_mqtt_client_handle_t client)
 #### log
 
 ```c
+
 ```
-
-
 
 #### memory
 
@@ -117,7 +194,13 @@ esp_err_t esp_mqtt_client_start(esp_mqtt_client_handle_t client)
 uint32_t sys_get_free_size(void)
 {
 	return (uint32_t)xPortGetFreeHeapSize();
+  //heap_caps_get_free_size(MALLOC_CAP_DEFAULT)
 }
+```
+
+```c
+// 目前 task 剩餘 stack 空間
+UBaseType_t task_freestack = uxTaskGetStackHighWaterMark(NULL);
 ```
 
 #### now
@@ -173,6 +256,19 @@ void sys_msleep(uint32_t u32_ms)
 }
 ```
 
+#### task
+
+```bash
+const char *taskname = pcTaskGetTaskName(NULL);
+```
+
+```c
+// 取得目前 task 的數量
+uint32_t before_count = uxTaskGetNumberOfTasks();
+...
+uint32_t after_count = uxTaskGetNumberOfTasks();
+```
+
 ## 3.4. Event
 
 > [FreeRTOS --（17）任务通知浅析](https://stephenzhou.blog.csdn.net/article/details/107467305)
@@ -202,7 +298,7 @@ sequenceDiagram
 
 ```
 
-## 3.5. Mailbox & Queue
+## 3.5. Mailbox & [Queues](https://www.freertos.org/a00018.html)
 
 > [FreeRTOS --（14）队列管理之概述](https://blog.csdn.net/zhoutaopower/article/details/107221175)
 
@@ -223,7 +319,9 @@ sequenceDiagram
 ```c
 xQueueCreate
 xQueueCreateStatic
-vQueueDelete
+
+// 刪除 QueueA
+vQueueDelete(QueueA);
   
 xQueueSend
 xQueueSendFromISR
@@ -238,10 +336,50 @@ xQueueOverwrite
 xQueuePeek
 xQueuePeekFromISR
 
-xQueueReceive
-xQueueReceiveFromISR
+// 從 xTimerQueue 接收訊息
+while( xQueueReceive( xTimerQueue, &xMessage, tmrNO_DELAY ) != pdFAIL )
+{
+  ...
+}
+// ISR 從 QueueA 接收訊息
+portBASE_TYPE xTaskWokenByReceive = pdFALSE;
+while( xQueueReceiveFromISR( QueueA, ( void *) &cRxedChar, &xTaskWokenByReceive) )
+{
+	...
+}
+//
 xQueueCRReceiveFromISR
+ //
 xQueueCRReceive
+
+// 清空 QueueA 裏的資料 
+xQueueReset(QueueA);
+
+// 取得 QueueA 的名稱
+const char *Qunamename = pcQueueGetName(QueueA);
+
+// 設定 QueueA 的編號
+UBaseType_t QueueA_id = 520;
+vQueueSetQueueNumber(QueueA, QueueA_id);
+// 取得 QueueA 的編號
+UBaseType_t QueueA_id = uxQueueGetQueueNumber(QueueA);
+
+// 取得 QueueA 中的待處理的個數
+UBaseType_t QueueA_wait_counts = uxQueueMessagesWaiting(QueueA);
+// 取得 QueueA 的剩餘空間（個數）
+UBaseType_t QueueA_free_spaces = uxQueueSpacesAvailable(QueueA);
+
+// ISR 取得 QueueA 是否為空
+if (pdTRUE == xQueueIsQueueEmptyFromISR(QueueA) )
+{
+	...
+}
+// ISR 取得 QueueA 是否為滿
+if (pdTRUE == xQueueIsQueueFullFromISR(QueueA) )
+{
+	...
+}
+  
 ```
 
 ```mermaid
@@ -387,9 +525,27 @@ sequenceDiagram
 
 ## I.5. [RTOS](https://blog.csdn.net/zhoutaopower/category_10073388.html)
 
+## I.6. [FreeRTOS Heap_1、Heap_2、Heap_3、Heap_4、Heap_5的区别](https://blog.csdn.net/qq_21513281/article/details/121243362)
+
+## I.7. [FreeRTOS Heap 1_2_3_4_5 比较](https://www.cnblogs.com/FutureHardware/p/14220238.html)
+
 # II. Debug
 
 # III. Glossary
+
+#### TCB, Task Control Block
+
+>[ChatGPT] FreeRTOS 的 TCB 功用
+>
+>FreeRTOS 中的 TCB 是任務控制塊（Task Control Block）的縮寫，用於存儲任務的運行時信息。每個任務都有一個對應的 TCB，TCB 中包含了任務的狀態、優先級、堆棧指針等信息。通過 TCB，FreeRTOS 可以管理任務的執行，包括任務的創建、刪除、掛起、恢覆等操作。
+>
+>TCB 的主要作用包括：
+>
+>1. 存儲任務的運行時信息：包括任務的狀態（運行、就緒、掛起等）、優先級、堆棧指針、任務名字等。
+>2. 任務調度：FreeRTOS 根據任務的優先級和狀態，使用 TCB 來進行任務的調度，確保高優先級任務可以優先執行。
+>3. 任務管理：通過 TCB，可以實現對任務的創建、刪除、掛起、恢覆等操作，以及獲取任務的運行時信息。
+>
+>總的來說，TCB 是 FreeRTOS 中管理任務的重要數據結構，它承載了任務的關鍵信息，為任務的管理和調度提供了基礎。
 
 # IV. Tool Usage
 
