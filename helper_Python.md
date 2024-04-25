@@ -132,13 +132,15 @@ $ sudo apt install -y python3.10-full
 $ sudo update-alternatives --config python3
 update-alternatives: error: no alternatives for python3
 
-$ ll /usr/bin/python3.*
+$ ll /usr/bin/python3*
+$ ll /usr/bin/python2*
+$ ll /usr/bin/python*
 
 # --install <link> <name> <path> <priority>
 # /usr/bin/python3
 $ sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 2
 $ sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1
-# /usr/bin/python
+# /usr/bin/python 
 $ sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.8 2
 $ sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.10 1
 
@@ -147,6 +149,7 @@ lrwxrwxrwx 1 root root 18  四  24 13:20 /etc/alternatives/python -> /usr/bin/py
 lrwxrwxrwx 1 root root 18  四  24 13:17 /etc/alternatives/python3 -> /usr/bin/python3.8*
 
 $ update-alternatives --list python
+/usr/bin/python3.10
 /usr/bin/python3.8
 
 $ update-alternatives --list python3
@@ -181,7 +184,10 @@ update-alternatives: using /usr/bin/python3.10 to provide /usr/bin/python3 (pyth
 
 ```bash
 # to check again
-$ ll /usr/bin/*python*
+$ ll /etc/alternatives/python*
+lrwxrwxrwx 1 root root 18  四  25 11:35 /etc/alternatives/python -> /usr/bin/python3.8*
+lrwxrwxrwx 1 root root 19  四  25 11:36 /etc/alternatives/python3 -> /usr/bin/python3.10*
+
 ```
 
 ### 4.2.3. Install PIP for python x.xx
