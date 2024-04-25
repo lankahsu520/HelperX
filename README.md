@@ -47,7 +47,7 @@
 >
 > 舉凡操作身邊的電腦、手機、PS4、Smart TV或是智慧家電等，就已經是一位 Computer Science。
 >
-> 當然各行各業有資深也有資淺，但不要忘了當初也是經歷一段學習歷程，達到了某一成就，更不可以利用貶低別人來吹虛自我。
+> 當然各行各業有資深也有資淺，但不要忘了當初也是經歷一段學習歷程，達到了某種成就，更不可以利用貶低別人來吹虛自我。
 >
 > 還有就算把所有的知識學會，你也不會成為賈伯斯（Steve Jobs），你也只能把工作（jobs）做順！
 
@@ -137,7 +137,7 @@
 
 ### 1.1.22. [helper_SVNvsGit.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SVNvsGit.md) - SVN vs. Git helper.
 
-> SVN、Git 都是很好的版本控管工具，當然市面上不止這兩種。只是取得一個方便的即可。
+> SVN、Git 都是很好的版本控管工具，當然市面上不止這兩種。只要選擇方便性即可。
 >
 > 曾經有人說：「SVN 的速度比 Git 慢，所以不會去用 SVN」；至於是不是如此，雖然心中已有答案，也不想當場有所爭執。因為版本控管是管東西，而不是管速度的。
 
@@ -189,7 +189,7 @@
 >
 >所以請大家試著上網查尋看看。
 
-### 2.1.5. [helper_GCCDebugandgdb.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GCCDebugandgdb.md) - GCC and gdb helper.
+### 2.1.5. [helper_GCCDebugandgdb.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GCCDebugandgdb.md) - GCC Debug and gdb helper.
 
 > 這邊又有個小故事，雖然沒辦法百分之一百重現，但是大致如下
 >
