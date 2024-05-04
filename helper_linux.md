@@ -65,10 +65,25 @@ pwd
 #### tree - list contents of directories in a tree-like format.
 
 ```bash
-function usb-tree()
-{
-	tree /dev/bus/usb
-}
+/var$ tree -L 1
+.
+├── backups
+├── cache
+├── crash
+├── lib
+├── local
+├── lock -> /run/lock
+├── log
+├── mail
+├── metrics
+├── opt
+├── run -> /run
+├── snap
+├── spool
+├── tmp
+└── www
+
+15 directories, 0 files
 
 ```
 
@@ -509,6 +524,15 @@ e2fsck -f /dev/sdd1
 gparted
 ```
 
+#### lsblk - list block devices
+
+```bash
+function mount-disk()
+{
+	lsblk -o model,name,fstype,size,label,mountpoint
+}
+```
+
 #### mke2fs - create an ext2/ext3/ext4 filesystem
 
 ```bash
@@ -536,6 +560,19 @@ uuidgen | xargs tune2fs /dev/sdd1 -U
 ```
 
 # 4. String Handler
+
+```bash
+$ export HELLO_WORLD="Hello World"
+
+# uppercase
+$ echo ${HELLO_WORLD^^}
+HELLO WORLD
+
+# lowercase
+$ echo ${HELLO_WORLD,}
+hello World
+
+```
 
 #### cut - remove sections from each line of files
 
@@ -2147,6 +2184,100 @@ function pkg-config-ex()
 		echo $HINT
 	fi
 }
+```
+
+# 22. usb Hadler
+
+```bash
+$ ll /sys/bus/usb/devices/
+total 0
+drwxr-xr-x 2 root root 0  五   4 15:50 ./
+drwxr-xr-x 4 root root 0  五   4 15:50 ../
+lrwxrwxrwx 1 root root 0  五   4 15:50 1-0:1.0 -> ../../../devices/pci0000:00/0000:00:0c.0/usb1/1-0:1.0/
+lrwxrwxrwx 1 root root 0  五   4 15:50 1-1 -> ../../../devices/pci0000:00/0000:00:0c.0/usb1/1-1/
+lrwxrwxrwx 1 root root 0  五   4 15:50 1-1:1.0 -> ../../../devices/pci0000:00/0000:00:0c.0/usb1/1-1/1-1:1.0/
+lrwxrwxrwx 1 root root 0  五   4 18:29 1-2 -> ../../../devices/pci0000:00/0000:00:0c.0/usb1/1-2/
+lrwxrwxrwx 1 root root 0  五   4 18:29 1-2:1.0 -> ../../../devices/pci0000:00/0000:00:0c.0/usb1/1-2/1-2:1.0/
+lrwxrwxrwx 1 root root 0  五   4 15:50 2-0:1.0 -> ../../../devices/pci0000:00/0000:00:0c.0/usb2/2-0:1.0/
+lrwxrwxrwx 1 root root 0  五   4 15:50 usb1 -> ../../../devices/pci0000:00/0000:00:0c.0/usb1/
+lrwxrwxrwx 1 root root 0  五   4 15:50 usb2 -> ../../../devices/pci0000:00/0000:00:0c.0/usb2/
+```
+
+#### lsusb - list USB devices
+
+```bash
+$ lsusb
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 001 Device 003: ID 10c4:8468 Silicon Labs Tview
+Bus 001 Device 002: ID 80ee:0021 VirtualBox USB Tablet
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+$ lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/8p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+    |__ Port 2: Dev 3, If 0, Class=Human Interface Device, Driver=, 12M
+```
+
+#### usb-tree
+
+```bash
+function usb-tree()
+{
+	tree /dev/bus/usb
+}
+```
+
+```bash
+$ usb-tree
+/dev/bus/usb
+├── 001
+│   ├── 001
+│   ├── 002
+│   └── 003
+└── 002
+    └── 001
+
+2 directories, 4 files
+```
+
+#### usb-mount
+
+```bash
+function usb-mount()
+{
+	for sysdevpath in $(find /sys/bus/usb/devices/usb*/ -name dev); do
+	(
+		syspath="${sysdevpath%/dev}"
+		devname="$(udevadm info -q name -p $syspath)"
+		if [[ "$devname" == "bus/"* ]]; then
+			#echo "==> ${FUNCNAME[0]}:${LINENO}- $devname"
+			#echo "==> sysdevpath: $sysdevpath"
+			#echo "==> syspath: $syspath"
+			#udevadm info -q property --export -p $syspath
+			eval "$(udevadm info -q property --export -p $syspath)"
+			echo "$DEVNAME;${ID_VENDOR_ID^^}:${ID_MODEL_ID^^};${ID_TYPE};${ID_SERIAL};"
+		else
+			#echo "==> ${FUNCNAME[0]}:${LINENO}- $devname"
+			#udevadm info -q property --export -p $syspath
+			eval "$(udevadm info -q property --export -p $syspath)"
+			[[ -z "$ID_SERIAL" ]] && exit
+			echo "/dev/$devname;${ID_VENDOR_ID^^}:${ID_MODEL_ID^^};${ID_TYPE};${ID_SERIAL};"
+		fi
+	)
+	done
+}
+```
+
+```bash
+$ usb-mount
+/dev/bus/usb/001/001;1D6B:0002;;Linux_5.15.0-105-generic_xhci-hcd_xHCI_Host_Controller_0000:00:0c.0;
+/dev/bus/usb/001/002;80EE:0021;;VirtualBox_USB_Tablet;
+/dev/input/event5;80EE:0021;hid;VirtualBox_USB_Tablet;
+/dev/input/js0;80EE:0021;hid;VirtualBox_USB_Tablet;
+/dev/input/mouse1;80EE:0021;hid;VirtualBox_USB_Tablet;
+/dev/bus/usb/001/003;10C4:8468;;Tiqiaa_Tview;
+/dev/bus/usb/002/001;1D6B:0003;;Linux_5.15.0-105-generic_xhci-hcd_xHCI_Host_Controller_0000:00:0c.0;
 ```
 
 # Appendix
