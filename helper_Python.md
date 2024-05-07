@@ -405,8 +405,12 @@ $ pip install --upgrade cmake
 # upgrade wheel setuptools
 $ pip install --upgrade wheel setuptools launchpadlib
 # upgrade pycairo
-$ pip install --upgrade pycairo
+
 $ pip install --upgrade pygobject
+$ pip install --upgrade pycairo
+$ pip install --upgrade awscli
+$ pip install --upgrade pyproject-toml
+$ pip install --upgrade pylint
 ```
 
 ## 5.3. Packages List
@@ -592,6 +596,7 @@ No LSB modules are available.
 Description:    Ubuntu 20.04.6 LTS
 # https://launchpad.net/ubuntu/focal/+package/python-gi
 # download pygobject_3.36.0.orig.tar.xz
+# download pygobject_3.42.0.orig.tar.xz - for python3.12
 $ tar xvf pygobject_3.36.0.orig.tar.xz
 $ cd pygobject-3.36.0/
 $ sudo apt-get install libgirepository1.0-dev libcairo2-dev
