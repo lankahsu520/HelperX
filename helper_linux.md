@@ -1048,8 +1048,15 @@ sudo netstat -ntlp | grep :80
 
 #### nmap - Network exploration tool and security / port scanner
 
+> - **open**. The service on the associated port is active and listens for incoming connections. The port is available for connections.
+> - **closed**. No service is listening on the port. No services are bound on the port, and the port will refuse all incoming connections.
+> - **filtered**. The port state is unknown. The port's status is concealed or restricted due to packet filtering, firewall rules, or a network security device configuration.
+> - **unfiltered**. The port state is unknown. The port is accessible and unrestricted but has no active service linked to it.
+> - **open|filtered**. The port state is open or filtered. Nmap cannot determine which due to network conditions.
+> - **closed|filtered**. The port state is closed or filtered. The exact state is indeterminate due to network conditions.
+
 ```bash
-alias port-nmap="sudo nmap -sNU localhost"
+alias port-nmap="sudo nmap -p-  -sTU localhost"
 nmap localhost
 
 sudo nmap -sNU localhost
