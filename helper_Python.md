@@ -26,7 +26,9 @@
 
 > [維基百科](https://zh.wikipedia.org/zh-tw/Python) **Python**（英國發音：[/ˈpaɪθən/](https://zh.wikipedia.org/wiki/Help:英語國際音標)；美國發音：[/ˈpaɪθɑːn/](https://zh.wikipedia.org/wiki/Help:英語國際音標)），是一種廣泛使用的[直譯式](https://zh.wikipedia.org/wiki/直譯語言)、[進階](https://zh.wikipedia.org/wiki/高級語言)和[通用](https://zh.wikipedia.org/wiki/通用编程语言)的[程式語言](https://zh.wikipedia.org/wiki/编程语言)。Python支援多種程式設計範式，包括結構化、程序式、反射式、物件導向和函數式程式設計。它擁有[動態型別系統](https://zh.wikipedia.org/wiki/類型系統)和[垃圾回收](https://zh.wikipedia.org/wiki/垃圾回收_(計算機科學))功能，能夠自動管理記憶體使用，並且其本身擁有一個巨大而廣泛的標準庫。它的語言結構以及[物件導向](https://zh.wikipedia.org/wiki/面向对象程序设计)的方法，旨在幫助程式設計師為小型的和大型的專案編寫邏輯清晰的程式碼。
 
-# 2. Normal Install
+# 2. Install python
+
+## 2.1. apt-get install
 
 > python3 & pip3 需要共生共存，兩邊的版本要一致。
 
@@ -54,7 +56,7 @@ $ sudo apt install -y python3-pip
 
 ```
 
-# 3. Check python
+## 2.2. Check python
 
 ```bash
 $ python3 --version
@@ -85,7 +87,7 @@ lrwxrwxrwx 1 root root      16  三  13  2020 /usr/bin/python3-config -> python3
 lrwxrwxrwx 1 root root      33  三  13  2020 /usr/bin/x86_64-linux-gnu-python3-config -> x86_64-linux-gnu-python3.8-config*
 ```
 
-# 4. Upgrade python
+# 3. Upgrade python
 
 > 當系統已經安裝很多的 packages 後，<font color="red">不建議升級系統的 python</font>，因為
 >
@@ -103,7 +105,7 @@ lrwxrwxrwx 1 root root      33  三  13  2020 /usr/bin/x86_64-linux-gnu-python3-
 
 >但是事情總是要解決，建議參考使用 Virtual Environment。
 
-## 4.1. Add apt-repository for Ubuntu 20.04
+## 3.1. Add apt-repository for Ubuntu 20.04
 
 ```bash
 $ sudo apt update
@@ -112,18 +114,17 @@ $ sudo apt -y upgrade
 $ sudo apt install -y software-properties-common
 
 $ sudo add-apt-repository ppa:deadsnakes/ppa
-
 ```
 
-## 4.2. Upgrade
+## 3.2. Upgrade
 
-### 4.2.1. Install Special Version
+### 3.2.1. Install Special Version
 
 ```bash
 $ sudo apt install -y python3.10-full
 ```
 
-### 4.2.2. Use update-alternatives
+### 3.2.2. Use update-alternatives
 
 > 這邊使用 update-alternatives 進行系統調整。
 
@@ -180,17 +181,11 @@ There are 2 choices for the alternative python3 (providing /usr/bin/python3).
 Press <enter> to keep the current choice[*], or type selection number: 1
 update-alternatives: using /usr/bin/python3.10 to provide /usr/bin/python3 (python3) in manual mode
 
+# remove /usr/bin/python3 from python
+$ sudo update-alternatives --remove python /usr/bin/python3
 ```
 
-```bash
-# to check again
-$ ll /etc/alternatives/python*
-lrwxrwxrwx 1 root root 18  四  25 11:35 /etc/alternatives/python -> /usr/bin/python3.8*
-lrwxrwxrwx 1 root root 19  四  25 11:36 /etc/alternatives/python3 -> /usr/bin/python3.10*
-
-```
-
-### 4.2.3. Install PIP for python x.xx
+### 3.2.3. Install PIP for python x.xx
 
 ```bash
 $ export PJ_PYTHON_VER=`python -c 'import sys; print("{0[0]}.{0[1]}".format(sys.version_info))'`
@@ -205,22 +200,39 @@ $ curl -sS https://bootstrap.pypa.io/get-pip.py | python${PJ_PYTHON_VER}
 
 ```bash
 # upgrade pip3
-$ pip3 install --upgrade pip
+$ pip install --upgrade pip
 # or
 $ python3 -m pip install --upgrade pip
-
-# upgrade setup tools
-$ pip3 install wheel setuptools pip --upgrade
 ```
 
-# 5. Run helloworld.py
+## 3.3. Check Python again
 
-## 5.1. Run on Virtual Environment
+```bash
+# to check again
+$ ll /etc/alternatives/python*
+lrwxrwxrwx 1 root root 18  四  25 11:35 /etc/alternatives/python -> /usr/bin/python3.8*
+lrwxrwxrwx 1 root root 19  四  25 11:36 /etc/alternatives/python3 -> /usr/bin/python3.10*
+
+$ python3 --version
+Python 3.10.14
+
+$ pip3 --version
+pip 24.0 from /home/lanka/.local/lib/python3.10/site-packages/pip (python 3.10)
+$ pip --version
+pip 24.0 from /home/lanka/.local/lib/python3.10/site-packages/pip (python 3.10)
+
+$ virtualenv --version
+virtualenv 20.26.0 from /home/lanka/.local/lib/python3.10/site-packages/virtualenv/__init__.py
+```
+
+# 4. Run helloworld.py
+
+## 4.1. Run on Virtual Environment
 
 >建立一個獨立的開發環境，如前章節有提到，現有能穩定執行的套件，不見得匹配最新的的 python3。
 >
 
-### 5.1.1. Create A Virtual Environment
+### 4.1.1. Create A Virtual Environment
 
 ```bash
 $ sudo apt install -y python3.10-full
@@ -228,7 +240,7 @@ $ which python3.10
 /usr/bin/python3.10
 
 # install python Virtual Environment
-$ pip install virtualenv
+$ pip install --upgrade virtualenv
 $ pip install --upgrade setuptools
 
 $ mkdir -p /work/bin/python/3.10
@@ -262,7 +274,7 @@ $ cd /work/bin/python/3.10; tree -L 2 ./
 
 ```
 
-### 5.1.2. Enter Virtual Environment
+### 4.1.2. Enter Virtual Environment
 
 ```bash
 $ . /work/bin/python/3.10/bin/activate
@@ -310,19 +322,19 @@ if __name__ == "__main__":
 $ python helloworld.py 
 ```
 
-### 5.1.3. Leave Virtual Environment
+### 4.1.3. Leave Virtual Environment
 
 ```bash
 (3.10) $ deactivate
 ```
 
-## 5.2. Run with PYTHONPATH
+## 4.2. Run with PYTHONPATH
 
-### 5.2.1. Install requirements.txt
+### 4.2.1. Install requirements.txt
 
 ```bash
 $ export PYTHON_LIB="/work/python"
-$ pip3 install --target ${PYTHON_LIB} -r requirements.txt
+$ pip install --target ${PYTHON_LIB} -r requirements.txt
 ```
 
 - requirements.txt
@@ -336,25 +348,25 @@ netifaces==0.11.0
 
 ```
 
-### 5.2.2. Run
+### 4.2.2. Run
 
 ```bash
 $ (export PYTHONPATH="/work/python"; python ./helloworld.py)
 ```
 
-# 6. Packages
+# 5. Packages
 
->  [PyPI – the Python Package Index · PyPI](https://pypi.org)
+## 5.0. [PyPI – the Python Package Index · PyPI](https://pypi.org)
 
-## 6.1. Install packages
+## 5.1. Install packages
 
 ```bash
-$ pip3 install markdown
+$ pip install markdown
 
 # for special version
-$ pip3 install meson==1.3.0
+$ pip install meson==1.3.0
 
-$ pip3 list
+$ pip list
 Package  Version
 -------- -------
 Markdown 3.5.1
@@ -366,32 +378,38 @@ cmake version 3.16.3
 
 ```
 
-## 6.2. Upgrade packages
+## 5.2. Upgrade packages
 
 #### A. outdated
 
 ```bash
 # list the outdated packages
-$ pip3 list -o
+$ pip list -o
 
 # upgrade all of the outdated packages
-$ pip3 list -o | cut -f1 -d' ' | xargs -n1 pip3 install -U
+$ pip list -o | cut -f1 -d' ' | xargs -n1 pip install -U
 ```
 #### B.  uninstall
 
 ```bash
-$ pip3 uninstall meson
+$ pip uninstall meson
 ```
 
 #### C. upgrade
 
 ```bash
-$ pip3 install --upgrade meson
-$ pip3 install --upgrade markdown
-$ pip3 install --upgrade cmake
+$ pip install --upgrade meson
+$ pip install --upgrade markdown
+$ pip install --upgrade cmake
+
+# upgrade wheel setuptools
+$ pip install --upgrade wheel setuptools launchpadlib
+# upgrade pycairo
+$ pip install --upgrade pycairo
+$ pip install --upgrade pygobject
 ```
 
-## 6.3. Packages List
+## 5.3. Packages List
 
 ```bash
 $ ll /usr/lib/python3/dist-packages
@@ -484,17 +502,16 @@ $ sudo apt install -y python${PJ_PYTHON_VER}-distutils
 > 此問題常發生在更換 python 版本時，只安裝了主體，其它套件忘了安裝
 
 ```bash
+$ pip install --upgrade virtualenv
+# or 有時 pip 無法順利安裝時
+
 $ export PJ_PYTHON_VER=`python -c 'import sys; print("{0[0]}.{0[1]}".format(sys.version_info))'`
 $ echo $PJ_PYTHON_VER
 3.10
-
-#
-$ pip install virtualenv
-# or 有時 pip 無法順利安裝時
 $ sudo apt install -y python${PJ_PYTHON_VER}-venv
 
 $ virtualenv --version
-virtualenv 20.25.3 from /home/lanka/.local/lib/python3.10/site-packages/virtualenv/__init__.py
+virtualenv 20.26.1 from /home/lanka/.local/lib/python3.10/site-packages/virtualenv/__init__.py
 ```
 
 ## II.5. ImportError: cannot import name 'html5lib' from 'pip._vendor' (/usr/lib/python3/dist-packages/pip/_vendor/__init__.py)
@@ -551,11 +568,36 @@ Description:    Ubuntu 20.04.6 LTS
 # https://launchpad.net/python-apt
 # download python-apt_2.0.0ubuntu0.20.04.6.tar.xz
 $ tar xvf python-apt_2.0.0ubuntu0.20.04.6.tar.xz
-$ cd python-apt_2.0.0ubuntu0.20.04.6
+$ cd python-apt-2.0.0ubuntu0.20.04.6
 $ sudo apt-get install libapt-pkg-dev
 $ python setup.py build
 $ cd build/lib.linux-x86_64-cpython-310
 $ sudo cp *.so /usr/lib/python3/dist-packages
+```
+
+## II.10. ImportError: cannot import name '_gi' from partially initialized module
+
+```bash
+# for python3.10
+$ cd /usr/lib/python3/dist-packages/gi
+$ pip3 install --upgrade pygobject
+
+$ sudo cp  ~/.local/lib/python${PJ_PYTHON_VER}/site-packages/gi/*.so /usr/lib/python3/dist-packages/gi
+```
+
+```bash
+# for python3.10 and Ubuntu 20.04.6
+$ lsb_release -a | grep Description
+No LSB modules are available.
+Description:    Ubuntu 20.04.6 LTS
+# https://launchpad.net/ubuntu/focal/+package/python-gi
+# download pygobject_3.36.0.orig.tar.xz
+$ tar xvf pygobject_3.36.0.orig.tar.xz
+$ cd pygobject-3.36.0/
+$ sudo apt-get install libgirepository1.0-dev libcairo2-dev
+$ python setup.py build
+$ cd build/lib.linux-x86_64-cpython-310/gi/
+$ sudo cp *.so /usr/lib/python3/dist-packages/gi
 ```
 
 # III. Glossary
