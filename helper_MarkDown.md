@@ -252,7 +252,9 @@ AT&amp;&#40;T&#41;
 
 > 以下內容取自於 https://mermaid.js.org/syntax/gantt.html
 
-#### A. Sample
+### 5.1.1. Examples
+
+#### A. Example 1
 
 ```mermaid
 gantt
@@ -312,7 +314,45 @@ gantt
 
 ```
 
-#### B. Input date format[#](https://mermaid.js.org/syntax/gantt.html#input-date-format)
+#### B. Example 1 + compact mode
+
+> Please add "displayMode: compact"
+
+```mermaid
+---
+displayMode: compact
+---
+
+gantt
+	title A Gantt Diagram (2023-03-29)
+
+	%%dateFormat HH:mm
+	%%axisFormat %H:%M
+	%%tickInterval 1h
+	dateFormat  YYYY-MM-DD
+	axisFormat %-m/%-d
+	tickInterval 1day
+
+	%% (`excludes` accepts specific dates in YYYY-MM-DD format, days of the week ("sunday") or "weekends", but not the word "weekdays".)
+	excludes weekends saturday,sunday, 2023-02-27, 2023-02-28
+	excludes weekends saturday,sunday, 2023-04-03, 2023-04-04, 2023-04-05
+	excludes weekends saturday,sunday, 2023-05-01
+
+	section SPEC
+		read spec1 (crit/done): crit, done, spec1, 2023-03-29, 2023-03-31
+		read spec2 (crit/active): crit, active, spec2, after spec1, 2d
+		read spec3 (crit/): crit, spec3, after spec2, 1d
+		report (milestone): milestone, active, SPEC-end, after spec3, 1d
+	section TODO
+		Todo A (/done): done, todo1, after SPEC-end, 3d
+		Todo B (/active): active, todo2, after SPEC-end, 2d
+		Todo C (/): todo3, after todo1 todo2, 48h
+		Todo B (/): todo4, after todo3, 96h
+
+```
+
+
+### 5.1.2. Input date format[#](https://mermaid.js.org/syntax/gantt.html#input-date-format)
 
 The default input date format is `YYYY-MM-DD`. You can define your custom `dateFormat`.
 
@@ -347,7 +387,7 @@ Z ZZ        +12:00              Offset from UTC as +-HH:mm, +-HHmm, or Z
 
 More info in: https://momentjs.com/docs/#/parsing/string-format/
 
-#### C. Output date format on the axis[#](https://mermaid.js.org/syntax/gantt.html#output-date-format-on-the-axis)
+### 5.1.3. Output date format on the axis[#](https://mermaid.js.org/syntax/gantt.html#output-date-format-on-the-axis)
 
 The default output date format is `YYYY-MM-DD`. You can define your custom `axisFormat`, like `2020-Q1` for the first quarter of the year 2020.
 
@@ -386,7 +426,7 @@ The following formatting strings are supported:
 
 More info in: https://github.com/d3/d3-time-format/tree/v4.0.0#locale_format
 
-#### D. Axis ticks[#](https://mermaid.js.org/syntax/gantt.html#axis-ticks)
+### 5.1.4. Axis ticks[#](https://mermaid.js.org/syntax/gantt.html#axis-ticks)
 
 The default output ticks are auto. You can custom your `tickInterval`, like `1day` or `1week`.
 
@@ -406,7 +446,7 @@ More info in: https://github.com/d3/d3-time#interval_every
 
 > 以下內容取自於 https://mermaid.js.org/syntax/flowchart.html
 
-### 5.2.1. Sample
+### 5.2.1. Examples
 
 ```mermaid
 flowchart TD
@@ -1036,9 +1076,9 @@ flowchart LR
 > 以下內容取自於 https://mermaid.js.org/syntax/sequenceDiagram.html
 >
 
-### 5.3.1. Sample
+### 5.3.1. Examples
 
-#### A. Sample 1
+#### A. Example 1
 
 ```mermaid
 sequenceDiagram
@@ -1063,7 +1103,7 @@ sequenceDiagram
 	RServer->>UAC: SIP/2.0 200 OK
 ```
 
-#### A. Sample 2
+#### A. Example 2
 
 ```mermaid
 sequenceDiagram
@@ -1337,7 +1377,7 @@ sequenceDiagram
 
 > 以下內容取自於 https://mermaid.js.org/syntax/mindmap.html
 
-### 5.4.1. Sample
+### 5.4.1. Examples
 
 > 內文是利用縮排來表示
 
@@ -1441,7 +1481,7 @@ mindmap
 
 > 以下內容取自於 https://mermaid.js.org/syntax/stateDiagram.html
 
-### 5.5.1. Sample
+### 5.5.1. Examples
 ```mermaid
 stateDiagram-v2
 	Requirement --> Analysis
