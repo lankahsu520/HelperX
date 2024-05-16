@@ -889,11 +889,31 @@ viewers =
 @viewers =
 ```
 
-#### D.  svn co
+#### D. pre-revprop-change
 
 ```bash
-$ svn co http://trac-vbx/svnroot
-$ svn co --username lanka http://trac-vbx/svnpi
+$ cd /work_svnroot/svnroot/hooks
+$ tree -L 1 ./
+./
+├── post-commit.tmpl
+├── post-lock.tmpl
+├── post-revprop-change.tmpl
+├── post-unlock.tmpl
+├── pre-commit.tmpl
+├── pre-lock.tmpl
+├── pre-revprop-change.tmpl
+├── pre-unlock.tmpl
+└── start-commit.tmpl
+
+0 directories, 9 files
+
+$ sudo mv pre-revprop-change.tmpl pre-revprop-change
+$ sudo chmod 755 pre-revprop-change
+```
+
+```bash
+# 更動 Changeset:123 的log
+$ svn propedit svn:log --revprop -r 123
 ```
 
 # 6. Special
