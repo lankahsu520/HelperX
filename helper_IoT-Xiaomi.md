@@ -135,25 +135,68 @@ Devices found for server "tw" @ home "12345678901":
 function xiaomi-device-ip()
 {
 	IP1="$1"
-	TOKEN2="$2"
-	IECHO="$3"
-	[ "$IP1" != "" ] && XIAOMI_IP=$IP1
-	[ "$TOKEN2" != "" ] && XIAOMI_TOKEN=$TOKEN2
+	UNSET2="$2"
+	[ "$IP1" != "" ] && export XIAOMI_IP=$IP1
 
-	if [ -z "${IECHO}" ]; then
+	if [ -z "${UNSET2}" ]; then
 		echo "XIAOMI_IP=${XIAOMI_IP}"
-		echo "XIAOMI_TOKEN=${XIAOMI_TOKEN}"
-	elif [ "${IECHO}" == "reset" ]; then
+	elif [ "${UNSET2}" == "unset" ]; then
 		unset XIAOMI_IP
+	fi
+}
+
+function xiaomi-device-token()
+{
+	TOKEN1="$1"
+	UNSET2="$2"
+	[ "$TOKEN1" != "" ] && export XIAOMI_TOKEN=$TOKEN1
+
+	if [ -z "${UNSET2}" ]; then
+		echo "XIAOMI_TOKEN=${XIAOMI_TOKEN}"
+	elif [ "${UNSET2}" == "unset" ]; then
 		unset XIAOMI_TOKEN
+	fi
+}
+
+function xiaomi-device-id()
+{
+	ID1="$1"
+	UNSET2="$2"
+	[ "$ID1" != "" ] && export XIAOMI_ID=$ID1
+
+	if [ -z "${UNSET2}" ]; then
+		echo "XIAOMI_ID=${XIAOMI_ID}"
+	elif [ "${UNSET2}" == "unset" ]; then
+		unset XIAOMI_ID
+	fi
+}
+
+function xiaomi-device-helper()
+{
+	IP1="$1"
+	TOKEN2="$2"
+	ID3="$3"
+	UNSET4="$4"
+
+	if [ "${IP1}" == "unset" ]; then
+		xiaomi-device-ip "" unset
+		xiaomi-device-token "" unset
+		xiaomi-device-id "" unset
+	else
+		xiaomi-device-ip "${IP1}" "${UNSET4}"
+		xiaomi-device-token "${TOKEN2}" "${UNSET4}"
+		xiaomi-device-id "${ID3}" "${UNSET4}"
 	fi
 }
 ```
 
 ```bash
-$ xiaomi-device-ip 192.168.0.28 12345678901234567890123456789012
-XIAOMI_IP=192.168.0.28
-XIAOMI_TOKEN=12345678901234567890123456789012
+$ xiaomi-device-ip 192.168.0.28
+$ xiaomi-device-token 12345678901234567890123456789012
+$ xiaomi-device-id 987654321
+
+# or
+$ xiaomi-device-helper 192.168.0.28 12345678901234567890123456789012 987654321
 ```
 
 ## 3.1. discover
@@ -235,7 +278,7 @@ function xiaomi-device-info()
 {
 	HINT="Usage: ${FUNCNAME[0]} [ip] [token]"
 
-	xiaomi-device-ip "$1" "$2" "no"
+	xiaomi-device-helper "$1" "$2" "" "hidden"
 
 	if [ ! -z "${XIAOMI_IP}" ] && [ ! -z "${XIAOMI_TOKEN}" ]; then
 		[ "$XIAOMI_IP" != "" ] && XIAOMI_IP_ARG="--ip $XIAOMI_IP"
@@ -261,36 +304,86 @@ Firmware version: 1.0.6
 #### A. get_properties
 
 ```bash
-# get the status of the device
-miiocli \
-	device \
-	${XIAOMI_IP_ARG} ${XIAOMI_TOKEN_ARG} \
-	raw_command get_properties \
-	"[{'did': '${XIAOMI_ID}', 'siid': 2, 'piid': 1 }]"
+function xiaomi-device-raw-get()
+{
+	HINT="Usage: ${FUNCNAME[0]} [ip] [token]"
+
+	xiaomi-device-helper "$1" "$2" "" "hidden"
+
+	if [ ! -z "${XIAOMI_IP}" ] && [ ! -z "${XIAOMI_TOKEN}" ] && [ ! -z "${XIAOMI_ID}" ]; then
+		[ "$XIAOMI_IP" != "" ] && XIAOMI_IP_ARG="--ip $XIAOMI_IP"
+		[ "$XIAOMI_TOKEN" != "" ] && XIAOMI_TOKEN_ARG="--token $XIAOMI_TOKEN"
+
+		xiaomi-device \
+			${XIAOMI_IP_ARG} ${XIAOMI_TOKEN_ARG} \
+			raw_command get_properties \
+			\"[{'did': '${XIAOMI_ID}', 'siid': 2, 'piid': 1 }]\"
+	else
+		echo $HINT
+	fi
+}
+```
+
+```bash
+$ xiaomi-device-raw-get
+[(miiocli device --ip 192.168.0.28 --token 12345678901234567890123456789012 raw_command get_properties "[{'did': '987654321', 'siid': 2, 'piid': 1 }]")]
+Running command raw_command
+[{'did': '987654321', 'siid': 2, 'piid': 1, 'code': 0, 'value': True}]
 ```
 
 #### B. set_properties
+
+```bash
+function xiaomi-device-raw-set()
+{
+	HINT="Usage: ${FUNCNAME[0]} <value> [ip] [token] [id]"
+
+	XIAOMI_VALUE="$1"
+	xiaomi-device-helper "$2" "$3" "$4" "hidden"
+
+	if [ ! -z "${XIAOMI_VALUE}" ] && [ ! -z "${XIAOMI_IP}" ] && [ ! -z "${XIAOMI_TOKEN}" ] && [ ! -z "${XIAOMI_ID}" ]; then
+		[ "$XIAOMI_IP" != "" ] && XIAOMI_IP_ARG="--ip $XIAOMI_IP"
+		[ "$XIAOMI_TOKEN" != "" ] && XIAOMI_TOKEN_ARG="--token $XIAOMI_TOKEN"
+
+		XIAOMI_RAW="[{'did': '${XIAOMI_ID}', 'siid': 2, 'piid': 1, 'value':${XIAOMI_VALUE} }]"
+		xiaomi-device \
+			${XIAOMI_IP_ARG} ${XIAOMI_TOKEN_ARG} \
+			raw_command set_properties \
+			\"${XIAOMI_RAW}\"
+	else
+		echo $HINT
+	fi
+}
+
+function xiaomi-device-raw-settrue()
+{
+	xiaomi-device-raw-set True
+}
+
+function xiaomi-device-raw-setfalse()
+{
+	xiaomi-device-raw-set False
+}
+```
 
 ##### B.1. turn on the device
 
 ```bash
 # turn on the device
-miiocli \
-	device \
-	${XIAOMI_IP_ARG} ${XIAOMI_TOKEN_ARG} \
-	raw_command set_properties \
-	"[{'did': '${XIAOMI_ID}', 'siid': 2, 'piid': 1, 'value':True}]"
+$ xiaomi-device-raw-settrue
+[(miiocli device --ip 192.168.0.28 --token 12345678901234567890123456789012 raw_command set_properties "[{'did': '987654321', 'siid': 2, 'piid': 1, 'value':True }]")]
+Running command raw_command
+[{'did': '987654321', 'siid': 2, 'piid': 1, 'code': 0}]
 ```
 
 ##### B.2. turn off the device
 
 ```bash
 # turn off the device
-miiocli \
-	device \
-	${XIAOMI_IP_ARG} ${XIAOMI_TOKEN_ARG} \
-	raw_command set_properties \
-	"[{'did': '${XIAOMI_ID}', 'siid': 2, 'piid': 1, 'value':False}]"
+$ xiaomi-device-raw-setfalse
+[(miiocli device --ip 192.168.0.28 --token 12345678901234567890123456789012 raw_command set_properties "[{'did': '987654321', 'siid': 2, 'piid': 1, 'value':False }]")]
+Running command raw_command
+[{'did': '987654321', 'siid': 2, 'piid': 1, 'code': 0}]
 ```
 
 # Appendix
