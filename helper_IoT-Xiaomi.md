@@ -24,6 +24,12 @@
 >
 > 如果個人有使用大陸產品的疑慮，建議可以省略此篇文章。
 
+## 1.1. [Xiaomi Miot Spec: 小米/米家产品库](https://home.miot-spec.com)
+
+## 1.2. [小米 IoT 开发者平台](https://iot.mi.com/)
+
+### 1.2.1. [平台介绍](https://iot.mi.com/v2/new/doc/home)
+
 # 2. Topology
 
 ```mermaid
@@ -75,6 +81,9 @@ flowchart LR
 
 ```bash
 $ pip install --upgrade python-miio
+
+# genericmiot
+$ pip install git+https://github.com/rytilahti/python-miio.git
 ```
 
 ## 3.0. cloud
@@ -299,6 +308,12 @@ Hardware version: ESP32C3
 Firmware version: 1.0.6
 ```
 
+#### A. [Xiaomi Smart Plug 2](https://home.miot-spec.com/s/qmi.plug.tw02)
+
+![Xiaomi_qmi.plug.tw02](./images/Xiaomi_qmi.plug.tw02.png)
+
+
+
 ### 3.2.2. device raw_command
 
 #### A. get_properties
@@ -390,11 +405,13 @@ Running command raw_command
 
 # I. Study
 
-## I.1. [Linux命令行控制小米电源开关](https://blog.csdn.net/yanceylu/article/details/135067812)
+## I.1. [python-miio](https://python-miio.readthedocs.io/en/latest/)
 
-## I.2. [[米家]解除台版小米多功能網關遠端控制(TELNET)密碼](https://esisterebbb.blogspot.com/2021/01/telnet.html)
+## I.2. [Linux命令行控制小米电源开关](https://blog.csdn.net/yanceylu/article/details/135067812)
 
-## I.3. [使用 Python 控制米家设备](https://moenew.us/python-miio-use.html)
+## I.3. [[米家]解除台版小米多功能網關遠端控制(TELNET)密碼](https://esisterebbb.blogspot.com/2021/01/telnet.html)
+
+## I.4. [使用 Python 控制米家设备](https://moenew.us/python-miio-use.html)
 
 # II. Debug
 
