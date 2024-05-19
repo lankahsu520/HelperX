@@ -97,6 +97,10 @@
 
 >IoT 的概念很簡單，不要被一些 “協定” 約束你的想像。也不要被主管 or 業務員的話語所迷惑。只要清楚基本概念既可。
 
+### 1.1.9a. [helper_IoT-Xiaomi.md](https://github.com/lankahsu520/HelperX/blob/master/helper_IoT-Xiaomi.md) - IoT Xiaomi helper.
+
+>用 Xiaomi 建構[智慧居家](https://www.mi.com/tw/product-list/smart-device/?cat_id=2546)。
+
 ### 1.1.10. [helper_jq.md](https://github.com/lankahsu520/HelperX/blob/master/helper_jq.md) - jq helper.
 
 >JSON 是目前常用的資料格式，jq 提供於簡單的命令列下查詢、編輯，抓取所需之資訊，導入另一個程式使用。
