@@ -32,6 +32,8 @@
 
 # 2. Topology
 
+>目前自行建置的設備如下，畢竟錢力有限、時間有限。也因為這樣的情況下，才能當興趣來做。
+
 ```mermaid
 flowchart LR
 	Xiaomi[Xiaomi cloud]
@@ -180,7 +182,7 @@ function xiaomi-device-id()
 	fi
 }
 
-function xiaomi-device-helper()
+function xiaomi-device-which()
 {
 	IP1="$1"
 	TOKEN2="$2"
@@ -191,10 +193,14 @@ function xiaomi-device-helper()
 		xiaomi-device-ip "" unset
 		xiaomi-device-token "" unset
 		xiaomi-device-id "" unset
+		unset XIAOMI_MODEL
+		unset XIAOMI_GENERICMIOT
 	else
 		xiaomi-device-ip "${IP1}" "${UNSET4}"
 		xiaomi-device-token "${TOKEN2}" "${UNSET4}"
 		xiaomi-device-id "${ID3}" "${UNSET4}"
+		echo "XIAOMI_MODEL=${XIAOMI_MODEL}"
+		echo "XIAOMI_GENERICMIOT=${XIAOMI_GENERICMIOT}"
 	fi
 }
 ```
@@ -205,7 +211,7 @@ $ xiaomi-device-token 12345678901234567890123456789012
 $ xiaomi-device-id 987654321
 
 # or
-$ xiaomi-device-helper 192.168.0.28 12345678901234567890123456789012 987654321
+$ xiaomi-device-which 192.168.0.28 12345678901234567890123456789012 987654321
 ```
 
 ## 3.1. discover
@@ -271,7 +277,61 @@ Commands:
 ```
 
 ```bash
-function xiaomi-device()
+function xiaomi-endpoint-piid()
+{
+	PIID1="$1"
+	UNSET2="$2"
+	[ "$PIID1" != "" ] && export XIAOMI_PIID=$PIID1
+
+	if [ -z "${UNSET2}" ]; then
+		echo "XIAOMI_PIID=${XIAOMI_PIID}"
+	elif [ "${UNSET2}" == "unset" ]; then
+		unset XIAOMI_PIID
+	fi
+}
+
+function xiaomi-endpoint-siid()
+{
+	SIID1="$1"
+	UNSET2="$2"
+	[ "$SIID1" != "" ] && export XIAOMI_SIID=$SIID1
+
+	if [ -z "${UNSET2}" ]; then
+		echo "XIAOMI_SIID=${XIAOMI_SIID}"
+	elif [ "${UNSET2}" == "unset" ]; then
+		unset XIAOMI_SIID
+	fi
+}
+
+function xiaomi-endpoint-which()
+{
+	SIID1="$1"
+	PIID2="$2"
+	UNSET3="$3"
+
+	if [ "${SIID1}" == "unset" ]; then
+		xiaomi-endpoint-siid "" unset
+		xiaomi-endpoint-piid "" unset
+	else
+		xiaomi-endpoint-siid "${SIID1}" "${UNSET3}"
+		xiaomi-endpoint-piid "${PIID2}" "${UNSET3}"
+	fi
+}
+
+function xiaomi-model2endpoint()
+{
+	HINT="Usage: ${FUNCNAME[0]} <model>"
+	MODEL1=$1
+
+	if [ "${MODEL1}" == "qmi.plug.tw02" ]; then
+		xiaomi-endpoint-which "2" "1" ""
+		#xiaomi-endpoint-which "2" "1" "hidden"
+	else
+		echo $HINT
+	fi
+}
+
+function xiaomi-device-helper()
 {
 	ARGS="$*"
 
@@ -287,13 +347,23 @@ function xiaomi-device-info()
 {
 	HINT="Usage: ${FUNCNAME[0]} [ip] [token]"
 
-	xiaomi-device-helper "$1" "$2" "" "hidden"
+	xiaomi-device-which "$1" "$2" "" "hidden"
 
 	if [ ! -z "${XIAOMI_IP}" ] && [ ! -z "${XIAOMI_TOKEN}" ]; then
 		[ "$XIAOMI_IP" != "" ] && XIAOMI_IP_ARG="--ip $XIAOMI_IP"
 		[ "$XIAOMI_TOKEN" != "" ] && XIAOMI_TOKEN_ARG="--token $XIAOMI_TOKEN"
 
-		xiaomi-device ${XIAOMI_IP_ARG} ${XIAOMI_TOKEN_ARG} info
+		export XIAOMI_DEVICE_FILE=/tmp/.${FUNCNAME[0]}
+		xiaomi-device-helper ${XIAOMI_IP_ARG} ${XIAOMI_TOKEN_ARG} info | tee ${XIAOMI_DEVICE_FILE}
+
+		if [ "$?" == "0" ]; then
+			echo "--------------------------------------------------"
+			export XIAOMI_MODEL=`grep 'Model' ${XIAOMI_DEVICE_FILE} | cut -d" " -f2`
+			export XIAOMI_GENERICMIOT=`grep 'Supported by genericmiot' ${XIAOMI_DEVICE_FILE} | cut -d" " -f4`
+			xiaomi-model2endpoint ${XIAOMI_MODEL}
+			echo "XIAOMI_MODEL=${XIAOMI_MODEL}"
+			echo "XIAOMI_GENERICMIOT=${XIAOMI_GENERICMIOT}"
+		fi
 	else
 		echo $HINT
 	fi
@@ -303,16 +373,27 @@ function xiaomi-device-info()
 ```bash
 $ xiaomi-device-info
 [(miiocli device --ip 192.168.0.28 --token 12345678901234567890123456789012 info)]
+Running command info
 Model: qmi.plug.tw02
 Hardware version: ESP32C3
 Firmware version: 1.0.6
+Supported using: GenericMiot
+Command: miiocli genericmiot --ip 192.168.0.28 --token 12345678901234567890123456789012
+Supported by genericmiot: True
+--------------------------------------------------
+XIAOMI_SIID=2
+XIAOMI_PIID=1
+XIAOMI_MODEL=qmi.plug.tw02
+XIAOMI_GENERICMIOT=True
 ```
 
 #### A. [Xiaomi Smart Plug 2](https://home.miot-spec.com/s/qmi.plug.tw02)
 
+> siid: 2
+>
+> piid: 1
+
 ![Xiaomi_qmi.plug.tw02](./images/Xiaomi_qmi.plug.tw02.png)
-
-
 
 ### 3.2.2. device raw_command
 
@@ -321,18 +402,20 @@ Firmware version: 1.0.6
 ```bash
 function xiaomi-device-raw-get()
 {
-	HINT="Usage: ${FUNCNAME[0]} [ip] [token]"
+	HINT="Usage: ${FUNCNAME[0]} [ip] [token] [id] [siid] [piid]"
 
-	xiaomi-device-helper "$1" "$2" "" "hidden"
+	xiaomi-device-which "$1" "$2" "$3" "hidden"
+	xiaomi-endpoint-which "$4" "$5" "hidden"
 
-	if [ ! -z "${XIAOMI_IP}" ] && [ ! -z "${XIAOMI_TOKEN}" ] && [ ! -z "${XIAOMI_ID}" ]; then
+	if [ ! -z "${XIAOMI_IP}" ] && [ ! -z "${XIAOMI_TOKEN}" ] && [ ! -z "${XIAOMI_ID}" ] && [ ! -z "${XIAOMI_SIID}" ] && [ ! -z "${XIAOMI_PIID}" ]; then
 		[ "$XIAOMI_IP" != "" ] && XIAOMI_IP_ARG="--ip $XIAOMI_IP"
 		[ "$XIAOMI_TOKEN" != "" ] && XIAOMI_TOKEN_ARG="--token $XIAOMI_TOKEN"
 
-		xiaomi-device \
+		XIAOMI_RAW="[{'did': '${XIAOMI_ID}', 'siid': ${XIAOMI_SIID}, 'piid': ${XIAOMI_PIID} }]"
+		xiaomi-device-helper \
 			${XIAOMI_IP_ARG} ${XIAOMI_TOKEN_ARG} \
 			raw_command get_properties \
-			\"[{'did': '${XIAOMI_ID}', 'siid': 2, 'piid': 1 }]\"
+			\"${XIAOMI_RAW}\"
 	else
 		echo $HINT
 	fi
@@ -354,14 +437,14 @@ function xiaomi-device-raw-set()
 	HINT="Usage: ${FUNCNAME[0]} <value> [ip] [token] [id]"
 
 	XIAOMI_VALUE="$1"
-	xiaomi-device-helper "$2" "$3" "$4" "hidden"
+	xiaomi-device-which "$2" "$3" "$4" "hidden"
 
 	if [ ! -z "${XIAOMI_VALUE}" ] && [ ! -z "${XIAOMI_IP}" ] && [ ! -z "${XIAOMI_TOKEN}" ] && [ ! -z "${XIAOMI_ID}" ]; then
 		[ "$XIAOMI_IP" != "" ] && XIAOMI_IP_ARG="--ip $XIAOMI_IP"
 		[ "$XIAOMI_TOKEN" != "" ] && XIAOMI_TOKEN_ARG="--token $XIAOMI_TOKEN"
 
 		XIAOMI_RAW="[{'did': '${XIAOMI_ID}', 'siid': 2, 'piid': 1, 'value':${XIAOMI_VALUE} }]"
-		xiaomi-device \
+		xiaomi-device-helper \
 			${XIAOMI_IP_ARG} ${XIAOMI_TOKEN_ARG} \
 			raw_command set_properties \
 			\"${XIAOMI_RAW}\"
