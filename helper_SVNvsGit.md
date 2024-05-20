@@ -1244,6 +1244,20 @@ $ git push -f
 $ rm -f ~/.subversion/auth/svn.simple/*
 ```
 
+## II.2. error: You have not concluded your merge (MERGE_HEAD exists).
+
+>當 local repository 的重要性大於 cloud repository。
+
+```bash
+$ git pull
+error: You have not concluded your merge (MERGE_HEAD exists).
+hint: Please, commit your changes before merging.
+fatal: Exiting because of unfinished merge.
+
+$ git reset --merge
+$ git push -f
+```
+
 # III. Glossary
 
 # IV. Tool Usage

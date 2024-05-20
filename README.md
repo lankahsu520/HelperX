@@ -238,6 +238,10 @@
 
 > Provide examples for make, cmake, meson and gn.
 
+#### A. [Kconfig-123](https://github.com/lankahsu520/makeXcmakeXmesonXgn/tree/main/Kconfig-123)
+
+>當編譯系統時，總是會遇到的。
+
 ### 2.2.6. [pythonX9](https://github.com/lankahsu520/pythonX9)
 
 > pythonX9 provides simple APIs - class, debug api, queue/stack api, multicast server/client, state machine api, sysinfo api.

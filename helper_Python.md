@@ -401,6 +401,8 @@ $ pip uninstall meson
 $ pip install --upgrade meson
 $ pip install --upgrade markdown
 $ pip install --upgrade cmake
+# for kconfig
+$ pip install --upgrade kconfiglib
 
 # upgrade wheel setuptools
 $ pip install --upgrade wheel setuptools launchpadlib
