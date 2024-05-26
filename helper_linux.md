@@ -2193,7 +2193,7 @@ function pkg-config-ex()
 }
 ```
 
-# 22. usb Hadler
+# 22. usb Handler
 
 ```bash
 $ ll /sys/bus/usb/devices/
@@ -2285,6 +2285,25 @@ $ usb-mount
 /dev/input/mouse1;80EE:0021;hid;VirtualBox_USB_Tablet;
 /dev/bus/usb/001/003;10C4:8468;;Tiqiaa_Tview;
 /dev/bus/usb/002/001;1D6B:0003;;Linux_5.15.0-105-generic_xhci-hcd_xHCI_Host_Controller_0000:00:0c.0;
+```
+
+# 23. Multimedia Handler
+
+## 23.1. GStreamer
+> 請參考 [helper_GStreamer.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GStreamer.md) - GStreamer helper.
+
+## 23.2. streamlink
+> extracts streams from various services and pipes them into a video player of choice
+
+```bash
+$ pip install --upgrade streamlink
+```
+
+```bash
+$ streamlink https://www.youtube.com/watch?v=a_9_38JpdYU -l info
+[cli][info] Found matching plugin youtube for URL https://www.youtube.com/watch?v=a_9_38JpdYU
+Available streams: audio_mp4a, audio_opus, 144p (worst), 240p, 360p, 480p, 720p, 1080p (best)
+$ streamlink -o 240p.mp4 https://www.youtube.com/watch?v=a_9_38JpdYU 240p
 ```
 
 # Appendix
