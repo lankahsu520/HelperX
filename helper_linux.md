@@ -2300,10 +2300,70 @@ $ pip install --upgrade streamlink
 ```
 
 ```bash
-$ streamlink https://www.youtube.com/watch?v=a_9_38JpdYU -l info
+function streamlink-helper()
+{
+	echo "STREAM_URL=${STREAM_URL}"
+	echo "STREAM_SAVETO=${STREAM_SAVETO}"
+	echo "STREAM_QUALITY=${STREAM_QUALITY}"
+}
+
+function streamlink-info()
+{
+	HINT="Usage: ${FUNCNAME[0]} <url>"
+	URL1="$1"
+
+	if [ ! -z "${URL1}" ]; then
+		export STREAM_URL=${URL1}
+		DO_COMMAND="(streamlink ${STREAM_URL} -l info)"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
+
+function streamlink-pull()
+{
+	HINT="Usage: ${FUNCNAME[0]} <saveto> <quality> <url>"
+	SAVETO1="$1"
+	QUALITY2="$2"
+	URL3="$3"
+
+	NOW=`date +"%Y%m%d%H%M%S"`
+
+	[ "$SAVETO1" = "" ] && [ "$STREAM_SAVETO" = "" ] && export STREAM_SAVETO="${NOW}.mp4"
+	[ "$SAVETO1" != "" ] && export STREAM_SAVETO=${SAVETO1}
+
+	[ "$QUALITY2" = "" ] && [ "$STREAM_QUALITY" = "" ] && export STREAM_QUALITY="best"
+	[ "$QUALITY2" != "" ] && export STREAM_QUALITY=${QUALITY2}
+
+	[ "$URL3" != "" ] && export STREAM_URL=${URL3}
+
+	if [ ! -z "${STREAM_URL}" ] && [ ! -z "${STREAM_SAVETO}" ]; then
+		DO_COMMAND="(streamlink --retry-max 3 -o ${STREAM_SAVETO} ${STREAM_URL} ${STREAM_QUALITY})"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
+```
+
+```bash
+$ streamlink-info https://www.youtube.com/watch?v=a_9_38JpdYU
+[(streamlink https://www.youtube.com/watch?v=a_9_38JpdYU -l info)]
 [cli][info] Found matching plugin youtube for URL https://www.youtube.com/watch?v=a_9_38JpdYU
 Available streams: audio_mp4a, audio_opus, 144p (worst), 240p, 360p, 480p, 720p, 1080p (best)
-$ streamlink -o 240p.mp4 https://www.youtube.com/watch?v=a_9_38JpdYU 240p
+
+$ streamlink-pull
+[(streamlink --retry-max 3 -o 20240527084746.mp4 https://www.youtube.com/watch?v=a_9_38JpdYU best)]
+[cli][info] Found matching plugin youtube for URL https://www.youtube.com/watch?v=a_9_38JpdYU
+[cli][info] Available streams: audio_mp4a, audio_opus, 144p (worst), 240p, 360p, 480p, 1080p (best)
+[cli][info] Opening stream: 1080p (muxed-stream)
+[cli][info] Writing output to
+/work/codebase/xbox/xbox_123/20240527084746.mp4
+[utils.named_pipe][info] Creating pipe streamlinkpipe-136632-1-5194
+[utils.named_pipe][info] Creating pipe streamlinkpipe-136632-2-642
+[download] Written 1.39 MiB to /work/codebase/xbox/xbox_123/20240527084746.mp4 (5s @ 300.11 KiB/s)
+
 ```
 
 # Appendix
