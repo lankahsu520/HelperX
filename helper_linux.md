@@ -2292,7 +2292,7 @@ $ usb-mount
 ## 23.1. GStreamer
 > 請參考 [helper_GStreamer.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GStreamer.md) - GStreamer helper.
 
-## 23.2. streamlink
+## 23.2. [streamlink](https://pypi.org/project/streamlink/)
 > extracts streams from various services and pipes them into a video player of choice
 
 ```bash
@@ -2365,7 +2365,158 @@ $ streamlink-pull
 [utils.named_pipe][info] Creating pipe streamlinkpipe-136632-1-5194
 [utils.named_pipe][info] Creating pipe streamlinkpipe-136632-2-642
 [download] Written 1.39 MiB to /work/codebase/xbox/xbox_123/20240527084746.mp4 (5s @ 300.11 KiB/s)
+```
 
+## 23.3. [yt-dlp](https://pypi.org/project/yt-dlp/)
+
+> [output-template](https://github.com/yt-dlp/yt-dlp#output-template)
+
+```bash
+$ pip install --upgrade yt-dlp
+```
+
+```bash
+function yt-dlp-helper()
+{
+	echo "YT_DLP_URL=${YT_DLP_URL}"
+	echo "YT_DLP_SAVETO=${YT_DLP_SAVETO}"
+	echo "YT_DLP_QUALITY=${YT_DLP_QUALITY}"
+}
+
+function yt-dlp-info()
+{
+	HINT="Usage: ${FUNCNAME[0]} <url>"
+	URL1="$1"
+
+	if [ ! -z "${URL1}" ]; then
+		export YT_DLP_URL=${URL1}
+		unset YT_DLP_SAVETO
+		unset YT_DLP_QUALITY
+		DO_COMMAND="(yt-dlp -F ${YT_DLP_URL})"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
+
+function yt-dlp-pull()
+{
+	HINT="Usage: ${FUNCNAME[0]} <saveto> <quality> <url>"
+	SAVETO1="$1"
+	QUALITY2="$2"
+	URL3="$3"
+
+	NOW=`date +"%Y%m%d%H%M%S"`
+
+	[ "$SAVETO1" = "" ] && [ "$YT_DLP_SAVETO" = "" ] && export YT_DLP_SAVETO="${NOW}.mp4"
+	[ "$SAVETO1" != "" ] && export YT_DLP_SAVETO=${SAVETO1}
+
+	[ "$QUALITY2" = "" ] && [ "$YT_DLP_QUALITY" = "" ] && export YT_DLP_QUALITY="'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b'"
+	[ "$QUALITY2" != "" ] && export YT_DLP_QUALITY=${QUALITY2}
+
+	[ "$URL3" != "" ] && export YT_DLP_URL=${URL3}
+
+	if [ ! -z "${YT_DLP_URL}" ] && [ ! -z "${YT_DLP_SAVETO}" ]; then
+		DO_COMMAND="(yt-dlp -f ${YT_DLP_QUALITY} ${YT_DLP_URL} -o ${YT_DLP_SAVETO})"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
+```
+
+```bash
+$ yt-dlp-info https://www.youtube.com/watch?v=a_9_38JpdYU
+[(yt-dlp -F https://www.youtube.com/watch?v=a_9_38JpdYU)]
+[youtube] Extracting URL: https://www.youtube.com/watch?v=a_9_38JpdYU
+[youtube] a_9_38JpdYU: Downloading webpage
+[youtube] a_9_38JpdYU: Downloading ios player API JSON
+[youtube] a_9_38JpdYU: Downloading m3u8 information
+[info] Available formats for a_9_38JpdYU:
+ID      EXT   RESOLUTION FPS CH │   FILESIZE   TBR PROTO │ VCODEC          VBR ACODEC      ABR ASR MORE INFO
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+sb3     mhtml 48x27        0    │                  mhtml │ images                                  storyboard
+sb2     mhtml 80x45        0    │                  mhtml │ images                                  storyboard
+sb1     mhtml 160x90       0    │                  mhtml │ images                                  storyboard
+sb0     mhtml 320x180      0    │                  mhtml │ images                                  storyboard
+233     mp4   audio only        │                  m3u8  │ audio only          unknown             [ja] Default
+234     mp4   audio only        │                  m3u8  │ audio only          unknown             [ja] Default
+139-drc m4a   audio only      2 │    8.26MiB   49k https │ audio only          mp4a.40.5   49k 22k [ja] low, DRC, m4a_dash
+249-drc webm  audio only      2 │    9.12MiB   54k https │ audio only          opus        54k 48k [ja] low, DRC, webm_dash
+250-drc webm  audio only      2 │   11.87MiB   70k https │ audio only          opus        70k 48k [ja] low, DRC, webm_dash
+139     m4a   audio only      2 │    8.26MiB   49k https │ audio only          mp4a.40.5   49k 22k [ja] low, m4a_dash
+249     webm  audio only      2 │    9.07MiB   54k https │ audio only          opus        54k 48k [ja] low, webm_dash
+250     webm  audio only      2 │   11.81MiB   70k https │ audio only          opus        70k 48k [ja] low, webm_dash
+140-drc m4a   audio only      2 │   21.92MiB  129k https │ audio only          mp4a.40.2  129k 44k [ja] medium, DRC, m4a_dash
+251-drc webm  audio only      2 │   22.72MiB  134k https │ audio only          opus       134k 48k [ja] medium, DRC, webm_dash
+140     m4a   audio only      2 │   21.92MiB  129k https │ audio only          mp4a.40.2  129k 44k [ja] medium, m4a_dash
+251     webm  audio only      2 │   22.60MiB  133k https │ audio only          opus       133k 48k [ja] medium, webm_dash
+602     mp4   256x144     12    │ ~ 18.14MiB  107k m3u8  │ vp09.00.10.08  107k video only
+394     mp4   256x144     24    │    7.84MiB   46k https │ av01.0.00M.08   46k video only          144p, mp4_dash
+269     mp4   256x144     24    │ ~ 38.95MiB  230k m3u8  │ avc1.4D400C    230k video only
+160     mp4   256x144     24    │    8.04MiB   47k https │ avc1.4D400C     47k video only          144p, mp4_dash
+603     mp4   256x144     24    │ ~ 27.85MiB  165k m3u8  │ vp09.00.11.08  165k video only
+278     webm  256x144     24    │   11.37MiB   67k https │ vp9             67k video only          144p, webm_dash
+395     mp4   426x240     24    │   13.35MiB   79k https │ av01.0.00M.08   79k video only          240p, mp4_dash
+229     mp4   426x240     24    │ ~ 65.24MiB  385k m3u8  │ avc1.4D4015    385k video only
+133     mp4   426x240     24    │   13.24MiB   78k https │ avc1.4D4015     78k video only          240p, mp4_dash
+604     mp4   426x240     24    │ ~ 49.89MiB  295k m3u8  │ vp09.00.20.08  295k video only
+242     webm  426x240     24    │   17.08MiB  101k https │ vp9            101k video only          240p, webm_dash
+396     mp4   640x360     24    │   23.50MiB  139k https │ av01.0.01M.08  139k video only          360p, mp4_dash
+230     mp4   640x360     24    │ ~132.38MiB  782k m3u8  │ avc1.4D401E    782k video only
+134     mp4   640x360     24    │   23.80MiB  141k https │ avc1.4D401E    141k video only          360p, mp4_dash
+18      mp4   640x360     24  2 │   73.36MiB  433k https │ avc1.42001E         mp4a.40.2       44k [ja] 360p
+605     mp4   640x360     24    │ ~ 97.56MiB  576k m3u8  │ vp09.00.21.08  576k video only
+243     webm  640x360     24    │   28.81MiB  170k https │ vp9            170k video only          360p, webm_dash
+397     mp4   854x480     24    │   36.55MiB  216k https │ av01.0.04M.08  216k video only          480p, mp4_dash
+231     mp4   854x480     24    │ ~219.04MiB 1294k m3u8  │ avc1.4D401E   1294k video only
+135     mp4   854x480     24    │   35.02MiB  207k https │ avc1.4D401E    207k video only          480p, mp4_dash
+606     mp4   854x480     24    │ ~161.68MiB  955k m3u8  │ vp09.00.30.08  955k video only
+244     webm  854x480     24    │   42.48MiB  251k https │ vp9            251k video only          480p, webm_dash
+22      mp4   1280x720    24  2 │ ≈ 82.18MiB  485k https │ avc1.64001F         mp4a.40.2       44k [ja] 720p
+398     mp4   1280x720    24    │   61.94MiB  366k https │ av01.0.05M.08  366k video only          720p, mp4_dash
+232     mp4   1280x720    24    │ ~398.59MiB 2355k m3u8  │ avc1.4D401F   2355k video only
+136     mp4   1280x720    24    │   60.33MiB  356k https │ avc1.4D401F    356k video only          720p, mp4_dash
+609     mp4   1280x720    24    │ ~291.58MiB 1723k m3u8  │ vp09.00.31.08 1723k video only
+247     webm  1280x720    24    │   62.78MiB  371k https │ vp9            371k video only          720p, webm_dash
+399     mp4   1920x1080   24    │  103.37MiB  611k https │ av01.0.08M.08  611k video only          1080p, mp4_dash
+270     mp4   1920x1080   24    │ ~804.28MiB 4751k m3u8  │ avc1.640028   4751k video only
+137     mp4   1920x1080   24    │  188.60MiB 1114k https │ avc1.640028   1114k video only          1080p, mp4_dash
+614     mp4   1920x1080   24    │ ~477.79MiB 2823k m3u8  │ vp09.00.40.08 2823k video only
+248     webm  1920x1080   24    │  134.73MiB  796k https │ vp9            796k video only          1080p, webm_dash
+616     mp4   1920x1080   24    │ ~981.90MiB 5801k m3u8  │ vp09.00.40.08 5801k video only          Premium
+```
+
+```bash
+$ yt-dlp-helper
+YT_DLP_URL=https://www.youtube.com/watch?v=a_9_38JpdYU
+YT_DLP_SAVETO=
+YT_DLP_QUALITY=
+
+$ yt-dlp-pull
+[(yt-dlp -f 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b' https://www.youtube.com/watch?v=a_9_38JpdYU -o 20240530232750.mp4)]
+[youtube] Extracting URL: https://www.youtube.com/watch?v=a_9_38JpdYU
+[youtube] a_9_38JpdYU: Downloading webpage
+[youtube] a_9_38JpdYU: Downloading ios player API JSON
+[youtube] a_9_38JpdYU: Downloading m3u8 information
+[info] a_9_38JpdYU: Downloading 1 format(s): 616+140
+[hlsnative] Downloading m3u8 manifest
+[hlsnative] Total fragments: 271
+[download] Destination: 20240530232750.f616.mp4
+[download] 100% of  269.21MiB in 00:00:30 at 8.79MiB/s
+[download] Destination: 20240530232750.f140.m4a
+[download] 100% of   21.92MiB in 00:00:01 at 12.69MiB/s
+[Merger] Merging formats into "20240530232750.mp4"
+Deleting original file 20240530232750.f140.m4a (pass -k to keep)
+Deleting original file 20240530232750.f616.mp4 (pass -k to keep)
+```
+
+```bash
+$ yt-dlp -f bv*+ba "https://www.youtube.com/watch?v=a_9_38JpdYU" -o 20240527084746
+# m4a + mp4
+$ yt-dlp -f 140+133 "https://www.youtube.com/watch?v=a_9_38JpdYU" -o 20240527084746
+# m4a
+$ yt-dlp -f 140 "https://www.youtube.com/watch?v=a_9_38JpdYU" -o 20240527084746
 ```
 
 # Appendix
