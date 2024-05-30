@@ -2314,6 +2314,8 @@ function streamlink-info()
 
 	if [ ! -z "${URL1}" ]; then
 		export STREAM_URL=${URL1}
+		unset STREAM_SAVETO
+		unset STREAM_QUALITY
 		DO_COMMAND="(streamlink ${STREAM_URL} -l info)"
 		eval-it "$DO_COMMAND"
 	else
