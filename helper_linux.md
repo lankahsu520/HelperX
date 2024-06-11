@@ -2367,6 +2367,14 @@ $ streamlink-pull
 [download] Written 1.39 MiB to /work/codebase/xbox/xbox_123/20240527084746.mp4 (5s @ 300.11 KiB/s)
 ```
 
+```bash
+$ streamlink-info https://www.youtube.com/watch?v=ikrasYUi3kM
+[(streamlink https://www.youtube.com/watch?v=ikrasYUi3kM -l info)]
+[cli][info] Found matching plugin youtube for URL https://www.youtube.com/watch?v=ikrasYUi3kM
+error: This plugin does not support protected videos, try youtube-dl instead
+
+```
+
 ## 23.3. [yt-dlp](https://pypi.org/project/yt-dlp/)
 
 > [output-template](https://github.com/yt-dlp/yt-dlp#output-template)
