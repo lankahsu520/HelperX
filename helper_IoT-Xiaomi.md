@@ -496,6 +496,8 @@ Running command raw_command
 
 ## I.4. [使用 Python 控制米家设备](https://moenew.us/python-miio-use.html)
 
+## I.5. [[业界动态\] **重磅, 小米多模网关全系列固件破解telnet, 免拆机**](https://bbs.hassbian.com/thread-12281-1-1.html)
+
 # II. Debug
 
 # III. Glossary
