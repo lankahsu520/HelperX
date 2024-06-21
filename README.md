@@ -40,7 +40,6 @@
 >
 >時時寫筆記的習慣，人人都討厭；會分享給其它人，更是少之又少。個人希望將來能成為一位像尤達大師，引領進入電腦世界的領航員。
 >
->
 
 # 1. Be A Computer Science
 > 人人都可以是 Computer Science！
@@ -145,6 +144,20 @@
 >
 > 曾經有人說：「SVN 的速度比 Git 慢，所以不會去用 SVN」；至於是不是如此，雖然心中已有答案，也不想當場有所爭執。因為版本控管是管東西，而不是管速度的。
 
+>學霸：「每次用 svn 都會有衝突」
+>
+>蘭卡：「那你用 git 就不會有衝突嗎？」
+>
+>學霸：「會啊」
+>
+>蘭卡：「公司才4位，你們有每天、每次上傳前 sync 嗎？」
+>
+>學霸：「沒有啊！所以我才會找網路編輯」
+>
+>蘭卡無語…
+>
+>沒有良好的習慣，又沒有能力解決衝突。真的只能找網路編輯，這也是一個“work around”。
+
 ### 1.1.23. [helper_vi.md](https://github.com/lankahsu520/HelperX/blob/master/helper_vi.md) - vi/vim helper.
 
 ### 1.1.24. [helper_VirtualBox-x86_64-Ubuntu20.04onWin10](https://github.com/lankahsu520/HelperX/blob/master/helper_VirtualBox-x86_64-Ubuntu20.04onWin10.md) - VirtualBox helper.
@@ -166,7 +179,7 @@
 ### 2.1.2. [helper_SDKvsCodebase.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SDKvsCodebase.md) - SDK vs. Codebase helper.
 
 >在專案開啟時，都會指派成員先去研究其可行性，當然有 SDK 時，就要先進行彙整、編譯和測試。以下就是一個很糟的專案案例。
->
+
 >我：「你最近研究的東西相關的文件放那？」
 >
 >先遣隊：「都在官網提供的 GitHub」
