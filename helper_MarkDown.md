@@ -204,8 +204,16 @@
 ```
 > 圖片
 > ![macOS_12_Monterey](./images/macOS_12_Monterey.png)
+>
+> [<img src="./images/macOS_12_Monterey.png" width="512"/>](macOS_12_Monterey.png)
+>
+> <img src="./images/macOS_12_Monterey.png" height="50%" width="50%">
 ```
 ![macOS_12_Monterey](./images/macOS_12_Monterey.png)
+
+[<img src="./images/macOS_12_Monterey.png" width="512"/>](macOS_12_Monterey.png)
+
+<img src="./images/macOS_12_Monterey.png" height="50%" width="50%">
 ```
 
 > span text - <span style="color:blue">blue</span>, <span style="color:red">red</span>, <span style="color:green">green</span>
