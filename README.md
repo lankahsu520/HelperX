@@ -74,15 +74,19 @@
 
 > docker is useful ? Please make sure that you aren't a low-level programmer or embedded engineer.
 
-### 1.1.5. [helper_Email.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Email.md) - Email helper.
+### 1.1.5. [helper_DevelopmentandManage.md](https://github.com/lankahsu520/HelperX/blob/master/helper_DevelopmentandManage.md) - Development and Manage helper
+
+>不管是敏捷式 (Agile) 開發、瀑布式 (Waterfall) 開發等，最主要是執行力，排除問題的能力！
+
+### 1.1.6. [helper_Email.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Email.md) - Email helper.
 
 > 我的第一份工作就是寫一套電子報系統，當時的網路速度說有多慢就有多慢（記得不是很清楚，ADSL好像還沒有開始呢），當要發送電子報時，還要選擇冷門時段，不然整個銀行系統都要停擺了。
 
-### 1.1.6. [helper_GitHub.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitHub.md) - GitHub helper.
+### 1.1.7. [helper_GitHub.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitHub.md) - GitHub helper.
 
 > 善用免費 git 空間。
 
-### 1.1.7. [helper_GitLabandCICD.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitLabandCICD.md) - GitLab helper.
+### 1.1.8. [helper_GitLabandCICD.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitLabandCICD.md) - GitLab helper.
 
 > CI/CD is useful ? Please make sure that you aren't a low-level programmer, system integration developer or embedded engineer.
 >
@@ -90,55 +94,55 @@
 >
 > 這時 CI/CD 就是一個很不錯的方法。
 
-### 1.1.8. [helper_GStreamer.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GStreamer.md) - GStreamer helper.
+### 1.1.9. [helper_GStreamer.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GStreamer.md) - GStreamer helper.
 
-### 1.1.9. [helper_IoT.md](https://github.com/lankahsu520/HelperX/blob/master/helper_IoT.md) - IoT helper.
+### 1.1.10. [helper_IoT.md](https://github.com/lankahsu520/HelperX/blob/master/helper_IoT.md) - IoT helper.
 
 >IoT 的概念很簡單，不要被一些 “協定” 約束你的想像。也不要被主管 or 業務員的話語所迷惑。只要清楚基本概念既可。
 
-### 1.1.9a. [helper_IoT-Xiaomi.md](https://github.com/lankahsu520/HelperX/blob/master/helper_IoT-Xiaomi.md) - IoT Xiaomi helper.
+### 1.1.10a. [helper_IoT-Xiaomi.md](https://github.com/lankahsu520/HelperX/blob/master/helper_IoT-Xiaomi.md) - IoT Xiaomi helper.
 
 >用 Xiaomi 建構[智慧居家](https://www.mi.com/tw/product-list/smart-device/?cat_id=2546)。
 
-### 1.1.10. [helper_jq.md](https://github.com/lankahsu520/HelperX/blob/master/helper_jq.md) - jq helper.
+### 1.1.11. [helper_jq.md](https://github.com/lankahsu520/HelperX/blob/master/helper_jq.md) - jq helper.
 
 >JSON 是目前常用的資料格式，jq 提供於簡單的命令列下查詢、編輯，抓取所需之資訊，導入另一個程式使用。
 
-### 1.1.11. [helper_linux.md](https://github.com/lankahsu520/HelperX/blob/master/helper_linux.md) - linux helper.
+### 1.1.12. [helper_linux.md](https://github.com/lankahsu520/HelperX/blob/master/helper_linux.md) - linux helper.
 
 >某人說「我是雲端工程師，從來沒有學過什麼 linux，為什麼還要去學？」或許他的話沒有錯，出社會後，你能在工作上得心應心，其實就可以了。
 
-### 1.1.12. [helper_macOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_macOS.md) - macOS helper.
+### 1.1.13. [helper_macOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_macOS.md) - macOS helper.
 
-### 1.1.13. [helper_MarkDown.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MarkDown.md) - Markdown helper.
+### 1.1.14. [helper_MarkDown.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MarkDown.md) - Markdown helper.
 
 > 身為一個人，建議善用 Markdown 記錄相關筆記，少用 doc。
 
-### 1.1.14. [helper_Matter.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Matter.md) - Matter helper.
+### 1.1.15. [helper_Matter.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Matter.md) - Matter helper.
 
 > Matter（以前稱為 Project CHIP，Connected Home over IP）是一種物聯網（IoT）通信協議和平台，致力於促進智能家居設備之間的互操作性和互聯性。
 
-### 1.1.15. [helper_MultimediaMuxandDemux.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MultimediaMuxandDemux.md) - Multimedia Mux and Demux helper
+### 1.1.16. [helper_MultimediaMuxandDemux.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MultimediaMuxandDemux.md) - Multimedia Mux and Demux helper
 
 >除了用手機看 YouTube 外，有些基本常識還是補足一下。
 
-### 1.1.16. [helper_MQTT.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MQTT.md) - MQTT helper.
+### 1.1.17. [helper_MQTT.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MQTT.md) - MQTT helper.
 
 > use mosquitto.
 
-### 1.1.17. [helper_ONVIF.md](https://github.com/lankahsu520/HelperX/blob/master/helper_ONVIF.md) - ONVIF helper.
+### 1.1.18. [helper_ONVIF.md](https://github.com/lankahsu520/HelperX/blob/master/helper_ONVIF.md) - ONVIF helper.
 
-### 1.1.18. [helper_OpenSSL.md](https://github.com/lankahsu520/HelperX/blob/master/helper_OpenSSL.md) - OpenSSL helper.
+### 1.1.19. [helper_OpenSSL.md](https://github.com/lankahsu520/HelperX/blob/master/helper_OpenSSL.md) - OpenSSL helper.
 
-### 1.1.19. [helper_RaspberryPiOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_RaspberryPiOS.md) - Raspberry Pi OS helper.
+### 1.1.20. [helper_RaspberryPiOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_RaspberryPiOS.md) - Raspberry Pi OS helper.
 
-### 1.1.20. [helper_SQLite.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SQLite.md) - SQLite helper.
+### 1.1.21. [helper_SQLite.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SQLite.md) - SQLite helper.
 
-### 1.1.21. [helper_SIPandAsterisk.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SIPandAsterisk.md) - SIP and Asterisk helper.
+### 1.1.22. [helper_SIPandAsterisk.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SIPandAsterisk.md) - SIP and Asterisk helper.
 
 > 如果你選擇 FreePBX 或其它 UI 進行安裝設定前，不妨看看這裏的指引。
 
-### 1.1.22. [helper_SVNvsGit.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SVNvsGit.md) - SVN vs. Git helper.
+### 1.1.23. [helper_SVNvsGit.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SVNvsGit.md) - SVN vs. Git helper.
 
 > SVN、Git 都是很好的版本控管工具，當然市面上不止這兩種。只要選擇方便性即可。
 >
@@ -158,9 +162,9 @@
 >
 >沒有良好的習慣，又沒有能力解決衝突。真的只能找網路編輯，這也是一個“work around”。
 
-### 1.1.23. [helper_vi.md](https://github.com/lankahsu520/HelperX/blob/master/helper_vi.md) - vi/vim helper.
+### 1.1.24. [helper_vi.md](https://github.com/lankahsu520/HelperX/blob/master/helper_vi.md) - vi/vim helper.
 
-### 1.1.24. [helper_VirtualBox-x86_64-Ubuntu20.04onWin10](https://github.com/lankahsu520/HelperX/blob/master/helper_VirtualBox-x86_64-Ubuntu20.04onWin10.md) - VirtualBox helper.
+### 1.1.25. [helper_VirtualBox-x86_64-Ubuntu20.04onWin10](https://github.com/lankahsu520/HelperX/blob/master/helper_VirtualBox-x86_64-Ubuntu20.04onWin10.md) - VirtualBox helper.
 
 > Host: win10
 >
