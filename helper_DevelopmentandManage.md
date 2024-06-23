@@ -118,7 +118,7 @@
 
 ## 2.3. 開發 vs. 管理
 
-> 這邊我不會去深究不同之處，個人認為「開發和管理是相輔相成，分別著重的比重不同，但是目標的一致的。」
+> 這邊我不會去深究不同之處，個人認為「開發和管理是相輔相成，著重的比重不同，但是目標的一致的。」
 
 > [ChatGPT] 開發 vs. 管理 有什麼差異
 >
@@ -194,13 +194,13 @@
 
 ## 2.4. 以人為本
 
-### 2.4.1. 開發什麼、管理什麼
+### 2.4.1. 管理什麼
 
 > 以開發為中心的心智圖。
 
 ```mermaid
 mindmap
-	開發 Development
+	管理
 		人
 			成員 L
 			成員 M
@@ -224,7 +224,7 @@ mindmap
 
 > 只要把人移除，時間一樣的流逝，物成為無主之物，目標是虛無飄渺的存在。
 >
-> 所以一切皆是以人為本！然後再加上點慾望就成為開發的本質。
+> 所以一切皆是以人為本！然後再加上點慾望就成為管理的本質。
 >
 ```mermaid
 mindmap
@@ -304,7 +304,7 @@ mindmap
 > 也就是說，雖然右側項目有其價值，
 > 但我們更重視左側項目。
 
-> 網路很多文章，請教 google 大神！
+> 網路上有很多文章，請教 google 大神！
 
 ## 3.3. [系統分析設計](https://www.uoitc.edu.iq/images/documents/informatics-institute/Competitive_exam/Systemanalysisanddesign.pdf)
 
@@ -322,11 +322,11 @@ mindmap
 
 #### B. <font color="red">傳統式開發</font>要等到產品發佈才能驗證市場反應，沒辦法增量叠代
 
-> 遇到這問題，不是砍掉開發方式，而是砍掉這位不會訂定 milestone 的 PM。
+> 遇到這問題，不是砍掉開發方式，而是該砍掉那位不會訂定 milestone 的 PM。
 
 #### C. 敏捷式開發有*Sprint* ，其它都沒有
 
-> 有那類員工在知道主管急著要某東西，故意放著不做，跑去喝咖啡，這不是在找死嗎？
+> 什麼員工會在知道主管急著要某東西，故意放著不做，跑去喝咖啡，這不是在找死嗎？（這種員工、小主管確實會存在）
 >
 > 選擇工作項目本來就有 priority，這有誰不懂。
 
@@ -348,23 +348,122 @@ mindmap
 >
 > 結果常在敏捷式開發的缺點看到“敏捷式開發複雜的專案可能很長”。這是什麼道理？
 
-# 5. 期望
+# 5. 精神與期許
 
-> 這裏不會吹捧敏捷式 (Agile) 開發有多好，而瀑布式 (Waterfall) 開發有多差。
->
-> 個人是希望能從中獲取優點，排除缺點。
->
-
-> 成敗的因素有很多，我們要學習其精神，而不是華麗的辭藻，方法只是幫助指引方向，最後是<font color="red">執行力</font>。
+> 這裏不會吹捧敏捷式 (Agile) 開發有多好，而瀑布式 (Waterfall) 開發有多差。管理或開發本來就不應該一成不變的，而是要隨著專案迅速反應和變化，我們要學習其精神，而不是華麗的辭藻！這些方法只是幫助指引方向。
 
 ```mermaid
 mindmap
-	xxx開發
+	方法論
 		效率-快 / 時間-短
 		市場-大 / 客戶-多
-		追蹤進度 / 累積經驗、成敗
-		及時的反應
+		分工 / 能力分配
+		及時反應
+    追蹤進度
+		累積經驗
+		資料匯整
+		記取成敗
 ```
+
+# 6. 現實與殘酷
+
+#### A. weekly report 太制式
+
+>不管任何管理方式，一定要求員工寫下 weekly report 或是專案進度；從中我發現一個很大的問題，就是太制式、太嚴肅，常常會貼上做了什麼，解了什麼問題，最後變成代入常用語。
+>
+>其實多點口語化，有時帶點心情會更好。
+
+#### B. weekly report 沒人看
+
+>接上，或許有人會說，「weekly report 寫的太誠實會被記仇」「會被當證據」。解決此問題，當然是要做一些取捨，因為你也不知道你的同事或主管是不是小人。
+>
+>但就目前經驗，weekly report 幾乎很少人會“幫”你看，就連高一級的主管也是。不然主管怎麼常跑來問「你最近在幹什」
+
+#### C. 你最近在幹什
+
+> 接上，就算有再好的管理工具或方法，也是沒有用的。
+
+#### D. 有權的常沒能力
+
+>這個大家應該都有遇到過，除非你生來就是當上位者，好命人，感受不到部屬的怨念。
+
+>就我的例子，一位號稱是 embedded linux  開發小主管，在類樹莓派上很順利的在一分鐘內安裝好 curl。
+>
+>```bash
+>$ sudo apt install curl
+>```
+>
+>就很天真的說，「只要編 curl 就好了，我給你1天算很大方」。
+>
+>完全不清楚、也不想知道以下的心酸
+>
+>```bash
+>$ ldd /usr/bin/curl
+>        linux-vdso.so.1 (0x00007ffe891f0000)
+>        libcurl.so.4 => /lib/x86_64-linux-gnu/libcurl.so.4 (0x00007f5c33e91000)
+>        libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f5c33e75000)
+>        libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f5c33e52000)
+>        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f5c33c60000)
+>        libnghttp2.so.14 => /lib/x86_64-linux-gnu/libnghttp2.so.14 (0x00007f5c33c36000)
+>        libidn2.so.0 => /lib/x86_64-linux-gnu/libidn2.so.0 (0x00007f5c33c15000)
+>        librtmp.so.1 => /lib/x86_64-linux-gnu/librtmp.so.1 (0x00007f5c33bf3000)
+>        libssh.so.4 => /lib/x86_64-linux-gnu/libssh.so.4 (0x00007f5c33b84000)
+>        libpsl.so.5 => /lib/x86_64-linux-gnu/libpsl.so.5 (0x00007f5c33b71000)
+>        libssl.so.1.1 => /lib/x86_64-linux-gnu/libssl.so.1.1 (0x00007f5c33ade000)
+>        libcrypto.so.1.1 => /lib/x86_64-linux-gnu/libcrypto.so.1.1 (0x00007f5c33807000)
+>        libgssapi_krb5.so.2 => /lib/x86_64-linux-gnu/libgssapi_krb5.so.2 (0x00007f5c337ba000)
+>        libldap_r-2.4.so.2 => /lib/x86_64-linux-gnu/libldap_r-2.4.so.2 (0x00007f5c33762000)
+>        liblber-2.4.so.2 => /lib/x86_64-linux-gnu/liblber-2.4.so.2 (0x00007f5c33751000)
+>        libbrotlidec.so.1 => /lib/x86_64-linux-gnu/libbrotlidec.so.1 (0x00007f5c33743000)
+>        /lib64/ld-linux-x86-64.so.2 (0x00007f5c33f8a000)
+>        libunistring.so.2 => /lib/x86_64-linux-gnu/libunistring.so.2 (0x00007f5c335c1000)
+>        libgnutls.so.30 => /lib/x86_64-linux-gnu/libgnutls.so.30 (0x00007f5c333eb000)
+>        libhogweed.so.5 => /lib/x86_64-linux-gnu/libhogweed.so.5 (0x00007f5c333b2000)
+>        libnettle.so.7 => /lib/x86_64-linux-gnu/libnettle.so.7 (0x00007f5c33378000)
+>        libgmp.so.10 => /lib/x86_64-linux-gnu/libgmp.so.10 (0x00007f5c332f4000)
+>        libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f5c332ee000)
+>        libkrb5.so.3 => /lib/x86_64-linux-gnu/libkrb5.so.3 (0x00007f5c33211000)
+>        libk5crypto.so.3 => /lib/x86_64-linux-gnu/libk5crypto.so.3 (0x00007f5c331de000)
+>        libcom_err.so.2 => /lib/x86_64-linux-gnu/libcom_err.so.2 (0x00007f5c331d7000)
+>        libkrb5support.so.0 => /lib/x86_64-linux-gnu/libkrb5support.so.0 (0x00007f5c331c8000)
+>        libresolv.so.2 => /lib/x86_64-linux-gnu/libresolv.so.2 (0x00007f5c331ac000)
+>        libsasl2.so.2 => /lib/x86_64-linux-gnu/libsasl2.so.2 (0x00007f5c3318f000)
+>        libgssapi.so.3 => /lib/x86_64-linux-gnu/libgssapi.so.3 (0x00007f5c3314a000)
+>        libbrotlicommon.so.1 => /lib/x86_64-linux-gnu/libbrotlicommon.so.1 (0x00007f5c33127000)
+>        libp11-kit.so.0 => /lib/x86_64-linux-gnu/libp11-kit.so.0 (0x00007f5c32fef000)
+>        libtasn1.so.6 => /lib/x86_64-linux-gnu/libtasn1.so.6 (0x00007f5c32fd9000)
+>        libkeyutils.so.1 => /lib/x86_64-linux-gnu/libkeyutils.so.1 (0x00007f5c32fd2000)
+>        libheimntlm.so.0 => /lib/x86_64-linux-gnu/libheimntlm.so.0 (0x00007f5c32fc6000)
+>        libkrb5.so.26 => /lib/x86_64-linux-gnu/libkrb5.so.26 (0x00007f5c32f33000)
+>        libasn1.so.8 => /lib/x86_64-linux-gnu/libasn1.so.8 (0x00007f5c32e8b000)
+>        libhcrypto.so.4 => /lib/x86_64-linux-gnu/libhcrypto.so.4 (0x00007f5c32e53000)
+>        libroken.so.18 => /lib/x86_64-linux-gnu/libroken.so.18 (0x00007f5c32e3a000)
+>        libffi.so.7 => /lib/x86_64-linux-gnu/libffi.so.7 (0x00007f5c32e2e000)
+>        libwind.so.0 => /lib/x86_64-linux-gnu/libwind.so.0 (0x00007f5c32e04000)
+>        libheimbase.so.1 => /lib/x86_64-linux-gnu/libheimbase.so.1 (0x00007f5c32df0000)
+>        libhx509.so.5 => /lib/x86_64-linux-gnu/libhx509.so.5 (0x00007f5c32da2000)
+>        libsqlite3.so.0 => /lib/x86_64-linux-gnu/libsqlite3.so.0 (0x00007f5c32c79000)
+>        libcrypt.so.1 => /lib/x86_64-linux-gnu/libcrypt.so.1 (0x00007f5c32c3e000)
+>        libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f5c32aef000)
+>```
+
+#### F. 能者多勞至能者過勞
+
+>向上沒辦法管理！
+>
+>分工但是沒辦法分錢，分xx。
+>
+>分工是好聽，「找不到人」、「就是要你去做」！
+
+#### G. 三個臭皮匠，勝過一個諸葛亮
+
+>我在某些人，花了2年以上，解釋 HTTP 和 Socket 的關係。那些人至今還是沒長進。
+>
+>現今是網路的世界，又身處軟體開發的團隊，瀑布式開發沒救，敏捷式開發就有救嗎？
+
+#### H. 其它
+
+> 還有很多…現實和理論還是有段差距。
 
 # Appendix
 
