@@ -381,69 +381,49 @@ mindmap
 
 > 接上，就算有再好的管理工具或方法，也是沒有用的。
 
-#### D. 有權的常沒能力
+#### D. 知道個皮毛就以為很透徹
 
->這個大家應該都有遇到過，除非你生來就是當上位者，好命人，感受不到部屬的怨念。
+>這個大家應該都有遇到過，有些人完全不聽人說話。
 
->就我的例子，一位號稱是 embedded linux  開發小主管，在類樹莓派上很順利的在一分鐘內安裝好 curl。
+>就我的例子，一位號稱是 embedded linux  開發者，在類樹莓派上一分鐘內安裝好 gstreamer1.0-tools。
 >
 >```bash
->$ sudo apt install curl
+>$ sudo apt-get install gstreamer1.0-tools
 >```
 >
->就很天真的說，「只要編 curl 就好了，我給你1天算很大方」。
->
->完全不清楚、也不想知道以下的心酸
+>就很天真的說，「只要編 gstreamer 就好了，有這麼難嗎」。好心教導說 apt install 時，也會有 Depends 的問題。然後很不屑的回我「我都沒遇到」
+
+>聽完之後，心中的心酸，有誰能知道。
 >
 >```bash
->$ ldd /usr/bin/curl
->        linux-vdso.so.1 (0x00007ffe891f0000)
->        libcurl.so.4 => /lib/x86_64-linux-gnu/libcurl.so.4 (0x00007f5c33e91000)
->        libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f5c33e75000)
->        libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f5c33e52000)
->        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f5c33c60000)
->        libnghttp2.so.14 => /lib/x86_64-linux-gnu/libnghttp2.so.14 (0x00007f5c33c36000)
->        libidn2.so.0 => /lib/x86_64-linux-gnu/libidn2.so.0 (0x00007f5c33c15000)
->        librtmp.so.1 => /lib/x86_64-linux-gnu/librtmp.so.1 (0x00007f5c33bf3000)
->        libssh.so.4 => /lib/x86_64-linux-gnu/libssh.so.4 (0x00007f5c33b84000)
->        libpsl.so.5 => /lib/x86_64-linux-gnu/libpsl.so.5 (0x00007f5c33b71000)
->        libssl.so.1.1 => /lib/x86_64-linux-gnu/libssl.so.1.1 (0x00007f5c33ade000)
->        libcrypto.so.1.1 => /lib/x86_64-linux-gnu/libcrypto.so.1.1 (0x00007f5c33807000)
->        libgssapi_krb5.so.2 => /lib/x86_64-linux-gnu/libgssapi_krb5.so.2 (0x00007f5c337ba000)
->        libldap_r-2.4.so.2 => /lib/x86_64-linux-gnu/libldap_r-2.4.so.2 (0x00007f5c33762000)
->        liblber-2.4.so.2 => /lib/x86_64-linux-gnu/liblber-2.4.so.2 (0x00007f5c33751000)
->        libbrotlidec.so.1 => /lib/x86_64-linux-gnu/libbrotlidec.so.1 (0x00007f5c33743000)
->        /lib64/ld-linux-x86-64.so.2 (0x00007f5c33f8a000)
->        libunistring.so.2 => /lib/x86_64-linux-gnu/libunistring.so.2 (0x00007f5c335c1000)
->        libgnutls.so.30 => /lib/x86_64-linux-gnu/libgnutls.so.30 (0x00007f5c333eb000)
->        libhogweed.so.5 => /lib/x86_64-linux-gnu/libhogweed.so.5 (0x00007f5c333b2000)
->        libnettle.so.7 => /lib/x86_64-linux-gnu/libnettle.so.7 (0x00007f5c33378000)
->        libgmp.so.10 => /lib/x86_64-linux-gnu/libgmp.so.10 (0x00007f5c332f4000)
->        libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f5c332ee000)
->        libkrb5.so.3 => /lib/x86_64-linux-gnu/libkrb5.so.3 (0x00007f5c33211000)
->        libk5crypto.so.3 => /lib/x86_64-linux-gnu/libk5crypto.so.3 (0x00007f5c331de000)
->        libcom_err.so.2 => /lib/x86_64-linux-gnu/libcom_err.so.2 (0x00007f5c331d7000)
->        libkrb5support.so.0 => /lib/x86_64-linux-gnu/libkrb5support.so.0 (0x00007f5c331c8000)
->        libresolv.so.2 => /lib/x86_64-linux-gnu/libresolv.so.2 (0x00007f5c331ac000)
->        libsasl2.so.2 => /lib/x86_64-linux-gnu/libsasl2.so.2 (0x00007f5c3318f000)
->        libgssapi.so.3 => /lib/x86_64-linux-gnu/libgssapi.so.3 (0x00007f5c3314a000)
->        libbrotlicommon.so.1 => /lib/x86_64-linux-gnu/libbrotlicommon.so.1 (0x00007f5c33127000)
->        libp11-kit.so.0 => /lib/x86_64-linux-gnu/libp11-kit.so.0 (0x00007f5c32fef000)
->        libtasn1.so.6 => /lib/x86_64-linux-gnu/libtasn1.so.6 (0x00007f5c32fd9000)
->        libkeyutils.so.1 => /lib/x86_64-linux-gnu/libkeyutils.so.1 (0x00007f5c32fd2000)
->        libheimntlm.so.0 => /lib/x86_64-linux-gnu/libheimntlm.so.0 (0x00007f5c32fc6000)
->        libkrb5.so.26 => /lib/x86_64-linux-gnu/libkrb5.so.26 (0x00007f5c32f33000)
->        libasn1.so.8 => /lib/x86_64-linux-gnu/libasn1.so.8 (0x00007f5c32e8b000)
->        libhcrypto.so.4 => /lib/x86_64-linux-gnu/libhcrypto.so.4 (0x00007f5c32e53000)
->        libroken.so.18 => /lib/x86_64-linux-gnu/libroken.so.18 (0x00007f5c32e3a000)
->        libffi.so.7 => /lib/x86_64-linux-gnu/libffi.so.7 (0x00007f5c32e2e000)
->        libwind.so.0 => /lib/x86_64-linux-gnu/libwind.so.0 (0x00007f5c32e04000)
->        libheimbase.so.1 => /lib/x86_64-linux-gnu/libheimbase.so.1 (0x00007f5c32df0000)
->        libhx509.so.5 => /lib/x86_64-linux-gnu/libhx509.so.5 (0x00007f5c32da2000)
->        libsqlite3.so.0 => /lib/x86_64-linux-gnu/libsqlite3.so.0 (0x00007f5c32c79000)
->        libcrypt.so.1 => /lib/x86_64-linux-gnu/libcrypt.so.1 (0x00007f5c32c3e000)
->        libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f5c32aef000)
->```
+>$ apt-cache show gstreamer1.0-tools | grep ^Depends
+>Depends: libc6 (>= 2.14), libglib2.0-0 (>= 2.40), libgstreamer1.0-0 (>= 1.16.1)
+>Depends: libc6 (>= 2.14), libglib2.0-0 (>= 2.40), libgstreamer1.0-0 (>= 1.16.1)
+>
+>$ pkg-config --libs gstreamer-1.0
+>-lgstreamer-1.0 -lgobject-2.0 -lglib-2.0
+>
+>$ pkg-config --list-all | grep gst
+>...
+>     gstreamer-base-1.0                  GStreamer base classes - Base classes for GStreamer elements
+>     gstreamer-plugins-base-1.0          GStreamer Base Plugins Libraries - Streaming media framework, base plugins libraries
+>     ...
+>     
+>     $ ldd /usr/bin/gst-launch-1.0
+>             linux-vdso.so.1 (0x00007ffef7ff4000)
+>             libgstreamer-1.0.so.0 => /lib/x86_64-linux-gnu/libgstreamer-1.0.so.0 (0x00007f9a58246000)
+>             libgobject-2.0.so.0 => /lib/x86_64-linux-gnu/libgobject-2.0.so.0 (0x00007f9a581e6000)
+>             libglib-2.0.so.0 => /lib/x86_64-linux-gnu/libglib-2.0.so.0 (0x00007f9a580bc000)
+>             libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f9a58099000)
+>             libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f9a57ea7000)
+>             libgmodule-2.0.so.0 => /lib/x86_64-linux-gnu/libgmodule-2.0.so.0 (0x00007f9a57ea1000)
+>             libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f9a57d50000)
+>             libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f9a57d4a000)
+>             libffi.so.7 => /lib/x86_64-linux-gnu/libffi.so.7 (0x00007f9a57d3e000)
+>             libpcre.so.3 => /lib/x86_64-linux-gnu/libpcre.so.3 (0x00007f9a57ccb000)
+>             /lib64/ld-linux-x86-64.so.2 (0x00007f9a583c2000)
+>     
+>     ```
 
 #### F. 能者多勞至能者過勞
 
