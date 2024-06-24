@@ -2160,6 +2160,22 @@ glib-2.0
 gobject-2.0
 ```
 
+#### pkg-find
+
+```bash
+function pkg-find()
+{
+	HINT="Usage: ${FUNCNAME[0]} <file1>"
+	FILE1=$1
+
+	if [ ! -z "$FILE1" ]; then
+		pkg-config --list-all | grep ${FILE1}
+	else
+		echo $HINT
+	fi
+}
+```
+
 #### pkg-config-ex
 
 ```bash
