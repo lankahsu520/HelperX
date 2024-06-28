@@ -423,6 +423,24 @@ pidof helloworld
 ps -aux
 ps -aux | grep helloworld | grep -v grep
 
+ps -p `pidof curl` -o %mem,%cpu,vsz,cmd
+ps -p 495220 -o %mem,%cpu,vsz,cmd
+```
+
+```bash
+function ps-name()
+{
+	HINT="Usage: ${FUNCNAME[0]} <name1>"
+	NAME1=$1
+
+	if [ ! -z "${NAME1}" ]; then
+		PID=`pidof ${NAME1}`
+		DO_COMMAND="(ps -p ${PID} -o %mem,%cpu,vsz,cmd)"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
 ```
 
 #### kill - send a signal to a process
