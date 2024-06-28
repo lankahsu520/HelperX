@@ -22,15 +22,19 @@
 
 > Amazon Kinesis Video Streams 可讓您安全輕鬆地將影片從連線裝置串流到 AWS，以進行分析、機器學習 (ML)、播放及其他處理。Kinesis Video Streams 可自動佈建和彈性地擴展所需的全部基礎設施，以便從數百萬台裝置導入串流影片資料。
 
-## 1.1. How it works
-
 ![amazon_kvs01](./images/amazon_kvs01.png)
 
-# 2. [amazon-kinesis-video-streams-producer-sdk-cpp](https://github.com/awslabs/amazon-kinesis-video-streams-producer-sdk-cpp)
+# 2. Repository
+
+## 2.1. [amazon-kinesis-video-streams-pic](https://github.com/awslabs/amazon-kinesis-video-streams-pic)
+
+> Amazon Kinesis Video Streams PIC provides the underlying tool API for the Amazon Kinesis Video Streams WebRTC SDK.
+
+## 2.2. [amazon-kinesis-video-streams-producer-sdk-cpp](https://github.com/awslabs/amazon-kinesis-video-streams-producer-sdk-cpp)
 
 > Amazon Kinesis Video Streams Producer SDK for C++ is for developers to install and customize for their connected camera and other devices to securely stream video, audio, and time-encoded data to Kinesis Video Streams.
 
-# 3. [amazon-kinesis-video-streams-webrtc-sdk-c](https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c)
+## 2.3. [amazon-kinesis-video-streams-webrtc-sdk-c](https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c)
 
 > Amazon Kinesis Video Streams Webrtc SDK is for developers to install and customize realtime communication between devices and enable secure streaming of video, audio to Kinesis Video Streams.
 
@@ -71,15 +75,177 @@ graph LR
 	KVS-WebRTC2 <--> |if STUN is fail|TURN
 ```
 
-# 4. Example / Test
+# 3. Build and Run
+
+>[Release 1.10.2 of the Amazon Kinesis Video WebRTC C SDK](https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c/releases/tag/v1.10.2)
+>
+>[Source code(tar.gz)](https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c/archive/refs/tags/v1.10.2.tar.gz)
+
+## 3.1. Build
+
+```bash
+# please download amazon-kinesis-video-streams-webrtc-sdk-c-1.10.2.tar.gz
+$ tar -zxvf amazon-kinesis-video-streams-webrtc-sdk-c-1.10.2.tar.gz
+$ cd amazon-kinesis-video-streams-webrtc-sdk-c-1.10.2
+$ tree -L 1 ./
+./
+├── bench
+├── certs
+├── CMake
+├── CMakeLists.txt
+├── CODE_OF_CONDUCT.md
+├── configs
+├── CONTRIBUTING.md
+├── Doxyfile
+├── DoxygenLayout.xml
+├── Introduction.md
+├── LICENSE
+├── NOTICE
+├── README.md
+├── samples
+├── scripts
+├── src
+└── tst
+
+8 directories, 9 files
+```
+```bash
+$ mkdir -p build_xxx
+$ cd build_xxx
+
+# 這邊採用原始設定
+$ cmake ..
+```
+```bash
+# 於 open-source 可以看到已經編譯了很多相關 libraries；
+# 這對開發 Embedded Linux 的同仁是很不友善的。因為在開發 Embedded Linux 時，要共同使用 libraries。
+# libkvsCommon* from Amazon Kinesis Video Streams Producer SDK for C++
+# libkvspic* from Amazon Kinesis Video Streams PIC
+$ tree -L 2 ../open-source/
+../open-source/
+├── bin
+│   ├── c_rehash
+│   └── openssl
+├── include
+│   ├── com
+│   ├── libwebsockets
+│   ├── libwebsockets.h
+│   ├── lws_config.h
+│   ├── openssl
+│   ├── srtp2
+│   └── usrsctp.h
+└── lib
+    ├── cmake
+    ├── engines-1.1
+    ├── libcrypto.a
+    ├── libcrypto.so -> libcrypto.so.1.1
+    ├── libcrypto.so.1.1
+    ├── libkvsCommonLws.so -> libkvsCommonLws.so.1
+    ├── libkvsCommonLws.so.1 -> libkvsCommonLws.so.1.5.2
+    ├── libkvsCommonLws.so.1.5.2
+    ├── libkvspic.a
+    ├── libkvspicClient.a
+    ├── libkvspicState.a
+    ├── libkvspicUtils.a
+    ├── libsrtp2.a
+    ├── libssl.a
+    ├── libssl.so -> libssl.so.1.1
+    ├── libssl.so.1.1
+    ├── libusrsctp.a
+    ├── libwebsockets.a
+    ├── libwebsockets.so -> libwebsockets.so.19
+    ├── libwebsockets.so.19
+    └── pkgconfig
+
+10 directories, 23 files
+```
+
+```bash
+$ make #VERBOSE=1
+```
+
+```bash
+$ tree -L 1 ./
+.
+├── CMakeCache.txt
+├── CMakeFiles
+├── cmake_install.cmake
+├── h264SampleFrames
+├── h265SampleFrames
+├── libkvsWebrtcClient.so
+├── libkvsWebrtcSignalingClient.so
+├── libkvsWebRtcThreadpool.so
+├── Makefile
+├── opusSampleFrames
+└── samples
+
+5 directories, 6 files
+
+$ tree -L 1 ./samples/
+./samples/
+├── CMakeFiles
+├── cmake_install.cmake
+├── discoverNatBehavior
+├── h264SampleFrames
+├── h265SampleFrames
+├── kvsWebrtcClientMaster
+├── kvsWebrtcClientMasterGstSample
+├── kvsWebrtcClientViewer
+├── kvsWebrtcClientViewerGstSample
+├── Makefile
+└── opusSampleFrames
+
+4 directories, 7 files
+```
+
+## 3.2. Run
+
+> Channel - HelloLankaKVS
+
+```bash
+export AWS_DEFAULT_REGION=ap-northeast-1
+export AWS_KVS_LOG_LEVEL=1
+export DEBUG_LOG_SDP=TRUE
+
+export AWS_ACCESS_KEY_ID=AKI00000000000000000
+export AWS_SECRET_ACCESS_KEY=KEY0000000000000000000000000/00000000000
+
+./samples/kvsWebrtcClientMasterGstSample HelloLankaKVS
+```
+
+# 4. Watch Viewer
 
 ## 4.1. [KVS WebRTC Test Page](https://awslabs.github.io/amazon-kinesis-video-streams-webrtc-sdk-js/examples/index.html)
 
-## 4.2. [alexa-sh-camera-webrtc](https://github.com/nachawat/alexa-sh-camera-webrtc)
+#### A. Input
+
+![amazon_kvs02](./images/amazon_kvs02.png)
+
+#### B. Start Viewer
+
+![amazon_kvs03](./images/amazon_kvs03.png)
+
+## 4.2. [Kinesis Video Streams](https://ap-northeast-1.console.aws.amazon.com/)
+
+#### A. Search Channel
+
+![amazon_kvs04](./images/amazon_kvs04.png)
+
+#### B. Select Channel
+
+![amazon_kvs05](./images/amazon_kvs05.png)
+
+#### C. Start Viewer
+
+![amazon_kvs06](./images/amazon_kvs06.png)
+
+# 5. Others
+
+## 5.1. [alexa-sh-camera-webrtc](https://github.com/nachawat/alexa-sh-camera-webrtc)
 
 > Sample Alexa skill to demonstrate WebRTC Integration with AWS KVS for Camera Streaming
 
-## 4.3. [kvs_webrtc_example](https://github.com/mganeko/kvs_webrtc_example)
+## 5.2. [kvs_webrtc_example](https://github.com/mganeko/kvs_webrtc_example)
 
 > example of Amazon Kinesis Video Streams WebRTC
 
