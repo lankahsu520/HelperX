@@ -423,8 +423,10 @@ pidof helloworld
 ps -aux
 ps -aux | grep helloworld | grep -v grep
 
-ps -p `pidof curl` -o %mem,%cpu,vsz,cmd
-ps -p 495220 -o %mem,%cpu,vsz,cmd
+ps -p `pidof curl` -o pid,%mem,%cpu,vsz,cmd
+ps -p 495220 -o pid,%mem,%cpu,vsz,cmd
+
+ps-name curl
 ```
 
 ```bash
@@ -435,8 +437,12 @@ function ps-name()
 
 	if [ ! -z "${NAME1}" ]; then
 		PID=`pidof ${NAME1}`
-		DO_COMMAND="(ps -p ${PID} -o %mem,%cpu,vsz,cmd)"
-		eval-it "$DO_COMMAND"
+		if [ ! -z "${PID}" ]; then
+			DO_COMMAND="(ps -p ${PID} -o pid,%mem,%cpu,vsz,cmd)"
+			eval-it "$DO_COMMAND"
+		else
+			echo "NAME1=$NAME1, PID=$PID"
+		fi
 	else
 		echo $HINT
 	fi
