@@ -20,8 +20,6 @@
 
 >If these are helpful to you, please give me a star. Thanks a lot !
 
-
-
 >本日2023/3/31，愚人節的前一天，有人跟我說「你寫的這些文件，只有你看的懂」。簡直是個屁！（這句是我從它的語氣感受到的！）而這已經不是第一次發生，我想也將不是最後一次了。記得第一次發生這類鳥事時，讓我想了很久，也讓我有很深的感觸，“我從網路上學到了這麼多，用了這麼多 Open-source；身邊的人不懂、不會、短視這些小小作品，那為什麼不分享出來，回饋給大眾，總會有需要的人或是看得“懂”的人，並且很謝謝那些貢獻的人。”
 >
 >從學校到出社會，從 Turbo C ++ 3.0、Delphi 5.0、 Linux 2.3 到現在的 AWS，就有一直撰寫筆記的習慣，當然中間也發生幾次硬碟損壞、資料遺失，讓我可以 copy-paste 的樣本變少了；後來轉至版本控管（svn 和 git）下就解決了這個煩惱。
@@ -69,6 +67,10 @@
 > BLE 的水很深，這邊只有概要，並且用不同的觀點去分析。
 >
 > 如果你是要實作的話，文件是幫不了你的！請直接找Opensource，而這裏有[BlueZX](https://github.com/lankahsu520/BlueZX) 或許能幫助到你。
+
+### 1.1.4. [helper_Confluence.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Confluence.md) - Confluence helper.
+
+>就是文件管理系統，相較於使用 Google Drive，一樣有共同編輯的功能，但是少了檔案的概念。
 
 ### 1.1.4. [helper_Docker.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Docker.md) - docker helper.
 
@@ -182,8 +184,10 @@
 
 ### 2.1.2. [helper_SDKvsCodebase.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SDKvsCodebase.md) - SDK vs. Codebase helper.
 
->在專案開啟時，都會指派成員先去研究其可行性，當然有 SDK 時，就要先進行彙整、編譯和測試。以下就是一個很糟的專案案例。
+>在專案開啟時，都會指派成員先去研究其可行性，當然有 SDK 時，就要先進行彙整、編譯和測試。
 
+>以下就是一個很糟的專案案例。
+>
 >我：「你最近研究的東西相關的文件放那？」
 >
 >先遣隊：「都在官網提供的 GitHub」
@@ -278,11 +282,11 @@
 # 3. Be An Embedded Engineer
 
 > 敢自稱“雲端工程師”，為什麼還跑過來問我 SSH 怎麼用？scp 怎麼用？crontab 怎麼用？web server 怎麼架？甚至 shell script 怎麼寫？
->
+
 > 因為身為一位資深的 Embedded Engineer （非只專注特定 MCU）就是什麼都要懂，不管是系統、網路、串流、協定、程式等。不然怎麼有效的安排資源，甚至多方面合作。
 >
-> 如果你只是認為 Embedded Engineer 處理一個小小設備，那就大錯特錯！因為 Embedded Engineer 是來創造宇宙，而雲端工程師卻是遊走在宇宙間。
->
+> 如果你認為一位<font color="red">認真的Embedded Engineer</font>只會處理一個小小設備，那就大錯特錯！因為 Embedded Engineer 是來創造宇宙星系，而雲端工程師卻是遊走在宇宙間。
+
 > 不過這邊還是語重心長的告知新同學，要賺大錢請往雲端工程師前進！但是平日要對資深的 Embedded Engineer 客氣點，因為你將可能需要他們的協助。
 
 ## 3.1. Topic
@@ -290,9 +294,9 @@
 ### 3.1.1. [helper_EmbeddedEngineer.md](https://github.com/lankahsu520/HelperX/blob/master/helper_EmbeddedEngineer.md)
 
 > 當初花了數個周末在家苦思，這一生學到了什麼，走過了什麼路，彙整入八個星期內，不只是想引領一位軟體工程師進嵌入式系統內；另一方面也想從中識別該員的能力。
->
+
 > 隔天帶著興奮之情與同事們討論可行性，馬上被打槍「你這個太難了」、「你沒有限制編輯軟體，新人做錯了怎麼辦」，之後還有一些奇怪的想法，我也不想記了。頓時認清不用再跟他們說是非，做回我自己吧！
->
+
 > 「你這個太難了」，這個還可以討論，是否更改內容或時間增長。
 >
 > 「你沒有限制編輯軟體…」聽到這個我是馬上“黃人”問號（現在不能說黑人問號，我講我自己總行吧）？身為一位嵌入式工程師，有的人用 vi，有的人用 Notepad++ 等。一套編輯軟體只要用的順手就好，那裏來的問題。有可能發生問題的部分常在開發 MCU，可我們的主力是 Linux 環境也。 
