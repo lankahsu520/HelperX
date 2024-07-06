@@ -1727,6 +1727,225 @@ stateDiagram-v2
 
 #### H. [Styling with classDefs](https://mermaid.js.org/syntax/stateDiagram.html#styling-with-classdefs), [Spaces in state names](https://mermaid.js.org/syntax/stateDiagram.html#spaces-in-state-names)
 
+## 5.6. Git 樹狀圖
+
+> 以下內容取自於 https://mermaid.js.org/syntax/gitgraph.html
+
+> - *commit* : Representing a new commit on the current branch.
+> - *branch* : To create & switch to a new branch, setting it as the current branch.
+> - *checkout* : To checking out an existing branch and setting it as the current branch.
+> - *merge* : To merge an existing branch onto the current branch.
+
+### 5.5.1. Examples
+
+#### A. merge from main to develop
+
+```mermaid
+---
+title: main to develop
+---
+gitGraph LR:
+	checkout main
+		commit
+		commit
+	branch develop
+	checkout main
+		commit
+	checkout develop
+		commit
+		commit
+	checkout main
+		commit
+		commit
+	checkout develop
+		commit
+		merge main
+		commit
+		commit
+	checkout main
+		commit
+		commit
+```
+
+```
+---
+title: main to develop
+---
+gitGraph LR:
+	checkout main
+		commit
+		commit
+	branch develop
+	checkout main
+		commit
+	checkout develop
+		commit
+		commit
+	checkout main
+		commit
+		commit
+	checkout develop
+		commit
+		merge main
+		commit
+		commit
+	checkout main
+		commit
+		commit
+```
+
+#### B. merge from develop to main
+
+```mermaid
+---
+title: develop to main
+---
+gitGraph LR:
+	checkout main
+		commit
+		commit
+	branch develop
+	checkout main
+		commit
+	checkout develop
+		commit
+		commit
+	checkout main
+		commit
+		commit
+		merge develop
+  checkout develop
+		commit
+    commit
+		commit
+	checkout main
+		commit
+		commit
+```
+
+```
+---
+title: develop to main
+---
+gitGraph LR:
+	checkout main
+		commit
+		commit
+	branch develop
+	checkout main
+		commit
+	checkout develop
+		commit
+		commit
+	checkout main
+		commit
+		commit
+	checkout develop
+		commit
+	merge main
+		commit
+		commit
+	checkout main
+		commit
+		commit
+```
+
+### 5.5.2. [custom commit id](https://mermaid.js.org/syntax/gitgraph.html#adding-custom-commit-id), [commit type](https://mermaid.js.org/syntax/gitgraph.html#modifying-commit-type), [tags](https://mermaid.js.org/syntax/gitgraph.html#adding-tags) and [orientation](https://mermaid.js.org/syntax/gitgraph.html#orientation-v10-3-0)
+
+> orientation: LR (default), TB
+>
+
+```mermaid
+---
+title: custom commit id, commit type and tags
+---
+gitGraph TB:
+	checkout main
+		commit
+		commit id: "1"
+		commit id: "2"
+		commit id: "3-bad" type: HIGHLIGHT
+		commit id: "4-3 Reverse" type: REVERSE
+```
+```
+---
+title: custom commit id, commit type and tags
+---
+gitGraph TB:
+	checkout main
+		commit
+		commit id: "1"
+		commit id: "2"
+		commit id: "3-bad" type: HIGHLIGHT
+		commit id: "4-3 Reverse" type: REVERSE
+```
+
+### 5.5.5. [branch](https://mermaid.js.org/syntax/gitgraph.html#create-a-new-branch), [checkout](https://mermaid.js.org/syntax/gitgraph.html#checking-out-an-existing-branch), [merge](https://mermaid.js.org/syntax/gitgraph.html#merging-two-branches) and [cherry-pick](https://mermaid.js.org/syntax/gitgraph.html#cherry-pick-commit-from-another-branch)
+
+```mermaid
+---
+title: branch, checkout, merge and cherry-pick
+---
+gitGraph LR:
+	checkout main
+		commit id:"1"
+		commit id:"2"
+	branch develop
+	checkout develop
+		commit id:"3"
+	checkout main
+		commit id:"4"
+		commit id:"5"
+    	commit id:"6"
+	checkout develop
+		cherry-pick id:"5"
+	checkout main
+    	commit id:"8"
+    checkout develop
+        merge main id: "9"
+
+```
+
+```
+---
+title: branch, checkout, merge and cherry-pick
+---
+gitGraph LR:
+	checkout main
+		commit id:"1"
+		commit id:"2"
+	branch develop
+	checkout develop
+		commit id:"3"
+	checkout main
+		commit id:"4"
+		commit id:"5"
+    	commit id:"6"
+	checkout develop
+		cherry-pick id:"5"
+	checkout main
+    	commit id:"8"
+    checkout develop
+        merge main id: "9"
+```
+
+### 
+
+```mermaid
+---
+config:
+  gitGraph:
+    parallelCommits: false
+---
+gitGraph:
+  commit
+  branch develop
+  commit
+  commit
+  checkout main
+  commit
+  commit
+```
 # Appendix
 
 # I. Study
