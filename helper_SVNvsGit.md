@@ -19,6 +19,8 @@
 
 # 0. Environment
 
+## 0.1. System Environment
+
 #### svn
 
 ```bash
@@ -59,6 +61,69 @@ $ git config –global user.email "email address"
 $ git config --global user.email "lankahsu@gmail.com"
 $ git config --global user.name "Lanka Hsu"
 ```
+
+## 0.2. 認知扭曲
+
+> 為什麼介紹版本控制系統，需要討論這些。
+>
+> 世界就這麼小，身邊就遇到奇葩的人事物。
+
+#### A. 版本控制系統只能存放程式碼
+
+>錯，不只程式碼、圖檔、執行檔、文件等都可放入。
+
+#### B. git 就是好棒棒，svn 就是爛
+
+>會有這想法的人，本身認知就很扭曲，而且不太會用 svn。
+
+#### C. svn 沒有 branch or tag
+
+> 錯，只是 svn 的呈現方式不同於 git。
+>
+> 想學，請見之後章節。
+>
+> （身邊的軟體工程師，教了很多次後還是不會，心寒）
+
+#### D. 沒有解決衝突的能力
+
+>後面很多問題，都是因為沒有解決衝突的能力，就怪東怪西的。
+
+#### E. 每次 svn commit 時都會衝突
+
+>跟前一問題有關係，沒有良好的習慣，要隨時同步工作區的檔案和 server repository。
+>
+>```bash
+>$ svn up
+>$ git pull
+>```
+>
+>再來就是本身的無知， svn ci = git commit + git push
+
+#### G. 使用 git 不是有 local repository，為什麼 commit 前要 pull
+
+>就是對 local repository 一知半解，認為 commit 沒事就好。
+>
+>忘了還有 server repository，在你工作的同時，你的夥伴也是很努力的在工作，
+
+#### F. 個人管個人的檔案，怎麼會衝突
+
+>專案是分工，不是分檔案，版本控制系統不負責這類問題。
+
+>這個就是沒有合作概念的認知。
+
+#### H. 那要改檔案，每個人都各自開 branch 再改
+
+>此法看似沒問題，如 Opensource 進程，當非成員要修改檔案時，在 github 和 gitlab 兩大平台上。一個使用 pull request，而另一個則是 merge request，都是有另外開 branch 的味道。
+
+>但究一般的專案管理，團隊都會決定在那個 branch 進行開發，而不是每個人個自去開 branch 開發後再 merge。當然原因很多，以下只是小部分
+>
+>- 時間不允許。
+>
+>- 員工必須緊密的合作，有先後卡程式碼問題，
+>- Daily build 總要驗證大家的成果。
+>
+>- 再來沒有專職的 code reviewer，雖然能讓同事來支援，但支援久了，不只沒有錢拿，還算加重了負擔。
+>- 就算 merge request/pull request 已提出，但是在等待 accept 時間中，有新的提交進入目標分支，一樣有可能發生衝突；所以只是浪費時間和功夫。
 
 # 1. Repository
 
