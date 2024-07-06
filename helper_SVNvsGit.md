@@ -115,7 +115,7 @@ $ git config --global user.name "Lanka Hsu"
 
 >此法看似沒問題，如 Opensource 進程，當非成員要修改檔案時，在 github 和 gitlab 兩大平台上。一個使用 pull request，而另一個則是 merge request，都是有另外開 branch 的味道。
 
->但究一般的專案管理，團隊都會決定在那個 branch 進行開發，而不是每個人個自去開 branch 開發後再 merge。當然原因很多，以下只是小部分
+>一般的專案管理，團隊都會決定在那個 branch 進行開發，而不是每個人個自去開 branch 開發後再 merge。當然原因很多，以下只是小部分
 >
 >- 時間不允許。
 >
@@ -700,6 +700,9 @@ $ git push -f
 
 ## 4.4. Merge
 ```mermaid
+---
+title: Merge a range of changes
+---
 flowchart LR
 
 	subgraph master
@@ -715,6 +718,9 @@ flowchart LR
 	M124 --> B???
 ```
 ```mermaid
+---
+title: Merge one specific change
+---
 flowchart LR
 
 	subgraph master
