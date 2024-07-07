@@ -1,10 +1,11 @@
-#!/bin/bash
- 
-SVN_DIR="/work_svnroot"
+#!/bin/sh
+
+PWD=`pwd`
+SVN_DIR="${PWD}"
 REPO_NAME=$1
- 
+
 sudo svnadmin create $SVN_DIR/${REPO_NAME}
- 
+
 #sudo vi ${SVN_DIR}/${REPO_NAME}/conf/svnserve.conf
 sudo sed -i "s|\# anon-access =.*|anon-access = read|g" ${SVN_DIR}/${REPO_NAME}/conf/svnserve.conf
 sudo sed -i "s|\# auth-access =.*|auth-access = write|g" ${SVN_DIR}/${REPO_NAME}/conf/svnserve.conf

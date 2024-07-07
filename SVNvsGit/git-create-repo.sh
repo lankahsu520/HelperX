@@ -1,11 +1,11 @@
-#!/bin/bash
- 
+#!/bin/sh
+
 GIT_DIR="/work_gitroot"
 REPO_NAME=$1
- 
+
 mkdir -p ${GIT_DIR}/${REPO_NAME}
 cd ${GIT_DIR}/${REPO_NAME}
- 
+
 git init --bare &> /dev/null
 touch git-daemon-export-ok
 cp hooks/post-update.sample hooks/post-update
