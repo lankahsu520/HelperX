@@ -1,6 +1,7 @@
 #!/bin/sh
 
-GIT_DIR="/work_gitroot"
+PWD=`pwd`
+GIT_DIR="${PWD}"
 REPO_NAME=$1
 
 mkdir -p ${GIT_DIR}/${REPO_NAME}
