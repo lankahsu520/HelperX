@@ -438,7 +438,7 @@ function ps-name()
 	if [ ! -z "${NAME1}" ]; then
 		PID=`pidof ${NAME1}`
 		if [ ! -z "${PID}" ]; then
-			DO_COMMAND="(ps -p ${PID} -o pid,%mem,%cpu,vsz,cmd)"
+			DO_COMMAND="(ps -p ${PID} -o pid,%mem,%cpu,vsz,time,etime,start,cmd)"
 			eval-it "$DO_COMMAND"
 		else
 			echo "NAME1=$NAME1, PID=$PID"
