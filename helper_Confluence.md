@@ -172,6 +172,18 @@
 
 >而 Macro 是需要使用者另行安裝 Apps（或稱 Plugins）來滿足需求。值得注意的是，有些 Apps 要額外收錢。
 
+>網路很多說明使用特定的“Macro”，如以下的 Markdown，都已經跟現行版本有出入了
+>
+>```txt
+>To insert markdown in the Legacy editor:
+>	1. Choose Insert > Markup.
+>	2. Select Markdown.
+>	3. Type or paste your text - the preview will show you how it will appear on your page.
+>	4. Choose Insert.
+>As with wiki markup, Confluence Cloud will convert your markdown to the rich text editor format. You will not be able to edit your content using markdown.
+>```
+>
+
 ### 2.4.1. Admin vs. User
 
 > 請先確定使用者的權限
@@ -187,6 +199,20 @@
 ### 2.4.2. Markdown for Confluence - Markdown Editor in Confluence
 
 > Native Markdown Editor adds alternative editor that supports Markdown in Confluence
+
+>[helper_MarkDown](https://github.com/lankahsu520/HelperX/helper_MarkDown.md) - Not supported
+>
+>```txt
+>1.6. 註腳
+>1.7. 參考連結
+>2.1. 表格合併
+>3. 格式
+>  圖片
+>  span text
+>  inline HTML font text
+>  code text
+>5. Mermaid
+>```
 
 #### A. Find new apps
 
@@ -234,15 +260,73 @@
 
 ### 2.4.3. Mermaid Charts & Diagrams for Confluence
 
-> Mermaid macro 
+> Mermaid macro
 
 ![Confluence040301](./images/Confluence040301.png)
 
+#### A. Input "/mermaid"
+
+![Confluence040302](./images/Confluence040302.png)
+
+#### B. Edit Mermaid diagram definition
+
+![Confluence040303](./images/Confluence040303.png)
+
+#### C. Other actions
+
+>Edit
+>
+>Back to center
+>
+>Go wide
+>
+>Go full width
+>
+>Copy
+>
+>Remove
+
+![Confluence040304](./images/Confluence040304.png)
+
+
+
 ### 2.4.4. Mermaid Diagrams for Confluence
 
-> Mermaid macro 
+> Mermaid macro
 
 ![Confluence040401](./images/Confluence040401.png)
+
+### 2.4.5. Markdown, HTML, PlantUML, LaTeX, Diagrams, Open API, Mermaid
+
+> Markdown macro
+
+>基本上可以把整個 Markdown 文檔貼入，但是要注意圖片要使用網址的（勿使用相對路徑和本地）。
+>
+>```
+>1.4. 程式碼區塊，會被當成內文
+>```
+
+![Confluence040501](./images/Confluence040501.png)
+
+### 2.4.6. Instant Markdown Exporter for Confluence
+
+> export tool
+>
+> Mermaid Charts & Diagrams for Confluence -> skip
+>
+> Mermaid Diagrams for Confluence -> picture
+
+![Confluence040601](./images/Confluence040601.png)
+
+### 2.4.7. Markdown Exporter for Confluence
+
+>export tool
+>
+>Mermaid Charts & Diagrams for Confluence -> fail
+>
+>Mermaid Diagrams for Confluence -> picture
+
+![Confluence040701](./images/Confluence040701.png)
 
 # Appendix
 
