@@ -430,6 +430,20 @@ ps-name curl
 ```
 
 ```bash
+function ps-id()
+{
+	HINT="Usage: ${FUNCNAME[0]} <id1>"
+	ID1=$1
+
+	if [ ! -z "${ID1}" ]; then
+		PID=${ID1}
+		DO_COMMAND="(ps -p ${PID} -o pid,%mem,%cpu,vsz,time,etime,start,cmd)"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
+
 function ps-name()
 {
 	HINT="Usage: ${FUNCNAME[0]} <name1>"
@@ -438,8 +452,7 @@ function ps-name()
 	if [ ! -z "${NAME1}" ]; then
 		PID=`pidof ${NAME1}`
 		if [ ! -z "${PID}" ]; then
-			DO_COMMAND="(ps -p ${PID} -o pid,%mem,%cpu,vsz,time,etime,start,cmd)"
-			eval-it "$DO_COMMAND"
+			ps-id ${PID}
 		else
 			echo "NAME1=$NAME1, PID=$PID"
 		fi
@@ -688,6 +701,9 @@ sed -i "s|<user>.*|<user>$WHO</user>|g" $CFG_FILE
 sed -i '94d' $CFG_FILE
 # add one line "\n" after line:94
 sed -i '94a\\n'
+
+# remove the line containing "PJ_BUILD_DIR"
+sed -i "s|PJ_BUILD_DIR|d" *.conf
 ```
 
 #### tr - translate or delete characters
