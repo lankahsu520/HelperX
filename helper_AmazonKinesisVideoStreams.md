@@ -85,7 +85,9 @@ graph LR
 
 ```bash
 # please download amazon-kinesis-video-streams-webrtc-sdk-c-1.10.2.tar.gz
+$ rm -rf amazon-kinesis-video-streams-webrtc-sdk-c-1.10.2
 $ tar -zxvf amazon-kinesis-video-streams-webrtc-sdk-c-1.10.2.tar.gz
+
 $ cd amazon-kinesis-video-streams-webrtc-sdk-c-1.10.2
 $ tree -L 1 ./
 ./
@@ -110,19 +112,24 @@ $ tree -L 1 ./
 8 directories, 9 files
 ```
 ```bash
-$ mkdir -p build_xxx
-$ cd build_xxx
+$ cd amazon-kinesis-video-streams-webrtc-sdk-c-1.10.2
+
+# to keep Dependencies
+$ sed -i "s|  file(REMOVE_RECURSE|#  file(REMOVE_RECURSE|g" CMake/Utilities.cmake
+
+$ (rm -rf build_xxx; mkdir -p build_xxx)
 
 # 這邊採用原始設定
-$ cmake ..
+$ (cd build_xxx; cmake ..)
+
 ```
 ```bash
 # 於 open-source 可以看到已經編譯了很多相關 libraries；
-# 這對開發 Embedded Linux 的同仁是很不友善的。因為在開發 Embedded Linux 時，要共同使用 libraries。
+# 開發 Embedded Linux 的同仁，請查看裏面有無重複 libraries。
 # libkvsCommon* from Amazon Kinesis Video Streams Producer SDK for C++
 # libkvspic* from Amazon Kinesis Video Streams PIC
-$ tree -L 2 ../open-source/
-../open-source/
+$ tree -L 2 open-source/
+open-source/
 ├── bin
 │   ├── c_rehash
 │   └── openssl
@@ -134,34 +141,73 @@ $ tree -L 2 ../open-source/
 │   ├── openssl
 │   ├── srtp2
 │   └── usrsctp.h
-└── lib
-    ├── cmake
-    ├── engines-1.1
-    ├── libcrypto.a
-    ├── libcrypto.so -> libcrypto.so.1.1
-    ├── libcrypto.so.1.1
-    ├── libkvsCommonLws.so -> libkvsCommonLws.so.1
-    ├── libkvsCommonLws.so.1 -> libkvsCommonLws.so.1.5.2
-    ├── libkvsCommonLws.so.1.5.2
-    ├── libkvspic.a
-    ├── libkvspicClient.a
-    ├── libkvspicState.a
-    ├── libkvspicUtils.a
-    ├── libsrtp2.a
-    ├── libssl.a
-    ├── libssl.so -> libssl.so.1.1
-    ├── libssl.so.1.1
-    ├── libusrsctp.a
-    ├── libwebsockets.a
-    ├── libwebsockets.so -> libwebsockets.so.19
-    ├── libwebsockets.so.19
-    └── pkgconfig
+├── lib
+│   ├── cmake
+│   ├── engines-1.1
+│   ├── libcrypto.a
+│   ├── libcrypto.so -> libcrypto.so.1.1
+│   ├── libcrypto.so.1.1
+│   ├── libkvsCommonLws.so -> libkvsCommonLws.so.1
+│   ├── libkvsCommonLws.so.1 -> libkvsCommonLws.so.1.5.2
+│   ├── libkvsCommonLws.so.1.5.2
+│   ├── libkvspic.a
+│   ├── libkvspicClient.a
+│   ├── libkvspicState.a
+│   ├── libkvspicUtils.a
+│   ├── libsrtp2.a
+│   ├── libssl.a
+│   ├── libssl.so -> libssl.so.1.1
+│   ├── libssl.so.1.1
+│   ├── libusrsctp.a
+│   ├── libwebsockets.a
+│   ├── libwebsockets.so -> libwebsockets.so.19
+│   ├── libwebsockets.so.19
+│   └── pkgconfig
+├── libkvsCommonLws
+│   ├── build
+│   ├── CMakeCache.txt
+│   ├── CMakeFiles
+│   ├── cmake_install.cmake
+│   ├── CMakeLists.txt
+│   └── Makefile
+├── libopenssl
+│   ├── build
+│   ├── CMakeCache.txt
+│   ├── CMakeFiles
+│   ├── cmake_install.cmake
+│   ├── CMakeLists.txt
+│   └── Makefile
+├── libsrtp
+│   ├── build
+│   ├── CMakeCache.txt
+│   ├── CMakeFiles
+│   ├── cmake_install.cmake
+│   ├── CMakeLists.txt
+│   └── Makefile
+├── libusrsctp
+│   ├── build
+│   ├── CMakeCache.txt
+│   ├── CMakeFiles
+│   ├── cmake_install.cmake
+│   ├── CMakeLists.txt
+│   └── Makefile
+└── libwebsockets
+    ├── build
+    ├── CMakeCache.txt
+    ├── CMakeFiles
+    ├── cmake_install.cmake
+    ├── CMakeLists.txt
+    ├── libwebsockets-leak-pipe-fix.patch
+    ├── libwebsockets-old-gcc-fix-cast-cmakelists.patch
+    └── Makefile
 
-10 directories, 23 files
+25 directories, 45 files
 ```
 
 ```bash
-$ make #VERBOSE=1
+$ (cd build_xxx;make)
+# or
+$ (cd build_xxx;make VERBOSE=1)
 ```
 
 ```bash
