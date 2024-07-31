@@ -39,6 +39,9 @@ alias l="ls -CF"
 # display file type
 alias ls-type="ls  | xargs -n 1 file"
 
+$ ls -al LICENSE
+-rwxrwxr-x 1 lanka lanka 1538  七   8 10:30 LICENSE
+
 ```
 
 #### mkdir - make directories
@@ -199,7 +202,7 @@ cat README.md
 
 ```
 
-#### hexdump, hd — ASCII, decimal, hexadecimal, octal dump
+#### hexdump, hd - ASCII, decimal, hexadecimal, octal dump
 
 ```bash
 hexdump -C helloworld.tar.gz.enc | less
@@ -725,6 +728,45 @@ ac -d
 
 ```
 
+#### gpasswd - administer /etc/group and /etc/gshadow
+
+```bash
+$ sudo gpasswd -d pokemon pikachu
+Removing user pokemon from group pikachu
+
+```
+
+#### groupadd - create a new group
+
+```bash
+$ sudo groupadd pokomon
+```
+
+#### groupdel - delete a group
+
+```bash
+$ sudo groupdel pikachu
+```
+
+#### groups- user group file
+
+```bash
+$ groups
+lanka adm cdrom sudo dip plugdev lpadmin lxd sambashare docker
+
+$ groups lanka
+lanka : lanka adm cdrom sudo dip plugdev lpadmin lxd sambashare docker
+
+```
+
+#### id - print real and effective user and group IDs
+
+```bash
+$ id lanka
+uid=1000(lanka) gid=1000(lanka) groups=1000(lanka),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),120(lpadmin),131(lxd),132(sambashare),142(docker)
+
+```
+
 #### last, lastb - show a listing of last logged in users
 
 ```bash
@@ -747,7 +789,25 @@ lastlog
 
 ```
 
-#### sudo, sudoedit — execute a command as another user
+#### newgrp - log in to a new group
+
+> switch to the group
+
+```bash
+$ newgrp pokomon
+```
+
+#### passwd - change user password
+
+```bash
+$ sudo passwd pikachu
+New password:
+Retype new password:
+passwd: password updated successfully
+
+```
+
+#### sudo, sudoedit - execute a command as another user
 
 ```bash
 sudo 
@@ -786,31 +846,133 @@ function sudo-pass123()
 }
 ```
 
+#### useradd - create a new user or update default new user information
+
+```bash
+$ sudo useradd pikachu
+$ id pikachu
+uid=1001(pikachu) gid=1003(pikachu) groups=1003(pikachu)
+$ cat /etc/passwd | grep pikachu
+pikachu:x:1003:1003::/home/pikachu:/bin/sh
+
+$ groups pokemon pikachu
+pokemon : pokemon
+pikachu : pikachu
+
+$ sudo mkdir -p /home/pikachu
+$ sudo chown pikachu:pikachu /home/pikachu
+
+$ sudo usermod -aG pokemon pikachu
+$ id pikachu
+uid=1003(pikachu) gid=1003(pikachu) groups=1003(pikachu),1004(pokemon)
+
+$ groups pokemon pikachu
+pokemon : pokemon
+pikachu : pikachu pokemon
+
+```
+
+#### userdel - delete a user account and related files
+
+```bash
+$ sudo userdel pikachu
+userdel: group pikachu not removed because it has other members.
+
+$ sudo userdel -r pikachu
+userdel: user pikachu is currently used by process 7499
+
+$ sudo userdel -rf pikachu
+userdel: user pikachu is currently used by process 7499
+userdel: pikachu mail spool (/var/mail/pikachu) not found
+
+$ cat /etc/group | grep pikachu
+
+$ sudo groupdel pikachu
+```
+
+#### usermod - modify a user account
+
+```bash
+# Add the user to the supplementary group(s). Use only with the -G option.
+$ sudo usermod -aG pokemon pikachu
+
+# The user's new login directory
+$ sudo usermod -d /work/pikachu pikachu
+$ cat /etc/passwd | grep pikachu
+pikachu:x:1003:1003::/work/pikachu:/bin/sh
+
+# grant pikachu sudo privileges 
+$ sudo usermod -aG sudo pikachu
+```
+
+#### users - print the user names of users currently logged in to the current host
+
+```bash
+$ users
+lanka
+
+```
+
 #### w - Show who is logged on and what they are doing
 
 ```bash
-w -i
+$ w -i
+ 11:45:58 up  4:04,  1 user,  load average: 0.22, 0.10, 0.03
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+lanka    pts/0    192.168.56.1     08:34    4.00s  0.28s  0.00s w -i
 
 ```
 
 #### who - show who is logged on
 
 ```bash
-who
+$ who
+lanka    pts/0        2024-07-31 08:34 (192.168.56.1)
 
 ```
 
 #### whoami - print effective userid
 
 ```bash
-whoami
+$ whoami
+lanka
 
 ```
 
 #### /etc/group
 
+> Groupname:Group Password:GID:User in group
+
 ```bash
-cat /etc/group
+$ cat /etc/group
+$ cat /etc/group | grep lanka
+```
+
+#### /etc/gshadow
+
+```bash
+$ sudo cat /etc/gshadow
+```
+
+#### /etc/passwd
+
+> Username:Password:UserID (UID):GroupID (GID):UserID Info:Home Directory:Shell
+
+```bash
+$ cat /etc/passwd
+$ cat /etc/passwd | grep lanka
+lanka:x:1000:1000:lanka,,,:/home/lanka:/bin/bash
+
+```
+
+#### /etc/shadow
+
+>Username:Encrypted Password:Modified Date:Minimum Password Age:Maximum Password Age:Password Expiration Warning Period:Password Inactivity Period:Account Experiation Date:Reserved Field
+
+```bash
+$ sudo cat /etc/shadow
+$ sudo cat /etc/shadow | grep lanka
+lanka:lanka520:19276:0:99999:7:::
 
 ```
 
@@ -1371,7 +1533,7 @@ apt-cache search package subversion-tools
 # 獲取 subversion-tools 的相關信息，如說明、大小、版本等
 apt-cache show package subversion-tools
 
-# 修覆安裝 -f = ——fix-missing
+# 修覆安裝 -f = --fix-missing
 sudo apt-get -f install subversion-tools
 
 # 刪除 subversion-tools
@@ -1728,7 +1890,54 @@ echo 2 > /proc/sys/vm/overcommit_memory
 
 # 14. Security Handler
 
-## 14.1. openssl
+## 14.1. Message Digest & Hash Function
+
+#### md5sum - compute and check MD5 message digest
+
+```bash
+$ md5sum LICENSE
+a828cf528fac643fcfef67d9304b685b  LICENSE
+
+$ md5sum LICENSE > LICENSE.md5sum
+$ md5sum -c LICENSE.md5sum
+LICENSE: OK
+
+$ cat LICENSE | md5sum
+a828cf528fac643fcfef67d9304b685b  -
+
+```
+
+#### sha1sum - compute and check SHA1 message digest
+
+```bash
+$ sha1sum LICENSE
+d27307d3abeb72ceec1181d641795d96e3004c8e  LICENSE
+
+$ sha1sum LICENSE > LICENSE.sha1sum
+$ sha1sum -c LICENSE.sha1sum
+LICENSE: OK
+
+$ cat LICENSE | sha1sum
+d27307d3abeb72ceec1181d641795d96e3004c8e  -
+
+```
+
+#### sha256sum - compute and check SHA256 message digest
+
+```bash
+$ sha256sum LICENSE
+d351638bb049dd4b46c8079adb0c059990e352bc28285a84835568fb1650f2da  LICENSE
+
+$ sha256sum LICENSE > LICENSE.sha256sum
+$ sha256sum -c LICENSE.sha256sum
+LICENSE: OK
+
+$ cat LICENSE | sha256sum
+d351638bb049dd4b46c8079adb0c059990e352bc28285a84835568fb1650f2da  -
+
+```
+
+## 14.2. openssl
 
 ```bash
 # list all security version
@@ -1762,14 +1971,14 @@ PASS_ENC=`openssl base64 -e <<< "lankahsu520"`; echo "(PASS_ENC: $PASS_ENC)"
 PASS_DEC=`openssl base64 -d <<< "$PASS_ENC"`; echo "(PASS_DEC: $PASS_DEC)"
 ```
 
-## 14.2. base64
+## 14.3. base64
 
 ```bash
 PASS_ENC=`echo lankahsu520 | base64`; echo "(PASS_ENC: $PASS_ENC)"
 PASS_DEC=`echo $PASS_ENC | base64 -d`; echo "(PASS_DEC: $PASS_DEC)"
 ```
 
-## 14.3. lynis
+## 14.4. lynis
 
 > 只是一個安全審計工具，就算找出問題後，也沒有相關的修補方式，因此實用性就不高了。
 
