@@ -1380,8 +1380,6 @@ iperf -s
 iperf -c 192.168.0.92
 ```
 
-
-
 # 9. Datetime Handler
 
 #### date - print or set the system date and time
@@ -1569,12 +1567,25 @@ apt-get source package
 dpkg -L libssl1.1
 dpkg -L libcurl4
 
+$ dpkg -l |grep hwe
+ii  linux-generic-hwe-20.04                       5.15.0.117.127~20.04.1                      amd64        Complete Generic Linux kernel and headers
+ii  linux-headers-generic-hwe-20.04               5.15.0.117.127~20.04.1                      amd64        Generic Linux kernel headers
+ii  linux-hwe-5.11-headers-5.11.0-46              5.11.0-46.51~20.04.1                        all          Header files related to Linux kernel version 5.11.0
+ii  linux-hwe-5.13-headers-5.13.0-52              5.13.0-52.59~20.04.1                        all          Header files related to Linux kernel version 5.13.0
+ii  linux-hwe-5.15-headers-5.15.0-116             5.15.0-116.126~20.04.1                      all          Header files related to Linux kernel version 5.15.0
+ii  linux-hwe-5.15-headers-5.15.0-117             5.15.0-117.127~20.04.1                      all          Header files related to Linux kernel version 5.15.0
+ii  linux-hwe-5.8-headers-5.8.0-63                5.8.0-63.71~20.04.1                         all          Header files related to Linux kernel version 5.8.0
+ii  linux-image-generic-hwe-20.04                 5.15.0.117.127~20.04.1                      amd64        Generic Linux kernel image
+ii  virtualbox-guest-dkms-hwe                     6.1.50-dfsg-1~ubuntu1.20.04.1               all          x86 virtualization solution - guest addition module source for dkms
+
 ```
 
 #### ldconfig - configure dynamic linker run-time bindings
 
 ```bash
-ldconfig -p|grep libmpc
+$ ldconfig -p|grep libmpc
+        libmpcdec.so.6 (libc6,x86-64) => /lib/x86_64-linux-gnu/libmpcdec.so.6
+        libmpc.so.3 (libc6,x86-64) => /lib/x86_64-linux-gnu/libmpc.so.3
 
 ```
 
@@ -1675,6 +1686,10 @@ Linux build20-vbx 5.15.0-87-generic #97~20.04.1-Ubuntu SMP Thu Oct 5 08:25:28 UT
 
 $ uname -m
 x86_64
+
+$ uname -r
+5.15.0-117-generic
+
 ```
 
 #### /proc/cpuinfo
@@ -2188,7 +2203,88 @@ zip -r helloworld.zip helloworld
 
 ```
 
-# 18. Others Handler
+# 18 Power Handler
+
+#### acpi - Shows battery status and other ACPI information
+
+```bash
+$ sudo apt install acpi
+
+$ acpi -i
+Battery 0: Unknown, 78%
+Battery 0: design capacity 5000 mAh, last full capacity 5000 mAh = 100%
+
+$ acpi -iab
+Battery 0: Unknown, 78%
+Battery 0: design capacity 5000 mAh, last full capacity 5000 mAh = 100%
+Adapter 0: on-line
+
+```
+
+#### upower - UPower command line tool
+
+```bash
+$ $ upower --dump
+Device: /org/freedesktop/UPower/devices/line_power_AC
+  native-path:          AC
+  power supply:         yes
+  updated:              廿廿四年八月二日 (週五) 七時39分十八秒 (940 seconds ago)
+  has history:          no
+  has statistics:       no
+  line-power
+    warning-level:       none
+    online:              yes
+    icon-name:          'ac-adapter-symbolic'
+
+Device: /org/freedesktop/UPower/devices/battery_BAT0
+  native-path:          BAT0
+  vendor:               innotek
+  model:                1
+  serial:               0
+  power supply:         yes
+  updated:              廿廿四年八月二日 (週五) 七時53分十九秒 (99 seconds ago)
+  has history:          yes
+  has statistics:       yes
+  battery
+    present:             yes
+    rechargeable:        yes
+    state:               charging
+    warning-level:       none
+    energy:              39 Wh
+    energy-empty:        0 Wh
+    energy-full:         50 Wh
+    energy-full-design:  50 Wh
+    energy-rate:         0 W
+    voltage:             10 V
+    percentage:          78%
+    capacity:            100%
+    icon-name:          'battery-full-charging-symbolic'
+
+Device: /org/freedesktop/UPower/devices/DisplayDevice
+  power supply:         yes
+  updated:              廿廿四年八月二日 (週五) 七時39分十八秒 (940 seconds ago)
+  has history:          no
+  has statistics:       no
+  battery
+    present:             yes
+    state:               charging
+    warning-level:       none
+    energy:              39 Wh
+    energy-full:         50 Wh
+    energy-rate:         0 W
+    percentage:          78%
+    icon-name:          'battery-full-charging-symbolic'
+
+Daemon:
+  daemon-version:  0.99.11
+  on-battery:      no
+  lid-is-closed:   no
+  lid-is-present:  no
+  critical-action: HybridSleep
+
+```
+
+# 19. Others Handler
 
 #### alias - define or display aliases
 
