@@ -297,7 +297,26 @@ Encryption:     disabled
 
 # I. Study
 
+## I.1. [Ubuntu kernel lifecycle and enablement stack](https://ubuntu.com/kernel/lifecycle)
+
 # II. Debug
+
+## II.1. Your Hardware Enablement Stack (HWE) is supported until April 2025.
+
+>Your Hardware Enablement Stack (HWE) is supported until April 2025.
+>*** System restart required ***
+
+```bash
+$ hwe-support-status
+Your Hardware Enablement Stack (HWE) is supported until 四月 2025.
+
+$ ubuntu-drivers list-oem
+$ ubuntu-drivers list
+virtualbox-guest-dkms, (kernel modules provided by virtualbox-guest-dkms)
+virtualbox-guest-dkms-hwe, (kernel modules provided by virtualbox-guest-dkms-hwe)
+open-vm-tools-desktop
+
+```
 
 # III. Glossary
 
