@@ -426,13 +426,72 @@ pidof helloworld
 ps -aux
 ps -aux | grep helloworld | grep -v grep
 
+ps aux --sort -%cpu
+
 ps -p `pidof curl` -o pid,%mem,%cpu,vsz,cmd
 ps -p 495220 -o pid,%mem,%cpu,vsz,cmd
 
-ps-name curl
 ```
 
 ```bash
+$ ps-name VBoxClient[(ps -p 3421 -o pid,nlwp,%mem,%cpu,vsz,time,etime,start,cmd)]    PID NLWP %MEM %CPU    VSZ     TIME     ELAPSED  STARTED CMD   3421    3  0.0  0.0 157768 00:00:00       28:22 22:15:10 /usr/bin/VBoxClient --vmsvga
+
+$ ps-sort-cpu-mem
+[(ps -ax -o pid,nlwp,%mem,%cpu,vsz,time,etime,start,cmd --sort=-%cpu,-%mem | head -n 10)]
+    PID NLWP %MEM %CPU    VSZ     TIME     ELAPSED  STARTED CMD
+   3512    8  3.1  0.4 3856068 00:00:08      28:44 22:15:11 /usr/bin/gnome-shell
+   3813    6  2.0  0.4 894180 00:00:07       28:41 22:15:14 /snap/snap-store/1113/usr/bin/snap-store --gapplication-service
+   4002    5  1.2  0.2 468556 00:00:03       28:37 22:15:18 /usr/libexec/fwupd/fwupd
+    939   11  0.5  0.1 1505912 00:00:03      43:16 22:00:39 /usr/bin/containerd
+    820   10  0.3  0.1 1394092 00:00:03      43:17 22:00:38 /usr/lib/snapd/snapd
+   2580    1  0.2  0.1 107720 00:00:03       36:38 22:07:17 /usr/sbin/smbd --foreground --no-process-group
+      1    1  0.1  0.1 170560 00:00:03       43:34 22:00:21 /sbin/init splash
+   3416    4  0.0  0.1 156012 00:00:03       28:45 22:15:10 /usr/bin/VBoxClient --draganddrop
+   1033   30  0.9  0.0 1795580 00:00:02      43:15 22:00:40 /usr/sbin/mysqld
+
+```
+
+```bash
+PS_OUTPUT="pid,nlwp,%mem,%cpu,vsz,time,etime,start,cmd"
+PS_OUTPUT_ARG="-o ${PS_OUTPUT}"
+PS_OUTPUT_LINES="10"
+
+function ps-args()
+{
+	echo "PS_OUTPUT=${PS_OUTPUT}"
+	echo "PS_OUTPUT_ARG=${PS_OUTPUT_ARG}"
+	echo "PS_OUTPUT_LINES=${PS_OUTPUT_LINES}"
+}
+
+function ps-sort()
+{
+	HINT="Usage: ${FUNCNAME[0]} <spec1>"
+	SPEC1=$1
+
+	if [ ! -z "${SPEC1}" ]; then
+		[ "$PS_OUTPUT_LINES" != "" ] && PS_OUTPUT_LINES_ARG="| head -n ${PS_OUTPUT_LINES}"
+		DO_COMMAND="(ps -ax ${PS_OUTPUT_ARG} ${SPEC1} ${PS_OUTPUT_LINES_ARG})"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
+
+function ps-sort-cpu()
+{
+	ps-sort "--sort=-%cpu"
+}
+
+function ps-sort-mem()
+{
+	ps-sort "--sort=-%mem"
+}
+
+function ps-sort-cpu-mem()
+{
+	ps-sort "--sort=-%cpu,-%mem"
+}
+
 function ps-id()
 {
 	HINT="Usage: ${FUNCNAME[0]} <id1>"
