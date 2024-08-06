@@ -133,24 +133,27 @@ scp -vr /work/* lanka@192.168.0.99:/work
 # sshpp scp -vr /work/* lanka@192.168.0.99:/work
 function sshpp()
 {
-	FILES="$*"
+	SSH_COMMAND="$*"
 
 	if [ ! -z "$SCP_PASS_AUTO" ]; then
-		sshpass -p "$SCP_PASS_AUTO" $FILES
-	else 
-		$FILES
+		DO_COMMAND="(sshpass -p '${SCP_PASS_AUTO}' ${SSH_COMMAND})"
+		eval-it "$DO_COMMAND"
+	else
+		echo "Please set [SCP_PASS_AUTO]"
+		DO_COMMAND="(${SSH_COMMAND})"
+		eval-it "$DO_COMMAND"
 	fi
 }
 
 function ssh-pass123()
 {
+	HINT="Usage: ${FUNCNAME[0]} <password>"
 	SCP_PASS="$1"
 
-	if [ ! -z "$SCP_PASS" ]; then
-		export SCP_PASS_AUTO=$SCP_PASS
-	else
-		echo "Please set [SCP_PASS_AUTO]"
-		echo "SCP_PASS_AUTO=$SCP_PASS_AUTO"
+	if [ ! -z "${SCP_PASS}" ]; then
+		export SCP_PASS_AUTO=${SCP_PASS}
+	else 
+		echo $HINT
 	fi
 }
 ```
@@ -277,26 +280,25 @@ tail -f /var/log/syslog
 #### diff - compare files line by line
 
 ```bash
-function diffx()
+function diffX()
 {
-	HINT="Usage: ${FUNCNAME[0]} <files1> <file2>"
+	HINT="Usage: ${FUNCNAME[0]} <file1> <file2>"
 	FILE1=$1
 	FILE2=$2
 
-	if [ ! -z "$FILE1" ] && [ ! -z "$FILE2" ]; then
-		diff -Naur $FILE1 $FILE2 
+	if [ ! -z "${FILE1}" ] && [ ! -z "${FILE2}" ]; then
+		DO_COMMAND="(diff -Naur ${FILE1} ${FILE2})"
+		eval-it "$DO_COMMAND"
 	else
 		echo $HINT
 	fi
 }
-
 ```
 
 #### patch - apply a diff file to an original
 
 ```
 patch -p1 < configure_fixes.patch
-
 ```
 
 ## 1.6. Finder
@@ -306,44 +308,100 @@ patch -p1 < configure_fixes.patch
 ```bash
 function find-min()
 {
-	find . -mmin -$1
-}
-function find-time()
-{
-	find . -mtime -$1
-}
-function find-size()
-{
-	find . -type f -size $1
-}
+	HINT="Usage: ${FUNCNAME[0]} <?min>"
+	MMIN1=$1
 
-alias find-bak="find * -name *.bak"
-
-alias find-name="find * -name"
-
-# display file type
-alias find-type="find * -type f | xargs -n 1 file"
-
-function find-ex()
-{
-	HINT="Usage: ${FUNCNAME[0]} <path> <file>"
-	PATH1=$1
-	FILE1=$2
-
-	echo "[$1][$2]"
-	if [ ! -z "$PATH1" ] && [ ! -z "$FILE1" ]; then
-		(cd $PATH1; find * -name $FILE1; cd - >/dev/null )
+	if [ ! -z "${MMIN1}" ]; then
+		DO_COMMAND="(find . -mmin -${MMIN1})"
+		eval-it "$DO_COMMAND"
 	else
 		echo $HINT
 	fi
 }
 
-# 尋找重複的檔案名稱
-function find-dup()
+function find-day()
 {
-	find . -type f -printf '%p -> %f\n' | sort -k2 | uniq -f1 --all-repeated=separate
+	HINT="Usage: ${FUNCNAME[0]} <?day>"
+	MTIME1=$1
+
+	if [ ! -z "${MTIME1}" ]; then
+		DO_COMMAND="(find . -mtime -${MTIME1})"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
 }
 
+function find-size()
+{
+	HINT="Usage: ${FUNCNAME[0]} <+?M>"
+	SIZE1=$1
+
+	if [ ! -z "${SIZE1}" ]; then
+		DO_COMMAND="(find . -type f -size ${SIZE1})"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
+
+function find-name()
+{
+	HINT="Usage: ${FUNCNAME[0]} <file>"
+	FILE1=$1
+
+	if [ ! -z "${FILE1}" ]; then
+		DO_COMMAND="(find * -name ${FILE1})"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
+
+function find-bak()
+{
+	find-name *.bak
+}
+
+function find-type()
+{
+	DO_COMMAND="(find * -type f | xargs -n 1 file)"
+	eval-it "$DO_COMMAND"
+}
+
+function find-ex()
+{
+	HINT="Usage: ${FUNCNAME[0]} <path> <file>"
+	PATH1=$1
+	FILE2=$2
+
+	if [ ! -z "${PATH1}" ] && [ ! -z "${FILE2}" ]; then
+		DO_COMMAND="(cd ${PATH1}; find * -name ${FILE2}; cd - >/dev/null)"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
+
+function find-dup()
+{
+	DO_COMMAND="(find . -type f -printf '%p -> %f\n' | sort -k2 | uniq -f1 --all-repeated=separate)"
+	eval-it "$DO_COMMAND"
+}
+
+function find-ex()
+{
+	HINT="Usage: ${FUNCNAME[0]} <path> <file>"
+	PATH1=$1
+	FILE2=$2
+
+	if [ ! -z "${PATH1}" ] && [ ! -z "${FILE2}" ]; then
+		DO_COMMAND="(cd ${PATH1}; find * -name ${FILE2}; cd - >/dev/null)"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
 ```
 
 #### fdupes - finds duplicate files in a given set of directories
@@ -353,7 +411,6 @@ sudo apt install fdupes
 
 # 尋找重複的檔案名稱
 fdupes -r ./
-
 ```
 
 #### locate - find files by name
@@ -370,11 +427,25 @@ sudo apt install mlocate
 locate libmpc.so | grep `pwd`
 ```
 
+```bash
+function locateX()
+{
+	HINT="Usage: ${FUNCNAME[0]} <file>"
+	FILE1=$1
+
+	if [ ! -z "${FILE1}" ]; then
+		DO_COMMAND="(locate ${FILE1} | grep `pwd`)"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
+```
+
 #### which - locate a command
 
 ```bash
 which find
-
 ```
 
 # 2. Task Handler
@@ -390,7 +461,6 @@ $ fuser -mv /work_999/
                      lanka      4888 .r.e. bash
 # 刷除佔用的 task
 $ fuser -kv /work_999
-
 ```
 
 #### history - GNU History Library
@@ -400,7 +470,6 @@ history
 history 10
 
 echo $HISTFILE
-
 ```
 
 #### lsof - list open files
@@ -417,7 +486,6 @@ $ lsof /work
 
 ```bash
 pidof helloworld
-
 ```
 
 #### ps - report a snapshot of the current processes.
@@ -430,25 +498,6 @@ ps aux --sort -%cpu
 
 ps -p `pidof curl` -o pid,%mem,%cpu,vsz,cmd
 ps -p 495220 -o pid,%mem,%cpu,vsz,cmd
-
-```
-
-```bash
-$ ps-name VBoxClient[(ps -p 3421 -o pid,nlwp,%mem,%cpu,vsz,time,etime,start,cmd)]    PID NLWP %MEM %CPU    VSZ     TIME     ELAPSED  STARTED CMD   3421    3  0.0  0.0 157768 00:00:00       28:22 22:15:10 /usr/bin/VBoxClient --vmsvga
-
-$ ps-sort-cpu-mem
-[(ps -ax -o pid,nlwp,%mem,%cpu,vsz,time,etime,start,cmd --sort=-%cpu,-%mem | head -n 10)]
-    PID NLWP %MEM %CPU    VSZ     TIME     ELAPSED  STARTED CMD
-   3512    8  3.1  0.4 3856068 00:00:08      28:44 22:15:11 /usr/bin/gnome-shell
-   3813    6  2.0  0.4 894180 00:00:07       28:41 22:15:14 /snap/snap-store/1113/usr/bin/snap-store --gapplication-service
-   4002    5  1.2  0.2 468556 00:00:03       28:37 22:15:18 /usr/libexec/fwupd/fwupd
-    939   11  0.5  0.1 1505912 00:00:03      43:16 22:00:39 /usr/bin/containerd
-    820   10  0.3  0.1 1394092 00:00:03      43:17 22:00:38 /usr/lib/snapd/snapd
-   2580    1  0.2  0.1 107720 00:00:03       36:38 22:07:17 /usr/sbin/smbd --foreground --no-process-group
-      1    1  0.1  0.1 170560 00:00:03       43:34 22:00:21 /sbin/init splash
-   3416    4  0.0  0.1 156012 00:00:03       28:45 22:15:10 /usr/bin/VBoxClient --draganddrop
-   1033   30  0.9  0.0 1795580 00:00:02      43:15 22:00:40 /usr/sbin/mysqld
-
 ```
 
 ```bash
@@ -524,6 +573,23 @@ function ps-name()
 }
 ```
 
+```bash
+$ ps-name VBoxClient[(ps -p 3421 -o pid,nlwp,%mem,%cpu,vsz,time,etime,start,cmd)]    PID NLWP %MEM %CPU    VSZ     TIME     ELAPSED  STARTED CMD   3421    3  0.0  0.0 157768 00:00:00       28:22 22:15:10 /usr/bin/VBoxClient --vmsvga
+
+$ ps-sort-cpu-mem
+[(ps -ax -o pid,nlwp,%mem,%cpu,vsz,time,etime,start,cmd --sort=-%cpu,-%mem | head -n 10)]
+    PID NLWP %MEM %CPU    VSZ     TIME     ELAPSED  STARTED CMD
+   3512    8  3.1  0.4 3856068 00:00:08      28:44 22:15:11 /usr/bin/gnome-shell
+   3813    6  2.0  0.4 894180 00:00:07       28:41 22:15:14 /snap/snap-store/1113/usr/bin/snap-store --gapplication-service
+   4002    5  1.2  0.2 468556 00:00:03       28:37 22:15:18 /usr/libexec/fwupd/fwupd
+    939   11  0.5  0.1 1505912 00:00:03      43:16 22:00:39 /usr/bin/containerd
+    820   10  0.3  0.1 1394092 00:00:03      43:17 22:00:38 /usr/lib/snapd/snapd
+   2580    1  0.2  0.1 107720 00:00:03       36:38 22:07:17 /usr/sbin/smbd --foreground --no-process-group
+      1    1  0.1  0.1 170560 00:00:03       43:34 22:00:21 /sbin/init splash
+   3416    4  0.0  0.1 156012 00:00:03       28:45 22:15:10 /usr/bin/VBoxClient --draganddrop
+   1033   30  0.9  0.0 1795580 00:00:02      43:15 22:00:40 /usr/sbin/mysqld
+```
+
 #### kill - send a signal to a process
 
 ```bash
@@ -554,7 +620,6 @@ renice +1 -u lanka
 ```bash
 killall helloworld
 kill -SIGTERM helloworld
-
 ```
 
 #### shutdown - Halt, power-off or reboot the machine
@@ -565,7 +630,6 @@ sudo shutdown -P 20:00
 
 # Cancel a pending shutdown.
 sudo shutdown -c
-
 ```
 
 ## 2.1. [Linux crontab 命令](https://www.runoob.com/linux/linux-comm-crontab.html)
@@ -599,7 +663,8 @@ sudo systemctl enable cron.service
 ```bash
 function free-disk()
 {
-	df -h
+	DO_COMMAND="(df -h)"
+	eval-it "$DO_COMMAND"
 }
 ```
 
@@ -607,7 +672,16 @@ function free-disk()
 ```bash
 function free-folder()
 {
-	du -h --max-depth=$1 $2
+	HINT="Usage: ${FUNCNAME[0]} <depth> <file>"
+	DEPTH1=$1
+	FILE2=$2
+
+	if [ ! -z "${DEPTH1}" ] && [ ! -z "$FILE2" ]; then
+		DO_COMMAND="(du -h --max-depth=${DEPTH1} ${FILE2})"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
 }
 ```
 
@@ -628,7 +702,8 @@ gparted
 ```bash
 function mount-disk()
 {
-	lsblk -o model,name,fstype,size,label,mountpoint
+	DO_COMMAND="(lsblk -o model,name,fstype,size,label,mountpoint)"
+	eval-it "$DO_COMMAND"
 }
 ```
 
@@ -636,7 +711,6 @@ function mount-disk()
 
 ```bash
 sudo mke2fs /dev/sdb1
-
 ```
 
 #### ncdu - NCurses Disk Usage
@@ -655,7 +729,6 @@ ncdu -x
 # 要先執行 e2fsck
 e2fsck -f /dev/sdd1
 uuidgen | xargs tune2fs /dev/sdd1 -U
-
 ```
 
 # 4. String Handler
@@ -670,21 +743,18 @@ HELLO WORLD
 # lowercase
 $ echo ${HELLO_WORLD,}
 hello World
-
 ```
 
 #### cut - remove sections from each line of files
 
 ```bash
 ifconfig enp0s3 | grep "ether" | cut -d" " -f 10-11
-
 ```
 
 #### echo - display a line of text
 
 ```bash
 echo "Hello World !!!"
-
 ```
 
 #### eval - construct command by concatenating arguments
@@ -722,7 +792,6 @@ PS1='[\u@\h\W]\$'
 ifconfig enp0s3 | grep 'ether' | awk -F ' ' '{print $2}'
 
 ip -o -4 addr list enp0s3 | awk '{print $4}' | cut -d/ -f1
-
 ```
 
 #### grep, egrep, fgrep, rgrep - print lines that match patterns
@@ -764,7 +833,6 @@ function grep-include()
 $ grep-include '*.md' grep-inc
 [(grep --exclude-dir='.svn' --exclude-dir='.git' -nrs --include="*.md" 'grep-inc')]
 helper_linux.md:748:function grep-include()
-
 ```
 
 #### integer checker
@@ -772,14 +840,12 @@ helper_linux.md:748:function grep-include()
 ```bash
 [[ $ABC == ?(-)+([0-9]) ]] && echo "$ABC is an integer"
 [[ $ABC == ?(-)+([:digit:]) ]] && echo "$ABC is an integer"
-
 ```
 
 #### number checker
 
 ```bash
 [ ! -z "${ABC##*[!0-9]*}" ] && echo "is a number" || echo "is not a number";
-
 ```
 
 #### sed - stream editor for filtering and transforming text
@@ -812,7 +878,6 @@ ac -p
 
 # 檢視每天的連線時間
 ac -d
-
 ```
 
 #### gpasswd - administer /etc/group and /etc/gshadow
@@ -820,7 +885,6 @@ ac -d
 ```bash
 $ sudo gpasswd -d pokemon pikachu
 Removing user pokemon from group pikachu
-
 ```
 
 #### groupadd - create a new group
@@ -843,7 +907,6 @@ lanka adm cdrom sudo dip plugdev lpadmin lxd sambashare docker
 
 $ groups lanka
 lanka : lanka adm cdrom sudo dip plugdev lpadmin lxd sambashare docker
-
 ```
 
 #### id - print real and effective user and group IDs
@@ -851,14 +914,12 @@ lanka : lanka adm cdrom sudo dip plugdev lpadmin lxd sambashare docker
 ```bash
 $ id lanka
 uid=1000(lanka) gid=1000(lanka) groups=1000(lanka),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),120(lpadmin),131(lxd),132(sambashare),142(docker)
-
 ```
 
 #### last, lastb - show a listing of last logged in users
 
 ```bash
 last -aiF -30
-
 ```
 
 #### lastcomm -  print out information about previously executed commands
@@ -866,14 +927,12 @@ last -aiF -30
 ```bash
 # 程序歷史清單
 lastcomm --forwards
-
 ```
 
 #### lastlog - reports the most recent login of all users or of a given user
 
 ```bash
 lastlog
-
 ```
 
 #### newgrp - log in to a new group
@@ -891,7 +950,6 @@ $ sudo passwd pikachu
 New password:
 Retype new password:
 passwd: password updated successfully
-
 ```
 
 #### sudo, sudoedit - execute a command as another user
@@ -902,7 +960,6 @@ sudo
 sudo -E -b
 # environment
 sudo -E
-
 ```
 
 ```bash
@@ -956,7 +1013,6 @@ uid=1003(pikachu) gid=1003(pikachu) groups=1003(pikachu),1004(pokemon)
 $ groups pokemon pikachu
 pokemon : pokemon
 pikachu : pikachu pokemon
-
 ```
 
 #### userdel - delete a user account and related files
@@ -997,7 +1053,6 @@ $ sudo usermod -aG sudo pikachu
 ```bash
 $ users
 lanka
-
 ```
 
 #### w - Show who is logged on and what they are doing
@@ -1007,7 +1062,6 @@ $ w -i
  11:45:58 up  4:04,  1 user,  load average: 0.22, 0.10, 0.03
 USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
 lanka    pts/0    192.168.56.1     08:34    4.00s  0.28s  0.00s w -i
-
 ```
 
 #### who - show who is logged on
@@ -1015,7 +1069,6 @@ lanka    pts/0    192.168.56.1     08:34    4.00s  0.28s  0.00s w -i
 ```bash
 $ who
 lanka    pts/0        2024-07-31 08:34 (192.168.56.1)
-
 ```
 
 #### whoami - print effective userid
@@ -1023,7 +1076,6 @@ lanka    pts/0        2024-07-31 08:34 (192.168.56.1)
 ```bash
 $ whoami
 lanka
-
 ```
 
 #### /etc/group
@@ -1049,7 +1101,6 @@ $ sudo cat /etc/gshadow
 $ cat /etc/passwd
 $ cat /etc/passwd | grep lanka
 lanka:x:1000:1000:lanka,,,:/home/lanka:/bin/bash
-
 ```
 
 #### /etc/shadow
@@ -1060,7 +1111,6 @@ lanka:x:1000:1000:lanka,,,:/home/lanka:/bin/bash
 $ sudo cat /etc/shadow
 $ sudo cat /etc/shadow | grep lanka
 lanka:lanka520:19276:0:99999:7:::
-
 ```
 
 # 6. Log Handler
@@ -1069,46 +1119,73 @@ lanka:lanka520:19276:0:99999:7:::
 
 ```bash
 ./helloworld | logger -t helloworld
-
 ```
 
 #### logread
 
 ```bash
-function logman-ex()
-{
-	HINT="Usage: ${FUNCNAME[0]} <tag>"
-	LOGGER_TAG=$1
-
-	if [ ! -z "$LOGGER_TAG" ]; then
-		LOGGER_COLOR="| awk '{gsub(/\^\[/,\"\x1b\"); print}'"
-		LOGREAD=`which logread`
-		LOGREAD_ARG=" [ ! -z '$LOGREAD' ] "
-		[ -z "$LOGREAD" ] || LOGREAD_ARG="(logread -f -e $LOGGER_TAG 2>/dev/null;) || (logread -f $LOGGER_COLOR | grep $LOGGER_TAG 2>/dev/null; )"
-		DO_COMMAND="$LOGREAD_ARG || (tail -f /var/log/syslog $LOGGER_COLOR | grep $LOGGER_TAG;)"
-		echo "[$DO_COMMAND]"
-		sh -c "$DO_COMMAND"
-	else
-		echo $HINT
-	fi
-}
-
-logman-ex helloworld
-
+logread -f -e helloworld 2>/dev/null
 ```
 
 #### /var/log/syslog
 
 ```bash
-alias logman-syslog="tail -f /var/log/syslog"
+#alias logman-syslog="tail -f /var/log/syslog"
+function logman-syslog()
+{
+	DO_COMMAND="(tail -f /var/log/syslog)"
+	eval-it "$DO_COMMAND"
+}
 
+function logman-ex()
+{
+	HINT="Usage: ${FUNCNAME[0]} <tag>"
+	LOGGER_TAG=$1
+
+	if [ ! -z "${LOGGER_TAG}" ]; then
+		LOGGER_COLOR="| awk '{gsub(/\^\[/,\"\x1b\"); print}'"
+		LOGREAD=`which logread`
+		LOGREAD_ARG=" [ ! -z '${LOGREAD}' ] "
+		[ -z "$LOGREAD" ] || LOGREAD_ARG="(logread -f -e ${LOGGER_TAG} 2>/dev/null;) || (logread -f ${LOGGER_COLOR} | grep ${LOGGER_TAG} 2>/dev/null)"
+		DO_COMMAND="${LOGREAD_ARG} || (tail -f /var/log/syslog ${LOGGER_COLOR} | grep ${LOGGER_TAG})"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
+
+function logman-cat()
+{
+	HINT="Usage: ${FUNCNAME[0]} <file>"
+	FILE1=$1
+
+	if [ ! -z "$FILE1" ]; then
+		LOGGER_COLOR="| awk '{gsub(/\^\[/,\"\x1b\"); print}'"
+
+		DO_COMMAND="(cat $FILE1 ${LOGGER_COLOR})"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
 ```
 
 #### /var/log/auth.log
 
 ```bash
-alias logman-auth="tail -f -n 60 /var/log/auth.log"
+#alias logman-auth="tail -f -n 60 /var/log/auth.log"
+function logman-auth()
+{
+	HINT="Usage: ${FUNCNAME[0]} <lines>"
+	LINES1=$1
 
+	if [ ! -z "${LINES1}" ]; then
+		DO_COMMAND="(tail -f -n ${LINES1} /var/log/auth.log)"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
 ```
 
 #### /etc/rsyslog.conf
@@ -1151,7 +1228,6 @@ dd if=/dev/zero of=test8mb.img bs=4k count=2048
 mkfs.ext4 test8mb.img
 sudo mount -o loop -w test8mb.img
 sudo mount test8mb.img ./ext4
-
 ```
 
 # 8. Network Handler
@@ -1159,10 +1235,60 @@ sudo mount test8mb.img ./ext4
 #### avahi-browse - Browse for mDNS/DNS-SD services using the Avahi daemon
 
 ```bash
-alias avahi-http="avahi-browse -r -t _http._tcp"
-alias avahi-ssh="avahi-browse -r -t _ssh._tcp"
-alias avahi-print="avahi-browse -r -t _printer._tcp"
+function avahi-123()
+{
+	HINT="Usage: ${FUNCNAME[0]} <terminate>"
+	TERMINATE1="$1"
 
+	if [ ! -z "${TERMINATE1}" ]; then
+		DO_COMMAND="(avahi-browse -r -t ${TERMINATE1})"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
+
+#alias avahi-hnap="avahi-browse -r -t _dhnap._tcp"
+function avahi-hnap()
+{
+	avahi-123 _dhnap._tcp
+}
+
+#alias avahi-zwave="avahi-browse -r -t _z-wave._udp"
+function avahi-zwave()
+{
+	avahi-123 _z-wave._udp
+}
+
+#alias avahi-hap="avahi-browse -r -t _hap._tcp"
+function avahi-hap()
+{
+	avahi-123 _hap._tcp
+}
+
+#alias avahi-mydlink="avahi-browse -r -t _dcp._tcp"
+function avahi-mydlink()
+{
+	avahi-123 _dcp._tcp
+}
+
+#alias avahi-http="avahi-browse -r -t _http._tcp"
+function avahi-http()
+{
+	avahi-123 _http._tcp
+}
+
+#alias avahi-ssh="avahi-browse -r -t _ssh._tcp"
+function avahi-ssh()
+{
+	avahi-123 _ssh._tcp
+}
+
+#alias avahi-print="avahi-browse -r -t _printer._tcp"
+function avahi-print()
+{
+	avahi-123 _printer._tcp
+}
 ```
 
 #### ifconfig - configure a network interface
@@ -1189,7 +1315,22 @@ sudo ifconfig $IFACE down
 sudo ifconfig $IFACE 0.0.0.0 up
 sudo ifconfig $MYBR $MYIP netmask $MYMASK
 sudo ifconfig $IFACE 0.0.0.0
+```
 
+```bash
+function ifconfig-mac()
+{
+	HINT="Usage: ${FUNCNAME[0]} <iface>"
+	IFACE="$1"
+
+	if [ ! -z "$IFACE" ]; then
+		MAC_ADDR=$(ifconfig $IFACE | grep 'ether' | awk -F ' ' '{print $2}' | sed s'|:||g')
+		MAC_ADDR=${MAC_ADDR^^}
+		echo $MAC_ADDR
+	else
+		echo $HINT
+	fi
+}
 ```
 
 #### ifdata - get network interface info without parsing ifconfig output
@@ -1199,7 +1340,6 @@ sudo apt install moreutils
 
 MYIP=`ifdata -pa $IFACE`
 MYMASK=`ifdata -pn $IFACE`
-
 ```
 
 #### ip - show / manipulate routing, network devices, interfaces and tunnels
@@ -1224,7 +1364,6 @@ sudo ip -6 route add ${ZIPPAN_PREFIX}::/64 via ${ZIPSRV} dev $MYTAP
 
 sudo ip -6 route del ${ZIPSRV_PREFIX}::/64 dev $MYTAP
 sudo ip -6 route del ${ZIPPAN_PREFIX}::/64 via ${ZIPSRV} dev $MYTAP
-
 ```
 
 ```bash
@@ -1247,14 +1386,12 @@ $ ip link show enp0s3
 
 ```bash
 nslookup www.google.com
-
 ```
 
 #### ping - send ICMP ECHO_REQUEST to network hosts
 
 ```bash
 ping -c 4 8.8.8.8
-
 ```
 
 #### route - show / manipulate the IP routing table
@@ -1268,14 +1405,12 @@ route del default gw 192.168.0.1 dev ra0
 
 route add -net 192.168.0.0 netmask 255.255.255.0 ra0
 route del -net 192.168.0.0 netmask 255.255.255.0 ra0
-
 ```
 
 #### umount - unmount file systems
 
 ```bash
 umount /mnt/CF
-
 ```
 
 ## 8.1. ARP
@@ -1288,7 +1423,6 @@ sudo arping -i enp0s3 192.168.0.1 -c 1
 for ip in 192.168.0.{1..100}; do \
 	echo $ip; sudo arping -i enp0s3 -w 1 -c 1 $ip | grep from; \
 done
-
 ```
 
 #### arp - manipulate the system ARP cache
@@ -1296,6 +1430,7 @@ done
 ```bash
 arp -n
 
+arp -a
 ```
 
 ## 8.2. iftop - display bandwidth usage on an interface by host
@@ -1318,7 +1453,8 @@ function port-listen()
 
 	#echo "WATCH_PORT=$WATCH_PORT"
 	if [ ! -z "$WATCH_PORT" ]; then
-		ss -tnul | grep -E 'LISTEN|UNCONN' | grep $WATCH_PORT
+		DO_COMMAND="(ss -tnul | grep -E 'LISTEN|UNCONN' | grep $WATCH_PORT)"
+		eval-it "$DO_COMMAND"
 	else
 		echo $HINT
 	fi
@@ -1332,7 +1468,6 @@ sudo netstat -ntlp | grep LISTEN
 sudo netstat -tulpn | grep ftp
 sudo netstat -tulpn    
 sudo netstat -ntlp | grep :80
-
 ```
 
 #### nmap - Network exploration tool and security / port scanner
@@ -1341,7 +1476,7 @@ sudo netstat -ntlp | grep :80
 > - **closed**. No service is listening on the port. No services are bound on the port, and the port will refuse all incoming connections.
 > - **filtered**. The port state is unknown. The port's status is concealed or restricted due to packet filtering, firewall rules, or a network security device configuration.
 > - **unfiltered**. The port state is unknown. The port is accessible and unrestricted but has no active service linked to it.
-> - **open|filtered**. The port state is open or filtered. Nmap cannot determine which due to network conditions.
+> - **open|filtered**. The port state is open or filtered. Nmap cannot determine which due to network conditions.ifconfig-mac
 > - **closed|filtered**. The port state is closed or filtered. The exact state is indeterminate due to network conditions.
 
 ```bash
@@ -1369,7 +1504,6 @@ nmap -v -sV localhost -p 5060
 swconfig dev switch0 show | grep port
 swconfig dev switch0 port 0 show
 swconfig dev switch0 port 0 get link
-
 ```
 
 #### /sys/class/net
@@ -1380,7 +1514,6 @@ for i in $( ls /sys/class/net ); do echo -n $i: ; cat /sys/class/net/$i/carrier_
 for i in $( ls /sys/class/net ); do echo -n $i: ; cat /sys/class/net/$i/operstate; done
 for i in $( ls /sys/class/net ); do echo -n $i: ; cat /sys/class/net/$i/iflink; done
 for i in $( ls /sys/class/net ); do echo -n $i: ; cat /sys/class/net/$i/link_mode; done
-
 ```
 
 ## 8.4. Wifi
@@ -1423,7 +1556,6 @@ iwpriv ra0 set EncrypType=AES
 iwpriv ra0 set SSID="lanka-FF:FF"
 iwpriv ra0 set WPAPSK="lanka520"
 iwpriv ra0 set SSID="lanka-FF:FF"
-
 ```
 
 ## 8.5. Bridge
@@ -1437,7 +1569,6 @@ ifconfig br1 up
 brctl addif br1 eth2.1
 ifconfig eth2.2 0.0.0.0
 ifconfig br1 up
-
 ```
 
 #### vconfig - VLAN (802.1q) configuration program
@@ -1445,7 +1576,6 @@ ifconfig br1 up
 ```bash
 vconfig add eth2 3
 ifconfig eth2.3 up
-
 ```
 
 ## 8.6. udhcpc
@@ -1454,7 +1584,6 @@ ifconfig eth2.3 up
 udhcpc -i br1 -s /sbin/udhcpc.sh -p /var/run/udhcpc.pid
 
 udhcpc -i ra0 -s /sbin/udhcpc.sh -p /var/run/udhcpc.pid
-
 ```
 
 ## 8.7. [iperf](https://iperf.fr) - perform network throughput tests
@@ -1478,7 +1607,6 @@ date +"%Y%m%d %T"
 date +"%Y%m%d %H%M%S"
 
 date +%s
-
 ```
 
 #### ntpdate - set the date and time via NTP
@@ -1490,7 +1618,6 @@ ntpdate time.stdtime.gov.tw
 TZ="GMT-08:00"
 export TZ="GMT-08:00"
 echo "GMT-08:00" > /etc/TZ
-
 ```
 
 ## 9.1. Timezone
@@ -1501,7 +1628,6 @@ cat /etc/timezone
 date +%Z
 
 date +"%Z %z"
-
 ```
 
 #### timedatectl - Control the system time and date
@@ -1512,7 +1638,6 @@ timedatectl
 timedatectl list-timezones
 
 sudo timedatectl set-timezone Asia/Taipei
-
 ```
 
 # 10. Service Handler
@@ -1521,7 +1646,6 @@ sudo timedatectl set-timezone Asia/Taipei
 
 ```bash
 sudo journalctl -xefu snapd
-
 ```
 
 ```bash
@@ -1531,7 +1655,8 @@ function systemctl-journal()
 	SERVICE1=$1
 
 	if [ ! -z "$SERVICE1" ]; then
-		sudo journalctl -xefu $SERVICE1
+		DO_COMMAND="(sudo journalctl -xefu $SERVICE1)"
+		eval-it "$DO_COMMAND"
 	else
 		echo $HINT
 	fi
@@ -1544,7 +1669,6 @@ function systemctl-journal()
 service --status-all
 service apache2 status
 service apache2 restart
-
 ```
 
 #### systemctl - Control the systemd system and service manager
@@ -1588,12 +1712,34 @@ function systemctl-ex()
 	COMMAND2=$2
 
 	if [ ! -z "$SERVICE1" ] && [ ! -z "$COMMAND2" ]; then
-		sudo systemctl $COMMAND2 $SERVICE1
+		DO_COMMAND="(sudo systemctl $COMMAND2 $SERVICE1)"
+		eval-it "$DO_COMMAND"
 	else
 		echo [${FUNCNAME[0]} $SERVICE1 $COMMAND2]
 		echo
 		echo $HINT
 	fi
+}
+
+function systemctl-status()
+{
+	HINT="Usage: ${FUNCNAME[0]} <SERVICE>"
+	SERVICE1=$1
+
+	if [ ! -z "$SERVICE1" ]; then
+		systemctl-ex ${SERVICE1} is-active
+		systemctl-ex ${SERVICE1} is-enabled
+		systemctl-ex ${SERVICE1} is-failed
+		systemctl-ex ${SERVICE1} status
+	else
+		echo $HINT
+	fi
+}
+
+function systemctl-list()
+{
+	DO_COMMAND="(systemctl list-units --all)"
+	eval-it "$DO_COMMAND"
 }
 
 function systemctl-help()
@@ -1647,9 +1793,12 @@ TriggeredBy: ● snapd.socket
 #### valgrind - a suite of tools for debugging and profiling programs
 
 ```bash
+valgrind --tool=memcheck --leak-check=full --show-reachable=yes -s ./demo_000
+
 sudo -E valgrind --tool=memcheck --leak-check=full --show-reachable=yes ./ir_daemon -d 2 -s /mnt -i eth0
+```
 
-
+```bash
 function valgrind-ex()
 {
 	HINT="Usage: ${FUNCNAME[0]} <prog-and-args>..."
@@ -1657,14 +1806,34 @@ function valgrind-ex()
 
 	#echo "PROG_AND_ARGS=$PROG_AND_ARGS"
 	if [ ! -z "$PROG_AND_ARGS" ]; then
-		valgrind --tool=memcheck --leak-check=full --show-reachable=yes $PROG_AND_ARGS
+		DO_COMMAND="(valgrind --tool=memcheck --leak-check=full --show-reachable=yes -s $PROG_AND_ARGS)"
+		eval-it "$DO_COMMAND"
 	else
 		echo $HINT
 	fi
 }
-
-valgrind-ex helloworld
-
+```
+```bash
+$ valgrind-ex ./demo_000
+[(valgrind --tool=memcheck --leak-check=full --show-reachable=yes -s ./demo_000)]
+==9900== Memcheck, a memory error detector
+==9900== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==9900== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==9900== Command: ./demo_000
+==9900==
+[9900/9900] app_loop:46 - (TAG: demo_000, pid: 9900)
+[9900/9900] app_loop:50 - (cksum: 1398)
+[9900/9900] app_loop:52 - (cksum: 22044)
+[9900/9900] main:156 - Bye-Bye !!!
+==9900==
+==9900== HEAP SUMMARY:
+==9900==     in use at exit: 0 bytes in 0 blocks
+==9900==   total heap usage: 1,820 allocs, 1,820 frees, 529,152 bytes allocated
+==9900==
+==9900== All heap blocks were freed -- no leaks are possible
+==9900==
+==9900== For lists of detected and suppressed errors, rerun with: -s
+==9900== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 ```
 
 # 12. Package Handler
@@ -1718,7 +1887,6 @@ apt-cache rdepends subversion-tools
 
 # 安裝相關的編譯環境
 sudo apt-get build-dep subversion-tools
-
 ```
 
 ```bash
@@ -1727,8 +1895,6 @@ $ sudo vi /etc/apt/sources.list
 
 # 下載該包的源代碼
 apt-get source package
-
-
 ```
 
 #### dpkg - package manager for Debian
@@ -1747,7 +1913,6 @@ ii  linux-hwe-5.15-headers-5.15.0-117             5.15.0-117.127~20.04.1        
 ii  linux-hwe-5.8-headers-5.8.0-63                5.8.0-63.71~20.04.1                         all          Header files related to Linux kernel version 5.8.0
 ii  linux-image-generic-hwe-20.04                 5.15.0.117.127~20.04.1                      amd64        Generic Linux kernel image
 ii  virtualbox-guest-dkms-hwe                     6.1.50-dfsg-1~ubuntu1.20.04.1               all          x86 virtualization solution - guest addition module source for dkms
-
 ```
 
 #### ldconfig - configure dynamic linker run-time bindings
@@ -1756,7 +1921,26 @@ ii  virtualbox-guest-dkms-hwe                     6.1.50-dfsg-1~ubuntu1.20.04.1 
 $ ldconfig -p|grep libmpc
         libmpcdec.so.6 (libc6,x86-64) => /lib/x86_64-linux-gnu/libmpcdec.so.6
         libmpc.so.3 (libc6,x86-64) => /lib/x86_64-linux-gnu/libmpc.so.3
+```
 
+#### snap - Tool to interact with snaps
+
+> 建議使用 apt-get；
+>
+> snapd using too much CPU 此狀況一直存在。因為不確定移除 snapd 和其安裝之套件會不會造成系統整個當機
+
+```bash
+sudo systemctl stop snapd.socket
+sudo systemctl stop snapd
+sudo systemctl stop snapd.seeded.service
+
+sudo systemctl status snapd.socket
+sudo systemctl status snapd
+sudo systemctl status snapd.seeded.service
+
+sudo systemctl disable snapd.socket
+sudo systemctl disable snapd
+sudo systemctl disable snapd.seeded.service
 ```
 
 # 13. System Handler
@@ -1767,8 +1951,9 @@ $ ldconfig -p|grep libmpc
 
 ```bash
 $ sudo snap install htop
-$ htop
 
+$ sudo apt install -y htop
+$ htop
 ```
 
 #### lshw - list hardware
@@ -1784,7 +1969,6 @@ $ sudo lshw -c cpuster
        capabilities: fpu fpu_exception wp vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx rdtscp x86-64 constant_tsc rep_good nopl xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single pti fsgsbase bmi1 avx2 bmi2 invpcid rdseed clflushopt md_clear flush_l1d
 
 $ sudo lshw
-
 ```
 
 #### lscpu - display information about the CPU architecture
@@ -1831,7 +2015,6 @@ Vulnerability Tsx async abort:      Not affected
 Flags:                              fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx rdtscp lm constant_tsc rep_good nop
                                     l xtopology nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx rdrand hypervisor lahf_l
                                     m abm 3dnowprefetch invpcid_single pti fsgsbase bmi1 avx2 bmi2 invpcid rdseed clflushopt md_clear flush_l1d
-
 ```
 
 #### sysctl - configure kernel parameters at runtime
@@ -1845,7 +2028,6 @@ sudo sysctl -w net.ipv6.conf.lo.disable_ipv6=1
 sudo sysctl -w net.ipv6.conf.all.disable_ipv6=0
 sudo sysctl -w net.ipv6.conf.default.disable_ipv6=0
 sudo sysctl -w net.ipv6.conf.lo.disable_ipv6=0
-
 ```
 
 #### uname - print system information
@@ -1859,7 +2041,6 @@ x86_64
 
 $ uname -r
 5.15.0-117-generic
-
 ```
 
 #### /proc/cpuinfo
@@ -1969,7 +2150,6 @@ clflush size    : 64
 cache_alignment : 64
 address sizes   : 39 bits physical, 48 bits virtual
 power management:
-
 ```
 
 #### /proc/meminfo
@@ -2026,7 +2206,6 @@ Hugepagesize:       2048 kB
 Hugetlb:               0 kB
 DirectMap4k:      268224 kB
 DirectMap2M:     8120320 kB
-
 ```
 
 #### /proc/sys/vm
@@ -2043,21 +2222,32 @@ $ cat /proc/sys/vm/dirty_expire_centisecs
 # 清除重建 dentry和inode的頻率
 $ $ cat /proc/sys/vm/vfs_cache_pressure
 100
+```
 
+```bash
+$ cat /proc/sys/vm/swappiness
+60
+# to set vm.swappiness to 20 until the next reboot, when it will be reset to its default value
+$ sysctl vm.swappiness=20
+
+$ sudo vi /etc/sysctl.conf
+# add
+vm.swappiness=20
+
+$ sudo sysctl -p
 ```
 
 #### /proc/sys/vm/drop_caches
 
 ```bash
-# 頁面緩存
+# clear pagecache
 sync; echo 1 > /proc/sys/vm/drop_caches
 
-# 目錄緩存和inodes
+# clear dentries and inodes
 sync; echo 2 > /proc/sys/vm/drop_caches
 
-# 頁面緩存、目錄緩存和inodes
+# clear pagecache, dentries and inodes
 sync; echo 3 > /proc/sys/vm/drop_caches
-
 ```
 
 #### /proc/sys/vm/overcommit_memory
@@ -2070,7 +2260,6 @@ echo 1 > /proc/sys/vm/overcommit_memory
 
 # kernel 拒絕相等或大於總可用置換空間與實體記憶體比例（於 overcommit_ratio 指定）的記憶體需求。如果您想要降低記憶體過度寫入的風險，這是最佳設定。
 echo 2 > /proc/sys/vm/overcommit_memory
-
 ```
 
 # 14. Security Handler
@@ -2089,7 +2278,6 @@ LICENSE: OK
 
 $ cat LICENSE | md5sum
 a828cf528fac643fcfef67d9304b685b  -
-
 ```
 
 #### sha1sum - compute and check SHA1 message digest
@@ -2104,7 +2292,6 @@ LICENSE: OK
 
 $ cat LICENSE | sha1sum
 d27307d3abeb72ceec1181d641795d96e3004c8e  -
-
 ```
 
 #### sha256sum - compute and check SHA256 message digest
@@ -2119,7 +2306,6 @@ LICENSE: OK
 
 $ cat LICENSE | sha256sum
 d351638bb049dd4b46c8079adb0c059990e352bc28285a84835568fb1650f2da  -
-
 ```
 
 ## 14.2. openssl
@@ -2202,7 +2388,6 @@ flash_erase /dev/mtd/2
 cp ./jffs2.img /dev/mtd/2
 
 sudo mount -t jffs2 /dev/mtdblock/2 ./jffs2
-
 ```
 
 # 16. Virus Handler
@@ -2214,7 +2399,6 @@ sudo mount -t jffs2 /dev/mtdblock/2 ./jffs2
 ```bash
 sudo apt-get install chkrootkit
 sudo chkrootkit | grep INFECTED
-
 ```
 
 #### rkhunter - RootKit Hunter
@@ -2233,7 +2417,6 @@ $ sudo vi /etc/rkhunter.conf.local
 PKGMGR=DPKG
 # netatalk
 RTKT_FILE_WHITELIST=/bin/ad
-
 ```
 
 ```bash
@@ -2269,7 +2452,6 @@ systemctl stop clamav-freshclam
 # 手動更新病毒碼
 sudo freshclam
 systemctl start clamav-freshclam
-
 ```
 
 ```bash
@@ -2358,14 +2540,12 @@ tar -zxvf helloworld.tar.gz
 
 cat helloworld.tar.gz | openssl enc -aes-256-cbc -e > helloworld.tar.gz.enc
 cat helloworld.tar.gz.enc | openssl enc -aes-256-cbc -d > helloworld.tar.gz
-
 ```
 
 #### unzip - list, test and extract compressed files in a ZIP archive
 
 ```bash
 unzip helloworld.zip
-
 ```
 
 #### uuidgen - create a new UUID value
@@ -2373,14 +2553,12 @@ unzip helloworld.zip
 ```bash
 $ uuidgen
 a9d92443-354b-47aa-a216-e60bbf73a94c
-
 ```
 
 #### zip - package and compress (archive) files
 
 ```bash
 zip -r helloworld.zip helloworld
-
 ```
 
 # 18 Power Handler
@@ -2398,13 +2576,12 @@ $ acpi -iab
 Battery 0: Unknown, 78%
 Battery 0: design capacity 5000 mAh, last full capacity 5000 mAh = 100%
 Adapter 0: on-line
-
 ```
 
 #### upower - UPower command line tool
 
 ```bash
-$ $ upower --dump
+$ upower --dump
 Device: /org/freedesktop/UPower/devices/line_power_AC
   native-path:          AC
   power supply:         yes
@@ -2461,7 +2638,6 @@ Daemon:
   lid-is-closed:   no
   lid-is-present:  no
   critical-action: HybridSleep
-
 ```
 
 # 19. Others Handler
@@ -2474,14 +2650,12 @@ alias la="ls -A"
 alias l="ls -CF"
 
 unalias la
-
 ```
 
 #### man - an interface to the system reference manuals
 
 ```bash
 man ls
-
 ```
 
 #### set - set or unset options and positional parameters
@@ -2502,7 +2676,6 @@ helloworld_fn ()
 {
 }
 unset -f helloworld_fn
-
 ```
 
 #### xargs - build and execute command lines from standard input
@@ -2701,6 +2874,12 @@ function pkg-find()
 }
 ```
 
+```bash
+$ pkg-find openssl
+openssl                             OpenSSL - Secure Sockets Layer and cryptography libraries and tools
+libevent_openssl                    libevent_openssl - libevent_openssl adds openssl-based TLS support to libevent
+```
+
 #### pkg-config-ex
 
 ```bash
@@ -2732,6 +2911,19 @@ function pkg-config-ex()
 		echo $HINT
 	fi
 }
+```
+
+```bash
+$ pkg-config-ex openssl
+[pkg-config --cflags openssl]
+
+[pkg-config --libs openssl]
+-lssl -lcrypto
+[pkg-config --modversion openssl]
+1.1.1f
+[pkg-config --print-requires openssl]
+libssl
+libcrypto
 ```
 
 # 22. usb Handler
@@ -2913,7 +3105,6 @@ $ streamlink-info https://www.youtube.com/watch?v=ikrasYUi3kM
 [(streamlink https://www.youtube.com/watch?v=ikrasYUi3kM -l info)]
 [cli][info] Found matching plugin youtube for URL https://www.youtube.com/watch?v=ikrasYUi3kM
 error: This plugin does not support protected videos, try youtube-dl instead
-
 ```
 
 ## 23.3. [yt-dlp](https://pypi.org/project/yt-dlp/)
