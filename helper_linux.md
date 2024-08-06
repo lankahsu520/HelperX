@@ -1517,6 +1517,27 @@ sudo timedatectl set-timezone Asia/Taipei
 
 # 10. Service Handler
 
+#### journalctl - Query the systemd journal
+
+```bash
+sudo journalctl -xefu snapd
+
+```
+
+```bash
+function systemctl-journal()
+{
+	HINT="Usage: ${FUNCNAME[0]} <SERVICE>"
+	SERVICE1=$1
+
+	if [ ! -z "$SERVICE1" ]; then
+		sudo journalctl -xefu $SERVICE1
+	else
+		echo $HINT
+	fi
+}
+```
+
 #### service - run a System V init script
 
 ```bash
@@ -1557,6 +1578,68 @@ ls -al /etc/systemd/system
 
 # 當有變更*.service 時，記得
 sudo systemctl daemon-reload
+```
+
+```bash
+function systemctl-ex()
+{
+	HINT="Usage: ${FUNCNAME[0]} <SERVICE> <COMMAND>"
+	SERVICE1=$1
+	COMMAND2=$2
+
+	if [ ! -z "$SERVICE1" ] && [ ! -z "$COMMAND2" ]; then
+		sudo systemctl $COMMAND2 $SERVICE1
+	else
+		echo [${FUNCNAME[0]} $SERVICE1 $COMMAND2]
+		echo
+		echo $HINT
+	fi
+}
+
+function systemctl-help()
+{
+	HINT="Usage: ${FUNCNAME[0]} <SERVICE>"
+	SERVICE1=$1
+	[ ! -z "$SERVICE1" ] || SERVICE1="avahi-daemon"
+
+	echo
+	echo "systemctl list-units"
+	echo "systemctl list-units --all"
+	echo "systemctl list-units --all --state=inactive"
+	echo "systemctl daemon-reload"
+	echo "systemctl list-unit-files --type service -all"
+	echo ""
+	echo "SERVICE1=$SERVICE1"
+	echo "systemctl status ${SERVICE1}.service"
+	echo "systemctl is-active ${SERVICE1}.service"
+	echo "systemctl is-failed ${SERVICE1}.service"
+	echo "systemctl restart ${SERVICE1}.service"
+	echo
+}
+
+alias systemctl-avahi="systemctl-ex avahi-daemon"
+alias systemctl-cups="systemctl-ex cups"
+alias systemctl-list-files="systemctl list-unit-files --type service -all"
+alias systemctl-nfs="systemctl-ex nfs-kernel-server"
+alias systemctl-rsyslog="systemctl-ex rsyslog"
+alias systemctl-smbd="systemctl-ex smbd"
+alias systemctl-ssh="systemctl-ex ssh"
+alias systemctl-tftpd="systemctl-ex tftpd-hpa"
+alias systemctl-vsftpd="systemctl-ex vsftpd"
+alias systemctl-asterisk="systemctl-ex asterisk"
+```
+
+```bash
+$ systemctl-ex snapd status
+● snapd.service - Snap Daemon
+     Loaded: loaded (/lib/systemd/system/snapd.service; enabled; vendor preset: enabled)
+     Active: active (running) since Sat 2024-08-03 06:07:45 CST; 3 days ago
+TriggeredBy: ● snapd.socket
+   Main PID: 33262 (snapd)
+      Tasks: 11 (limit: 19077)
+     Memory: 16.0M
+     CGroup: /system.slice/snapd.service
+             └─33262 /usr/lib/snapd/snapd
 ```
 
 # 11. Debug Handler
