@@ -2340,6 +2340,16 @@ $ cat  /var/log/clamav/freshclam.log
 
 # 17. Archive Handler
 
+#### gzip, gunzip, zcat - compress or expand files
+
+```bash
+# decompress
+gzip -d helloworld.gz
+gzip -dk helloworld.gz
+
+gunzip helloworld.gz
+```
+
 #### tar - an archiving utility
 
 ```bash
