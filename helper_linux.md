@@ -728,14 +728,42 @@ ip -o -4 addr list enp0s3 | awk '{print $4}' | cut -d/ -f1
 #### grep, egrep, fgrep, rgrep - print lines that match patterns
 
 ```bash
-alias gr="grep --exclude-dir='.svn' --exclude-dir='.git' -nrs"
-function gr-include()
+ps -aux | grep helloworld | grep -v grep
+```
+
+```bash
+function grep-ex()
 {
-	echo "[$1][$2]"
-	grep --exclude-dir='.svn' --exclude-dir='.git' -nrs --include=$1 $2
+	HINT="Usage: ${FUNCNAME[0]} <string>"
+	STRING1=$1
+
+	if [ ! -z "${STRING1}" ]; then
+		DO_COMMAND="(grep --exclude-dir='.svn' --exclude-dir='.git' -nrs '${STRING1}')"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
 }
 
-ps -aux | grep helloworld | grep -v grep
+function grep-include()
+{
+	HINT="Usage: ${FUNCNAME[0]} <include> <string>"
+	INCLUDE1=$1
+	STRING2=$2
+
+	if [ ! -z "${INCLUDE1}" ] && [ ! -z "${STRING2}" ]; then
+		DO_COMMAND="(grep --exclude-dir='.svn' --exclude-dir='.git' -nrs --include=${INCLUDE1} '${STRING2}')"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
+```
+
+```bash
+$ grep-include '*.md' grep-inc
+[(grep --exclude-dir='.svn' --exclude-dir='.git' -nrs --include="*.md" 'grep-inc')]
+helper_linux.md:748:function grep-include()
 
 ```
 
