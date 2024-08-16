@@ -369,27 +369,13 @@ function find-type()
 	eval-it "$DO_COMMAND"
 }
 
-function find-ex()
-{
-	HINT="Usage: ${FUNCNAME[0]} <path> <file>"
-	PATH1=$1
-	FILE2=$2
-
-	if [ ! -z "${PATH1}" ] && [ ! -z "${FILE2}" ]; then
-		DO_COMMAND="(cd ${PATH1}; find * -name ${FILE2}; cd - >/dev/null)"
-		eval-it "$DO_COMMAND"
-	else
-		echo $HINT
-	fi
-}
-
 function find-dup()
 {
 	DO_COMMAND="(find . -type f -printf '%p -> %f\n' | sort -k2 | uniq -f1 --all-repeated=separate)"
 	eval-it "$DO_COMMAND"
 }
 
-function find-ex()
+function find-path()
 {
 	HINT="Usage: ${FUNCNAME[0]} <path> <file>"
 	PATH1=$1
@@ -428,7 +414,7 @@ locate libmpc.so | grep `pwd`
 ```
 
 ```bash
-function locateX()
+function find-locate()
 {
 	HINT="Usage: ${FUNCNAME[0]} <file>"
 	FILE1=$1
@@ -453,12 +439,15 @@ which find
 #### fuser - identify processes using files or sockets
 
 ```bash
-$ fuser -mv /work_999/
+$ fuser -v /work
                      USER        PID ACCESS COMMAND
-/work_999:           root     kernel mount /
-                     lanka      3939 .rce. systemd
-                     lanka      4770 .rce. bash
-                     lanka      4888 .r.e. bash
+/work:               root     kernel mount /work
+
+$ fuser -vm /work
+                     USER        PID ACCESS COMMAND
+/work:               root     kernel mount /work
+                     lanka     11180 ..c.. bash
+
 # 刷除佔用的 task
 $ fuser -kv /work_999
 ```
@@ -479,13 +468,68 @@ echo $HISTFILE
 sudo lsof -c sftp-server
 
 # 列出所有開啟 /work 的行程
-$ lsof /work
+$ sudo lsof /work
+```
+
+```bash
+function ps-lsof-pname()
+{
+	HINT="Usage: ${FUNCNAME[0]} <pname>"
+	PNAME1=$1
+
+	if [ ! -z "${PNAME1}" ]; then
+		DO_COMMAND="(sudo lsof -c ${PNAME1})"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
+
+function ps-lsof-file()
+{
+	HINT="Usage: ${FUNCNAME[0]} <file>"
+	FILE1=$1
+
+	if [ ! -z "${FILE1}" ]; then
+		DO_COMMAND="(sudo lsof ${FILE1})"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
+```
+
+```bash
+$ ps-lsof-pname apache2
+
+$ ps-lsof-file /work
 ```
 
 #### pidof -- find the process ID of a running program.
 
 ```bash
 pidof helloworld
+```
+
+#### ps-pmap - report memory map of a process
+
+```bash
+function ps-pmap()
+{
+	HINT="Usage: ${FUNCNAME[0]} <pid>"
+	PID1=$1
+
+	if [ ! -z "${PID1}" ]; then
+		DO_COMMAND="(sudo pmap -xp ${PID1})"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
+```
+
+```bash
+$ ps-pmap 1102
 ```
 
 #### ps - report a snapshot of the current processes.
@@ -512,9 +556,9 @@ function ps-args()
 	echo "PS_OUTPUT_LINES=${PS_OUTPUT_LINES}"
 }
 
-function ps-sort()
+function ps-sort-ex()
 {
-	HINT="Usage: ${FUNCNAME[0]} <spec1>"
+	HINT="Usage: ${FUNCNAME[0]} <spec>"
 	SPEC1=$1
 
 	if [ ! -z "${SPEC1}" ]; then
@@ -528,27 +572,26 @@ function ps-sort()
 
 function ps-sort-cpu()
 {
-	ps-sort "--sort=-%cpu"
+	ps-sort-ex "--sort=-%cpu"
 }
 
 function ps-sort-mem()
 {
-	ps-sort "--sort=-%mem"
+	ps-sort-ex "--sort=-%mem"
 }
 
 function ps-sort-cpu-mem()
 {
-	ps-sort "--sort=-%cpu,-%mem"
+	ps-sort-ex "--sort=-%cpu,-%mem"
 }
 
 function ps-id()
 {
-	HINT="Usage: ${FUNCNAME[0]} <id1>"
-	ID1=$1
+	HINT="Usage: ${FUNCNAME[0]} <pid>"
+	PID1=$1
 
-	if [ ! -z "${ID1}" ]; then
-		PID=${ID1}
-		DO_COMMAND="(ps -p ${PID} -o pid,%mem,%cpu,vsz,time,etime,start,cmd)"
+	if [ ! -z "${PID1}" ]; then
+		DO_COMMAND="(ps -p ${PID1} ${PS_OUTPUT_ARG})"
 		eval-it "$DO_COMMAND"
 	else
 		echo $HINT
@@ -557,7 +600,7 @@ function ps-id()
 
 function ps-name()
 {
-	HINT="Usage: ${FUNCNAME[0]} <name1>"
+	HINT="Usage: ${FUNCNAME[0]} <name>"
 	NAME1=$1
 
 	if [ ! -z "${NAME1}" ]; then
@@ -619,7 +662,7 @@ renice +1 -u lanka
 
 ```bash
 killall helloworld
-kill -SIGTERM helloworld
+killall -SIGTERM helloworld
 ```
 
 #### shutdown - Halt, power-off or reboot the machine
@@ -2924,7 +2967,7 @@ gobject-2.0
 ```bash
 function pkg-find()
 {
-	HINT="Usage: ${FUNCNAME[0]} <file1>"
+	HINT="Usage: ${FUNCNAME[0]} <file>"
 	FILE1=$1
 
 	if [ ! -z "$FILE1" ]; then
@@ -3094,7 +3137,7 @@ $ pip install --upgrade streamlink
 ```
 
 ```bash
-function streamlink-helper()
+function streamlink-export()
 {
 	echo "STREAM_URL=${STREAM_URL}"
 	echo "STREAM_SAVETO=${STREAM_SAVETO}"
@@ -3177,7 +3220,7 @@ $ pip install --upgrade yt-dlp
 ```
 
 ```bash
-function yt-dlp-helper()
+function yt-dlp-export()
 {
 	echo "YT_DLP_URL=${YT_DLP_URL}"
 	echo "YT_DLP_SAVETO=${YT_DLP_SAVETO}"
