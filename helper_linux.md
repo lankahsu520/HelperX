@@ -1945,6 +1945,42 @@ sudo systemctl disable snapd.seeded.service
 
 # 13. System Handler
 
+#### free - Display amount of free and used memory in the system
+
+> | TITLE      | DESCRIPTION                                                  |      |
+> | ---------- | ------------------------------------------------------------ | ---- |
+> | total      | Total installed memory (MemTotal and SwapTotal in /proc/meminfo)<br>實體的記憶體空間 |      |
+> | used       | Used memory (calculated as total - free - buffers - cache)<br>已經使用的記憶體空間 |      |
+> | free       | Unused memory (MemFree and SwapFree in /proc/meminfo)<br>未使用的記憶體空間 |      |
+> | shared     | Memory used (mostly) by tmpfs (Shmem in /proc/meminfo)<br>共享的記憶體空間 |      |
+> | buffers    | Memory used by kernel buffers (Buffers in /proc/meminfo)     |      |
+> | cache      | Memory used by the page cache and slabs (Cached and SReclaimable in /proc/meminfo) |      |
+> | buff/cache | Sum of buffers and cache                                     |      |
+> | available  | Estimation of how much memory is available for starting new applications, without  swapping.  Unlike  the data provided by the cache or free fields, this field takes into account page cache and also that not all reclaimable memory slabs will be reclaimed due to items being  in  use  (MemAvailable  in  /proc/meminfo, available on kernels 3.14, emulated on kernels 2.6.27+, otherwise the same as free)<br>available = free + cache (可清除) |      |
+
+```bash
+$ alias free-mem="free -hwt"
+
+$ free-mem
+              total        used        free      shared     buffers       cache   available
+Mem:          7.8Gi       640Mi       4.6Gi        11Mi       684Mi       1.8Gi       6.8Gi
+Swap:         2.0Gi          0B       2.0Gi
+Total:        9.8Gi       640Mi       6.6Gi
+
+$ sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
+
+$ free-mem
+              total        used        free      shared     buffers       cache   available
+Mem:          7.8Gi       615Mi       6.8Gi        11Mi       5.0Mi       355Mi       6.9Gi
+Swap:         2.0Gi          0B       2.0Gi
+Total:        9.8Gi       615Mi       8.8Gi
+
+# 每秒刷新一次
+$ free-mem -s1
+
+$ echo 3 > /proc/sys/vm/drop_caches
+```
+
 #### htop - process manager
 
 > [你一定用過 htop，但你有看懂每個欄位嗎？](https://medium.com/starbugs/do-you-understand-htop-ffb72b3d5629)
@@ -2261,6 +2297,22 @@ echo 1 > /proc/sys/vm/overcommit_memory
 # kernel 拒絕相等或大於總可用置換空間與實體記憶體比例（於 overcommit_ratio 指定）的記憶體需求。如果您想要降低記憶體過度寫入的風險，這是最佳設定。
 echo 2 > /proc/sys/vm/overcommit_memory
 ```
+
+#### [/proc/[pid]/statm](/proc/[pid]/statm)
+
+>Provides information about memory usage, measured in pages.
+>
+>The columns are:
+>
+>| Field    | Content                                                      |
+>| -------- | ------------------------------------------------------------ |
+>| size     | total program size (pages) <br>(same as VmSize in /proc/[pid]/status) |
+>| resident | size of memory portions (pages) <br>(same as VmRSS in /proc/[pid]/status) |
+>| shared   | number of pages that are shared <br>(i.e. backed by a file, same as RssFile+RssShmem in status) |
+>| trs      | number of pages that are 'code' <br>(not including libs; broken, includes data segment) |
+>| lrs      | number of pages of library<br>(always 0 on 2.6)              |
+>| drs      | number of pages of data/stack<br>(including libs; broken, includes library text) |
+>| dt       | number of dirty pages<br>(always 0 on 2.6)                   |
 
 # 14. Security Handler
 
@@ -2693,6 +2745,8 @@ cat mqttSub.sh
 # 19. Editor
 
 #### vim / vi - a programmer's text editor
+
+> 請參考 [helper_vi.md](https://github.com/lankahsu520/HelperX/blob/master/helper_vi.md) - vi/vim helper.
 
 > [~/.vimrc](https://github.com/lankahsu520/HelperX/blob/master/linux/.vimrc)
 
@@ -3266,6 +3320,8 @@ $ yt-dlp -f 140 "https://www.youtube.com/watch?v=a_9_38JpdYU" -o 20240527084746
 ## I.1. [Linux 教程](https://www.runoob.com/linux/linux-tutorial.html)
 
 ## I.2. [Ubuntu Linux 安裝、使用 ClamAV 防毒軟體 clamscan 掃毒指令教學與範例](https://officeguide.cc/linux-clamav-antivirus-clamscan-installation-configuration-tutorial-examples/)
+
+## I.3. [SwapFaq](https://help.ubuntu.com/community/SwapFaq)
 
 # II. Debug
 
