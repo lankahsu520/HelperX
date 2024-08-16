@@ -2582,6 +2582,13 @@ gzip -d helloworld.gz
 gzip -dk helloworld.gz
 
 gunzip helloworld.gz
+
+# compress
+$ gzip -k helper_vi.md
+$ ll helper_vi.md*
+-rwxrwxr-x 1 lanka lanka 4155  八   6 08:15 helper_vi.md*
+-rwxrwxr-x 1 lanka lanka 1872  八   6 08:15 helper_vi.md.gz*
+
 ```
 
 #### tar - an archiving utility
