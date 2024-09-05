@@ -222,10 +222,10 @@
 span text - <span style="color:blue">blue</span>, <span style="color:red">red</span>, <span style="color:green">green</span>, <span style="background-color:blue">blue</span>, <span style="background-color:red">red</span>, <span style="background-color:green">green</span>
 ```
 
-> inline HTML font text - <font color="blue">blue</font>, <font color="red">red</font>, <font color="green">green</font>
+> font text - <font color="blue">blue</font>, <font color="red">red</font>, <font color="green">green</font>, <font style="background-color:blue">blue</font>, <font style="background-color:red">red</font>, <font style="background-color:green">green</font>
 
 ```
-font text - <font color="blue">blue</font>, <font color="red">red</font>, <font color="green">green</font>
+font text - <font color="blue">blue</font>, <font color="red">red</font>, <font color="green">green</font>, <font style="background-color:blue">blue</font>, <font style="background-color:red">red</font>, <font style="background-color:green">green</font>
 ```
 
 > code text - <code style="color:blue">blue</code >, <code style="color:red">red</code >, <code style="color:green">green</code>, <code style="background-color:blue">blue</code>, <code style="background-color:red">red</code>, <code style="background-color:green">green</code>
