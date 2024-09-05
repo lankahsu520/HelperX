@@ -216,10 +216,10 @@
 <img src="./images/macOS_12_Monterey.png" height="50%" width="50%">
 ```
 
-> span text - <span style="color:blue">blue</span>, <span style="color:red">red</span>, <span style="color:green">green</span>
+> span text - <span style="color:blue">blue</span>, <span style="color:red">red</span>, <span style="color:green">green</span>, <span style="background-color:blue">blue</span>, <span style="background-color:red">red</span>, <span style="background-color:green">green</span>
 
-```
-span text - <span style="color:blue">blue</span>, <span style="color:red">red</span>, <span style="color:green">green</span>
+```html
+span text - <span style="color:blue">blue</span>, <span style="color:red">red</span>, <span style="color:green">green</span>, <span style="background-color:blue">blue</span>, <span style="background-color:red">red</span>, <span style="background-color:green">green</span>
 ```
 
 > inline HTML font text - <font color="blue">blue</font>, <font color="red">red</font>, <font color="green">green</font>
@@ -228,12 +228,11 @@ span text - <span style="color:blue">blue</span>, <span style="color:red">red</s
 font text - <font color="blue">blue</font>, <font color="red">red</font>, <font color="green">green</font>
 ```
 
-> code text - <code style="color:blue">blue</code >, <code style="color:red">red</code >, <code style="color:green">green</code>
+> code text - <code style="color:blue">blue</code >, <code style="color:red">red</code >, <code style="color:green">green</code>, <code style="background-color:blue">blue</code>, <code style="background-color:red">red</code>, <code style="background-color:green">green</code>
 
+```html
+code text - <code style="color:blue">blue</code >, <code style="color:red">red</code >, <code style="color:green">green</code>, <code style="background-color:blue">blue</code>, <code style="background-color:red">red</code>, <code style="background-color:green">green</code>
 ```
-code text - <code style="color:blue">blue</code >, <code style="color:red">red</code >, <code style="color:green">green</code>
-```
-
 
 # 4. [特殊特元](https://chukaml.tripod.com/linguistics/charCode/)
 
