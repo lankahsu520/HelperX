@@ -24,7 +24,9 @@
 >
 >此篇不討論如何撰寫 Python 的程式，而是當使用或變動系統的 Python 時，可能發生的問題。
 
-> [維基百科](https://zh.wikipedia.org/zh-tw/Python) **Python**（英國發音：[/ˈpaɪθən/](https://zh.wikipedia.org/wiki/Help:英語國際音標)；美國發音：[/ˈpaɪθɑːn/](https://zh.wikipedia.org/wiki/Help:英語國際音標)），是一種廣泛使用的[直譯式](https://zh.wikipedia.org/wiki/直譯語言)、[進階](https://zh.wikipedia.org/wiki/高級語言)和[通用](https://zh.wikipedia.org/wiki/通用编程语言)的[程式語言](https://zh.wikipedia.org/wiki/编程语言)。Python支援多種程式設計範式，包括結構化、程序式、反射式、物件導向和函數式程式設計。它擁有[動態型別系統](https://zh.wikipedia.org/wiki/類型系統)和[垃圾回收](https://zh.wikipedia.org/wiki/垃圾回收_(計算機科學))功能，能夠自動管理記憶體使用，並且其本身擁有一個巨大而廣泛的標準庫。它的語言結構以及[物件導向](https://zh.wikipedia.org/wiki/面向对象程序设计)的方法，旨在幫助程式設計師為小型的和大型的專案編寫邏輯清晰的程式碼。
+> [維基百科] [Python](https://zh.wikipedia.org/zh-tw/Python)
+>
+> **Python**（英國發音：[/ˈpaɪθən/](https://zh.wikipedia.org/wiki/Help:英語國際音標)；美國發音：[/ˈpaɪθɑːn/](https://zh.wikipedia.org/wiki/Help:英語國際音標)），是一種廣泛使用的[直譯式](https://zh.wikipedia.org/wiki/直譯語言)、[進階](https://zh.wikipedia.org/wiki/高級語言)和[通用](https://zh.wikipedia.org/wiki/通用编程语言)的[程式語言](https://zh.wikipedia.org/wiki/编程语言)。Python支援多種程式設計範式，包括結構化、程序式、反射式、物件導向和函數式程式設計。它擁有[動態型別系統](https://zh.wikipedia.org/wiki/類型系統)和[垃圾回收](https://zh.wikipedia.org/wiki/垃圾回收_(計算機科學))功能，能夠自動管理記憶體使用，並且其本身擁有一個巨大而廣泛的標準庫。它的語言結構以及[物件導向](https://zh.wikipedia.org/wiki/面向对象程序设计)的方法，旨在幫助程式設計師為小型的和大型的專案編寫邏輯清晰的程式碼。
 
 # 2. Install python
 
@@ -474,6 +476,16 @@ $ g-ir-scanner --version
 Command 'g-ir-scanner' not found, but can be installed with:
 
 $ sudo apt install gobject-introspection
+```
+
+## II.1a. ModuleNotFoundError: No module named 'giscanner._giscanner'
+
+```bash
+$ cd /usr/lib/x86_64-linux-gnu/gobject-introspection/giscanner
+$ ll *.so
+-rw-r--r-- 1 root root 102000  五   4  2020 _giscanner.cpython-38-x86_64-linux-gnu.so
+$ sudo ln -s _giscanner.cpython-38-x86_64-linux-gnu.so _giscanner.so
+$ sudo ldconfig
 ```
 
 ## II.2. ImportError: cannot import name 'six' from 'pkg_resources.extern' (/usr/lib/python3/dist-packages/pkg_resources/extern/__init__.py)
