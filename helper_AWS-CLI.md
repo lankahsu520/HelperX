@@ -685,102 +685,145 @@ $ aws sns list-subscriptions
 
 ```bash
 #******************************************************************************
-#** aws **
+#** aws cli **
 #******************************************************************************
-export S3_BUCKET_NAME=intercom-storage
+function aws-export()
+{
+	echo "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}"
+	echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
+	echo "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
 
-function aws-path()
+	echo
+	[ ! -v AWS_SHARED_CREDENTIALS_FILE ] && export AWS_SHARED_CREDENTIALS_FILE="$HOME/.aws/credentials"
+	echo "AWS_SHARED_CREDENTIALS_FILE=${AWS_SHARED_CREDENTIALS_FILE}"
+	if [ ! -z "${AWS_SHARED_CREDENTIALS_FILE}" ]; then
+		DO_COMMAND="(cat ${AWS_SHARED_CREDENTIALS_FILE})"
+		eval-it "$DO_COMMAND"
+	else
+		echo "Can't find AWS_SHARED_CREDENTIALS_FILE !!! ($HOME/.aws/credentials)"
+	fi
+
+	echo
+	[ ! -v AWS_CONFIG_FILE ] && export AWS_CONFIG_FILE="$HOME/.aws/config"
+	echo "AWS_CONFIG_FILE=${AWS_CONFIG_FILE}"
+	if [ ! -z "${AWS_CONFIG_FILE}" ]; then
+		DO_COMMAND="(cat ${AWS_CONFIG_FILE})"
+		eval-it "$DO_COMMAND"
+	else
+		echo "Can't find AWS_CONFIG_FILE !!! ($HOME/.aws/config)"
+	fi
+
+	echo
+}
+
+```
+
+```bash
+#******************************************************************************
+#** aws cli (S3) **
+#******************************************************************************
+export S3_BUCKET_NAME=lambdax9
+
+function aws-s3-path()
 {
 	echo "S3_BUCKET_NAME=${S3_BUCKET_NAME}"
 }
 
-function aws-ls()
+function aws-s3-ls()
 {
-	aws-path
-	aws s3 ls s3://${S3_BUCKET_NAME}
+	aws-s3-path
+	DO_COMMAND="(aws s3 ls s3://${S3_BUCKET_NAME})"
+	eval-it "$DO_COMMAND"
 }
 
-function aws-mb()
-{
-	HINT="Usage: ${FUNCNAME[0]} <bucket>"
-	BUCKET1="$1"
-
-	if [ ! -z "$BUCKET1" ]; then
-		aws s3 mb s3://$BUCKET1
-	else
-		echo $HINT
-	fi
-}
-
-function aws-rb()
+function aws-s3-mb()
 {
 	HINT="Usage: ${FUNCNAME[0]} <bucket>"
 	BUCKET1="$1"
 
-	if [ ! -z "$BUCKET1" ]; then
-		aws s3 rb s3://$BUCKET1
+	if [ ! -z "${BUCKET1}" ]; then
+		DO_COMMAND="(aws s3 mb s3://${BUCKET1})"
+		eval-it "$DO_COMMAND"
 	else
 		echo $HINT
 	fi
 }
 
-#alias aws-pull="aws-path; aws s3 cp s3://${S3_BUCKET_NAME}/$1 ./"
-function aws-pull()
+function aws-s3-rb()
 {
-	aws-path
+	HINT="Usage: ${FUNCNAME[0]} <bucket>"
+	BUCKET1="$1"
+
+	if [ ! -z "${BUCKET1}" ]; then
+		DO_COMMAND="(aws s3 rb s3://${BUCKET1})"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
+
+#alias aws-s3-pull="aws-s3-path; aws s3 cp s3://${S3_BUCKET_NAME}/$1 ./"
+function aws-s3-pull()
+{
+	aws-s3-path
 
 	HINT="Usage: ${FUNCNAME[0]} <file>"
 	FILE1="$1"
 
-	if [ ! -z "$FILE1" ]; then
-		aws s3 cp s3://${S3_BUCKET_NAME}/$FILE1 ./
-		#echo "aws s3 cp s3://${S3_BUCKET_NAME}/$FILE1 ./"
+	if [ ! -z "${FILE1}" ]; then
+		DO_COMMAND="(aws s3 cp s3://${S3_BUCKET_NAME}/${FILE1} ./)"
+		eval-it "$DO_COMMAND"
+		#echo "aws s3 cp s3://${S3_BUCKET_NAME}/${FILE1} ./"
 	else
 		echo $HINT
 	fi
 }
 
-#alias aws-push="aws s3 cp ${1} s3://${S3_BUCKET_NAME}"
-function aws-push()
+#alias aws-s3-push="aws s3 cp ${1} s3://${S3_BUCKET_NAME}"
+function aws-s3-push()
 {
-	aws-path
+	aws-s3-path
 
 	HINT="Usage: ${FUNCNAME[0]} <file>"
 	FILE1="$1"
 
-	if [ ! -z "$FILE1" ]; then
-		aws s3 cp $FILE1 s3://${S3_BUCKET_NAME}/
-		#echo "aws s3 cp s3://${S3_BUCKET_NAME}/$FILE1"
+	if [ ! -z "${FILE1}" ]; then
+		DO_COMMAND="(aws s3 cp ${FILE1} s3://${S3_BUCKET_NAME}/)"
+		eval-it "$DO_COMMAND"
+		#echo "aws s3 cp s3://${S3_BUCKET_NAME}/${FILE1}"
 	else
 		echo $HINT
 	fi
 }
 
-function aws-pull-bash_aliases()
+function aws-s3-pull-bash_aliases()
 {
-	(cd /tmp; aws-pull .bash_aliases; chmod 775 .bash_aliases; cp .bash_aliases ~/)
+	DO_COMMAND="(cd /tmp; aws-s3-pull .bash_aliases; chmod 775 .bash_aliases; cp .bash_aliases ~/)"
+	eval-it "$DO_COMMAND"
 }
 
-function aws-push-bash_aliases()
+function aws-s3-push-bash_aliases()
 {
-	(aws-push ~/.bash_aliases)
+	aws-s3-push ~/.bash_aliases
 }
 
-#alias aws-rm="aws s3 rm s3://${S3_BUCKET_NAME}/$1"
-function aws-rm()
+#alias aws-s3-rm="aws s3 rm s3://${S3_BUCKET_NAME}/$1"
+function aws-s3-rm()
 {
-	aws-path
+	aws-s3-path
 
 	HINT="Usage: ${FUNCNAME[0]} <file>"
 	FILE1="$1"
 
-	if [ ! -z "$FILE1" ]; then
-		aws s3 rm s3://${S3_BUCKET_NAME}/$FILE1
-		#echo "aws s3 rm s3://${S3_BUCKET_NAME}/$FILE1"
+	if [ ! -z "${FILE1}" ]; then
+		DO_COMMAND="(aws s3 rm s3://${S3_BUCKET_NAME}/${FILE1})"
+		eval-it "$DO_COMMAND"
+		#echo "aws s3 rm s3://${S3_BUCKET_NAME}/${FILE1}"
 	else
 		echo $HINT
 	fi
 }
+
 ```
 
 # Author

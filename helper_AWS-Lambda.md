@@ -217,10 +217,10 @@ flowchart LR
 > 這邊用 S3 當範例，因為 S3 裏的檔案變動，利用 aws cli 就可以了。
 
 ```bash
-$ S3_BUCKET_NAME=lambdax9bak; aws-ls
-$ S3_BUCKET_NAME=lambdax9; aws-ls
-$ S3_BUCKET_NAME=lambdax9; aws-push out.yml
-$ S3_BUCKET_NAME=lambdax9; aws-rm out.yml
+$ S3_BUCKET_NAME=lambdax9bak; aws-s3-ls
+$ S3_BUCKET_NAME=lambdax9; aws-s3-ls
+$ S3_BUCKET_NAME=lambdax9; aws-s3-push out.yml
+$ S3_BUCKET_NAME=lambdax9; aws-s3-rm out.yml
 
 ```
 
