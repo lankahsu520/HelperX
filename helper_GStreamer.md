@@ -69,6 +69,8 @@ flowchart LR
 	filesrc --> autoaudiosink
 ```
 
+#### A. filesrc (wav or mp3) -> alsasink/pulsesink/autoaudiosink
+
 ```bash
 export MUSIC_FILE="/work/BeethovenFurElise.mp3"
 export MUSIC_FILE="/work/BeethovenFurElise.wav"
@@ -90,6 +92,52 @@ gst-launch-1.0 filesrc \
  ! decodebin \
  ! audioconvert \
  ! autoaudiosink
+```
+
+#### B. filesrc (pcm) -> autoaudiosink
+
+```mermaid
+flowchart LR
+	filesrc[filesrc]
+	autoaudiosink[alsasink/pulsesink/autoaudiosink]
+
+	filesrc --> autoaudiosink
+```
+
+```bash
+gst-launch-1.0 filesrc \
+ location="/work/BeethovenFurElise-S16BE.pcm" \
+ ! audio/x-raw,format=S16BE,channels=2,rate=44100,layout=interleaved \
+ ! audioconvert \
+ ! audioresample \
+ ! autoaudiosink
+
+gst-launch-1.0 filesrc \
+ location="/work/BeethovenFurElise-S16LE.pcm" \
+ ! audio/x-raw,format=S16LE,channels=2,rate=44100,layout=interleaved \
+ ! audioconvert \
+ ! audioresample \
+ ! autoaudiosink
+
+gst-launch-1.0 filesrc \
+ location="/work/BeethovenFurElise-S16LE.pcm" \
+ ! rawaudioparse format=pcm pcm-format=s16le sample-rate=44100 num-channels=2 \
+ ! audioconvert \
+ ! autoaudiosink
+```
+
+#### C. filesrc (opus) -> autoaudiosink
+
+> [opusSampleFrames](https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c/tree/master/samples/opusSampleFrames)
+
+```bash
+export MUSIC_FILE="./opusSampleFrames/sample-000.opus"
+
+gst-launch-1.0 filesrc \
+ location=$MUSIC_FILE \
+ ! opusparse \
+ ! opusdec \
+ ! alsasink
 ```
 
 ## 3.2. filesrc -> udpsink  ⇢ |rtpL16pay|udpsrc -> alsasink
@@ -219,53 +267,11 @@ gst-launch-1.0 -e filesrc \
  ! filesink location="/work/BeethovenFurElise-vorbis.ogg"
 ```
 
-## 3.4. filesrc (pcm) -> ???sink
-
-### 3.4.1. filesrc (pcm) -> autoaudiosink
-
-```mermaid
-flowchart LR
-	filesrc[filesrc]
-	autoaudiosink[alsasink/pulsesink/autoaudiosink]
-
-	filesrc --> autoaudiosink
-```
-
-```bash
-gst-launch-1.0 filesrc \
- location="/work/BeethovenFurElise-S16BE.pcm" \
- ! audio/x-raw,format=S16BE,channels=2,rate=44100,layout=interleaved \
- ! audioconvert \
- ! audioresample \
- ! autoaudiosink
-
-gst-launch-1.0 filesrc \
- location="/work/BeethovenFurElise-S16LE.pcm" \
- ! audio/x-raw,format=S16LE,channels=2,rate=44100,layout=interleaved \
- ! audioconvert \
- ! audioresample \
- ! autoaudiosink
-
-gst-launch-1.0 filesrc \
- location="/work/BeethovenFurElise-S16LE.pcm" \
- ! rawaudioparse format=pcm pcm-format=s16le sample-rate=44100 num-channels=2 \
- ! audioconvert \
- ! autoaudiosink
-```
-
-### 3.4.2. filesrc (pcm) -> filesink
-
-```mermaid
-flowchart LR
-	filesrc[filesrc]
-	filesink[filesink]
-
-	filesrc --> filesink
-```
+#### F. filesrc (pcm, rawaudioparse) -> filesink (wav)
 
 > [rawaudioparse](https://gstreamer.freedesktop.org/documentation/rawparse/rawaudioparse.html?gi-language=c)
 
-#### A. filesrc (pcm, rawaudioparse) -> filesink (wav)
+##### F.1. filesrc (pcm, S16BE)
 
 ```bash
 gst-launch-1.0 -e filesrc \
@@ -274,17 +280,22 @@ gst-launch-1.0 -e filesrc \
  ! audioconvert \
  ! wavenc \
  ! filesink location="/work/BeethovenFurElise.wav"
+```
 
+##### F.2. filesrc (pcm, S16LE)
+
+```bash
 gst-launch-1.0 -e filesrc \
  location="/work/BeethovenFurElise-S16LE.pcm" \
  ! rawaudioparse use-sink-caps=false format=pcm pcm-format=s16le sample-rate=44100 num-channels=2 \
  ! audioconvert \
  ! wavenc \
  ! filesink location="/work/BeethovenFurElise.wav"
-
 ```
 
-#### B. filesrc (pcm, rawaudioparse) -> filesink (ogg, opusenc)
+#### G. filesrc (pcm, rawaudioparse) -> filesink (ogg, opusenc)
+
+> [rawaudioparse](https://gstreamer.freedesktop.org/documentation/rawparse/rawaudioparse.html?gi-language=c)
 
 ```bash
 gst-launch-1.0 -e filesrc \
@@ -297,7 +308,7 @@ gst-launch-1.0 -e filesrc \
  ! filesink location="/work/BeethovenFurElise-opus.ogg"
 ```
 
-#### C. filesrc (pcm, audio/x-raw) -> filesink (wav, wavenc)
+#### H. filesrc (pcm, audio/x-raw) -> filesink (wav, wavenc)
 
 ```bash
 gst-launch-1.0 -e filesrc \
@@ -310,7 +321,7 @@ gst-launch-1.0 -e filesrc \
 
 # 4. multifilesrc
 
-## 4.1. multifilesrc (mp3) -> alsasink/pulsesink/autoaudiosink
+## 4.1. multifilesrc -> alsasink/pulsesink/autoaudiosink
 
 ```mermaid
 flowchart LR
@@ -319,6 +330,8 @@ flowchart LR
 
 	multifilesrc --> autoaudiosink
 ```
+
+#### A. multifilesrc (mp3) -> alsasink
 
 ```bash
 gst-launch-1.0 multifilesrc \
@@ -333,6 +346,112 @@ gst-launch-1.0 multifilesrc \
  ! decodebin \
  ! audioconvert \
  ! alsasink
+
+# loop
+gst-launch-1.0 multifilesrc \
+ location="/work/BeethovenFurElise.mp3" loop=true \
+ ! decodebin \
+ ! audioconvert \
+ ! alsasink
+```
+
+#### B. multifilesrc (opus) -> alsasink
+
+> [opusSampleFrames](https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c/tree/master/samples/opusSampleFrames)
+
+```bash
+gst-launch-1.0 -e multifilesrc \
+ location="./opusSampleFrames/sample-%03d.opus" start-index=1 stop-index=618 \
+ ! opusparse \
+ ! opusdec \
+ ! alsasink
+
+gst-launch-1.0 -e multifilesrc \
+ location="./opusSampleFrames/sample-%03d.opus" \
+ ! opusparse \
+ ! opusdec \
+ ! alsasink
+```
+
+## 4.2. multifilesrc -> autovideosink
+
+#### A. multifilesrc (h264) -> autovideosink
+
+> [h264SampleFrames](https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c/tree/master/samples/h264SampleFrames)
+
+```bash
+gst-launch-1.0 -e -v multifilesrc \
+ location="./h264SampleFrames/frame-%04d.h264" index=1 loop=true \
+ ! h264parse \
+ ! avdec_h264 ! autovideosink
+
+```
+
+## 4.3. multifilesrc -> filesink
+
+#### A. multifilesrc (opus) -> filesink (ogg)
+
+> [opusSampleFrames](https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c/tree/master/samples/opusSampleFrames)
+
+```bash
+gst-launch-1.0 -e multifilesrc \
+ location="./opusSampleFrames/sample-%03d.opus" start-index=1 \
+ ! opusparse \
+ ! oggmux \
+ ! filesink location="./opusSampleFrames.ogg"
+
+```
+
+#### B. multifilesrc (h264) -> filesink (mp4)
+
+> [h264SampleFrames](https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c/tree/master/samples/h264SampleFrames)
+
+```bash
+gst-launch-1.0 -e -v multifilesrc \
+ location="./h264SampleFrames/frame-%04d.h264" index=1 stop-index=1500 \
+ ! decodebin \
+ ! videoconvert \
+ ! video/x-raw,width=1280,height=720,framerate=25/1 \
+ ! x264enc \
+ ! queue \
+ ! mp4mux \
+ ! queue \
+ ! filesink location=./h264SampleFrames.mp4
+
+gst-launch-1.0 -e -v multifilesrc \
+ location="./h264SampleFrames/frame-%04d.h264" index=1 stop-index=1500 \
+ ! h264parse \
+ ! avdec_h264 \
+ ! video/x-raw,width=1280,height=720,framerate=25/1 \
+ ! x264enc \
+ ! queue \
+ ! mp4mux \
+ ! queue \
+ ! filesink location=./h264SampleFrames.mp4
+```
+
+#### C. multifilesrc (h264 + opus) -> filesink (mkv)
+
+> [opusSampleFrames](https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c/tree/master/samples/opusSampleFrames)
+>
+> [h264SampleFrames](https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c/tree/master/samples/h264SampleFrames)
+
+```bash
+gst-launch-1.0 -e -v \
+ multifilesrc \
+ location="./h264SampleFrames/frame-%04d.h264" index=1 stop-index=1500 \
+ ! h264parse \
+ ! avdec_h264 \
+ ! video/x-raw,width=1280,height=720,framerate=25/1 \
+ ! x264enc \
+ ! queue \
+ ! matroskamux name=mux \
+ ! filesink location=./lanka520.mkv \
+ multifilesrc \
+ location="./opusSampleFrames/sample-%03d.opus" start-index=1 \
+ ! opusparse \
+ ! queue \
+ ! mux.
 ```
 
 # 5. appsrc
@@ -933,10 +1052,12 @@ gst-launch-1.0 audiotestsrc \
 gst-launch-1.0 -v udpsrc port=50000 \
  ! application/x-rtp,payload=96 \
  ! rtph264depay \
+ ! queue \
  ! decodebin ! videoconvert ! autovideosink \
  udpsrc port=51000 \
  ! application/x-rtp,payload=97,encoding-name=OPUS \
  ! rtpopusdepay  \
+ ! queue \
  ! opusdec \
  ! autoaudiosink
 ```
