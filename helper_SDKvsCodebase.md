@@ -211,7 +211,7 @@ stateDiagram-v2
 
 #### SDK, Software Development Kit
 
-> [[維基百科] 軟體開發套件](https://zh.wikipedia.org/zh-tw/软件开发工具包)
+> [維基百科] [軟體開發套件](https://zh.wikipedia.org/zh-tw/软件开发工具包)
 >
 > **軟體開發套件**（英語：Software Development Kit, SDK）指一些被[軟體工程師](https://zh.wikipedia.org/wiki/软件工程师)用於為特定的[軟體套件](https://zh.wikipedia.org/wiki/软件包)、[軟體框架](https://zh.wikipedia.org/wiki/软件框架)、[硬體平台](https://zh.wikipedia.org/w/index.php?title=硬件平台&action=edit&redlink=1)及[作業系統](https://zh.wikipedia.org/wiki/作業系統)等建立[應用軟體](https://zh.wikipedia.org/wiki/应用软件)的開發工具之集合。
 

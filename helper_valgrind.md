@@ -19,11 +19,11 @@
 
 # 1. Overview
 
-> Valgrind is an instrumentation framework for building dynamic analysis tools. There are Valgrind tools that can automatically detect many memory management and threading bugs, and profile your programs in detail. You can also use Valgrind to build new tools.
+> [Valgrind](https://valgrind.org) is an instrumentation framework for building dynamic analysis tools. There are Valgrind tools that can automatically detect many memory management and threading bugs, and profile your programs in detail. You can also use Valgrind to build new tools.
 >
 > The Valgrind distribution currently includes seven production-quality tools: a memory error detector, two thread error detectors, a cache and branch-prediction profiler, a call-graph generating cache and branch-prediction profiler, and two different heap profilers. It also includes an experimental SimPoint basic block vector generator. It runs on the following platforms: X86/Linux, AMD64/Linux, ARM/Linux, ARM64/Linux, PPC32/Linux, PPC64/Linux, PPC64LE/Linux, S390X/Linux, MIPS32/Linux, MIPS64/Linux, X86/Solaris, AMD64/Solaris, ARM/Android (2.3.x and later), ARM64/Android, X86/Android (4.0 and later), MIPS32/Android, X86/FreeBSD, AMD64/FreeBSD, X86/Darwin and AMD64/Darwin (Mac OS X 10.12).
 
-> [[維基百科] Valgrind](https://zh.wikipedia.org/zh-tw/Valgrind)
+> [維基百科] [Valgrind](https://zh.wikipedia.org/zh-tw/Valgrind)
 >
 > **Valgrind**是一款用於記憶體除錯、[記憶體流失](https://zh.wikipedia.org/wiki/内存泄漏)檢測以及[效能分析](https://zh.wikipedia.org/wiki/性能分析)的[軟體開發工具](https://zh.wikipedia.org/wiki/软件开发工具)。Valgrind這個名字取自[北歐神話](https://zh.wikipedia.org/wiki/北欧神话)中[英靈殿](https://zh.wikipedia.org/wiki/英灵殿)的入口。
 

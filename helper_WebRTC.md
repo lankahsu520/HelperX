@@ -28,7 +28,7 @@
 >
 > 但因為 WebRTC 用到很多網路技術，而個人時間，所學有限，本人也不是專門搞研究的，只希望能小小幫助各位。
 
-> [維基百科] WebRTC
+> [維基百科] [WebRTC](https://zh.wikipedia.org/zh-tw/WebRTC)
 >
 > **WebRTC**，名稱源自**網頁即時通訊**（英語：Web Real-Time Communication）的縮寫，是一個支援[網頁瀏覽器](https://zh.wikipedia.org/wiki/網頁瀏覽器)進行即時語音對話或影片對話的[API](https://zh.wikipedia.org/wiki/API)。它於2011年6月1日開源並在[Google](https://zh.wikipedia.org/wiki/Google)、[Mozilla](https://zh.wikipedia.org/wiki/Mozilla基金會)、[Opera](https://zh.wikipedia.org/wiki/Opera_Software)支援下被納入[全球資訊網協會](https://zh.wikipedia.org/wiki/万维网联盟)的[W3C推薦標準](https://zh.wikipedia.org/wiki/W3C推荐标准)[[2\]](https://zh.wikipedia.org/zh-tw/WebRTC#cite_note-#1-2)[[3\]](https://zh.wikipedia.org/zh-tw/WebRTC#cite_note-3)[[4\]](https://zh.wikipedia.org/zh-tw/WebRTC#cite_note-4)。
 
@@ -336,9 +336,9 @@ sequenceDiagram
 
 # III. Glossary
 
-#### [ICE](https://zh.wikipedia.org/wiki/互動式連接建立), Interactive Connectivity Establishment
+#### ICE, Interactive Connectivity Establishment
 
-> [維基百科] ICE
+> [維基百科] [ICE](https://zh.wikipedia.org/wiki/互動式連接建立)
 >
 > **互動式連接建立**（Interactive Connectivity Establishment），一種綜合性的[NAT穿越](https://zh.wikipedia.org/wiki/NAT穿越)的技術。
 >
@@ -402,25 +402,25 @@ sequenceDiagram
 >
 > ICE 是實時通信應用中解決 NAT 穿透問題的核心技術，通過收集、交換和測試多種候選連接，來確保 P2P 連接的成功建立和穩定性。這使得像 WebRTC 這樣的技術能夠在現代網絡環境中有效工作，並為用戶提供流暢的音視頻體驗。
 
-#### [NAT](https://zh.wikipedia.org/zh-tw/网络地址转换), **N**etwork **A**ddress **T**ranslation
+#### NAT, **N**etwork **A**ddress **T**ranslation
 
-> [維基百科] NAT
+> [維基百科] [NAT](https://zh.wikipedia.org/zh-tw/网络地址转换)
 >
 > **網路位址轉譯**（英語：**N**etwork **A**ddress **T**ranslation，縮寫：**NAT**），又稱**IP動態偽裝**（英語：IP Masquerade）[[1\]](https://zh.wikipedia.org/zh-tw/网络地址转换#cite_note-1):176，是一種在IP[封包](https://zh.wikipedia.org/wiki/封包)通過[路由器](https://zh.wikipedia.org/wiki/路由器)或[防火牆](https://zh.wikipedia.org/wiki/防火牆)時重寫來源或目的[IP位址](https://zh.wikipedia.org/wiki/IP地址)或[埠](https://zh.wikipedia.org/wiki/端口)的技術。這種技術普遍應用於有多台主機，但只通過一個公有IP位址訪問[網際網路](https://zh.wikipedia.org/wiki/網際網路)的[私有網路](https://zh.wikipedia.org/wiki/私有网络)中。
 >
 > NAT技術部署方便，且得到了廣泛應用。然而，NAT也讓主機之間的通訊變得複雜，導致了通訊效率的降低。
 
-#### [SDP](https://zh.wikipedia.org/zh-tw/会话描述协议), Session Description Protocol
+#### SDP, Session Description Protocol
 
->[維基百科] SDP
+>[維基百科] [SDP](https://zh.wikipedia.org/zh-tw/会话描述协议)
 >
 >會話描述協議**（**Session Description Protocol**或簡寫**SDP**）描述的是[流媒體](https://zh.wikipedia.org/wiki/流媒体)的初始化參數。此協議由[IETF](https://zh.wikipedia.org/wiki/IETF)發表為 [RFC 2327](https://tools.ietf.org/html/rfc2327)。**
 >
 >SDP最初的時候是會話發布協議（Session Announcement Protocol或簡寫SAP）的一個部件，1998年4月推出第一版[[1\]](https://zh.wikipedia.org/zh-tw/会话描述协议#cite_note-1)，但是之後被廣泛用於和[RTSP](https://zh.wikipedia.org/wiki/RTSP)以及[SIP](https://zh.wikipedia.org/wiki/会话发起协议)協同工作，也可被單獨用來描述[多播](https://zh.wikipedia.org/wiki/多播)會話。
 
-#### [STUN](https://zh.wikipedia.org/zh-tw/会话描述协议),  Session Traversal Utilities for NAT
+#### STUN,  Session Traversal Utilities for NAT
 
-> [維基百科] STUN
+> [維基百科] [STUN](https://zh.wikipedia.org/zh-tw/会话描述协议)
 >
 > STUN（用戶資料報協定[UDP]簡單穿越網路位址轉換器[NAT])伺服器允許所有的NAT客戶終端(如防火牆後邊的電腦)與位於局區域網以外的VOIP服務商實現電話通話。
 >
@@ -469,9 +469,9 @@ sequenceDiagram
 >
 > Symmetric NAT 是一種提供較高安全性和隱私保護的 NAT 類型，但它也帶來了挑戰，尤其是在需要點對點連接的應用場景中。理解 Symmetric NAT 的工作方式對於設計可靠的網絡應用程序，特別是在涉及實時通信的情況下，如 WebRTC、VoIP 和視頻會議等，是非常重要的。
 
-#### [TURN](https://zh.wikipedia.org/zh-tw/TURN), Traversal Using Relay around NAT
+#### TURN, Traversal Using Relay around NAT
 
-> [維基百科] TURN
+> [維基百科] [TURN](https://zh.wikipedia.org/zh-tw/TURN)
 >
 > **TURN**（全名**Traversal Using Relay around NAT**），是一種資料傳輸協定（data-transfer protocol）。允許在TCP或UDP的連線上跨越[NAT](https://zh.wikipedia.org/wiki/网络地址转换)或[防火牆](https://zh.wikipedia.org/wiki/防火牆)。
 >
