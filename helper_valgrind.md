@@ -69,7 +69,9 @@ valgrind-3.15.0
 
 > a leak error has been suppressed. There are some suppressions in the default suppression files. You can ignore suppressed errors.
 
-# 3. Exmaples
+# 3. How to Check
+
+## 3.1. Exmaples
 
 #### A. [demo_valgrind.c](https://github.com/lankahsu520/utilx9/blob/main/demo_valgrind.c)
 
@@ -218,6 +220,26 @@ static void app_loop(void)
 	SAFE_UV_LOOP_CLOSE_VALGRIND(uv_loop);
 	...
 }
+```
+
+## 3.2. Problems Collection
+
+### 3.2.1. \*** stack smashing detected ***: terminated
+
+```bash
+$ valgrind --tool=exp-sgcheck ./uv_000
+```
+
+### 3.2.2. Glib memory leak
+
+```bash
+$ G_SLICE=all G_DEBUG=gc-friendly \
+ valgrind \
+ --tool=memcheck \
+ --show-reachable=yes \
+ --show-leak-kinds=definite \
+ --suppressions=/usr/share/glib-2.0/valgrind/glib.supp \
+ ./uv_000
 ```
 
 # Appendix
