@@ -1537,6 +1537,12 @@ sudo apt update
 sudo apt install software-properties-common
 ```
 
+## II.2. Caps changes are not supported by Matroska
+
+> matroskamux 不支援變動的 Caps，例如 width 和 height 有變更。
+>
+> 建議可改用 mp4mux。
+
 # III. Glossary
 
 # IV. Tool Usage
