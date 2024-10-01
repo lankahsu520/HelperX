@@ -436,6 +436,8 @@ gst-launch-1.0 -e -v multifilesrc \
 >
 > [h264SampleFrames](https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c/tree/master/samples/h264SampleFrames)
 
+> Caps changes are not supported by Matroska
+
 ```bash
 gst-launch-1.0 -e -v \
  multifilesrc \
@@ -446,10 +448,51 @@ gst-launch-1.0 -e -v \
  ! x264enc \
  ! queue \
  ! matroskamux name=mux \
- ! filesink location=./lanka520.mkv \
+ ! filesink location=./lanka520-h264andopus.mkv \
  multifilesrc \
  location="./opusSampleFrames/sample-%03d.opus" start-index=1 \
  ! opusparse \
+ ! queue \
+ ! mux.
+```
+
+#### D. multifilesrc (h264 + ogg) -> filesink (mp4)
+
+```bash
+gst-launch-1.0 -e -v \
+ multifilesrc \
+ location="./h264SampleFrames/frame-%04d.h264" index=1 stop-index=1500 \
+ ! h264parse \
+ ! avdec_h264 \
+ ! video/x-raw,width=1280,height=720,framerate=25/1 \
+ ! x264enc \
+ ! queue \
+ ! mp4mux name=mux \
+ ! filesink location=./lanka520-h264andogg.mp4 \
+ multifilesrc \
+ location="./opusSampleFrames/sample-%03d.ogg" start-index=1 \
+ ! oggdemux \
+ ! opusparse \
+ ! queue \
+ ! mux.
+```
+
+#### E. multifilesrc (h264 + mp3) -> filesink (mp4)
+
+```bash
+gst-launch-1.0 -e -v \
+ multifilesrc \
+ location="./h264SampleFrames/frame-%04d.h264" index=1 stop-index=1500 \
+ ! h264parse \
+ ! avdec_h264 \
+ ! video/x-raw,width=1280,height=720,framerate=25/1 \
+ ! x264enc \
+ ! queue \
+ ! mp4mux name=mux \
+ ! filesink location=./lanka520-h264andmp3.mp4 \
+ filesrc \
+ location="/work/BeethovenFurElise.mp3" \
+ ! mpegaudioparse \
  ! queue \
  ! mux.
 ```
