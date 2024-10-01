@@ -752,6 +752,29 @@ gst-launch-1.0 v4l2src device=/dev/video0 \
 ```
 # 9. alsasrc/autoaudiosrc
 
+## 9.0. arecord
+
+```bash
+# check audiosrc
+$ arecord -l
+**** List of CAPTURE Hardware Devices ****
+card 0: I82801AAICH [Intel 82801AA-ICH], device 0: Intel ICH [Intel 82801AA-ICH]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+card 0: I82801AAICH [Intel 82801AA-ICH], device 1: Intel ICH - MIC ADC [Intel 82801AA-ICH - MIC ADC]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+card 1: w300 [w300], device 0: USB Audio [USB Audio]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+
+$ aplay -l
+**** List of PLAYBACK Hardware Devices ****
+card 0: I82801AAICH [Intel 82801AA-ICH], device 0: Intel ICH [Intel 82801AA-ICH]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+```
+
 ## 9.1. alsasrc -> |vorbisenc,oggmux| filesink
 
 ```mermaid
@@ -784,6 +807,14 @@ flowchart LR
 ```bash
 gst-launch-1.0 alsasrc \
  ! queue \
+ ! audioconvert \
+ ! audioresample \
+ ! autoaudiosink
+```
+
+```bash
+gst-launch-1.0 alsasrc \
+ device="hw:0,0" \
  ! audioconvert \
  ! audioresample \
  ! autoaudiosink
