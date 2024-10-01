@@ -200,8 +200,58 @@ Plugin Details:
 > lanka520-h264andmp3.mp4
 
 ```bash
-$ cd amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1
-$ ./build_xxx/kvs_gstreamer_file_uploader_sample HelloLankaKVS /work/lanka520-h264andmp3.mp4 0
+$ cd amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build_xxx
+$ ./kvs_gstreamer_file_uploader_sample HelloLankaKVS /work/lanka520-h264andmp3.mp4 0
+```
+
+#### B. kvs_gstreamer_audio_video_sample
+
+##### B.1. audiosrc
+
+```bash
+# check audiosrc
+$ arecord -l
+**** List of CAPTURE Hardware Devices ****
+card 0: I82801AAICH [Intel 82801AA-ICH], device 0: Intel ICH [Intel 82801AA-ICH]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+card 0: I82801AAICH [Intel 82801AA-ICH], device 1: Intel ICH - MIC ADC [Intel 82801AA-ICH - MIC ADC]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+card 1: w300 [w300], device 0: USB Audio [USB Audio]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+
+$ aplay -l
+**** List of PLAYBACK Hardware Devices ****
+card 0: I82801AAICH [Intel 82801AA-ICH], device 0: Intel ICH [Intel 82801AA-ICH]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+```
+
+```bash
+$ export AWS_KVS_AUDIO_DEVICE=hw:0,0
+```
+
+##### B.2. videosrc
+
+```bash
+$ sudo apt-get --yes install v4l-utils
+$ v4l2-ctl --list-devices
+w300: w300 (usb-0000:00:0b.0-1):
+        /dev/video0
+        /dev/video1
+```
+
+```bash
+export AWS_KVS_VIDEO_DEVICE=/dev/video0
+```
+
+##### B.3. run
+
+```bash
+$ cd amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build_xxx
+$ ./kvs_gstreamer_audio_video_sample HelloLankaKVS
 ```
 
 ## 2.3. Watch Viewer
