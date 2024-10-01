@@ -26,6 +26,8 @@
 
 >Amazon Kinesis Video Streams 中提供 **Video stream** 和 **Signaling channel** 兩種。
 
+>兩邊最大的不同在於**Signaling channel** (WebRTC) 是提供雙向串流。
+
 # 2. Video stream
 
 ## 2.1. Repository
@@ -33,6 +35,186 @@
 ### 2.1.1. [amazon-kinesis-video-streams-producer-sdk-cpp](https://github.com/awslabs/amazon-kinesis-video-streams-producer-sdk-cpp)
 
 > Amazon Kinesis Video Streams Producer SDK for C++ is for developers to install and customize for their connected camera and other devices to securely stream video, audio, and time-encoded data to Kinesis Video Streams.
+
+## 2.2. Build and Run
+
+>[Release 3.4.1 of the Amazon Kinesis Video C++ Producer SDK](https://github.com/awslabs/amazon-kinesis-video-streams-producer-sdk-cpp/releases/tag/v3.4.1)
+>
+>[Source code(tar.gz)](https://github.com/awslabs/amazon-kinesis-video-streams-producer-sdk-cpp/archive/refs/tags/v3.4.1.tar.gz)
+
+### 2.2.1. Build
+
+```bash
+# please download amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1.tar.gz
+$ rm -rf amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1.tar.gz
+$ tar -zxvf amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1.tar.gz
+
+$ cd amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1
+$ tree -L 1 ./
+./
+├── certs
+├── CMake
+├── CMakeLists.txt
+├── docs
+├── kvs_log_configuration
+├── LICENSE
+├── NOTICE
+├── README.md
+├── samples
+├── src
+└── tst
+
+6 directories, 5 files
+```
+
+```bash
+$ cd amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1
+
+$ (rm -rf build_xxx; mkdir -p build_xxx)
+
+# To Include Building GStreamer Sample Programs
+$ (cd build_xxx; cmake -DBUILD_GSTREAMER_PLUGIN=TRUE ..)
+```
+
+```bash
+# 於 open-source 可以看到已經編譯了很多相關 libraries；
+# 開發 Embedded Linux 的同仁，請查看裏面有無重複 libraries。
+$ tree -L 3 open-source/
+open-source/
+└── local
+    ├── bin
+    │   ├── aclocal
+    │   ├── aclocal-1.16
+    │   ├── autoconf
+    │   ├── autoheader
+    │   ├── autom4te
+    │   ├── automake
+    │   ├── automake-1.16
+    │   ├── autoreconf
+    │   ├── autoscan
+    │   ├── autoupdate
+    │   ├── c_rehash
+    │   ├── curl-config
+    │   ├── ifnames
+    │   └── openssl
+    ├── include
+    │   ├── curl
+    │   ├── log4cplus
+    │   └── openssl
+    ├── lib
+    │   ├── cmake
+    │   ├── engines-1.1
+    │   ├── libcrypto.a
+    │   ├── libcrypto.so -> libcrypto.so.1.1
+    │   ├── libcrypto.so.1.1
+    │   ├── libcurl.so
+    │   ├── liblog4cplus-2.0.so.3 -> liblog4cplus-2.0.so.3.2.2
+    │   ├── liblog4cplus-2.0.so.3.2.2
+    │   ├── liblog4cplus.la
+    │   ├── liblog4cplus.so -> liblog4cplus-2.0.so.3.2.2
+    │   ├── liblog4cplusU-2.0.so.3 -> liblog4cplusU-2.0.so.3.2.2
+    │   ├── liblog4cplusU-2.0.so.3.2.2
+    │   ├── liblog4cplusU.la
+    │   ├── liblog4cplusU.so -> liblog4cplusU-2.0.so.3.2.2
+    │   ├── libssl.a
+    │   ├── libssl.so -> libssl.so.1.1
+    │   ├── libssl.so.1.1
+    │   └── pkgconfig
+    └── share
+        ├── aclocal
+        ├── aclocal-1.16
+        ├── autoconf
+        ├── automake-1.16
+        ├── doc
+        ├── info
+        └── man
+
+18 directories, 29 files
+```
+
+```bash
+$ (cd build_xxx;make)
+# or
+$ (cd build_xxx;make VERBOSE=1)
+```
+
+```bash
+$ (cd build_xxx; tree -L 1 ./)
+./
+├── CMakeCache.txt
+├── CMakeFiles
+├── cmake_install.cmake
+├── dependency
+├── kvs_gstreamer_audio_video_sample
+├── kvs_gstreamer_file_uploader_sample
+├── kvs_gstreamer_multistream_sample
+├── kvs_gstreamer_sample
+├── kvssink_gstreamer_sample
+├── libgstkvssink.so
+├── libKinesisVideoProducer.so
+└── Makefile
+
+2 directories, 10 files
+```
+
+### 2.2.2. Run
+
+> Channel - HelloLankaKVS
+
+```bash
+export AWS_DEFAULT_REGION=ap-northeast-1
+export AWS_KVS_LOG_LEVEL=1
+export DEBUG_LOG_SDP=TRUE
+
+export AWS_ACCESS_KEY_ID=AKI00000000000000000
+export AWS_SECRET_ACCESS_KEY=KEY0000000000000000000000000/00000000000
+```
+
+```bash
+export GST_PLUGIN_PATH=`pwd`/build_xxx
+export LD_LIBRARY_PATH=`pwd`/open-source/local/lib
+
+# to check gstreamer plugin
+$ gst-inspect-1.0 kvssink
+Factory Details:
+  Rank                     primary + 10 (266)
+  Long-name                KVS Sink
+  Klass                    Sink/Video/Network
+  Description              GStreamer AWS KVS plugin
+  Author                   AWS KVS <kinesis-video-support@amazon.com>
+
+Plugin Details:
+  Name                     kvssink
+  Description              GStreamer AWS KVS plugin
+  Filename                 /work/codebase/xbox/amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build_xxx/libgstkvssink.so
+  Version                  1.0
+  License                  Proprietary
+  Source module            kvssinkpackage
+  Binary package           GStreamer
+  Origin URL               http://gstreamer.net/
+...
+```
+
+#### A. kvs_gstreamer_file_uploader_sample
+
+> lanka520-h264andmp3.mp4
+
+```bash
+$ cd amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1
+$ ./build_xxx/kvs_gstreamer_file_uploader_sample HelloLankaKVS /work/lanka520-h264andmp3.mp4 0
+```
+
+## 2.3. Watch Viewer
+
+### 2.3.1. [Kinesis Video Streams](https://ap-northeast-1.console.aws.amazon.com/)
+
+#### A. Search Stream name
+
+![amazon_kvsv01](./images/amazon_kvsv01.png)
+
+#### B. Media playback
+
+![amazon_kvsv02](./images/amazon_kvsv02.png)
 
 # 3. **Signaling channel** (WebRTC)
 
@@ -140,7 +322,7 @@ $ (cd build_xxx; cmake ..)
 # 開發 Embedded Linux 的同仁，請查看裏面有無重複 libraries。
 # libkvsCommon* from Amazon Kinesis Video Streams Producer SDK for C++
 # libkvspic* from Amazon Kinesis Video Streams PIC
-$ tree -L 2 open-source/
+$ (tree -L 2 open-source/)
 open-source/
 ├── bin
 │   ├── c_rehash
@@ -223,7 +405,7 @@ $ (cd build_xxx;make VERBOSE=1)
 ```
 
 ```bash
-$ tree -L 1 ./
+$ (cd build_xxx; tree -L 1 ./)
 .
 ├── CMakeCache.txt
 ├── CMakeFiles
@@ -239,7 +421,7 @@ $ tree -L 1 ./
 
 5 directories, 6 files
 
-$ tree -L 1 ./samples/
+$ (cd build_xxx; tree -L 1 ./samples/)
 ./samples/
 ├── CMakeFiles
 ├── cmake_install.cmake
@@ -271,9 +453,9 @@ export AWS_SECRET_ACCESS_KEY=KEY0000000000000000000000000/00000000000
 ./samples/kvsWebrtcClientMasterGstSample HelloLankaKVS
 ```
 
-## 3.4. Watch Viewer
+## 3.3. Watch Viewer
 
-### 3.4.1. [KVS WebRTC Test Page](https://awslabs.github.io/amazon-kinesis-video-streams-webrtc-sdk-js/examples/index.html)
+### 3.3.1. [KVS WebRTC Test Page](https://awslabs.github.io/amazon-kinesis-video-streams-webrtc-sdk-js/examples/index.html)
 
 #### A. Input
 
@@ -283,13 +465,13 @@ export AWS_SECRET_ACCESS_KEY=KEY0000000000000000000000000/00000000000
 
 ![amazon_kvs03](./images/amazon_kvs03.png)
 
-### 3.4.2. [Kinesis Video Streams](https://ap-northeast-1.console.aws.amazon.com/)
+### 3.3.2. [Kinesis Video Streams](https://ap-northeast-1.console.aws.amazon.com/)
 
-#### A. Search Channel
+#### A. Search Signaling Channel Name
 
 ![amazon_kvs04](./images/amazon_kvs04.png)
 
-#### B. Select Channel
+#### B. Select Signaling Channel Name
 
 ![amazon_kvs05](./images/amazon_kvs05.png)
 
@@ -297,13 +479,13 @@ export AWS_SECRET_ACCESS_KEY=KEY0000000000000000000000000/00000000000
 
 ![amazon_kvs06](./images/amazon_kvs06.png)
 
-## 3.5. Others
+## 3.4. Others
 
-### 3.5.1. [alexa-sh-camera-webrtc](https://github.com/nachawat/alexa-sh-camera-webrtc)
+### 3.4.1. [alexa-sh-camera-webrtc](https://github.com/nachawat/alexa-sh-camera-webrtc)
 
 > Sample Alexa skill to demonstrate WebRTC Integration with AWS KVS for Camera Streaming
 
-### 3.5.2. [kvs_webrtc_example](https://github.com/mganeko/kvs_webrtc_example)
+### 3.4.2. [kvs_webrtc_example](https://github.com/mganeko/kvs_webrtc_example)
 
 > example of Amazon Kinesis Video Streams WebRTC
 
