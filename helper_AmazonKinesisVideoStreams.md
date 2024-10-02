@@ -27,6 +27,29 @@
 >Amazon Kinesis Video Streams 中提供 **Video stream** 和 **Signaling channel** 兩種。
 
 >兩邊最大的不同在於**Signaling channel** (WebRTC) 是提供雙向串流。
+>
+>網路上很多教學都是以 **Video stream** 為主。所以大家要小心取用。
+
+```mermaid
+flowchart LR
+
+classDef Aqua    fill:#00FFFF
+classDef lightblue fill:#ADD8E6
+classDef Lime    fill:#00FF00
+classDef Tomato  fill:#FF6347
+
+subgraph aws[aws cloud]
+	subgraph kvsServer["KVS (Kinesis Video Streams)"]
+		subgraph Video[Video streams]
+            v1[HelloLankaKVS]
+        end
+		subgraph Signaling[Signaling channels]
+			s1[HelloLankaKVS]
+		end
+	end
+end
+class aws Aqua
+```
 
 # 2. Video stream
 
@@ -36,13 +59,11 @@
 
 > Amazon Kinesis Video Streams Producer SDK for C++ is for developers to install and customize for their connected camera and other devices to securely stream video, audio, and time-encoded data to Kinesis Video Streams.
 
-## 2.2. Build and Run
+## 2.2. Build
 
 >[Release 3.4.1 of the Amazon Kinesis Video C++ Producer SDK](https://github.com/awslabs/amazon-kinesis-video-streams-producer-sdk-cpp/releases/tag/v3.4.1)
 >
 >[Source code(tar.gz)](https://github.com/awslabs/amazon-kinesis-video-streams-producer-sdk-cpp/archive/refs/tags/v3.4.1.tar.gz)
-
-### 2.2.1. Build
 
 ```bash
 # please download amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1.tar.gz
@@ -157,7 +178,7 @@ $ (cd build_xxx; tree -L 1 ./)
 2 directories, 10 files
 ```
 
-### 2.2.2. Run
+## 2.3. Samples
 
 > Channel - HelloLankaKVS
 
@@ -195,18 +216,37 @@ Plugin Details:
 ...
 ```
 
-#### A. kvs_gstreamer_file_uploader_sample
+### 2.3.1. kvs_gstreamer_file_uploader_sample
 
 > lanka520-h264andmp3.mp4
+>
+> video: h264
+>
+> audio: mp3
+
+>kvs_gstreamer_file_uploader_sample 上傳格式式
+>
+>video: h264
+>
+>audio: aac
 
 ```bash
 $ cd amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build_xxx
+
+# video-only
+$ ./kvs_gstreamer_file_uploader_sample HelloLankaKVS /work/lanka520-h264andmp3.mp4 0
+
+# audio-video
+# please update kvs_gstreamer_file_uploader_sample.cpp
+#   "demuxer. ! queue ! aacparse ! audio/mpeg,stream-format=raw ! sink.",
+#   換成
+#   "demuxer. ! queue ! mpegaudioparse ! mpg123audiodec ! audioconvert ! voaacenc ! audio/mpeg,stream-format=raw ! sink.",
 $ ./kvs_gstreamer_file_uploader_sample HelloLankaKVS /work/lanka520-h264andmp3.mp4 0
 ```
 
-#### B. kvs_gstreamer_audio_video_sample
+### 2.3.2. kvs_gstreamer_audio_video_sample
 
-##### B.1. audiosrc
+#### A. audiosrc
 
 ```bash
 # check audiosrc
@@ -229,11 +269,7 @@ card 0: I82801AAICH [Intel 82801AA-ICH], device 0: Intel ICH [Intel 82801AA-ICH]
   Subdevice #0: subdevice #0
 ```
 
-```bash
-$ export AWS_KVS_AUDIO_DEVICE=hw:0,0
-```
-
-##### B.2. videosrc
+#### B. videosrc
 
 ```bash
 $ sudo apt-get --yes install v4l-utils
@@ -243,20 +279,18 @@ w300: w300 (usb-0000:00:0b.0-1):
         /dev/video1
 ```
 
-```bash
-export AWS_KVS_VIDEO_DEVICE=/dev/video0
-```
-
-##### B.3. run
+#### C. run
 
 ```bash
+$ export AWS_KVS_AUDIO_DEVICE=hw:0,0
+$ export AWS_KVS_VIDEO_DEVICE=/dev/video0
 $ cd amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build_xxx
 $ ./kvs_gstreamer_audio_video_sample HelloLankaKVS
 ```
 
-## 2.3. Watch Viewer
+## 2.4. Watch Viewer
 
-### 2.3.1. [Kinesis Video Streams](https://ap-northeast-1.console.aws.amazon.com/)
+### 2.4.1. [Kinesis Video Streams](https://ap-northeast-1.console.aws.amazon.com/)
 
 #### A. Search Stream name
 
@@ -319,13 +353,11 @@ graph LR
 	KVS-WebRTC2 <--> |if STUN is fail|TURN
 ```
 
-## 3.2. Build and Run
+## 3.2. Build
 
 >[Release 1.10.2 of the Amazon Kinesis Video WebRTC C SDK](https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c/releases/tag/v1.10.2)
 >
 >[Source code(tar.gz)](https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c/archive/refs/tags/v1.10.2.tar.gz)
-
-### 3.2.1. Build
 
 ```bash
 # please download amazon-kinesis-video-streams-webrtc-sdk-c-1.10.2.tar.gz
@@ -488,7 +520,9 @@ $ (cd build_xxx; tree -L 1 ./samples/)
 4 directories, 7 files
 ```
 
-### 3.2.2. Run
+### 3.3. Samples
+
+3.3.1. kvsWebrtcClientMasterGstSample
 
 > Channel - HelloLankaKVS
 
@@ -503,9 +537,9 @@ export AWS_SECRET_ACCESS_KEY=KEY0000000000000000000000000/00000000000
 ./samples/kvsWebrtcClientMasterGstSample HelloLankaKVS
 ```
 
-## 3.3. Watch Viewer
+## 3.4. Watch Viewer
 
-### 3.3.1. [KVS WebRTC Test Page](https://awslabs.github.io/amazon-kinesis-video-streams-webrtc-sdk-js/examples/index.html)
+### 3.4.1. [KVS WebRTC Test Page](https://awslabs.github.io/amazon-kinesis-video-streams-webrtc-sdk-js/examples/index.html)
 
 #### A. Input
 
@@ -515,7 +549,7 @@ export AWS_SECRET_ACCESS_KEY=KEY0000000000000000000000000/00000000000
 
 ![amazon_kvs03](./images/amazon_kvs03.png)
 
-### 3.3.2. [Kinesis Video Streams](https://ap-northeast-1.console.aws.amazon.com/)
+### 3.4.2. [Kinesis Video Streams](https://ap-northeast-1.console.aws.amazon.com/)
 
 #### A. Search Signaling Channel Name
 
@@ -529,13 +563,13 @@ export AWS_SECRET_ACCESS_KEY=KEY0000000000000000000000000/00000000000
 
 ![amazon_kvs06](./images/amazon_kvs06.png)
 
-## 3.4. Others
+## 3.5. Others
 
-### 3.4.1. [alexa-sh-camera-webrtc](https://github.com/nachawat/alexa-sh-camera-webrtc)
+### 3.5.1. [alexa-sh-camera-webrtc](https://github.com/nachawat/alexa-sh-camera-webrtc)
 
 > Sample Alexa skill to demonstrate WebRTC Integration with AWS KVS for Camera Streaming
 
-### 3.4.2. [kvs_webrtc_example](https://github.com/mganeko/kvs_webrtc_example)
+### 3.5.2. [kvs_webrtc_example](https://github.com/mganeko/kvs_webrtc_example)
 
 > example of Amazon Kinesis Video Streams WebRTC
 
