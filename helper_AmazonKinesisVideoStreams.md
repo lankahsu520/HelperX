@@ -218,33 +218,95 @@ Plugin Details:
 
 ### 2.3.1. kvs_gstreamer_file_uploader_sample
 
-> lanka520-h264andmp3.mp4
->
-> video: h264
->
-> audio: mp3
-
->kvs_gstreamer_file_uploader_sample 上傳格式式
+>kvs_gstreamer_file_uploader_sample 上傳格式
 >
 >video: h264
 >
 >audio: aac
+
+#### A. lanka520-h264andmp3.mp4
+
+>lanka520-h264andmp3.mp4
+>
+>video: h264
+>
+>audio: mp3
+
+```mermaid
+flowchart LR
+	subgraph lanka520-h264andmp3.mp4
+		video[vide: h264]
+		audio[audio: mp3]
+	end
+
+	video --> |h264|kvssink
+	audio --> |aac|kvssink
+```
+
+##### A.1. video-only
 
 ```bash
 $ cd amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build_xxx
 
 # video-only
 $ ./kvs_gstreamer_file_uploader_sample HelloLankaKVS /work/lanka520-h264andmp3.mp4 0
+```
 
+##### A.2. audio-video
+
+```bash
 # audio-video
+# video: h264 (file)
+# audio: mp3 (file) -> aac
 # please update kvs_gstreamer_file_uploader_sample.cpp
 #   "demuxer. ! queue ! aacparse ! audio/mpeg,stream-format=raw ! sink.",
 #   換成
 #   "demuxer. ! queue ! mpegaudioparse ! mpg123audiodec ! audioconvert ! voaacenc ! audio/mpeg,stream-format=raw ! sink.",
-$ ./kvs_gstreamer_file_uploader_sample HelloLankaKVS /work/lanka520-h264andmp3.mp4 0
+$ ./kvs_gstreamer_file_uploader_sample HelloLankaKVS /work/lanka520-h264andmp3.mp4 0 audio-video
+```
+
+#### B. lanka520-h264andmp3.mp4 (alsasrc)
+
+> lanka520-h264andmp3.mp4
+>
+> video: h264
+>
+> audio: mp3 (這邊用 alsasrc 取代)
+
+```mermaid
+flowchart LR
+	subgraph lanka520-h264andmp3.mp4
+		video[vide: h264]
+		audio[audio: alsasrc]
+	end
+
+	video --> |h264|kvssink
+	audio --> |aac|kvssink
+```
+##### B.1. audio-video
+
+```bash
+# audio-video
+# video: h264(file)
+# audio: alsasrc -> aac
+# please update kvs_gstreamer_file_uploader_sample.cpp
+#   換成
+#   "alsasrc device=\"hw:0,0\" ! audioconvert ! voaacenc ! audio/mpeg,stream-format=raw ! sink.",
+$ ./kvs_gstreamer_file_uploader_sample HelloLankaKVS /work/lanka520-h264andmp3.mp4 0 audio-video
 ```
 
 ### 2.3.2. kvs_gstreamer_audio_video_sample
+
+```mermaid
+flowchart LR
+	subgraph ubuntu
+		video[vide: videosrc]
+		audio[audio: audiosrc]
+	end
+
+	video --> |h264|kvssink
+	audio --> |aac|kvssink
+```
 
 #### A. audiosrc
 
@@ -277,15 +339,77 @@ $ v4l2-ctl --list-devices
 w300: w300 (usb-0000:00:0b.0-1):
         /dev/video0
         /dev/video1
+$ gst-device-monitor-1.0
 ```
 
 #### C. run
 
 ```bash
-$ export AWS_KVS_AUDIO_DEVICE=hw:0,0
-$ export AWS_KVS_VIDEO_DEVICE=/dev/video0
-$ cd amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build_xxx
-$ ./kvs_gstreamer_audio_video_sample HelloLankaKVS
+export AWS_KVS_AUDIO_DEVICE=hw:0,0
+export AWS_KVS_VIDEO_DEVICE=/dev/video0
+
+cd /work/codebase/xbox/amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build_xxx
+./kvs_gstreamer_audio_video_sample HelloLankaKVS
+```
+
+### 2.3.3. kvssink
+
+```bash
+cd /work/codebase/xbox/amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1
+export GST_PLUGIN_PATH=`pwd`/build_xxx
+export LD_LIBRARY_PATH=`pwd`/open-source/local/lib
+
+cd /work/codebase/xbox/amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build_xxx
+cd amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1
+```
+
+#### A. v4l2src
+
+```bash
+cd amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build_xxx
+
+gst-launch-1.0 -v \
+ v4l2src device=/dev/video0 \
+ ! queue \
+ ! videoconvert \
+ ! video/x-raw,width=640,height=480,framerate=30/1,format=I420 \
+ ! clockoverlay time-format=\"%D %H:%M:%S\" \
+ ! x264enc bitrate=500 \
+ ! h264parse \
+ ! video/x-h264,stream-format=avc,alignment=au \
+ ! kvssink stream-name=\"HelloLankaKVS\" storage-size=512 name=sink
+```
+
+#### B. v4l2src + alsasrc
+
+```bash
+cd amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build_xxx
+
+gst-launch-1.0 -v \
+ v4l2src device=/dev/video0 \
+ ! queue \
+ ! videoconvert \
+ ! video/x-raw,width=640,height=480,framerate=30/1,format=I420 \
+ ! queue \
+ ! x264enc bitrate=500 \
+ ! h264parse \
+ ! video/x-h264,stream-format=avc,alignment=au \
+ ! kvssink stream-name=\"HelloLankaKVS\" storage-size=128 frame-timecodes=false name=sink \
+ alsasrc device=\"hw:0,0\" \
+ ! queue \
+ ! audioconvert \
+ ! voaacenc \
+ ! queue \
+ ! aacparse \
+ ! audio/mpeg,stream-format=raw \
+ ! queue \
+ ! sink.
+```
+
+#### C. rtspsrc
+
+```bash
+
 ```
 
 ## 2.4. Watch Viewer
