@@ -192,6 +192,8 @@ export AWS_SECRET_ACCESS_KEY=KEY0000000000000000000000000/00000000000
 ```
 
 ```bash
+cd /work/codebase/xbox/amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1
+
 export GST_PLUGIN_PATH=`pwd`/build_xxx
 export LD_LIBRARY_PATH=`pwd`/open-source/local/lib
 
@@ -246,22 +248,26 @@ flowchart LR
 ##### A.1. video-only
 
 ```bash
-$ cd amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build_xxx
-
-# video-only
+$ cd /work/codebase/xbox/amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build_xxx
 $ ./kvs_gstreamer_file_uploader_sample HelloLankaKVS /work/lanka520-h264andmp3.mp4 0
 ```
 
 ##### A.2. audio-video
 
+> video: h264 (file)
+>
+> audio: mp3 (file) -> aac
+>
+> please update kvs_gstreamer_file_uploader_sample.cpp
+>
+> ​	"demuxer. ! queue ! aacparse ! audio/mpeg,stream-format=raw ! sink.",
+>
+> 換成
+>
+> ​	"demuxer. ! queue ! mpegaudioparse ! mpg123audiodec ! audioconvert ! voaacenc ! audio/mpeg,stream-format=raw ! sink.",
+
 ```bash
-# audio-video
-# video: h264 (file)
-# audio: mp3 (file) -> aac
-# please update kvs_gstreamer_file_uploader_sample.cpp
-#   "demuxer. ! queue ! aacparse ! audio/mpeg,stream-format=raw ! sink.",
-#   換成
-#   "demuxer. ! queue ! mpegaudioparse ! mpg123audiodec ! audioconvert ! voaacenc ! audio/mpeg,stream-format=raw ! sink.",
+$ cd /work/codebase/xbox/amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build_xxx
 $ ./kvs_gstreamer_file_uploader_sample HelloLankaKVS /work/lanka520-h264andmp3.mp4 0 audio-video
 ```
 
@@ -285,13 +291,20 @@ flowchart LR
 ```
 ##### B.1. audio-video
 
+> video: h264 (file)
+>
+> audio: alsasrc -> aac
+>
+> please update kvs_gstreamer_file_uploader_sample.cpp
+>
+> ​	"demuxer. ! queue ! aacparse ! audio/mpeg,stream-format=raw ! sink.",
+>
+> 換成
+>
+> ​	"alsasrc device=\"hw:0,0\" ! audioconvert ! voaacenc ! audio/mpeg,stream-format=raw ! sink.",
+
 ```bash
-# audio-video
-# video: h264(file)
-# audio: alsasrc -> aac
-# please update kvs_gstreamer_file_uploader_sample.cpp
-#   換成
-#   "alsasrc device=\"hw:0,0\" ! audioconvert ! voaacenc ! audio/mpeg,stream-format=raw ! sink.",
+$ cd /work/codebase/xbox/amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build_xxx
 $ ./kvs_gstreamer_file_uploader_sample HelloLankaKVS /work/lanka520-h264andmp3.mp4 0 audio-video
 ```
 
@@ -358,16 +371,11 @@ cd /work/codebase/xbox/amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build
 cd /work/codebase/xbox/amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1
 export GST_PLUGIN_PATH=`pwd`/build_xxx
 export LD_LIBRARY_PATH=`pwd`/open-source/local/lib
-
-cd /work/codebase/xbox/amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build_xxx
-cd amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1
 ```
 
 #### A. v4l2src
 
 ```bash
-cd amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build_xxx
-
 gst-launch-1.0 -v \
  v4l2src device=/dev/video0 \
  ! queue \
@@ -383,8 +391,6 @@ gst-launch-1.0 -v \
 #### B. v4l2src + alsasrc
 
 ```bash
-cd amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build_xxx
-
 gst-launch-1.0 -v \
  v4l2src device=/dev/video0 \
  ! queue \
