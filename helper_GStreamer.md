@@ -837,7 +837,7 @@ $ gst-launch-1.0 autoaudiosrc \
  ! autoaudiosink
 ```
 
-# 10. rtspsrc 
+# 10. rtspsrc
 
 ## 10.1. rtspsrc -> autovideosink
 
@@ -849,29 +849,37 @@ flowchart LR
 	rtspsrc --> autovideosink
 ```
 
-```bash
-gst-launch-1.0 rtspsrc \
- location=rtsp://192.168.50.21:554 user-id=admin user-pw=admin protocols=4 \
- ! rtph264depay \
- ! h264parse \
- ! avdec_h264 ! autovideosink
-```
+#### A. avdec_h264
 
 ```bash
-gst-launch-1.0 rtspsrc \
+gst-launch-1.0 -v rtspsrc \
  location=rtsp://192.168.50.21:554 user-id=admin user-pw=admin protocols=4 \
  ! rtph264depay \
- ! h264parse \
- ! decodebin \
- ! videoconvert ! autovideosink
+ ! avdec_h264 \
+ ! autovideosink
 ```
 
+#### B. decodebin
+
 ```bash
-gst-launch-1.0  rtspsrc \
+gst-launch-1.0 -v rtspsrc \
  location=rtsp://192.168.50.21:554 user-id=admin user-pw=admin protocols=4 \
- ! rtph264depay \
  ! decodebin \
- ! videoconvert ! autovideosink
+ ! autovideosink
+```
+
+#### C. decodebin -> x264enc -> decodebin
+
+> 這邊可以用在，將 h265 轉成 h264
+
+```bash
+gst-launch-1.0 -v rtspsrc \
+ location=rtsp://192.168.50.21:554 user-id=admin user-pw=admin protocols=4 \
+ ! decodebin \
+ ! x264enc \
+ ! 'video/x-h264,stream-format=byte-stream,level=(string)4,profile=baseline' \
+ ! decodebin \
+ ! autovideosink
 ```
 
 ## 10.2. rtspsrc -> autovideosink and autoaudiosink
@@ -886,11 +894,29 @@ flowchart LR
 	rtspsrc --> autoaudiosink
 ```
 
+> The file BigBuckBunny_115k.mp4 is corrupted.
+>
+> [RTSP.Stream](https://rtsp.stream)
+>
+> Please visit **RTSP.Stream** to request a test video.
+
 ```bash
+#export RTSP_SRC="rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4"
+export RTSP_SRC="rtsp://rtspstream:49d94336abfe907ef96dc4a26c651461@zephyr.rtsp.stream/movie"
+
 gst-launch-1.0 rtspsrc \
- location="rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4" protocols=tcp name=src \
+ location=${RTSP_SRC} protocols=tcp name=src \
  src. ! queue ! decodebin ! videoconvert ! autovideosink \
  src. ! queue ! decodebin ! audioconvert ! audioresample ! autoaudiosink
+```
+
+```bash
+export RTSP_SRC="rtsp://rtspstream:1c4480aa4712534d983c30fd483dda08@zephyr.rtsp.stream/pattern"
+
+gst-launch-1.0 -v rtspsrc \
+ location=${RTSP_SRC} \
+ ! decodebin \
+ ! autovideosink
 ```
 
 ## 10.3. rtspsrc -> udpsink (Multicast) ⇢ udpsrc -> autovideosink
@@ -923,7 +949,9 @@ gst-launch-1.0 -v udpsrc \
  multicast-group=224.0.0.1 port=50000 auto-multicast=true \
  caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H264, payload=(int)96' \
  ! rtph264depay \
- ! decodebin ! videoconvert ! autovideosink
+ ! decodebin \
+ ! videoconvert \
+ ! autovideosink
 ```
 
 ## 10.4. rtspsrc -> udpsink  ⇢ udpsrc -> autovideosink
@@ -957,7 +985,10 @@ export VIDEO_PORT="50000"
 gst-launch-1.0 -v rtspsrc \
  location=rtsp://192.168.50.21:554 user-id=admin user-pw=admin protocols=4 name=src \
  src. \
- ! decodebin ! autovideoconvert ! x264enc tune=zerolatency ! rtph264pay \
+ ! decodebin \
+ ! autovideoconvert \
+ ! x264enc tune=zerolatency \
+ ! rtph264pay \
  ! udpsink host=127.0.0.1 port=$VIDEO_PORT
 ```
 
@@ -971,7 +1002,8 @@ gst-launch-1.0 -v udpsrc \
  caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H264, payload=(int)96' \
  ! rtph264depay \
  ! decodebin \
- ! videoconvert ! autovideosink
+ ! videoconvert \
+ ! autovideosink
 ```
 
 ## 10.5. rtspsrc -> kvssink
@@ -985,13 +1017,42 @@ flowchart LR
 ```
 
 ```bash
-gst-launch-1.0  rtspsrc location=rtsp://192.168.50.21:554 user-id=admin user-pw=admin protocols=4 \
+export AWS_DEFAULT_REGION=ap-northeast-1
+export AWS_ACCESS_KEY_ID=AKI00000000000000000
+export AWS_SECRET_ACCESS_KEY=KEY0000000000000000000000000/00000000000
+```
+
+#### A. video-only
+
+```bash
+RTSP_SRC="rtsp://rtspstream:49d94336abfe907ef96dc4a26c651461@zephyr.rtsp.stream/movie"
+
+gst-launch-1.0 rtspsrc \
+ location=${RTSP_SRC} protocols=tcp \
  ! rtph264depay \
  ! h264parse \
- ! kvssink stream-name="HelloLanka" storage-size=512 \
- access-key="AKI12345678901234567" \
- secret-key="1234567890123456789012345678901234567890" \
- aws-region="ap-northeast-1"
+ ! kvssink stream-name="HelloLankaRTSP" storage-size=512
+```
+
+#### B. audio-video
+
+```bash
+gst-launch-1.0 rtspsrc \
+ location=${RTSP_SRC} protocols=tcp name=src \
+ src. ! queue ! rtph264depay ! h264parse ! kvssink stream-name="HelloLankaRTSP" storage-size=512 name=sink \
+ src. ! queue ! decodebin ! audioconvert ! voaacenc ! audio/mpeg,stream-format=raw ! sink.
+```
+
+#### C. x264enc
+
+```bash
+gst-launch-1.0 -v rtspsrc \
+ location=rtsp://192.168.50.21:554 user-id=admin user-pw=admin protocols=4 \
+ ! decodebin \
+ ! x264enc \
+ ! 'video/x-h264,stream-format=byte-stream,level=(string)4,profile=baseline' \
+ ! h264parse \
+ ! kvssink stream-name="HelloLankaRTSP" storage-size=512
 ```
 
 # 11. udpsrc
