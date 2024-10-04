@@ -184,9 +184,6 @@ $ (cd build_xxx; tree -L 1 ./)
 
 ```bash
 export AWS_DEFAULT_REGION=ap-northeast-1
-export AWS_KVS_LOG_LEVEL=1
-export DEBUG_LOG_SDP=TRUE
-
 export AWS_ACCESS_KEY_ID=AKI00000000000000000
 export AWS_SECRET_ACCESS_KEY=KEY0000000000000000000000000/00000000000
 ```
@@ -321,10 +318,9 @@ flowchart LR
 	audio --> |aac|kvssink
 ```
 
-#### A. audiosrc
+#### A. check audiosrc
 
 ```bash
-# check audiosrc
 $ arecord -l
 **** List of CAPTURE Hardware Devices ****
 card 0: I82801AAICH [Intel 82801AA-ICH], device 0: Intel ICH [Intel 82801AA-ICH]
@@ -344,7 +340,7 @@ card 0: I82801AAICH [Intel 82801AA-ICH], device 0: Intel ICH [Intel 82801AA-ICH]
   Subdevice #0: subdevice #0
 ```
 
-#### B. videosrc
+#### B. check videosrc
 
 ```bash
 $ sudo apt-get --yes install v4l-utils
@@ -397,16 +393,34 @@ gst-launch-1.0 -v \
  ! videoconvert \
  ! video/x-raw,width=640,height=480,framerate=30/1,format=I420 \
  ! queue \
- ! x264enc bitrate=500 \
+ ! x264enc \
+ ! 'video/x-h264,stream-format=byte-stream,level=(string)4,profile=baseline' \
  ! h264parse \
- ! video/x-h264,stream-format=avc,alignment=au \
- ! kvssink stream-name=\"HelloLankaKVS\" storage-size=128 frame-timecodes=false name=sink \
- alsasrc device=\"hw:0,0\" \
+ ! kvssink stream-name="HelloLankaKVS" storage-size=128 frame-timecodes=false name=sink \
+ alsasrc device="hw:0,0" \
  ! queue \
  ! audioconvert \
  ! voaacenc \
+ ! audio/mpeg,stream-format=raw \
  ! queue \
- ! aacparse \
+ ! sink.
+```
+
+```bash
+gst-launch-1.0 -v \
+ v4l2src device=/dev/video0 \
+ ! queue \
+ ! videoconvert \
+ ! video/x-raw,width=640,height=480,framerate=30/1,format=I420 \
+ ! queue \
+ ! x264enc bitrate=500 \
+ ! h264parse \
+ ! video/x-h264,stream-format=avc,alignment=au \
+ ! kvssink stream-name="HelloLankaKVS" storage-size=128 frame-timecodes=false name=sink \
+ alsasrc device="hw:0,0" \
+ ! queue \
+ ! audioconvert \
+ ! voaacenc \
  ! audio/mpeg,stream-format=raw \
  ! queue \
  ! sink.
@@ -414,8 +428,17 @@ gst-launch-1.0 -v \
 
 #### C. rtspsrc
 
-```bash
+> [RTSP.Stream](https://rtsp.stream)
+>
+> Please visit **RTSP.Stream** to request a test video.
 
+```bash
+RTSP_SRC="rtsp://rtspstream:49d94336abfe907ef96dc4a26c651461@zephyr.rtsp.stream/movie"
+
+gst-launch-1.0 rtspsrc \
+ location=${RTSP_SRC} protocols=tcp name=src \
+ src. ! queue ! rtph264depay ! h264parse ! kvssink stream-name="HelloLankaRTSP" storage-size=512 name=sink \
+ src. ! queue ! decodebin ! audioconvert ! voaacenc ! audio/mpeg,stream-format=raw ! sink.
 ```
 
 ## 2.4. Watch Viewer
@@ -655,14 +678,23 @@ $ (cd build_xxx; tree -L 1 ./samples/)
 3.3.1. kvsWebrtcClientMasterGstSample
 
 > Channel - HelloLankaKVS
+>
+> LOG_LEVEL_VERBOSE=1
+> LOG_LEVEL_DEBUG=2
+> LOG_LEVEL_INFO=3
+> LOG_LEVEL_WARN=4
+> LOG_LEVEL_ERROR=5
+> LOG_LEVEL_FATAL=6
+> LOG_LEVEL_SILENT=7
+> LOG_LEVEL_PROFILE=8
 
 ```bash
 export AWS_DEFAULT_REGION=ap-northeast-1
-export AWS_KVS_LOG_LEVEL=1
-export DEBUG_LOG_SDP=TRUE
-
 export AWS_ACCESS_KEY_ID=AKI00000000000000000
 export AWS_SECRET_ACCESS_KEY=KEY0000000000000000000000000/00000000000
+
+export AWS_KVS_LOG_LEVEL=4
+export DEBUG_LOG_SDP=FALSE
 
 ./samples/kvsWebrtcClientMasterGstSample HelloLankaKVS
 ```
