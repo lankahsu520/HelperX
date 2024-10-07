@@ -474,6 +474,48 @@ cd /work/codebase/xbox/amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build
 
 ### 2.3.5. gst-launch-1.0 and kvssink
 
+| name                    | desc                                                         |                                                     |
+| ----------------------- | ------------------------------------------------------------ | --------------------------------------------------- |
+| stream-name             | Name of the destination stream                               | DEFAULT_STREAM_NAME "DEFAULT_STREAM"                |
+| user-agent              | Name of the user agent                                       | KVS_CLIENT_USER_AGENT_NAME "AWS-SDK-KVS-CPP-CLIENT" |
+| retention-period        | Length of time stream is preserved. Unit: hours              | 0                                                   |
+| streaming-type          | Streaming type                                               |                                                     |
+| content-type            | content type                                                 |                                                     |
+| max-latency             | Max Latency. Unit: seconds                                   |                                                     |
+| fragment-duration       | Fragment Duration. Unit: miliseconds                         |                                                     |
+| timecode-scale          | Timecode Scale. Unit: milliseconds                           |                                                     |
+| key-frame-fragmentation | If true, generate new fragment on each keyframe, otherwise generate new fragment on first keyframe after fragment-duration has passed. |                                                     |
+| frame-timecodes         | Do frame timecodes                                           |                                                     |
+| absolute-fragment-times | Use absolute fragment time                                   |                                                     |
+| fragment-acks           | Do fragment acks                                             |                                                     |
+| restart-on-error        | Do restart on error                                          |                                                     |
+| recalculate-metrics     | Do recalculate metrics                                       |                                                     |
+| framerate               | Framerate                                                    |                                                     |
+| avg-bandwidth-bps       | Average bandwidth bps                                        |                                                     |
+| buffer-duration         | Buffer duration. Unit: seconds                               | 120                                                 |
+| replay-duration         | Replay duration. Unit: seconds                               | 40                                                  |
+| connection-staleness    | Connection staleness. Unit: seconds                          |                                                     |
+| codec-id                | Codec ID                                                     |                                                     |
+| track-name              | Track name                                                   |                                                     |
+| access-key              | AWS Access Key                                               |                                                     |
+| secret-key              | AWS Secret Key                                               |                                                     |
+| session-token           | AWS Session token                                            |                                                     |
+| aws-region              | AWS Region                                                   |                                                     |
+| rotation-period         | Rotation Period. Unit: seconds                               |                                                     |
+| log-config              | Log Configuration Path                                       | DEFAULT_LOG_FILE_PATH "../kvs_log_configuration"    |
+| storage-size            | Storage Size. Unit: MB                                       |                                                     |
+| stop-stream-timeout     | Stop stream timeout: seconds                                 |                                                     |
+| connection-timeout      | Service call connection timeout: seconds                     |                                                     |
+| completion-timeout      | Service call completion timeout: seconds. Should be more than connection timeout. If it isnt, SDK will override with defaults |                                                     |
+| credential-path         | Credential File Path                                         |                                                     |
+| iot-certificate         | Use aws iot certificate to obtain credentials                |                                                     |
+| stream-tags             | key-value pair that you can define and assign to each stream |                                                     |
+| file-start-time         | Epoch time that the file starts in kinesis video stream. By default, current time is used. Unit: Seconds |                                                     |
+| disable-buffer-clipping | Set to true only if your src/mux elements produce GST_CLOCK_TIME_NONE for segment start times.  It is non-standard behavior to set this to true, only use if there are known issues with your src/mux segment start/stop times. |                                                     |
+| use-original-pts        | Set to true only if you want to use the original presentation time stamp on the buffer and that timestamp is expected to be a valid epoch value in nanoseconds. Most encoders will not have a valid PTS |                                                     |
+| get-kvs-metrics         | Set to true if you want to read on the producer streamMetrics and clientMetrics object every key frame. Disabled by default |                                                     |
+| allow-create-stream     | Set to true if allowing create stream call, false otherwise  |                                                     |
+
 ```bash
 cd /work/codebase/xbox/amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1
 
