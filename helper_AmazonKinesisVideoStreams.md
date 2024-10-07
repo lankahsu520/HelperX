@@ -348,7 +348,101 @@ $ v4l2-ctl --list-devices
 w300: w300 (usb-0000:00:0b.0-1):
         /dev/video0
         /dev/video1
+
+$ v4l2-ctl --all
 $ gst-device-monitor-1.0
+Probing devices...
+
+Device found:
+
+        name  : w300 Analog Stereo
+        class : Audio/Source
+        caps  : audio/x-raw, format={ (string)S16LE, (string)S16BE, (string)F32LE, (string)F32BE, (string)S32LE, (string)S32BE, (string)S24LE, (string)S24BE, (string)S24_32LE, (string)S24_32BE, (string)U8 }, layout=interleaved, rate=[ 1, 384000 ], channels=[ 1, 32 ]
+                audio/x-alaw, rate=[ 1, 384000 ], channels=[ 1, 32 ]
+                audio/x-mulaw, rate=[ 1, 384000 ], channels=[ 1, 32 ]
+        properties:
+                alsa.resolution_bits = 16
+                device.api = alsa
+                device.class = sound
+                alsa.class = generic
+                alsa.subclass = generic-mix
+                alsa.name = "USB\ Audio"
+                alsa.id = "USB\ Audio"
+                alsa.subdevice = 0
+                alsa.subdevice_name = "subdevice\ \#0"
+                alsa.device = 0
+                alsa.card = 1
+                alsa.card_name = w300
+                alsa.long_card_name = "Sonix\ Technology\ Co.\,\ Ltd.\ w300\ at\ usb-0000:00:0c.0-2\,\ high\ speed"
+                alsa.driver_name = snd_usb_audio
+                device.bus_path = pci-0000:00:0c.0-usb-0:2:1.2
+                sysfs.path = /devices/pci0000:00/0000:00:0c.0/usb1/1-2/1-2:1.2/sound/card1
+                udev.id = usb-Sonix_Technology_Co.__Ltd._w300_SN0001-02
+                device.bus = usb
+                device.vendor.id = 03f0
+                device.vendor.name = "HP\,\ Inc"
+                device.product.id = 0a59
+                device.product.name = w300
+                device.serial = Sonix_Technology_Co.__Ltd._w300_SN0001
+                device.form_factor = webcam
+                device.string = front:1
+                device.buffering.buffer_size = 17632
+                device.buffering.fragment_size = 4408
+                device.access_mode = mmap
+                device.profile.name = analog-stereo
+                device.profile.description = "Analog\ Stereo"
+                device.description = "w300\ Analog\ Stereo"
+                module-udev-detect.discovered = 1
+                device.icon_name = camera-web-usb
+                is-default = true
+        gst-launch-1.0 pulsesrc device=alsa_input.usb-Sonix_Technology_Co.__Ltd._w300_SN0001-02.analog-stereo ! ...
+
+Device found:
+
+        name  : w300: w300
+        class : Video/Source
+        caps  : video/x-raw, format=YUY2, width=864, height=480, pixel-aspect-ratio=1/1, framerate=10/1
+                video/x-raw, format=YUY2, width=848, height=480, pixel-aspect-ratio=1/1, framerate=10/1
+                video/x-raw, format=YUY2, width=800, height=448, pixel-aspect-ratio=1/1, framerate=10/1
+                video/x-raw, format=YUY2, width=640, height=480, pixel-aspect-ratio=1/1, framerate=30/1
+                video/x-raw, format=YUY2, width=640, height=360, pixel-aspect-ratio=1/1, framerate=30/1
+                video/x-raw, format=YUY2, width=352, height=288, pixel-aspect-ratio=1/1, framerate=30/1
+                video/x-raw, format=YUY2, width=320, height=240, pixel-aspect-ratio=1/1, framerate=30/1
+                image/jpeg, width=1920, height=1080, pixel-aspect-ratio=1/1, framerate=30/1
+                image/jpeg, width=1600, height=896, pixel-aspect-ratio=1/1, framerate=30/1
+                image/jpeg, width=1280, height=720, pixel-aspect-ratio=1/1, framerate=30/1
+                image/jpeg, width=1024, height=768, pixel-aspect-ratio=1/1, framerate=30/1
+                image/jpeg, width=1024, height=576, pixel-aspect-ratio=1/1, framerate=30/1
+                image/jpeg, width=960, height=544, pixel-aspect-ratio=1/1, framerate=30/1
+                image/jpeg, width=864, height=480, pixel-aspect-ratio=1/1, framerate=30/1
+                image/jpeg, width=848, height=480, pixel-aspect-ratio=1/1, framerate=30/1
+                image/jpeg, width=800, height=448, pixel-aspect-ratio=1/1, framerate=30/1
+                image/jpeg, width=640, height=480, pixel-aspect-ratio=1/1, framerate=30/1
+                image/jpeg, width=640, height=360, pixel-aspect-ratio=1/1, framerate=30/1
+                image/jpeg, width=352, height=288, pixel-aspect-ratio=1/1, framerate=30/1
+                image/jpeg, width=320, height=240, pixel-aspect-ratio=1/1, framerate=30/1
+        properties:
+                udev-probed = true
+                device.bus_path = pci-0000:00:0c.0-usb-0:2:1.0
+                sysfs.path = /sys/devices/pci0000:00/0000:00:0c.0/usb1/1-2/1-2:1.0/video4linux/video0
+                device.bus = usb
+                device.subsystem = video4linux
+                device.vendor.id = 03f0
+                device.vendor.name = "Sonix\\x20Technology\\x20Co.\\x2c\\x20Ltd."
+                device.product.id = 0a59
+                device.product.name = "w300:\ w300"
+                device.serial = Sonix_Technology_Co.__Ltd._w300_SN0001
+                device.capabilities = :capture:
+                device.api = v4l2
+                device.path = /dev/video0
+                v4l2.device.driver = uvcvideo
+                v4l2.device.card = "w300:\ w300"
+                v4l2.device.bus_info = usb-0000:00:0c.0-2
+                v4l2.device.version = 331683 (0x00050fa3)
+                v4l2.device.capabilities = 2225078273 (0x84a00001)
+                v4l2.device.device_caps = 69206017 (0x04200001)
+        gst-launch-1.0 v4l2src ! ...
+
 ```
 
 #### C. run
@@ -358,13 +452,31 @@ export AWS_KVS_AUDIO_DEVICE=hw:0,0
 export AWS_KVS_VIDEO_DEVICE=/dev/video0
 
 cd /work/codebase/xbox/amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build_xxx
+
 ./kvs_gstreamer_audio_video_sample HelloLankaKVS
 ```
 
-### 2.3.3. kvssink
+### 2.3.3. kvssink_gstreamer_sample
+
+```bash
+cd /work/codebase/xbox/amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build_xxx
+
+./kvssink_gstreamer_sample HelloLankaKVS
+```
+
+### 2.3.4. kvs_gstreamer_sample
+
+```bash
+cd /work/codebase/xbox/amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1/build_xxx
+
+./kvs_gstreamer_sample HelloLankaKVS -w 640 -h 480 -f 30 -b 500
+```
+
+### 2.3.5. gst-launch-1.0 and kvssink
 
 ```bash
 cd /work/codebase/xbox/amazon-kinesis-video-streams-producer-sdk-cpp-3.4.1
+
 export GST_PLUGIN_PATH=`pwd`/build_xxx
 export LD_LIBRARY_PATH=`pwd`/open-source/local/lib
 ```
@@ -393,33 +505,14 @@ gst-launch-1.0 -v \
  ! videoconvert \
  ! video/x-raw,width=640,height=480,framerate=30/1,format=I420 \
  ! queue \
- ! x264enc \
- ! 'video/x-h264,stream-format=byte-stream,level=(string)4,profile=baseline' \
+ ! x264enc bframes=0 speed-preset=veryfast key-int-max=60 bitrate=512 byte-stream=TRUE tune=zerolatency \
+ ! video/x-h264,stream-format=byte-stream,alignment=au,profile=baseline \
  ! h264parse \
- ! kvssink stream-name="HelloLankaKVS" storage-size=128 frame-timecodes=false name=sink \
+ ! kvssink stream-name="HelloLankaKVS" storage-size=128 name=sink \
  alsasrc device="hw:0,0" \
  ! queue \
  ! audioconvert \
- ! voaacenc \
- ! audio/mpeg,stream-format=raw \
- ! queue \
- ! sink.
-```
-
-```bash
-gst-launch-1.0 -v \
- v4l2src device=/dev/video0 \
- ! queue \
- ! videoconvert \
- ! video/x-raw,width=640,height=480,framerate=30/1,format=I420 \
- ! queue \
- ! x264enc bitrate=500 \
- ! h264parse \
- ! video/x-h264,stream-format=avc,alignment=au \
- ! kvssink stream-name="HelloLankaKVS" storage-size=128 frame-timecodes=false name=sink \
- alsasrc device="hw:0,0" \
- ! queue \
- ! audioconvert \
+ ! audio/x-raw,rate=24000 \
  ! voaacenc \
  ! audio/mpeg,stream-format=raw \
  ! queue \
