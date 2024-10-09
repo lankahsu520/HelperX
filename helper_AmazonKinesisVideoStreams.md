@@ -588,6 +588,12 @@ gst-launch-1.0 rtspsrc \
 
 ![amazon_kvsv02](./images/amazon_kvsv02.png)
 
+## 2.5. Application
+
+## 2.5.1. Image Extraction to S3
+
+
+
 # 3. **Signaling channel** (WebRTC)
 
 ## 3.1. Repository
@@ -887,6 +893,210 @@ export DEBUG_LOG_SDP=FALSE
 # III. Glossary
 
 # IV. Tool Usage
+
+## IV.1. gst-inspect-1.0 kvssink
+
+```bash
+$ gst-inspect-1.0 kvssink
+Factory Details:
+  Rank                     primary + 10 (266)
+  Long-name                KVS Sink
+  Klass                    Sink/Video/Network
+  Description              GStreamer AWS KVS plugin
+  Author                   AWS KVS <kinesis-video-support@amazon.com>
+
+Plugin Details:
+  Name                     kvssink
+  Description              GStreamer AWS KVS plugin
+  Filename                 /work/rootfs_intercom/lib/libgstkvssink.so
+  Version                  1.0
+  License                  Proprietary
+  Source module            kvssinkpackage
+  Binary package           GStreamer
+  Origin URL               http://gstreamer.net/
+
+GObject
+ +----GInitiallyUnowned
+       +----GstObject
+             +----GstElement
+                   +----GstKvsSink
+
+Pad Templates:
+  SINK template: 'audio_%u'
+    Availability: On request
+    Capabilities:
+      audio/mpeg
+            mpegversion: { (int)2, (int)4 }
+          stream-format: raw
+               channels: [ 1, 2147483647 ]
+                   rate: [ 1, 2147483647 ]
+      audio/x-alaw
+               channels: { (int)1, (int)2 }
+                   rate: [ 8000, 192000 ]
+      audio/x-mulaw
+               channels: { (int)1, (int)2 }
+                   rate: [ 8000, 192000 ]
+  
+  SINK template: 'video_%u'
+    Availability: On request
+    Capabilities:
+      video/x-h264
+          stream-format: avc
+              alignment: au
+                  width: [ 16, 2147483647 ]
+                 height: [ 16, 2147483647 ]
+      video/x-h265
+              alignment: au
+                  width: [ 16, 2147483647 ]
+                 height: [ 16, 2147483647 ]
+
+Element has no clocking capabilities.
+Element has no URI handling capabilities.
+
+Pads:
+  none
+
+Element Properties:
+  absolute-fragment-times: Use absolute fragment time
+                        flags: readable, writable
+                        Boolean. Default: true
+  access-key          : AWS Access Key
+                        flags: readable, writable
+                        String. Default: "access_key"
+  allow-create-stream : Set to true if allowing create stream call, false otherwise
+                        flags: readable, writable
+                        Boolean. Default: true
+  avg-bandwidth-bps   : Average bandwidth bps
+                        flags: readable, writable
+                        Unsigned Integer. Range: 0 - 4294967295 Default: 4194304 
+  aws-region          : AWS Region
+                        flags: readable, writable
+                        String. Default: "us-west-2"
+  buffer-duration     : Buffer duration. Unit: seconds
+                        flags: readable, writable
+                        Unsigned Integer. Range: 0 - 4294967295 Default: 120 
+  codec-id            : Codec ID
+                        flags: readable, writable
+                        String. Default: "V_MPEG4/ISO/AVC"
+  completion-timeout  : Service call completion timeout: seconds. Should be more than connection timeout. If it isnt, SDK will override with defaults
+                        flags: readable, writable
+                        Unsigned Integer. Range: 0 - 4294967295 Default: 10 
+  connection-staleness: Connection staleness. Unit: seconds
+                        flags: readable, writable
+                        Unsigned Integer. Range: 0 - 4294967295 Default: 60 
+  connection-timeout  : Service call connection timeout: seconds
+                        flags: readable, writable
+                        Unsigned Integer. Range: 0 - 4294967295 Default: 5 
+  content-type        : content type
+                        flags: readable, writable
+                        String. Default: null
+  credential-path     : Credential File Path
+                        flags: readable, writable
+                        String. Default: ".kvs/credential"
+  disable-buffer-clipping: Set to true only if your src/mux elements produce GST_CLOCK_TIME_NONE for segment start times.  It is non-standard behavior to set this to true, only use if there are known issues with your src/mux segment start/stop times.
+                        flags: readable, writable
+                        Boolean. Default: false
+  file-start-time     : Epoch time that the file starts in kinesis video stream. By default, current time is used. Unit: Seconds
+                        flags: readable, writable
+                        Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 1728443695 
+  fragment-acks       : Do fragment acks
+                        flags: readable, writable
+                        Boolean. Default: true
+  fragment-duration   : Fragment Duration. Unit: miliseconds
+                        flags: readable, writable
+                        Unsigned Integer. Range: 0 - 4294967295 Default: 2000 
+  frame-timecodes     : Do frame timecodes
+                        flags: readable, writable
+                        Boolean. Default: true
+  framerate           : Framerate
+                        flags: readable, writable
+                        Unsigned Integer. Range: 0 - 4294967295 Default: 25 
+  get-kvs-metrics     : Set to true if you want to read on the producer streamMetrics and clientMetrics object every key frame. Disabled by default
+                        flags: readable, writable
+                        Boolean. Default: false
+  iot-certificate     : Use aws iot certificate to obtain credentials
+                        flags: readable, writable
+                        Boxed pointer of type "GstStructure"
+  key-frame-fragmentation: If true, generate new fragment on each keyframe, otherwise generate new fragment on first keyframe after fragment-duration has passed.
+                        flags: readable, writable
+                        Boolean. Default: true
+  log-config          : Log Configuration Path
+                        flags: readable, writable
+                        String. Default: "../kvs_log_configuration"
+  max-latency         : Max Latency. Unit: seconds
+                        flags: readable, writable
+                        Unsigned Integer. Range: 0 - 4294967295 Default: 60 
+  name                : The name of the object
+                        flags: readable, writable, 0x2000
+                        String. Default: "kvssink0"
+  parent              : The parent of the object
+                        flags: readable, writable, 0x2000
+                        Object of type "GstObject"
+  recalculate-metrics : Do recalculate metrics
+                        flags: readable, writable
+                        Boolean. Default: true
+  replay-duration     : Replay duration. Unit: seconds
+                        flags: readable, writable
+                        Unsigned Integer. Range: 0 - 4294967295 Default: 40 
+  restart-on-error    : Do restart on error
+                        flags: readable, writable
+                        Boolean. Default: true
+  retention-period    : Length of time stream is preserved. Unit: hours
+                        flags: readable, writable
+                        Unsigned Integer. Range: 0 - 4294967295 Default: 2 
+  rotation-period     : Rotation Period. Unit: seconds
+                        flags: readable, writable
+                        Unsigned Integer. Range: 0 - 4294967295 Default: 3600 
+  secret-key          : AWS Secret Key
+                        flags: readable, writable
+                        String. Default: "secret_key"
+  session-token       : AWS Session token
+                        flags: readable, writable
+                        String. Default: "session_token"
+  stop-stream-timeout : Stop stream timeout: seconds
+                        flags: readable, writable
+                        Unsigned Integer. Range: 0 - 4294967295 Default: 120 
+  storage-size        : Storage Size. Unit: MB
+                        flags: readable, writable
+                        Unsigned Integer. Range: 0 - 4294967295 Default: 128 
+  stream-name         : Name of the destination stream
+                        flags: readable, writable
+                        String. Default: "DEFAULT_STREAM"
+  stream-tags         : key-value pair that you can define and assign to each stream
+                        flags: readable, writable
+                        Boxed pointer of type "GstStructure"
+  streaming-type      : Streaming type
+                        flags: readable, writable
+                        Enum "GstKvsSinkStreamingType" Default: 0, "realtime"
+                           (0): realtime         - streaming type realtime
+                           (1): near-realtime    - streaming type near realtime
+                           (2): offline          - streaming type offline
+  timecode-scale      : Timecode Scale. Unit: milliseconds
+                        flags: readable, writable
+                        Unsigned Integer. Range: 0 - 4294967295 Default: 1 
+  track-name          : Track name
+                        flags: readable, writable
+                        String. Default: "kinesis_video"
+  use-original-pts    : Set to true only if you want to use the original presentation time stamp on the buffer and that timestamp is expected to be a valid epoch value in nanoseconds. Most encoders will not have a valid PTS
+                        flags: readable, writable
+                        Boolean. Default: false
+  user-agent          : Name of the user agent
+                        flags: readable, writable
+                        String. Default: "AWS-SDK-KVS-CPP-CLIENT/3.4.1"
+
+Element Signals:
+  "stream-error" :  void user_function (GstElement* object,
+                                        guint64 arg0,
+                                        gpointer user_data);
+
+Element Actions:
+  "fragment-ack" :  void user_function (GstElement* object,
+                                        gpointer arg0);
+  "stream-client-metric" :  void user_function (GstElement* object,
+                                                gpointer arg0);
+```
+
+
 
 # V. Tools
 
