@@ -662,6 +662,105 @@ $ aws sns list-subscriptions
 }
 ```
 
+## 2.6. [KVS (Kinesis Video Streams)](https://docs.aws.amazon.com/zh_tw/kinesisvideostreams/latest/dg/what-is-kinesis-video.html)
+
+```bash
+$ export AWS_KVS_STREAM_NAME=HelloLanka520
+$ export AWS_KVS_STREAM_OUTPUT_MP4=1111111.mp4
+```
+
+### 2.6.1. [KVS Dashboard](https://us-east-1.console.aws.amazon.com/dashboard)
+
+### 2.6.2. aws [kinesisvideo](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesisvideo/index.html) xxx
+
+#### [describe-stream](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesisvideo/describe-stream.html)
+
+```bash
+$ aws kinesisvideo \
+ describe-stream \
+ --stream-name ${AWS_KVS_STREAM_NAME}
+```
+
+#### [get-data-endpoint](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesisvideo/get-data-endpoint.html)
+
+> `--api-name` (string)
+>
+> > The name of the API action for which to get an endpoint.
+> >
+> > Possible values:
+> >
+> > - `PUT_MEDIA`
+> > - `GET_MEDIA`
+> > - `LIST_FRAGMENTS`
+> > - `GET_MEDIA_FOR_FRAGMENT_LIST`
+> > - `GET_HLS_STREAMING_SESSION_URL`
+> > - `GET_DASH_STREAMING_SESSION_URL`
+> > - `GET_CLIP`
+> > - `GET_IMAGES`
+
+```bash
+$ aws kinesisvideo \
+ get-data-endpoint \
+ --stream-name ${AWS_KVS_STREAM_NAME} \
+ --api-name GET_HLS_STREAMING_SESSION_URL
+{
+    "DataEndpoint": "https://b-ba4a413e.kinesisvideo.us-east-1.amazonaws.com"
+}
+
+$ aws kinesisvideo \
+  get-data-endpoint \
+ --stream-name ${AWS_KVS_STREAM_NAME} \
+ --api-name GET_CLIP
+{
+    "DataEndpoint": "https://b-ba4a413e.kinesisvideo.us-east-1.amazonaws.com"
+}
+
+```
+
+### 2.6.2. aws [kinesis-video-archived-media](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesis-video-archived-media/index.html) xxx
+
+#### [get-clip](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesis-video-archived-media/get-clip.html)
+
+```bash
+$ aws kinesis-video-archived-media \
+ get-clip \
+ --stream-name ${AWS_KVS_STREAM_NAME} \
+ --clip-fragment-selector '{"FragmentSelectorType":"SERVER_TIMESTAMP","TimestampRange": {"StartTimestamp":"2024-10-09T15:00:00+08:00","EndTimestamp":"2024-10-09T15:05:00+08:00"}}' \
+ --endpoint-url 'https://b-ba4a413e.kinesisvideo.us-east-1.amazonaws.com' \
+ ${AWS_KVS_STREAM_OUTPUT_MP4}
+```
+
+#### [list-fragments](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesis-video-archived-media/list-fragments.html)
+
+> must have endpoint-url
+
+```bash
+$ aws kinesis-video-archived-media \
+ list-fragments \
+ --stream-name ${AWS_KVS_STREAM_NAME} \
+ --endpoint-url 'https://b-ba4a413e.kinesisvideo.us-east-1.amazonaws.com' \
+ --max-items 30 \
+ --fragment-selector '{"FragmentSelectorType":"SERVER_TIMESTAMP","TimestampRange": {"StartTimestamp":"2024-10-09T00:00:00Z","EndTimestamp":"2024-10-09T23:59:59Z"}}'
+
+```
+
+### 2.6.3. aws [kinesis-video-media](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesis-video-media/index.html) xxx
+
+#### [get-media](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesis-video-media/get-media.html)
+
+```bash
+aws kinesis-video-media get-media --stream-name <stream-name> --start-selector <start-selector-json> --output <file-path>
+```
+
+```bash
+$ aws kinesis-video-media \
+ get-media \
+ --stream-name HelloLanka520 \
+ --start-selector '{ "StartSelectorType": "LATEST" }' \
+ media-output.mkv
+
+```
+
 # Appendix
 
 # I. Study
