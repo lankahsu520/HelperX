@@ -888,6 +888,88 @@ export DEBUG_LOG_SDP=FALSE
 
 ## I.4. [helper_WebRTC](https://github.com/lankahsu520/HelperX/blob/master/helper_WebRTC.md) - WebRTC helper.
 
+## I.5. [ChatGPT] 有kvs播放或是管理程式嗎
+
+> **Amazon Kinesis Video Streams (KVS)** 目前没有专门的官方第三方图形界面播放器或管理程序，但通过 AWS 提供的 SDK 和 API 以及一些开源或第三方工具，您可以实现播放和管理功能。以下是一些与 KVS 相关的播放和管理工具：
+>
+> ### 1. **Amazon Kinesis Video Streams Console**
+> AWS 管理控制台提供了内置的 KVS 视频流管理和播放功能：
+>
+> - **播放功能**：您可以在 KVS 流的详情页中选择 "Play" 来查看实时或存储的视频流。
+> - **管理功能**：包括查看视频流的状态、统计信息、配置流（如修改权限或删除流）。
+>
+> **优点**：
+> - 无需额外工具，AWS 控制台即提供了基础播放和管理功能。
+>
+> ### 2. **KVS HLS/DASH 播放器**
+> KVS 支持通过 **HLS (HTTP Live Streaming)** 或 **DASH** 播放视频，您可以使用各种播放器播放视频流。
+>
+> - **获取 HLS URL**：使用 AWS CLI 或 SDK 生成 HLS 播放 URL，然后在支持 HLS 的播放器中播放。
+>
+>   生成 HLS URL 的 CLI 命令：
+>   ```bash
+>   aws kinesisvideo get-hls-streaming-session-url --stream-name your-stream-name --region your-region
+>   ```
+>
+> - **播放器**：
+>   - **VLC**：直接粘贴 HLS URL 播放视频。
+>   - **HLS.js / Dash.js**：开源 JavaScript 库，可以嵌入到网页中实现播放功能。
+>
+>   **优点**：
+>   - 简单易用，支持大多数常见播放器。
+>
+> ### 3. **WebRTC for Real-time Video Playback**
+> KVS 支持 **WebRTC**，用于实时视频传输和播放。
+>
+> - **KVS WebRTC SDK**：AWS 提供了用于 WebRTC 的 SDK，可以在网页或移动设备中实现实时视频的播放和互动（双向通话）。
+> - **浏览器支持**：任何支持 WebRTC 的浏览器都可以与 KVS 进行实时视频通信，适合实时监控、视频会议等场景。
+>
+> **优点**：
+> - 实现实时互动和低延迟的视频播放。
+>
+> ### 4. **AWS SDK for Custom Playback and Management**
+> 通过 AWS 提供的 SDK（支持 Python、Java、JavaScript 等），您可以定制自己的播放器和管理程序。
+>
+> - **GetMedia API**：用于提取 KVS 中的视频流，并将其播放或存储。
+> - **GetHLSStreamingSessionURL API**：用于获取 HLS 播放 URL，结合播放器播放。
+>
+>
+> 您可以构建自定义的播放器或管理界面，来处理视频流并实现特定业务逻辑。
+>
+> ### 5. **第三方开源工具**
+> 虽然没有很多专门针对 KVS 的第三方应用程序，但一些开源项目和 VMS （视频管理系统）提供了对 KVS 的支持。
+>
+> #### 示例：
+> - **Milestone、Genetec** 等视频管理系统可以集成 KVS，用于视频监控和管理。
+> - **FFmpeg**：虽然 FFmpeg 不能直接播放 KVS 流，但可以通过 AWS SDK 结合使用，用于拉取、转码和播放视频流。
+>
+> ### 6. **AWS Elemental Media Services**
+> **AWS Elemental MediaConvert** 和 **MediaLive** 提供了对视频流的处理、转码、管理和分发功能。
+>
+> - **MediaConvert**：将 KVS 视频流转码为不同的格式，如 MP4。
+> - **MediaLive**：用于处理实时流，可以将 KVS 输入流处理后分发给 CDN 或其他流媒体服务。
+>
+> ### 总结：
+> 虽然目前没有专门用于 **KVS** 的图形界面播放器或管理程序，但 AWS 提供的管理控制台、HLS 播放、WebRTC 实时视频播放和 SDK 支持可以帮助您轻松实现播放和管理功能。
+
+## I.6. [Live video streaming using Amazon S3](https://aws.amazon.com/blogs/media/live-video-streaming-using-amazon-s3/)
+
+## I.99. YouTude
+
+#### A. [KVS ingestion from RTSP cameras a Kinesis Video Streams tutorial | Amazon Web Services](https://www.youtube.com/watch?v=nVxwX7Q9nPU)
+
+#### B. Kinesis Video Streams (KVS) RTSP Stream
+
+##### B.1.  [Part 1 - Ingestion from RTSP cameras (Tutorial)](https://www.youtube.com/watch?v=YoOYTCD_v3Q)
+
+##### B.2. [Part 2 - Image Extraction to S3 for Rekognition](https://www.youtube.com/watch?v=pUvxI76YnfA)
+
+#### C. Building a serverless Facial Analysis system with AWS Kinesis Video Stream & AWS Rekognition
+
+##### C.1. [PART1](https://www.youtube.com/watch?v=lMdavqoWRKc)
+
+##### C.2. [PART2](https://www.youtube.com/watch?v=LrQt4U-CLXE)
+
 # II. Debug
 
 # III. Glossary
