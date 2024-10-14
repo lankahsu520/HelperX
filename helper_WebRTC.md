@@ -40,7 +40,6 @@
 >
 > Signaling Server 可以用 WebSocket、SIP、XMPP 或其他自定義協議來實現。
 
-> 這邊標示國名和各大洲沒有特別意義。
 
 ```mermaid
 flowchart LR
@@ -54,6 +53,12 @@ flowchart LR
 	Lanka <--> Signaling
 
 ```
+
+>用 mermaid 的圖示這麼好看，借用
+>
+>[WebRTC Signaling Servers: Everything You Need to Know](https://www.wowza.com/blog/webrtc-signaling-servers)
+
+![](https://lh3.googleusercontent.com/tn1h7nq5-ANzEyuwISMNLqFngijegUKAAfIkqoy76lg3ewxnI2wDGBtA29vIgp96CyivhVOEuh_OkX7jjAc_e4r-_m5LpZStO8Bxc3VFvOL-XVEB51mnOJSzrnXwzpHGE-DFsq6w)
 
 # 3. Routing Decision
 
@@ -265,6 +270,12 @@ flowchart TB
 
 <img src="https://pica.zhimg.com/80/v2-367b3f9e0bdc1c6fd80092ad2a914c7a_720w.webp"/>
 
+#### D. ICE exchange diagram
+
+> 以下圖片取自於 [webRTC学习笔记](https://www.yuyoung32.com/post/webrtc学习笔记/)
+
+<img src="https://www.yuyoung32.com/webRTC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/peer-connection.png"/>
+
 ## 3.3. TURN
 
 > 如果對連失敗，TURN Server 用于中繼轉運站。
@@ -300,7 +311,9 @@ flowchart TB
 
 # 4. SDP
 
-#### A. Sequence
+> [RFC 8839 Session Description Protocol (SDP) Offer/Answer Procedures for Interactive Connectivity Establishment (ICE)](https://www.rfc-editor.org/rfc/rfc8839.pdf)
+
+## 4.1. Sequence
 
 ```mermaid
 sequenceDiagram
@@ -309,28 +322,85 @@ sequenceDiagram
 	participant Client as Client
 
 	Master->>Signaling: Offer SDP
+	Master->>Master: setLocalDescription
 	Signaling->>Client: Offer SDP
+	Client->>Client: setRemoteDescription
 	Client->>Signaling: Answer SDP
+	Client->>Client: setLocalDescription
 	Signaling->>Master: Answer SDP
+	Master->>Master: setRemoteDescription
 ```
 
-#### B. Format
+## 4.2. Format
 
-> 以下圖片取自於 [WebRTC 筆記](https://naurudao.blogspot.com/2016/07/webrtc.html)
+> 以下圖片取自於 [webRTC学习笔记](https://www.yuyoung32.com/post/webrtc学习笔记/)
 
 ![](https://www.yuyoung32.com/webRTC%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.assets/image-20220729232002539.png)
+
+```json
+v=0
+o=jdoe 2890844526 2890842807 IN IP4 203.0.113.141
+s=
+c=IN IP4 192.0.2.3
+t=0 0
+a=ice-options:ice2
+a=ice-pacing:50
+a=ice-pwd:asd88fgpdd777uzjYhagZg
+a=ice-ufrag:8hhY
+m=audio 45664 RTP/AVP 0
+b=RS:0
+b=RR:0
+a=rtpmap:0 PCMU/8000
+a=candidate:1 1 UDP 2130706431 203.0.113.141 8998 typ host
+a=candidate:2 1 UDP 1694498815 192.0.2.3 45664 typ srflx raddr
+ 203.0.113.141 rport 8998
+```
+
+#### A. [RTP payload formats](https://en.wikipedia.org/wiki/RTP_payload_formats)
+
+# 5. WebRTC API
+
+![](https://webrtc.github.io/webrtc-org/assets/images/webrtc-public-diagram-for-website.png)
+
+## 5.1. [WebRTC API](https://developer.mozilla.org/zh-CN/docs/Web/API/WebRTC_API#webrtc_概念和用法)
+
+### 5.1.1. MediaStream
+
+> 媒體流，如音訊、視訊
+
+### 5.1.2. RTCPeerConnection
+
+> 建立連線、監控、加密
+
+### 5.1.3. RTCDataChannel
+
+> 傳輸非音視訊的資料，如文字、圖片
+
+## 5.2. WebRTC Native C++ API
+
+## 5.3. Session management / Abstract signaling (Session)
+
+## 5.4. Transport
+
+## 5.5. VoiceEngine
+
+## 5.6. VideoEngine
+
+
 
 # Appendix
 
 # I. Study
 
-## I.1. [Introduction to WebRTC](https://medium.com/dvt-engineering/introduction-to-webrtc-cad0c6900b8e)
+## I.1. [WebRTC: Real-Time Communication in Browsers](https://www.w3.org/TR/webrtc/)
 
-## I.2. [webRTC学习笔记](https://www.yuyoung32.com/post/webrtc学习笔记/)
+## I.2. [Introduction to WebRTC](https://medium.com/dvt-engineering/introduction-to-webrtc-cad0c6900b8e)
 
-## I.3. [後疫情時代的 WebRTC 微學習](https://ithelp.ithome.com.tw/users/20130062/ironman/3918)
+## I.3. [webRTC学习笔记](https://www.yuyoung32.com/post/webrtc学习笔记/)
 
-## I.4. [Real-time communication with WebRTC: Google I/O 2013](https://www.youtube.com/watch?v=p2HzZkd2A40&t=1272s)
+## I.4. [後疫情時代的 WebRTC 微學習](https://ithelp.ithome.com.tw/users/20130062/ironman/3918)
+
+## I.5. [Real-time communication with WebRTC: Google I/O 2013](https://www.youtube.com/watch?v=p2HzZkd2A40&t=1272s)
 
 # II. Debug
 
