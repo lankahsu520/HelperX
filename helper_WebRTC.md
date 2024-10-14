@@ -54,7 +54,7 @@ flowchart LR
 
 ```
 
->用 mermaid 的圖示這麼好看，借用
+>用 mermaid 的圖示不易看，借用
 >
 >[WebRTC Signaling Servers: Everything You Need to Know](https://www.wowza.com/blog/webrtc-signaling-servers)
 
