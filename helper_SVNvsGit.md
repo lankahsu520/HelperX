@@ -1471,11 +1471,9 @@ See 'git help git' for an overview of the system.
 
 ```
 
-## IV.3. bash
+## IV.3. ~/.bash_aliases
 
-#### A. ~/.bash_aliases
-
-##### A.1. SVN
+#### A. SVN
 
 ```bash
 #** svn **
@@ -1539,7 +1537,7 @@ function svn-revert-sh()
 }
 ```
 
-##### A.2. Git
+#### B. Git
 
 ```bash
 export GIT_EDITOR=vim
@@ -1549,6 +1547,8 @@ export LESS=Rx2
 alias git-push="git push"
 alias git-pull="git pull"
 
+alias git-diffc="git diff --cached $*"
+alias git-diffc2file="git diff --cached $* > /tmp/diff"
 alias git-diff="git diff HEAD $*"
 alias git-diff2file="git diff HEAD $* > /tmp/diff"
 
