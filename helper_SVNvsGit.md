@@ -94,8 +94,11 @@ mindmap
 >- 員工必須緊密的合作，如同事間提供 api。
 >- Daily build 不只試著編譯有無出錯，甚至有時要交給 QA 進行測試。
 >- 再來公司請不起專職、專業的 code reviewer，雖然能讓同事來支援，但支援久了，不只沒有錢拿，還算加重該同事的負擔。
->- 就算 merge request/pull request 已提出，但是在等待 accept 時間，有新的提交進入目標分支，一樣有可能發生衝突。
+>- 就算 merge request/pull request (A) 已提出，但是在等待 accept 時間，有新的提交進入目標分支，一樣有可能發生衝突。
 >- branch 進行 merge 時，是進行批次的匯入，反而更不利於解決衝突。
+>- 延續前面項目，如果版本有先後關係，未完成前面的 merge (A)，如果其它人要繼續開發，也只能使用目前的版本另開 branch，當前面完成 merge (A) 後，手邊的版本不是要再一次進行 merge，這看似簡單，如果是 10個人等待這個版本呢 ？又或是這個 merge (A) 的變動很大時，這之後的功夫更是難上加難。
+
+> 個人是建議，只要個人工作到一個斷點就上傳 codes，而不是等解決某個 bug  或完成整個功能才上傳。
 
 ## 0.2. System Environment
 
@@ -125,11 +128,16 @@ $ sudo apt-get --yes install git
 $ export GIT_EDITOR=vim
 
 $ git config --global core.editor "vim"
+```
 
+```bash
 # git diff
 $ export LESS=Rx2
 
 $ git config --global core.pager "less -FRSX"
+
+# prevent 'git diff' from using a pager
+$ git config --global pager.diff false
 ```
 
 ```bash
@@ -140,6 +148,13 @@ $ git config –global user.email "email address"
 
 $ git config --global user.email "lankahsu@gmail.com"
 $ git config --global user.name "Lanka Hsu"
+
+$ git config --global -l
+user.email=lankahsu@gmail.com
+user.name=Lanka Hsu
+color.ui=auto
+http.cookiefile=/home/lanka/.gitcookies
+pager.diff=false
 ```
 
 # 1. Repository
