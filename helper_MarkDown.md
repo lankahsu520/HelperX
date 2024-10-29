@@ -358,6 +358,21 @@ gantt
 
 ```
 
+#### C. Example 2 (Bar chart)
+
+```mermaid
+gantt
+title 成績
+dateFormat X
+axisFormat %s
+section 天字班
+lana : 0, 100
+mary : 0, 100
+section 放牛班
+大雄 : 0, 0
+技安 : 0, 16
+阿福 : 0, 33
+```
 
 ### 5.1.2. Input date format[#](https://mermaid.js.org/syntax/gantt.html#input-date-format)
 
