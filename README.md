@@ -210,7 +210,11 @@
 
 >程式碼格式化（縮排）工具，支援 C/C++、C++/CLI、Objective-C、C# 和 Java。
 
-### 2.1.4. [helper_DBus.md](https://github.com/lankahsu520/HelperX/blob/master/helper_DBus.md) - dbus helper.
+### 2.1.4. [helper_curl.md](https://github.com/lankahsu520/HelperX/blob/master/helper_curl.md) - curl helper.
+
+>使用 curl 抓圖、抓檔，甚至軟體工程師提供測試的方法。
+
+### 2.1.5. [helper_DBus.md](https://github.com/lankahsu520/HelperX/blob/master/helper_DBus.md) - dbus helper.
 
 >本人是用 D-Bus low-level API 來進行對接，主要範例請見 [utilx9](https://github.com/lankahsu520/utilx9)。
 >
@@ -220,7 +224,7 @@
 >
 >所以請大家試著上網查尋看看。
 
-### 2.1.5. [helper_GCCDebugandgdb.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GCCDebugandgdb.md) - GCC Debug and gdb helper.
+### 2.1.6. [helper_GCCDebugandgdb.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GCCDebugandgdb.md) - GCC Debug and gdb helper.
 
 > 這邊又有個小故事，雖然沒辦法百分之一百重現，但是大致如下
 >
@@ -235,11 +239,11 @@
 >
 > <font color="red">平常寫程式有良好的習慣，如注意 alloc、free，給初值，使用驗證過的函數等，加上幾行 Debug message(s) ，解決 Compile Errors and Warnings，就能處理至少 95%上的問題。</font>
 
-### 2.1.6. [helper_Python.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Python.md) - Python helper.
+### 2.1.7. [helper_Python.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Python.md) - Python helper.
 
 > 不討論如何撰寫 Python 的程式，而是當使用或變動系統的 Python 時，可能發生的問題。
 
-### 2.1.7. [helper_valgrind.md](https://github.com/lankahsu520/HelperX/blob/master/helper_valgrind) - valgrind helper.
+### 2.1.8. [helper_valgrind.md](https://github.com/lankahsu520/HelperX/blob/master/helper_valgrind) - valgrind helper.
 
 > <font color="red">平常寫程式有良好的習慣 ! 再以 valgrind 進行輔助，維持軟體品質。</font>
 
