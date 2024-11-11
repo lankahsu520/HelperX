@@ -306,6 +306,11 @@ patch -p1 < configure_fixes.patch
 #### find - search for files in a directory hierarchy
 
 ```bash
+# Delete .DS_STORE and ._.DS_Store files in current folder and all subfolders
+find . -type f \( -name ".DS_Store" -o -name "._.DS_Store" \) -delete -print
+```
+
+```bash
 function find-min()
 {
 	HINT="Usage: ${FUNCNAME[0]} <?min>"
@@ -903,6 +908,9 @@ sed -i '94a\\n'
 
 # remove the line containing "PJ_BUILD_DIR"
 sed -i "s|PJ_BUILD_DIR|d" *.conf
+
+# update link files
+sed --follow-symlinks "s|PJ_BUILD_DIR|d" *.conf
 ```
 
 #### tr - translate or delete characters
@@ -1166,6 +1174,8 @@ lanka:lanka520:19276:0:99999:7:::
 
 #### logread
 
+> for openwrt
+
 ```bash
 logread -f -e helloworld 2>/dev/null
 ```
@@ -1190,7 +1200,7 @@ function logman-ex()
 		LOGREAD=`which logread`
 		LOGREAD_ARG=" [ ! -z '${LOGREAD}' ] "
 		[ -z "$LOGREAD" ] || LOGREAD_ARG="(logread -f -e ${LOGGER_TAG} 2>/dev/null;) || (logread -f ${LOGGER_COLOR} | grep ${LOGGER_TAG} 2>/dev/null)"
-		DO_COMMAND="${LOGREAD_ARG} || (tail -f /var/log/syslog ${LOGGER_COLOR} | grep ${LOGGER_TAG})"
+		DO_COMMAND="${LOGREAD_ARG} || (tail -f /var/log/syslog ${LOGGER_COLOR} | grep '${LOGGER_TAG}:')"
 		eval-it "$DO_COMMAND"
 	else
 		echo $HINT
