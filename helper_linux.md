@@ -306,18 +306,16 @@ patch -p1 < configure_fixes.patch
 #### find - search for files in a directory hierarchy
 
 ```bash
-# Delete .DS_STORE and ._.DS_Store files in current folder and all subfolders
-find . -type f \( -name ".DS_Store" -o -name "._.DS_Store" \) -delete -print
-```
+export FIND_PRUNE_ARG="-name lost+found -prune -o"
+export FIND_PRINT_ARG="-print"
 
-```bash
 function find-min()
 {
 	HINT="Usage: ${FUNCNAME[0]} <?min>"
 	MMIN1=$1
 
 	if [ ! -z "${MMIN1}" ]; then
-		DO_COMMAND="(find . -mmin -${MMIN1})"
+		DO_COMMAND="(find * ${FIND_PRUNE_ARG} -mmin -${MMIN1} ${FIND_PRINT_ARG};)"
 		eval-it "$DO_COMMAND"
 	else
 		echo $HINT
@@ -330,7 +328,7 @@ function find-day()
 	MTIME1=$1
 
 	if [ ! -z "${MTIME1}" ]; then
-		DO_COMMAND="(find . -mtime -${MTIME1})"
+		DO_COMMAND="(find * ${FIND_PRUNE_ARG} -mtime -${MTIME1} ${FIND_PRINT_ARG};)"
 		eval-it "$DO_COMMAND"
 	else
 		echo $HINT
@@ -343,7 +341,7 @@ function find-size()
 	SIZE1=$1
 
 	if [ ! -z "${SIZE1}" ]; then
-		DO_COMMAND="(find . -type f -size ${SIZE1})"
+		DO_COMMAND="(find * ${FIND_PRUNE_ARG} -type f -size ${SIZE1} ${FIND_PRINT_ARG};)"
 		eval-it "$DO_COMMAND"
 	else
 		echo $HINT
@@ -353,30 +351,42 @@ function find-size()
 function find-name()
 {
 	HINT="Usage: ${FUNCNAME[0]} <file>"
-	FILE1=$1
+	FILE1="$*"
 
 	if [ ! -z "${FILE1}" ]; then
-		DO_COMMAND="(find * -name ${FILE1})"
-		eval-it "$DO_COMMAND"
+		for ITEM in ${FILE1}; do
+		(
+			DO_COMMAND="(find * ${FIND_PRUNE_ARG} -name ${ITEM} ${FIND_PRINT_ARG};)"
+			eval-it "$DO_COMMAND"
+			echo
+		)
+		done
 	else
 		echo $HINT
 	fi
 }
+
+alias find123="find-name"
 
 function find-bak()
 {
 	find-name *.bak
 }
 
+function find-bash_aliases()
+{
+	find-name .bash_aliases
+}
+
 function find-type()
 {
-	DO_COMMAND="(find * -type f | xargs -n 1 file)"
+	DO_COMMAND="(find * ${FIND_PRUNE_ARG} -type f ${FIND_PRINT_ARG} | xargs -n 1 file;)"
 	eval-it "$DO_COMMAND"
 }
 
 function find-dup()
 {
-	DO_COMMAND="(find . -type f -printf '%p -> %f\n' | sort -k2 | uniq -f1 --all-repeated=separate)"
+	DO_COMMAND="(find * ${FIND_PRUNE_ARG} -type f -printf '%p -> %f\n' | sort -k2 | uniq -f1 --all-repeated=separate)"
 	eval-it "$DO_COMMAND"
 }
 
@@ -387,7 +397,7 @@ function find-path()
 	FILE2=$2
 
 	if [ ! -z "${PATH1}" ] && [ ! -z "${FILE2}" ]; then
-		DO_COMMAND="(cd ${PATH1}; find * -name ${FILE2}; cd - >/dev/null)"
+		DO_COMMAND="(cd ${PATH1}; find * ${FIND_PRUNE_ARG} -name ${FILE2} ${FIND_PRINT_ARG}; cd - >/dev/null)"
 		eval-it "$DO_COMMAND"
 	else
 		echo $HINT
@@ -3396,4 +3406,3 @@ $ yt-dlp -f 140 "https://www.youtube.com/watch?v=a_9_38JpdYU" -o 20240527084746
 # License
 
 > [HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
-
