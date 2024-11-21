@@ -306,6 +306,7 @@ patch -p1 < configure_fixes.patch
 #### find - search for files in a directory hierarchy
 
 ```bash
+export FIND_PATH="."
 export FIND_PRUNE_ARG="-name lost+found -prune -o"
 export FIND_PRINT_ARG="-print"
 
@@ -315,7 +316,7 @@ function find-min()
 	MMIN1=$1
 
 	if [ ! -z "${MMIN1}" ]; then
-		DO_COMMAND="(find * ${FIND_PRUNE_ARG} -mmin -${MMIN1} ${FIND_PRINT_ARG};)"
+		DO_COMMAND="(find ${FIND_PATH} ${FIND_PRUNE_ARG} -mmin -${MMIN1} ${FIND_PRINT_ARG};)"
 		eval-it "$DO_COMMAND"
 	else
 		echo $HINT
@@ -328,7 +329,7 @@ function find-day()
 	MTIME1=$1
 
 	if [ ! -z "${MTIME1}" ]; then
-		DO_COMMAND="(find * ${FIND_PRUNE_ARG} -mtime -${MTIME1} ${FIND_PRINT_ARG};)"
+		DO_COMMAND="(find ${FIND_PATH} ${FIND_PRUNE_ARG} -mtime -${MTIME1} ${FIND_PRINT_ARG};)"
 		eval-it "$DO_COMMAND"
 	else
 		echo $HINT
@@ -341,7 +342,7 @@ function find-size()
 	SIZE1=$1
 
 	if [ ! -z "${SIZE1}" ]; then
-		DO_COMMAND="(find * ${FIND_PRUNE_ARG} -type f -size ${SIZE1} ${FIND_PRINT_ARG};)"
+		DO_COMMAND="(find ${FIND_PATH} ${FIND_PRUNE_ARG} -type f -size ${SIZE1} ${FIND_PRINT_ARG};)"
 		eval-it "$DO_COMMAND"
 	else
 		echo $HINT
@@ -356,7 +357,7 @@ function find-name()
 	if [ ! -z "${FILE1}" ]; then
 		for ITEM in ${FILE1}; do
 		(
-			DO_COMMAND="(find * ${FIND_PRUNE_ARG} -name ${ITEM} ${FIND_PRINT_ARG};)"
+			DO_COMMAND="(find ${FIND_PATH} ${FIND_PRUNE_ARG} -name ${ITEM} ${FIND_PRINT_ARG};)"
 			eval-it "$DO_COMMAND"
 			echo
 		)
@@ -380,13 +381,13 @@ function find-bash_aliases()
 
 function find-type()
 {
-	DO_COMMAND="(find * ${FIND_PRUNE_ARG} -type f ${FIND_PRINT_ARG} | xargs -n 1 file;)"
+	DO_COMMAND="(find ${FIND_PATH} ${FIND_PRUNE_ARG} -type f ${FIND_PRINT_ARG} | xargs -n 1 file;)"
 	eval-it "$DO_COMMAND"
 }
 
 function find-dup()
 {
-	DO_COMMAND="(find * ${FIND_PRUNE_ARG} -type f -printf '%p -> %f\n' | sort -k2 | uniq -f1 --all-repeated=separate)"
+	DO_COMMAND="(find ${FIND_PATH} ${FIND_PRUNE_ARG} -type f -printf '%p -> %f\n' | sort -k2 | uniq -f1 --all-repeated=separate)"
 	eval-it "$DO_COMMAND"
 }
 
@@ -397,7 +398,7 @@ function find-path()
 	FILE2=$2
 
 	if [ ! -z "${PATH1}" ] && [ ! -z "${FILE2}" ]; then
-		DO_COMMAND="(cd ${PATH1}; find * ${FIND_PRUNE_ARG} -name ${FILE2} ${FIND_PRINT_ARG}; cd - >/dev/null)"
+		DO_COMMAND="(cd ${PATH1}; find ${FIND_PATH} ${FIND_PRUNE_ARG} -name ${FILE2} ${FIND_PRINT_ARG}; cd - >/dev/null)"
 		eval-it "$DO_COMMAND"
 	else
 		echo $HINT
