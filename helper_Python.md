@@ -245,10 +245,10 @@ $ which python3.10
 $ pip install --upgrade virtualenv
 $ pip install --upgrade setuptools
 
-$ mkdir -p /work/bin/python/3.10
+$ mkdir -p /work/bin/python/$PJ_PYTHON_VER
 # create A Virtual Environment in /work/bin/python/3.10
-$ cd /work/bin/python/3.10; virtualenv --python=python3.10 .
-$ cd /work/bin/python/3.10; tree -L 2 ./
+$ cd /work/bin/python/$PJ_PYTHON_VER; virtualenv --python=python$PJ_PYTHON_VER .
+$ cd /work/bin/python/$PJ_PYTHON_VER; tree -L 2 ./
 ./
 ├── bin
 │   ├── activate
@@ -279,7 +279,7 @@ $ cd /work/bin/python/3.10; tree -L 2 ./
 ### 4.1.2. Enter Virtual Environment
 
 ```bash
-$ . /work/bin/python/3.10/bin/activate
+$ . /work/bin/python/$PJ_PYTHON_VER/bin/activate
 (3.10) $ pip3 list
 Package    Version
 ---------- -------
@@ -407,13 +407,13 @@ $ pip install --upgrade cmake
 $ pip install --upgrade kconfiglib
 
 # upgrade wheel setuptools
-$ pip install --upgrade wheel setuptools launchpadlib
+$ pip install --upgrade wheel setuptools launchpadlib six
 # upgrade pycairo
 
 $ pip install --upgrade six
 $ pip install --upgrade pygobject
 $ pip install --upgrade pycairo
-$ pip install --upgrade awscli
+$ pip install --upgrade awscli boto3 netifaces
 $ pip install --upgrade pyproject-toml
 $ pip install --upgrade pylint
 ```
