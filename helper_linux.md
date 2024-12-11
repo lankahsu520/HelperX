@@ -1710,6 +1710,9 @@ sudo timedatectl set-timezone Asia/Taipei
 
 ```bash
 sudo journalctl -xefu snapd
+
+# check the last log
+sudo journalctl -xe
 ```
 
 ```bash
@@ -2773,6 +2776,13 @@ alias la="ls -A"
 alias l="ls -CF"
 
 unalias la
+```
+
+#### locale - get locale-specific information
+
+```bash
+sudo vi /etc/default/locale
+
 ```
 
 #### man - an interface to the system reference manuals
