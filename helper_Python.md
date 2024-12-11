@@ -410,6 +410,7 @@ $ pip install --upgrade kconfiglib
 $ pip install --upgrade wheel setuptools launchpadlib
 # upgrade pycairo
 
+$ pip install --upgrade six
 $ pip install --upgrade pygobject
 $ pip install --upgrade pycairo
 $ pip install --upgrade awscli
@@ -608,6 +609,7 @@ $ sudo cp  ~/.local/lib/python${PJ_PYTHON_VER}/site-packages/gi/*.so /usr/lib/py
 $ lsb_release -a | grep Description
 No LSB modules are available.
 Description:    Ubuntu 20.04.6 LTS
+# https://launchpad.net/ubuntu/+source/pygobject/
 # https://launchpad.net/ubuntu/focal/+package/python-gi
 # download pygobject_3.36.0.orig.tar.xz
 # download pygobject_3.42.0.orig.tar.xz - for python3.12
@@ -617,6 +619,17 @@ $ sudo apt-get install libgirepository1.0-dev libcairo2-dev
 $ python setup.py build
 $ cd build/lib.linux-x86_64-cpython-310/gi/
 $ sudo cp *.so /usr/lib/python3/dist-packages/gi
+```
+
+```bash
+# https://launchpad.net/ubuntu/+source/cairo
+# download cairo_1.18.2.orig.tar.xz
+```
+
+## II.11. dpkg: error processing archive /var/cache/apt/archives/python3.12_3.12.8-1+focal1_amd64.deb (--unpack)
+
+```bash
+$ sudo apt list --installed | grep 'python3.12' | cut -d'/' -f1 | xargs -o sudo apt autoremove && sudo apt install python3.12-full
 ```
 
 # III. Glossary
