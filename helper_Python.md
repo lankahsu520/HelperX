@@ -24,7 +24,7 @@
 >
 >此篇不討論如何撰寫 Python 的程式，而是當使用或變動系統的 Python 時，可能發生的問題。
 
-> 我們是要用 Python，而不是解決 Python 的問題。而此篇就是最好的處方！
+> 我們是要用 Python，而不是解決 Python 的問題。但問題不解決，怎麼用。而此篇就是最好的處方！
 
 > [維基百科] [Python](https://zh.wikipedia.org/zh-tw/Python)
 >
