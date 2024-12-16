@@ -575,6 +575,8 @@ Date:   Sat May 4 23:00:29 2024 +0800
 
     update helper_linux.md, 22. usb Hadler
 
+$ git log --oneline --graph -1
+
 $ git log --oneline
 27bdad7 (HEAD -> master, origin/master, origin/HEAD) update helper_linux.md, 22. usb Hadler
 
