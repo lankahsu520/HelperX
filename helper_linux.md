@@ -118,7 +118,7 @@ dd if=/dev/zero of=/dev/mtdblock10 bs=4M count=1
 rsync -av --progress /work/* /work_bak
 
 rsync -av --progress --delete /work/* /work_bak
-
+rsync -av --progress --delete --exclude lost+found --exclude recycle /work/* /work_bak
 ```
 
 #### scp - OpenSSH secure file copy
