@@ -1303,6 +1303,81 @@ flowchart LR
 $ git remote prune origin
 ```
 
+### 6.2.2. externals / submodules
+
+#### A. List all submodules
+
+```bash
+$ git submodule
+ 8518684c0f33d004fa93971be2c6a8eca3167d1e examples/common/QRCode/repo (v1.6.0-19-g8518684)
+ a6299b6c7c0b2e3eb62fa08ee4bf7155c39bad1f examples/common/m5stack-tft/repo (heads/master)
+ e9ca8d1ca225ef94fd20890b5440b22f490a410a third_party/abseil-cpp/src
+...
+```
+
+```bash
+$ git submodule status
+ 8518684c0f33d004fa93971be2c6a8eca3167d1e examples/common/QRCode/repo (v1.6.0-19-g8518684)
+ a6299b6c7c0b2e3eb62fa08ee4bf7155c39bad1f examples/common/m5stack-tft/repo (heads/master)
+ e9ca8d1ca225ef94fd20890b5440b22f490a410a third_party/abseil-cpp/src
+...
+```
+
+```bash
+$ cat .gitmodules
+[submodule "nlassert"]
+        path = third_party/nlassert/repo
+        url = https://github.com/nestlabs/nlassert.git
+        branch  = master
+[submodule "nlio"]
+        path = third_party/nlio/repo
+        url = https://github.com/nestlabs/nlio.git
+        branch  = master
+[submodule "mbedtls"]
+        path = third_party/mbedtls/repo
+        url = https://github.com/ARMmbed/mbedtls.git
+        branch = mbedtls-2.28
+...
+```
+
+```bash
+$ git config --file .gitmodules --get-regexp path
+submodule.nlassert.path third_party/nlassert/repo
+submodule.nlio.path third_party/nlio/repo
+submodule.mbedtls.path third_party/mbedtls/repo
+submodule.qrcode.path examples/common/QRCode/repo
+...
+```
+
+#### B. Add submodule
+
+```bash
+$ git submodule add https://github.com/lankahsu520/utilx9 Submodules/utilx9
+$ git submodule add https://github.com/lankahsu520/utilx9 utilx9
+$ git commit
+```
+
+#### C. Remove submodule
+
+```bash
+$ git rm utilx9
+$ git commit
+```
+
+#### D. Update submodule
+
+```bash
+$ git submodule update --init --recursive
+
+# pull main and submodules
+$ git pull --recurse-submodules
+
+# clone and pull submodules with recurse mode
+$ git clone --recurse-submodules  <repo>
+```
+
+
+
 # 7. Others ???
 
 ```bash
