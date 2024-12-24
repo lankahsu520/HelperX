@@ -423,7 +423,9 @@ $ file /bin/bash
 > Building Host: ubuntu 20.04 x86_64
 
 ```bash
-$ git clone --recurse-submodules https://github.com/project-chip/connectedhomeip.git
+$ git clone --recurse-submodules https://github.com/project-chip/connectedhomeip.git connectedhomeip-123
+
+$ ls connectedhomeip-123
 
 #  you already have the Matter code checked out, run the following commands to update the repository and synchronize submodules
 $ git pull
@@ -517,29 +519,7 @@ $ git submodule update --init
 $ git clone https://github.com/SiliconLabs/matter.git
 ```
 
-## 5.2. [Building Matter](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#building-matter)
-
-> [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[docs](https://github.com/project-chip/connectedhomeip/tree/master/docs)/[guides](https://github.com/project-chip/connectedhomeip/tree/master/docs/guides)/[BUILDING.md](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md)
-
-```mermaid
-flowchart TD
-	subgraph Linux-a[Linux]
-		subgraph Native-a[Native compiler]
-			subgraph Matter-a[Matter SDK]
-				lighting-app[lighting-app]
-			end
-		end
-	end
-	subgraph Linux-b[Linux]
-		subgraph Native-b[Native compiler]
-			subgraph Matter-b[Matter SDK]
-				bridge-app
-			end
-		end
-	end
-```
-
-### 5.2.1. Installing prerequisites on Linux
+## 5.2. Setup environment
 
 ```bash
 $ sudo apt install -y git gcc g++ pkg-config libssl-dev libdbus-1-dev \
@@ -582,23 +562,41 @@ $ gn --version
 2124 (e4702d740906)
 ```
 
-### 5.2.2. Prepare for building
+## 5.3. [Building Matter](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#building-matter)
 
->因為一開始使用 --recurse-submodules，這邊就只要執行 activate.sh
+> [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[docs](https://github.com/project-chip/connectedhomeip/tree/master/docs)/[guides](https://github.com/project-chip/connectedhomeip/tree/master/docs/guides)/[BUILDING.md](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md)
+
+```mermaid
+flowchart TD
+	subgraph Linux-a[Linux]
+		subgraph Native-a[Native compiler]
+			subgraph Matter-a[Matter SDK]
+				lighting-app[lighting-app]
+			end
+		end
+	end
+	subgraph Linux-b[Linux]
+		subgraph Native-b[Native compiler]
+			subgraph Matter-b[Matter SDK]
+				bridge-app
+			end
+		end
+	end
+```
+
+### 5.3.1. activate
 
 > Before running any other build command, the `scripts/activate.sh` environment setup script should be sourced at the top level. This script takes care of downloading GN, ninja, and setting up a Python environment with libraries used to build and test.
 
 ```bash
-$ source scripts/activate.sh
+$ cd connectedhomeip-123
+
+$ . scripts/activate.sh
+# If the script says the environment is out of date, you can update it by running the following command
+$ . scripts/bootstrap.sh
 ```
 
-> If the script says the environment is out of date, you can update it by running the following command
-
-```bash
-$ source scripts/bootstrap.sh
-```
-
-### 5.2.3. Building
+### 5.3.2. Building Method
 
 > 先確定環境是否設定完成，執行 gn
 
@@ -621,6 +619,8 @@ export PJ_GN_BUILD_DIR=build_xxx
 ```
 
 #### A. General - gn
+
+> 此方法不易理解
 
 ```bash
 # generate and run ninja/make as needed to compile
@@ -657,6 +657,8 @@ $ ninja -C ${PJ_GN_BUILD_DIR}/${PJ_GN_TARGET} \
 #### B. [`build_examples.py`](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#using-build_examplespy)
 
 >The script `./scripts/build/build_examples.py` provides a uniform build interface into using `gn`, `cmake`, `ninja` and other tools as needed to compile various platforms.
+
+> 建議使用此方法
 
 ##### B.1. target vs function
 
@@ -834,65 +836,21 @@ $ cd /work/bin/android
 $ unzip android-ndk-r26b-linux.zip
 ```
 
-## 5.3. Cross-Compilation with Clang on ubuntu x86_64
+
+
+### 5.3.3. CHIP [examples](https://github.com/project-chip/connectedhomeip/tree/master/examples)
+
+> - [Running your first example](https://github.com/project-chip/connectedhomeip/blob/master/docs/getting_started/first_example.md)
+> - [Changing examples](https://github.com/project-chip/connectedhomeip/blob/master/docs/getting_started/changing_examples.md)
+> - [SDK Architecture Overview](https://github.com/project-chip/connectedhomeip/blob/master/docs/getting_started/SDKBasics.md)
 
 > Host: ubuntu x86_64
->
-> Target: Pi4 arm64
->
-> 請先準備好你的 Toolchain，尤其是裏面的 sysroot，請設定環境變數
->
-> export SYSROOT_AARCH64=/work/aarch64-linux-gnu
 
-> sysroot 最簡單的製作方式，就是進到 Target 裏，把 /lib、 /usr/include 和 /usr/lib 把包即可
-
-#### A. linux-arm64-light-clang
+#### A. Linux (Native-Compilation)
 
 ##### A.1. [lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app)
 
-> 記得編譯完成是要放在 Pi4 上執行 
-
-```bash
-# 設邊選擇 Pi4 (arm64/aarch64);另外使用 clang進行編譯
-$ export PJ_GN_TARGET=linux-arm64-light-clang
-
-# 設定 SYSROOT_AARCH64
-$ export SYSROOT_AARCH64=/work/aarch64-linux-gnu
-$ echo $SYSROOT_AARCH64
-/work/aarch64-linux-gnu
-
-$ ./scripts/build/build_examples.py \
-	--target ${PJ_GN_TARGET} \
-	--out-prefix ./build_xxx \
-	gen
-# or
-$ PKG_CONFIG_PATH="${SYSROOT_AARCH64}/lib/aarch64-linux-gnu/pkgconfig" \
-	gn gen --check --fail-on-unused-args --export-compile-commands \
-	--root=./examples/lighting-app/linux \
-	'--args=is_clang=true target_cpu="arm64" sysroot="/work/aarch64-linux-gnu"' \
-	./build_xxx/${PJ_GN_TARGET}
-
-$ ninja -C ./build_xxx/${PJ_GN_TARGET}
-
-$ gn ls \
-	--root=./examples/bridge-app/linux \
-	./build_xxx/${PJ_GN_TARGET}
-```
-
-```bash
-$ ll build_xxx/linux-arm64-light-clang/chip-lighting-app
--rwxrwxr-x 1 lanka lanka 54785464 十一 23 13:39 build_xxx/linux-arm64-light-clang/chip-lighting-app*
-
-$ file build_xxx/linux-arm64-light-clang/chip-lighting-app
-build_xxx/linux-arm64-light-clang/chip-lighting-app: ELF 64-bit LSB shared object, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, for GNU/Linux 3.7.0, BuildID[xxHash]=7587b1aefa363654, with debug_info, not stripped
-
-```
-
-## 5.4. CHIP [examples](https://github.com/project-chip/connectedhomeip/tree/master/examples)
-
-#### A. Linux
-
-##### A.1. [lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app)
+> [CHIP Linux Lighting Example](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app/linux) - An example showing the use of CHIP on the Linux. The document will describe how to build and run CHIP Linux Lighting Example on Raspberry Pi. This doc is tested on **Ubuntu for Raspberry Pi Server 20.04 LTS (aarch64)** and **Ubuntu for Raspberry Pi Desktop 20.10 (aarch64)**
 
 ```bash
 $ export PJ_GN_TARGET=linux-x64-light
@@ -985,9 +943,61 @@ $ ll build_xxx/linux-x64-tests/chip-tool
 -rwxrwxr-x 1 lanka lanka 159226400 十一 24 10:51 build_xxx/linux-x64-tests/chip-tool*
 ```
 
-#### B. Silicon Labs
+#### B. Pi4 Cross-Compilation with Clang on ubuntu x86_64
 
-##### B.1. efr32-brd4187c-light
+> Host: ubuntu x86_64
+>
+> Target: Pi4 arm64
+>
+> 請先準備好你的 Toolchain，尤其是裏面的 sysroot，請設定環境變數
+>
+> export SYSROOT_AARCH64=/work/aarch64-linux-gnu
+
+> sysroot 最簡單的製作方式，就是找一台 Pi4 ，開機後進入系統，把 /lib、 /usr/include 和 /usr/lib 把包即可
+
+##### B.1. [lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app) (linux-arm64-light-clang)
+
+> 記得編譯完成是要放在 Pi4 上執行
+
+```bash
+# 設邊選擇 Pi4 (arm64/aarch64);另外使用 clang進行編譯
+$ export PJ_GN_TARGET=linux-arm64-light-clang
+
+# 設定 SYSROOT_AARCH64
+$ export SYSROOT_AARCH64=/work/aarch64-linux-gnu
+$ echo $SYSROOT_AARCH64
+/work/aarch64-linux-gnu
+
+$ ./scripts/build/build_examples.py \
+	--target ${PJ_GN_TARGET} \
+	--out-prefix ./build_xxx \
+	gen
+# or
+$ PKG_CONFIG_PATH="${SYSROOT_AARCH64}/lib/aarch64-linux-gnu/pkgconfig" \
+	gn gen --check --fail-on-unused-args --export-compile-commands \
+	--root=./examples/lighting-app/linux \
+	'--args=is_clang=true target_cpu="arm64" sysroot="/work/aarch64-linux-gnu"' \
+	./build_xxx/${PJ_GN_TARGET}
+
+$ ninja -C ./build_xxx/${PJ_GN_TARGET}
+
+$ gn ls \
+	--root=./examples/bridge-app/linux \
+	./build_xxx/${PJ_GN_TARGET}
+```
+
+```bash
+$ ll build_xxx/linux-arm64-light-clang/chip-lighting-app
+-rwxrwxr-x 1 lanka lanka 54785464 十一 23 13:39 build_xxx/linux-arm64-light-clang/chip-lighting-app*
+
+$ file build_xxx/linux-arm64-light-clang/chip-lighting-app
+build_xxx/linux-arm64-light-clang/chip-lighting-app: ELF 64-bit LSB shared object, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, for GNU/Linux 3.7.0, BuildID[xxHash]=7587b1aefa363654, with debug_info, not stripped
+
+```
+
+#### C. Silicon Labs (Cross-Compilation)
+
+##### C.1. efr32-brd4187c-light
 
 ```bash
 $ export PJ_GN_TARGET=efr32-brd4187c-light
@@ -1004,7 +1014,7 @@ $ gn ls \
 	./build_xxx/${PJ_GN_TARGET}
 ```
 
-##### B.2. efr32-brd4186c-light
+##### C.2. efr32-brd4186c-light
 
 ```bash
 $ export PJ_GN_TARGET=efr32-brd4186c-light
@@ -1021,9 +1031,9 @@ $ gn ls \
 	./build_xxx/${PJ_GN_TARGET}
 ```
 
-#### C. Texas Instruments
+#### D. Texas Instruments (Cross-Compilation)
 
-##### C.1. ti-cc13x2x7_26x2x7-lighting
+##### D.1. ti-cc13x2x7_26x2x7-lighting
 
 ```bash
 $ export PJ_GN_TARGET=ti-cc13x2x7_26x2x7-lighting
@@ -1057,9 +1067,9 @@ $ gn ls \
 	./build_xxx/${PJ_GN_TARGET}
 ```
 
-#### D. android
+#### E. android (Cross-Compilation)
 
-##### D.1. [CHIPTool](https://github.com/project-chip/connectedhomeip/tree/master/examples/android/CHIPTool)
+##### E.1. [CHIPTool](https://github.com/project-chip/connectedhomeip/tree/master/examples/android/CHIPTool)
 
 > 20231206 app-debug.apk 使用測試完很失望。
 >
@@ -1127,39 +1137,24 @@ $ ll build_xxx/android-arm64-chip-tool/outputs/apk/debug/app-debug.apk
 
 # 6. Run ! Run ! Run !
 
-## 6.1. chip-tool and chip-lighting-app
+## 6.1. chip-lighting-app
 
-```mermaid
-flowchart BT
-	subgraph Router[Router]
-	end
-	subgraph ubuntu[PC - Ubuntu x86_64]
-		subgraph chip-tool[chip-tool]
-		end
-	end
-	subgraph Pi4[Pi4 - Ubuntu arm64 22.04.xx 64-bit server]
-		chip-lighting-app[chip-lighting-app]
-	end
-	
-	ubuntu <--> |Lan|Router
-	Pi4 <--> |Lan|Router
-	
-	chip-tool <--> |Matter command| chip-lighting-app
-```
-
-#### A. Pi4 - Ubuntu arm64 22.04.xx 64-bit server
+> run on Pi4 - Ubuntu arm64 22.04.xx 64-bit server
 
 > --ble-device <number>
->     The device number for CHIPoBLE, without 'hci' prefix, can be found by hciconfig.
+>  The device number for CHIPoBLE, without 'hci' prefix, can be found by hciconfig.
 >
 > --passcode <passcode>
->     A 27-bit unsigned integer, which serves as proof of possession during commissioning.
->     If not provided to compute a verifier, the --spake2p-verifier-base64 must be provided.
+>  A 27-bit unsigned integer, which serves as proof of possession during commissioning.
+>  If not provided to compute a verifier, the --spake2p-verifier-base64 must be provided.
 >
 > ​    [1..99999998]
 >
 > --interface-id <interface>
->     A interface id to advertise on.
+>  A interface id to advertise on.
+>
+> --discriminator <discriminator>
+>    A 12-bit unsigned integer match the value which a device advertises during commissioning.
 
 ```bash
 $ export MATTER_PINCODE=20231206
@@ -1179,7 +1174,8 @@ hci0:   Type: Primary  Bus: UART
 $ export MATTER_IFACE=eth0
 $ export MATTER_IFACE_ID=`ip link show dev $MATTER_IFACE | grep $MATTER_IFACE | cut -d":" -f1`
 
-#$ ./chip-lighting-app --interface-id --ble-device 0 --capabilities 4 --passcode 20231206 --discriminator 3849
+$ export MATTER_IFACE=enp0s3
+$ export MATTER_IFACE_ID=`ip link show dev $MATTER_IFACE | grep $MATTER_IFACE | cut -d":" -f1`
 
 $ ./chip-lighting-app \
  --interface-id $MATTER_IFACE_ID \
@@ -1205,11 +1201,133 @@ $ ./chip-lighting-app \
 
 ```
 
-#### B. PC - Ubuntu x86_64
+```bash
+# 目前 demo 裏有個嚴重的 bug，unpair 後無法再進行 pair，需要刪除 /tmp/chip_kvs 後，再重啟 chip-lighting-app
+$ rm /tmp/chip_kvs
+
+# no ble
+$ ./chip-lighting-app --interface-id 2 --ble-device 0 --capabilities 4 --passcode 20231206 --discriminator 3849
+
+$ ./chip-lighting-app --interface-id 2 --capabilities 4 --passcode 20231206 --discriminator 3849
+
+$ ./chip-lighting-app --interface-id 2 --capabilities 4 --passcode 20231205 --discriminator 3849
+```
+
+#### A. QR Code
+
+> https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0IRV01DWLA39G00
+
+![matter_QRCode01](./images/matter_QRCode01.png)
+
+## 6.2. [chip-tool](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool)
+
+> run on PC - Ubuntu x86_64
+
+>  [chip-tool](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool) is a C++ command line controller with an interactive shell. More information on chip-tool can be found in the [chip-tool guide](https://github.com/project-chip/connectedhomeip/blob/master/docs/development_controllers/chip-tool/chip_tool_guide.md).
+>
+> [chip-repl](https://github.com/project-chip/connectedhomeip/blob/master/src/controller/python/chip-repl.py) is a shell for the python controller. The chip-repl is part of the python controller framework, often used for testing. More information about the python controller can be found in the [python testing](https://github.com/project-chip/connectedhomeip/blob/master/docs/testing/python.md) documentation.
+
+```mermaid
+flowchart BT
+	subgraph Router[Router]
+	end
+	subgraph ubuntu[PC - Ubuntu x86_64]
+		subgraph chip-tool[chip-tool]
+		end
+	end
+	subgraph Pi4[Pi4 - Ubuntu arm64 22.04.xx 64-bit server]
+		chip-lighting-app[chip-lighting-app]
+	end
+	
+	ubuntu <--> |Lan|Router
+	Pi4 <--> |Lan|Router
+	
+	chip-tool <--> |Matter command| chip-lighting-app
+```
 
 ```bash
-$ sudo cp chip-tool /bin
+# 你也可以透過 snap 安裝 chip-tool
+$ sudo snap install chip-tool
+```
 
+### 6.2.0. Modes
+
+#### A. Single-command mode (default)
+
+>  In this mode, the CHIP Tool will exit with a timeout error if any single command does not complete within a certain timeout period.
+
+#### B. Interactive mode
+
+> In this mode, a command will terminate with an error if it does not complete within the timeout period. However, the CHIP Tool will not be terminated and it will not terminate processes that previous commands have started. Moreover, when using the interactive mode, the CHIP Tool will establish a new CASE session only when there is no session available yet. On the following commands, it will use the existing session.
+
+```bash
+$ chip-tool interactive start
+>>>
+
+pairing onnetwork 1 20231206
+
+onoff toggle 1 1
+
+pairing unpair 1
+
+```
+
+### 6.2.1. Commissioning
+
+>  Matter devices can use different commissioning channels:
+>
+> - Devices that are not yet connected to the target IP network use Bluetooth LE as the commissioning channel.
+> - Devices that have already joined an IP network only need to use the IP protocol for commissioning to the Matter network.
+
+#### A. Commissioning into a Thread network over Bluetooth LE
+
+ ```bash
+ $ chip-tool pairing ble-thread <node_id> hex:<operational_dataset> <pin_code> <discriminator>
+ ```
+
+#### B. Commissioning into a Wi-Fi network over Bluetooth LE
+
+ ```bash
+ $ chip-tool pairing ble-wifi <node_id> <ssid> <password> <pin_code> <discriminator>
+
+ $ chip-tool pairing ble-wifi <node_id> hex:<ssid> hex:<password> <pin_code> <discriminator>
+ ```
+
+#### C. Commissioning into a network over IP
+
+```bash
+$ chip-tool pairing onnetwork <node_id> <pin_code>
+```
+
+#### D. Commissioning with long discriminator
+
+```bash
+$ chip-tool pairing onnetwork-long <node_id> <pin_code> <discriminator>
+```
+
+#### E. Commissioning with QR code payload or manual pairing code
+
+```bash
+$ chip-tool pairing code <node_id> <qrcode_payload-or-manual_code>
+```
+
+#### F. Forgetting the already-commissioned device
+
+```bash
+$ chip-tool pairing unpair <node_id>
+```
+
+### 6.2.2. Control application Data Model clusters
+
+#### A. onoff
+
+```bash
+$ ./chip-tool onoff toggle <node_id> <endpoint_id>
+```
+
+### 6.2.3. Test Case
+
+```bash
 # default 20202021
 $ export MATTER_PINCODE=20231206
 # default 3840
@@ -1217,24 +1335,47 @@ $ export MATTER_DISCRIMINATOR=3849
 
 $ export MATTER_NODEID=1
 $ export MATTER_EPID=1
-```
 
-```bash
 # Commissioning
 $ chip-tool pairing onnetwork $MATTER_NODEID $MATTER_PINCODE
-```
 
-```bash
 # toggle
 $ chip-tool onoff toggle $MATTER_NODEID $MATTER_EPID
-```
 
-```bash
 # Unpairing
 $ chip-tool pairing unpair $MATTER_NODEID
 ```
 
-## 6.2. Google Home
+## 6.4. Android App
+```mermaid
+flowchart BT
+	subgraph Router[Router]
+	end
+	subgraph Phone[Phone]
+		subgraph SmartLife[Smart Life]
+		end
+	end
+	subgraph Pi4[Pi4 - Ubuntu arm64 22.04.xx 64-bit server]
+		chip-lighting-app[chip-lighting-app]
+	end
+	
+	Phone <--> |Wi-Fi|Router
+	Pi4 <--> |Lan|Router
+	
+	SmartLife<--> |Matter command| chip-lighting-app
+```
+### 6.4.1. Sample App for Matter APK
+
+> [Matter 專用的 Google Home 範例應用程式](https://developers.home.google.com/samples/matter-app?hl=zh-tw)
+>
+> [sample-apps-for-matter-android](https://github.com/google-home/sample-apps-for-matter-android) - [GHSAFM-2.0.0-default-debug.apk](https://github.com/google-home/sample-apps-for-matter-android/releases/download/v2.0.0/GHSAFM-2.0.0-default-debug.apk)
+
+### 6.4.2. Smart Life (Android App)
+
+> [Google play](https://play.google.com/store/games?hl=zh_TW)上的軟體大都需要有一個 *Matter Gateway* 當中介者。而此軟體不用，方便測試。
+
+## 6.3. Google Home
+
 ```mermaid
 flowchart BT
 	subgraph Google
@@ -1266,7 +1407,7 @@ flowchart BT
 	NestHub <--> |Wifi|Router
 	android <--> |Wifi|Router
 ```
-### 6.2.1. [支援 Matter 的 Google 裝置](https://support.google.com/googlenest/answer/12391458?hl=zh-Hant&co=GENIE.Platform%3DAndroid)
+### 6.3.1. [支援 Matter 的 Google 裝置](https://support.google.com/googlenest/answer/12391458?hl=zh-Hant&co=GENIE.Platform%3DAndroid)
 
 > ## Matter 如何與 Google 服務搭配運作
 >
@@ -1280,7 +1421,7 @@ flowchart BT
 >
 > 歡迎前往 [Google 商店](https://home.google.com/explore-devices/featured-devices/#google-devices-with-matter)選購上述裝置。
 
-### 6.2.2. [配對 Matter 裝置](https://developers.home.google.com/matter/integration/pair?hl=zh-tw)
+### 6.3.2. [配對 Matter 裝置](https://developers.home.google.com/matter/integration/pair?hl=zh-tw)
 
 > ## 配對限制
 >
@@ -1305,11 +1446,40 @@ flowchart BT
 
 ![matter_google_console](./images/matter_google_console.png)
 
-# 7. Deep dive into Matter
+# 7. Tools
+
+## 7.1. [ZCL Advanced Platform (ZAP)](https://developers.home.google.com/matter/tools/zap)
+
+> github - [zap](https://github.com/project-chip/zap)
+>
+> [ZAP releases](https://github.com/project-chip/zap/releases) - zap-linux-x64.deb
+>
+> [ZAP documentation](https://github.com/project-chip/connectedhomeip/blob/master/docs/zap_and_codegen/zap_intro.md)
+
+```bash
+# 因為版本過新，會在編譯中出錯；避免安裝
+$ sudo dpkg -i ./zap-linux-x64.deb
+
+# 使用內建安裝 .environment
+$ cd connectedhomeip-123
+
+$ export PW_ZAP_CIPD_INSTALL_DIR=`pwd`/.environment/cipd/packages/zap
+```
+
+```bash
+# lighting-app
+$ ./scripts/tools/zap/run_zaptool.sh ./examples/lighting-app/lighting-common/lighting-app.zap
+```
+
+![matter_zcl01](./images/matter_zcl01.png)
+
+![matter_zcl02](./images/matter_zcl02.png)
+
+# 8. Deep dive into Matter
 
 > 主要著重在 linux 上的開發
 
-## 7.0. CTAG
+## 8.0. CTAG
 
 > 要熟悉程式本身，就必須將程式碼加入專案之中，方便查尋。下面列出要收錄的目錄，避免加入一些不必要的程式。
 >
@@ -1348,9 +1518,9 @@ flowchart BT
 
 ```
 
-## 7.1. Data Model
+## 8.1. Data Model
 
-### 7.1.1. Elements of Matter
+### 8.1.1. Elements of Matter
 
 > 因為曾經有開發 Z-Wave 的經驗，對此定義並不陌生；類似的應用 [mctt_1st.md](https://github.com/lankahsu520/beeX/blob/main/doc/mctt_1st.md)。
 >
@@ -1413,7 +1583,7 @@ flowchart BT
 
 > Provides basic information about the node, like firmware version, manufacturer etc
 
-### 7.1.2. Examples of Devices
+### 8.1.2. Examples of Devices
 
 #### A. Dimmable Light & On/Off Light
 
@@ -1451,7 +1621,7 @@ flowchart BT
 
 ```
 
-### 7.1.3. Server(s) and Client(s)
+### 8.1.3. Server(s) and Client(s)
 
 ```mermaid
 flowchart LR
@@ -1556,7 +1726,7 @@ flowchart LR
 
 ```
 
-## 7.2. [Clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)
+## 8.2. [Clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)
 
 >[connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/
 >
@@ -1602,7 +1772,7 @@ low-power-server
 
 ```
 
-### 7.2.1. 0x0006 [on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters) - <font color="red">開 / 關 (On / Off) 功能</font>
+### 8.2.1. 0x0006 [on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters) - <font color="red">開 / 關 (On / Off) 功能</font>
 
 >[connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/[on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/on-off-server)/
 
@@ -1644,13 +1814,13 @@ Usage:
 
 > [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/[on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/on-off-server)/[on-off-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/on-off-server/on-off-server.cpp)
 
-### 7.2.2. 0x0008 [level-control](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/level-control) - <font color="red">調光器 (Dimmer) 功能</font>
+### 8.2.2. 0x0008 [level-control](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/level-control) - <font color="red">調光器 (Dimmer) 功能</font>
 
 > [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/[level-control](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/level-control)/
 
-## 7.3. Init & Options
+## 8.3. Init & Options
 
-### 7.3.0. Init
+### 8.3.0. Init
 
 #### - [AppMain.cpp](https://github.com/project-chip/connectedhomeip/blob/master/examples/platform/linux/AppMain.cpp)
 
@@ -1695,7 +1865,7 @@ CHIP_ERROR Server::Init(const ServerInitParams & initParams)
 }
 ```
 
-### 7.3.1. [Options.cpp](https://github.com/project-chip/connectedhomeip/blob/master/examples/platform/linux/Options.cpp)
+### 8.3.1. [Options.cpp](https://github.com/project-chip/connectedhomeip/blob/master/examples/platform/linux/Options.cpp)
 
 > [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[examples](https://github.com/project-chip/connectedhomeip/tree/master/examples)/[platform](https://github.com/project-chip/connectedhomeip/tree/master/examples/platform)/[linux](https://github.com/project-chip/connectedhomeip/tree/master/examples/platform/linux)/[Options.cpp](https://github.com/project-chip/connectedhomeip/blob/master/examples/platform/linux/Options.cpp)
 
@@ -1709,9 +1879,9 @@ initParams.interfaceId = LinuxDeviceOptions::GetInstance().interfaceId;
 
 #### --passcode, kDeviceOption_Passcode 0x1009
 
-## 7.4. Pair
+## 8.4. Pair
 
-### 7.4.1. passcode and discriminator
+### 8.4.1. passcode and discriminator
 
 #### A. [CHIPDeviceConfig.h](https://github.com/project-chip/connectedhomeip/blob/master/src/include/platform/CHIPDeviceConfig.h)
 
@@ -1877,10 +2047,6 @@ $ cd ~/connectedhomeip/examples/chef/
 $ ./chef.py -zbr -v0xfff1 -p 0x8000 -d rootnode_onofflight_bbs1b7IaOV -t linux
 $ ./linux/out/rootnode_onofflight_bbs1b7IaOV
 ```
-
-# ??? [ZAP](https://github.com/project-chip/zap)
-
-> ZAP is Zigbee Cluster Library configuration tool and generator. It allows users to configure their ZCL application using web-like interface and then generate the required artifacts for this application, based upon the templates inside a given ZCL SDK.
 
 # ??? [`libfuzzer` unit tests](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#libfuzzer-unit-tests)
 
