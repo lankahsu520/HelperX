@@ -273,14 +273,10 @@ flowchart LR
 ```mermaid
 flowchart TD
 	subgraph PI4-a[Raspberry Pi 4]
-		subgraph Matter-a[Matter]
-			lighting-app[lighting-app]
-		end
+		lighting-app[lighting-app]
 	end
 	subgraph PI4b[Raspberry Pi 4]
-		subgraph Matter-b[Matter]
-			bridge-app
-		end
+		bridge-app
 	end
 ```
 
@@ -319,8 +315,8 @@ $ sudo reboot
 ```bash
 # then you can ssh to connect this Pi4
 $ sudo apt -y install git gcc g++ pkg-config libssl-dev libdbus-1-dev \
-	libglib2.0-dev libavahi-client-dev ninja-build python3-venv python3-dev \
-	python3-pip unzip libgirepository1.0-dev libcairo2-dev libreadline-dev
+ libglib2.0-dev libavahi-client-dev ninja-build python3-venv python3-dev \
+ python3-pip unzip libgirepository1.0-dev libcairo2-dev libreadline-dev
 
 $ sudo apt -y install wireless-tools
 
@@ -422,6 +418,15 @@ $ file /bin/bash
 
 > Building Host: ubuntu 20.04 x86_64
 
+> 以下可以選定要使用的 Repository，畢竟全部就要24G，對一些抱持 **keep the cost down** 的上司，員工真的很難為。
+
+| Repository            | Platforms | Size |
+| --------------------- | --------- | ---- |
+| connectedhomeip-123   | All       | 24G  |
+| connectedhomeip-linux | linux     | 999M |
+
+#### A. Checking out All Platforms
+
 ```bash
 $ git clone --recurse-submodules https://github.com/project-chip/connectedhomeip.git connectedhomeip-123
 
@@ -432,83 +437,19 @@ $ git pull
 $ git submodule update --init
 ```
 
-> <font color="red">這邊選擇先下載 submodules (--recurse-submodules) ，所以空間佔用的比較大</font>
-
-| SHA1 ID: 3aac08f941084f02f54de840ce8631f636724ec3<br>2023-10-25 06:30:16 | connectedhomeip |
-| ------------------------------------------------------------ | --------------- |
-| without recurse-submodules                                   | 719M            |
-| recurse-submodules                                           | 12G             |
-| build linux-x64-tests                                        | 25G             |
-
-#### A. without recurse-submodules
+#### B. Specific platforms Checking out
 
 ```bash
-1.0M    ./data_model
-22M     ./zzz_generated
-76K     ./.vscode
-80M     ./src
-3.9M    ./docs
-5.6M    ./scripts
-41M     ./third_party
-490M    ./.git
-608K    ./.github
-2.2M    ./config
-540K    ./build
-63M     ./examples
-16K     ./.devcontainer
-8.0K    ./.githooks
-124K    ./build_overrides
-12M     ./credentials
-492K    ./integrations
-719M    ./
-```
+$ git clone --depth=1 https://github.com/project-chip/connectedhomeip.git connectedhomeip-linux
 
-#### B. recurse-submodules
+$ cd connectedhomeip-linux
 
-```bash
-1.0M    ./data_model
-22M     ./zzz_generated
-76K     ./.vscode
-80M     ./src
-3.9M    ./docs
-5.6M    ./scripts
-6.6G    ./third_party
-5.3G    ./.git
-608K    ./.github
-2.1M    ./config
-540K    ./build
-95M     ./examples
-16K     ./.devcontainer
-8.0K    ./.githooks
-124K    ./build_overrides
-12M     ./credentials
-492K    ./integrations
-12G     ./
-```
+# For Linux host example:
+$ ./scripts/checkout_submodules.py --shallow --platform linux
+Checking out: nlassert, nlio, mbedtls, qrcode, pigweed, openthread, ot-br-posix, cirque, nanopb, third_party/jsoncpp/repo, editline, third_party/boringssl/repo/src, third_party/libwebsockets/repo, third_party/imgui/repo, perfetto, third_party/lwip/repo, third_party/abseil-cpp/src, third_party/fuzztest, third_party/googletest, third_party/re2/src
 
-#### C. build linux-x64-tests
-
-```bash
-1.0M    ./data_model
-22M     ./zzz_generated
-76K     ./.vscode
-80M     ./src
-3.9M    ./docs
-5.7M    ./scripts
-6.6G    ./third_party
-5.3G    ./.git
-608K    ./.github
-2.1M    ./config
-540K    ./build
-95M     ./examples
-16K     ./.devcontainer
-7.5G    ./build_xxx
-8.0K    ./.githooks
-128K    ./build_overrides
-12M     ./credentials
-492K    ./integrations
-4.9G    ./.environment
-25G     ./
+# For Darwin host example:
+$ ./scripts/checkout_submodules.py --shallow --platform darwin
 ```
 
 ### 5.1.2. [SiliconLabs](https://github.com/SiliconLabs)/**[matter](https://github.com/SiliconLabs/matter)**
@@ -568,20 +509,13 @@ $ gn --version
 
 ```mermaid
 flowchart TD
-	subgraph Linux-a[Linux]
-		subgraph Native-a[Native compiler]
-			subgraph Matter-a[Matter SDK]
-				lighting-app[lighting-app]
-			end
+	subgraph Linux["Linux (Native compiler)"]
+		subgraph Matter-a[Matter SDK]
+			lighting-app[lighting-app]
+			bridge-app[bridge-app]
 		end
 	end
-	subgraph Linux-b[Linux]
-		subgraph Native-b[Native compiler]
-			subgraph Matter-b[Matter SDK]
-				bridge-app
-			end
-		end
-	end
+
 ```
 
 ### 5.3.1. activate
@@ -625,12 +559,12 @@ export PJ_GN_BUILD_DIR=build_xxx
 ```bash
 # generate and run ninja/make as needed to compile
 $ gn gen \
-	--check \
-	--fail-on-unused-args \
-	--export-compile-commands \
-	--args='chip_build_tests=true ' \
-	--root=./ \
-  build_xxx/linux-x64-tests
+ --check \
+ --fail-on-unused-args \
+ --export-compile-commands \
+ --args='chip_build_tests=true ' \
+ --root=./ \
+ build_xxx/linux-x64-tests
 
 $ tree -L 1 build_xxx/linux-x64-tests
 $ ninja -C build_xxx/linux-x64-tests \
@@ -642,16 +576,16 @@ $ ninja -C build_xxx/linux-x64-tests \
 ```bash
 # generate and run ninja/make as needed to compile
 $ gn gen \
-	--check \
-	--fail-on-unused-args \
-	--export-compile-commands \
-	--args='chip_build_tests=true ' \
-	--root=${PWD} \
-	${PJ_GN_BUILD_DIR}/${PJ_GN_TARGET}
+ --check \
+ --fail-on-unused-args \
+ --export-compile-commands \
+ --args='chip_build_tests=true ' \
+ --root=${PWD} \
+ ${PJ_GN_BUILD_DIR}/${PJ_GN_TARGET}
 
 $ tree -L 1 ${PJ_GN_BUILD_DIR}/${PJ_GN_TARGET}
 $ ninja -C ${PJ_GN_BUILD_DIR}/${PJ_GN_TARGET} \
-	check
+ check
 ```
 
 #### B. [`build_examples.py`](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#using-build_examplespy)
@@ -836,114 +770,78 @@ $ cd /work/bin/android
 $ unzip android-ndk-r26b-linux.zip
 ```
 
-
-
 ### 5.3.3. CHIP [examples](https://github.com/project-chip/connectedhomeip/tree/master/examples)
 
 > - [Running your first example](https://github.com/project-chip/connectedhomeip/blob/master/docs/getting_started/first_example.md)
+>
+>   很簡單的文件，看本篇就不用看這文章。
+>
 > - [Changing examples](https://github.com/project-chip/connectedhomeip/blob/master/docs/getting_started/changing_examples.md)
+>
+>   主要是介紹 ZAP。
+>
 > - [SDK Architecture Overview](https://github.com/project-chip/connectedhomeip/blob/master/docs/getting_started/SDKBasics.md)
+
+### 5.3.4. ubuntu x86_64 (Native-Compilation)
 
 > Host: ubuntu x86_64
 
-#### A. Linux (Native-Compilation)
-
-##### A.1. [lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app)
-
-> [CHIP Linux Lighting Example](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app/linux) - An example showing the use of CHIP on the Linux. The document will describe how to build and run CHIP Linux Lighting Example on Raspberry Pi. This doc is tested on **Ubuntu for Raspberry Pi Server 20.04 LTS (aarch64)** and **Ubuntu for Raspberry Pi Desktop 20.10 (aarch64)**
-
-```bash
-$ export PJ_GN_TARGET=linux-x64-light
-
-$ ./scripts/build/build_examples.py \
-	--target ${PJ_GN_TARGET} \
-	--out-prefix ./build_xxx \
-	gen
-# or
-$ gn gen --check --fail-on-unused-args --export-compile-commands \
-	--root=./examples/lighting-app/linux \
-	./build_xxx/${PJ_GN_TARGET}
-
-$ ninja -C ./build_xxx/${PJ_GN_TARGET}
-
-$ gn ls \
-	--root=./examples/bridge-app/linux \
-	./build_xxx/${PJ_GN_TARGET}
-```
-
-```bash
-$ tree -L 2  connectedhomeip/examples/lighting-app/linux/
-connectedhomeip/examples/lighting-app/linux/
-├── args.gni
-├── BUILD.gn
-├── build_overrides -> ../../build_overrides
-├── Dockerfile
-├── entrypoint.sh
-├── include
-│   └── CHIPProjectAppConfig.h
-├── LightingAppCommandDelegate.cpp
-├── LightingAppCommandDelegate.h
-├── main.cpp
-├── README.md
-├── third_party
-│   └── connectedhomeip -> ../../../../
-└── with_pw_rpc.gni
-
-4 directories, 10 files
-```
-
-##### A.2. [bridge-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/bridge-app)
-
 ```bash
 $ export PJ_GN_TARGET=linux-x64-bridge
+$ export PJ_GN_EXAMPLE=bridge-app
+$ export PJ_GN_ROOT=`pwd`/examples/${PJ_GN_EXAMPLE}/linux
 
-$ ./scripts/build/build_examples.py \
-	--target ${PJ_GN_TARGET} \
-	--out-prefix ./build_xxx \
-  gen
-# or
-$ gn gen --check --fail-on-unused-args --export-compile-commands \
-	--root=./examples/bridge-app/linux \
-	./build_xxx/${PJ_GN_TARGET}
+$ export PJ_GN_TARGET=linux-x64-light
+$ export PJ_GN_EXAMPLE=lighting-app
+$ export PJ_GN_ROOT=`pwd`/examples/${PJ_GN_EXAMPLE}/linux
 
-$ ninja -C ./build_xxx/${PJ_GN_TARGET}
+$ export PJ_GN_TARGET=linux-x64-lock
+$ export PJ_GN_EXAMPLE=lock-app
+$ export PJ_GN_ROOT=`pwd`/examples/${PJ_GN_EXAMPLE}/linux
 
-$ gn ls \
-	--root=./examples/bridge-app/linux \
-	./build_xxx/${PJ_GN_TARGET}
-```
-
-##### A.3. linux-x64-tests
-
-> <font color="red"> chip-tool 可以在這邊獲得</font>
-
-```bash
 $ export PJ_GN_TARGET=linux-x64-tests
+$ export PJ_GN_EXAMPLE=chip-tool
+$ export PJ_GN_ROOT=`pwd`
 
+# setup
 $ ./scripts/build/build_examples.py \
-	--target ${PJ_GN_TARGET} \
-	--out-prefix ./build_xxx \
-  gen
+ --target ${PJ_GN_TARGET} \
+ --out-prefix ./build_xxx \
+ gen
 # or
 $ gn gen --check --fail-on-unused-args --export-compile-commands \
-	--root=./ \
-	./build_xxx/${PJ_GN_TARGET}
+ --root=${PJ_GN_ROOT} \
+ ./build_xxx/${PJ_GN_TARGET}
 
+# build
 $ ninja -C ./build_xxx/${PJ_GN_TARGET}
 
 $ gn ls \
-	--root=./ \
-	./build_xxx/${PJ_GN_TARGET}
+ --root=${PJ_GN_ROOT} \
+ ./build_xxx/${PJ_GN_TARGET}
 ```
 
-- build_xxx/linux-x64-tests
-
 ```bash
+# linux-x64-tests
 $ ll build_xxx/linux-x64-tests/chip-tool
 -rwxrwxr-x 1 lanka lanka 159226400 十一 24 10:51 build_xxx/linux-x64-tests/chip-tool*
 ```
 
-#### B. Pi4 Cross-Compilation with Clang on ubuntu x86_64
+#### linux-x64-bridge ([bridge-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/bridge-app))
+
+> [Matter Linux Bridge Example](https://github.com/project-chip/connectedhomeip/tree/master/examples/bridge-app/linux) - An example demonstrating a simple lighting bridge and the use of dynamic endpoints. The document will describe the theory of operation and how to build and run Matter Linux Bridge Example on Raspberry Pi. This doc is tested on **Ubuntu for Raspberry Pi Server 20.04 LTS (aarch64)** and **Ubuntu for Raspberry Pi Desktop 20.10 (aarch64)**
+
+#### linux-x64-light ([lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app))
+
+> [CHIP Linux Lighting Example](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app/linux) - An example showing the use of CHIP on the Linux. The document will describe how to build and run CHIP Linux Lighting Example on Raspberry Pi. This doc is tested on **Ubuntu for Raspberry Pi Server 20.04 LTS (aarch64)** and **Ubuntu for Raspberry Pi Desktop 20.10 (aarch64)**
+
+#### linux-x64-lock ([lock-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lock-app))
+
+#### linux-x64-tests (tests)
+
+> <font color="red"> chip-tool 可以在這邊獲得</font>
+
+### 5.3.5. Pi4 (Cross-Compilation)
 
 > Host: ubuntu x86_64
 >
@@ -955,35 +853,39 @@ $ ll build_xxx/linux-x64-tests/chip-tool
 
 > sysroot 最簡單的製作方式，就是找一台 Pi4 ，開機後進入系統，把 /lib、 /usr/include 和 /usr/lib 把包即可
 
-##### B.1. [lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app) (linux-arm64-light-clang)
+#### linux-arm64-light-clang ([lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app))
 
 > 記得編譯完成是要放在 Pi4 上執行
 
 ```bash
 # 設邊選擇 Pi4 (arm64/aarch64);另外使用 clang進行編譯
 $ export PJ_GN_TARGET=linux-arm64-light-clang
+$ export PJ_GN_EXAMPLE=lighting-app
+$ export PJ_GN_ROOT=`pwd`/examples/${PJ_GN_EXAMPLE}/linux
 
 # 設定 SYSROOT_AARCH64
 $ export SYSROOT_AARCH64=/work/aarch64-linux-gnu
 $ echo $SYSROOT_AARCH64
 /work/aarch64-linux-gnu
 
+# setup
 $ ./scripts/build/build_examples.py \
-	--target ${PJ_GN_TARGET} \
-	--out-prefix ./build_xxx \
-	gen
+ --target ${PJ_GN_TARGET} \
+ --out-prefix ./build_xxx \
+ gen
 # or
 $ PKG_CONFIG_PATH="${SYSROOT_AARCH64}/lib/aarch64-linux-gnu/pkgconfig" \
-	gn gen --check --fail-on-unused-args --export-compile-commands \
-	--root=./examples/lighting-app/linux \
-	'--args=is_clang=true target_cpu="arm64" sysroot="/work/aarch64-linux-gnu"' \
-	./build_xxx/${PJ_GN_TARGET}
+ gn gen --check --fail-on-unused-args --export-compile-commands \
+ --root=${PJ_GN_ROOT} \
+ '--args=is_clang=true target_cpu="arm64" sysroot="/work/aarch64-linux-gnu"' \
+ ./build_xxx/${PJ_GN_TARGET}
 
+# build
 $ ninja -C ./build_xxx/${PJ_GN_TARGET}
 
 $ gn ls \
-	--root=./examples/bridge-app/linux \
-	./build_xxx/${PJ_GN_TARGET}
+ --root=${PJ_GN_ROOT} \
+ ./build_xxx/${PJ_GN_TARGET}
 ```
 
 ```bash
@@ -992,12 +894,11 @@ $ ll build_xxx/linux-arm64-light-clang/chip-lighting-app
 
 $ file build_xxx/linux-arm64-light-clang/chip-lighting-app
 build_xxx/linux-arm64-light-clang/chip-lighting-app: ELF 64-bit LSB shared object, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, for GNU/Linux 3.7.0, BuildID[xxHash]=7587b1aefa363654, with debug_info, not stripped
-
 ```
 
-#### C. Silicon Labs (Cross-Compilation)
+### 5.3.6. Silicon Labs (Cross-Compilation)
 
-##### C.1. efr32-brd4187c-light
+#### efr32-brd4187c-light
 
 ```bash
 $ export PJ_GN_TARGET=efr32-brd4187c-light
@@ -1014,7 +915,7 @@ $ gn ls \
 	./build_xxx/${PJ_GN_TARGET}
 ```
 
-##### C.2. efr32-brd4186c-light
+#### efr32-brd4186c-light
 
 ```bash
 $ export PJ_GN_TARGET=efr32-brd4186c-light
@@ -1031,9 +932,9 @@ $ gn ls \
 	./build_xxx/${PJ_GN_TARGET}
 ```
 
-#### D. Texas Instruments (Cross-Compilation)
+### 5.3.7. Texas Instruments (Cross-Compilation)
 
-##### D.1. ti-cc13x2x7_26x2x7-lighting
+#### ti-cc13x2x7_26x2x7-lighting
 
 ```bash
 $ export PJ_GN_TARGET=ti-cc13x2x7_26x2x7-lighting
@@ -1050,7 +951,7 @@ $ gn ls \
 	./build_xxx/${PJ_GN_TARGET}
 ```
 
-##### C.2. ti-cc13x4_26x4-lighting
+#### ti-cc13x4_26x4-lighting
 
 ```bash
 $ export PJ_GN_TARGET=ti-cc13x4_26x4-lighting
@@ -1067,9 +968,9 @@ $ gn ls \
 	./build_xxx/${PJ_GN_TARGET}
 ```
 
-#### E. android (Cross-Compilation)
+### 5.3.8. android (Cross-Compilation)
 
-##### E.1. [CHIPTool](https://github.com/project-chip/connectedhomeip/tree/master/examples/android/CHIPTool)
+#### [CHIPTool](https://github.com/project-chip/connectedhomeip/tree/master/examples/android/CHIPTool)
 
 > 20231206 app-debug.apk 使用測試完很失望。
 >
@@ -1137,7 +1038,7 @@ $ ll build_xxx/android-arm64-chip-tool/outputs/apk/debug/app-debug.apk
 
 # 6. Run ! Run ! Run !
 
-## 6.1. chip-lighting-app
+## 6.1. chip-XXX-app
 
 > run on Pi4 - Ubuntu arm64 22.04.xx 64-bit server
 
@@ -1176,7 +1077,17 @@ $ export MATTER_IFACE_ID=`ip link show dev $MATTER_IFACE | grep $MATTER_IFACE | 
 
 $ export MATTER_IFACE=enp0s3
 $ export MATTER_IFACE_ID=`ip link show dev $MATTER_IFACE | grep $MATTER_IFACE | cut -d":" -f1`
+```
 
+#### chip-bridge-app
+
+```bash
+$ ./chip-bridge-app --interface-id 2 --capabilities 4 --passcode 20231206 --discriminator 3849
+```
+
+#### chip-lighting-app
+
+```bash
 $ ./chip-lighting-app \
  --interface-id $MATTER_IFACE_ID \
  --ble-device $MATTER_BLE_HCI \
@@ -1198,7 +1109,6 @@ $ ./chip-lighting-app \
  $MATTER_DISCOVER_ARG
  $MATTER_PINCODE_ARG \
  $MATTER_DISCRIMINATOR_ARG
-
 ```
 
 ```bash
@@ -1213,7 +1123,7 @@ $ ./chip-lighting-app --interface-id 2 --capabilities 4 --passcode 20231206 --di
 $ ./chip-lighting-app --interface-id 2 --capabilities 4 --passcode 20231205 --discriminator 3849
 ```
 
-#### A. QR Code
+##### QR Code
 
 > https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0IRV01DWLA39G00
 
@@ -1248,9 +1158,21 @@ flowchart BT
 ```bash
 # 你也可以透過 snap 安裝 chip-tool
 $ sudo snap install chip-tool
+
+$ tree -L 4 ~/snap/chip-tool/
+/home/lanka/snap/chip-tool/
+├── 199
+├── common
+│   ├── chip_tool_config.alpha.ini
+│   ├── chip_tool_config.ini
+│   ├── chip_tool_history
+│   └── chip_tool_kvs
+└── current -> 199
+
+3 directories, 4 files
 ```
 
-### 6.2.0. Modes
+### 6.2.1. CHIP Tool modes
 
 #### A. Single-command mode (default)
 
@@ -1261,6 +1183,8 @@ $ sudo snap install chip-tool
 > In this mode, a command will terminate with an error if it does not complete within the timeout period. However, the CHIP Tool will not be terminated and it will not terminate processes that previous commands have started. Moreover, when using the interactive mode, the CHIP Tool will establish a new CASE session only when there is no session available yet. On the following commands, it will use the existing session.
 
 ```bash
+$ rm /tmp/chip_kvs
+
 $ chip-tool interactive start
 >>>
 
@@ -1269,10 +1193,9 @@ pairing onnetwork 1 20231206
 onoff toggle 1 1
 
 pairing unpair 1
-
 ```
 
-### 6.2.1. Commissioning
+### 6.2.2. Commissioning
 
 >  Matter devices can use different commissioning channels:
 >
@@ -1317,15 +1240,211 @@ $ chip-tool pairing code <node_id> <qrcode_payload-or-manual_code>
 $ chip-tool pairing unpair <node_id>
 ```
 
-### 6.2.2. Control application Data Model clusters
+### 6.2.3. [Matter Client Example](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
 
-#### A. onoff
+> An example application that uses Matter to send messages to a Matter server.
+>
+> - [Building the Example Application](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md#building-the-example-application)
+> - [Using the Client to Commission a Device](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md#using-the-client-to-commission-a-device)
+
+#### any
 
 ```bash
-$ ./chip-tool onoff toggle <node_id> <endpoint_id>
+$ chip-tool any read-by-id cluster-ids attribute-ids destination-id endpoint-ids
+
+# 6 (OnOff)
+any read-by-id 6 0xFFFFFFFF 1 1
 ```
 
-### 6.2.3. Test Case
+```bash
+$ chip-tool any
+[1735096121.330] [29862:29862] [TOO] Missing command name
+Usage:
+  /snap/chip-tool/199/bin/chip-tool any command_name [param1 param2 ...]
+
+Commands for sending IM messages based on cluster id, not cluster name.
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * read-by-id                                                                        |
+  | * write-by-id                                                                       |
+  | * subscribe-by-id                                                                   |
+  | * read-event-by-id                                                                  |
+  | * subscribe-event-by-id                                                             |
+  | * read-none                                                                         |
+  | * read-all                                                                          |
+  | * subscribe-none                                                                    |
+  | * subscribe-all                                                                     |
+  +-------------------------------------------------------------------------------------+
+[1735096121.330] [29862:29862] [TOO] Run command failure: ../examples/chip-tool/commands/common/Commands.cpp:248: Error 0x0000002F
+```
+
+#### basicinformation
+
+```bash
+$ chip-tool basicinformation read vendor-name destination-id endpoint-ids
+$ chip-tool basicinformation read product-name destination-id endpoint-ids
+$ chip-tool basicinformation read software-version destination-id endpoint-ids
+```
+
+```bash
+$ chip-tool basicinformation
+[1735089497.974] [29288:29288] [TOO] Missing command name
+Usage:
+  /snap/chip-tool/199/bin/chip-tool basicinformation command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * mfg-specific-ping                                                                 |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * force-write                                                                       |
+  | * write                                                                             |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * read-event                                                                        |
+  | * subscribe-event-by-id                                                             |
+  | * subscribe-event                                                                   |
+  +-------------------------------------------------------------------------------------+
+[1735089497.975] [29288:29288] [TOO] Run command failure: ../examples/chip-tool/commands/common/Commands.cpp:248: Error 0x0000002F
+```
+
+#### descriptor
+
+```bash
+# 列出 Endpoints
+$ chip-tool descriptor read parts-list destination-id endpoint-ids
+
+descriptor read parts-list 1 0xFFFF
+
+$ chip-tool descriptor read server-list destination-id endpoint-ids
+
+# 列出 Clusters - server
+descriptor read server-list 1 1
+
+# 列出 Clusters - client
+descriptor read client-list 1 1
+```
+
+```bash
+$ chip-tool descriptor
+[1735092397.593] [2083751:2083751] [TOO] Missing command name
+Usage:
+  /snap/chip-tool/199/bin/chip-tool descriptor command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * force-write                                                                       |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * subscribe-event-by-id                                                             |
+  +-------------------------------------------------------------------------------------+
+[1735092397.593] [2083751:2083751] [TOO] Run command failure: ../examples/chip-tool/commands/common/Commands.cpp:248: Error 0x0000002F
+```
+
+#### levelcontrol
+
+```bash
+$ chip-tool levelcontrol move-to-level Level TransitionTime OptionsMask OptionsOverride destination-id endpoint-id-ignored-for-group-commands 
+
+levelcontrol move-to-level 100 0 0 0 1 1
+levelcontrol move-to-level 0 0 0 0 1 1
+
+levelcontrol read current-level 1 1
+levelcontrol read max-level 1 1
+levelcontrol read min-level 1 1
+```
+
+```bash
+$ chip-tool levelcontrol
+[1735086925.738] [2079134:2079134] [TOO] Missing command name
+Usage:
+  /snap/chip-tool/199/bin/chip-tool levelcontrol command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * move-to-level                                                                     |
+  | * move                                                                              |
+  | * step                                                                              |
+  | * stop                                                                              |
+  | * move-to-level-with-on-off                                                         |
+  | * move-with-on-off                                                                  |
+  | * step-with-on-off                                                                  |
+  | * stop-with-on-off                                                                  |
+  | * move-to-closest-frequency                                                         |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * force-write                                                                       |
+  | * write                                                                             |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * subscribe-event-by-id                                                             |
+  +-------------------------------------------------------------------------------------+
+[1735086925.739] [2079134:2079134] [TOO] Run command failure: ../examples/chip-tool/commands/common/Commands.cpp:248: Error 0x0000002F
+```
+
+#### onoff
+
+```bash
+$ chip-tool onoff toggle destination-id endpoint-id-ignored-for-group-commands
+
+onoff toggle 1 1
+onoff read on-off 1 1
+
+onoff on 1 1
+onoff off 1 1
+
+$ chip-tool onoff subscribe on-off min-interval max-interval destination-id endpoint-ids
+onoff subscribe on-off 2 3600 1 1
+```
+
+```bash
+$ chip-tool onoff
+[1735086896.238] [2079094:2079094] [TOO] Missing command name
+Usage:
+  /snap/chip-tool/199/bin/chip-tool onoff command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * off                                                                               |
+  | * on                                                                                |
+  | * toggle                                                                            |
+  | * off-with-effect                                                                   |
+  | * on-with-recall-global-scene                                                       |
+  | * on-with-timed-off                                                                 |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * force-write                                                                       |
+  | * write                                                                             |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * subscribe-event-by-id                                                             |
+  +-------------------------------------------------------------------------------------+
+[1735086896.239] [2079094:2079094] [TOO] Run command failure: ../examples/chip-tool/commands/common/Commands.cpp:248: Error 0x0000002F
+
+```
+
+### 6.2.4. Test Case
 
 ```bash
 # default 20202021
@@ -1338,22 +1457,29 @@ $ export MATTER_EPID=1
 
 # Commissioning
 $ chip-tool pairing onnetwork $MATTER_NODEID $MATTER_PINCODE
+$ chip-tool pairing onnetwork 1 20231206
 
-# toggle
+# onoff-toggle
 $ chip-tool onoff toggle $MATTER_NODEID $MATTER_EPID
+
+$ chip-tool move-to-level 100 0
 
 # Unpairing
 $ chip-tool pairing unpair $MATTER_NODEID
 ```
 
-## 6.4. Android App
+## 6.3. Android App
+
+> 目前使用過的 App 並沒有一個完善所有功能。使用 GHSAFM-2.0.0-default-debug 去配對 lighting-app，也只能得到 onoff；而 Smart Life 配對下的結果也是不堪使用。
+>
+
 ```mermaid
 flowchart BT
 	subgraph Router[Router]
 	end
 	subgraph Phone[Phone]
-		subgraph SmartLife[Smart Life]
-		end
+		SmartLife[Smart Life]
+		GHSAFM[GHSAFM-2.0.0-default-debug]
 	end
 	subgraph Pi4[Pi4 - Ubuntu arm64 22.04.xx 64-bit server]
 		chip-lighting-app[chip-lighting-app]
@@ -1363,18 +1489,36 @@ flowchart BT
 	Pi4 <--> |Lan|Router
 	
 	SmartLife<--> |Matter command| chip-lighting-app
+	GHSAFM<--> |Matter command| chip-lighting-app
 ```
-### 6.4.1. Sample App for Matter APK
+### 6.3.1. Sample App for Matter APK
 
 > [Matter 專用的 Google Home 範例應用程式](https://developers.home.google.com/samples/matter-app?hl=zh-tw)
 >
 > [sample-apps-for-matter-android](https://github.com/google-home/sample-apps-for-matter-android) - [GHSAFM-2.0.0-default-debug.apk](https://github.com/google-home/sample-apps-for-matter-android/releases/download/v2.0.0/GHSAFM-2.0.0-default-debug.apk)
 
-### 6.4.2. Smart Life (Android App)
+![matter_GHSAFM01](./images/matter_GHSAFM01.jpg)
+
+![matter_GHSAFM02](./images/matter_GHSAFM02.jpg)
+
+![matter_GHSAFM03](./images/matter_GHSAFM03.jpg)
+
+![matter_GHSAFM04](./images/matter_GHSAFM04.jpg)
+
+![matter_GHSAFM05](./images/matter_GHSAFM05.jpg)
+
+![matter_GHSAFM06](./images/matter_GHSAFM06.jpg)
+
+![matter_GHSAFM07](./images/matter_GHSAFM07.jpg)
+
+![matter_GHSAFM08](./images/matter_GHSAFM08.jpg)
+
+
+### 6.3.2. Smart Life (Android App)
 
 > [Google play](https://play.google.com/store/games?hl=zh_TW)上的軟體大都需要有一個 *Matter Gateway* 當中介者。而此軟體不用，方便測試。
 
-## 6.3. Google Home
+## 6.4. Google Home
 
 ```mermaid
 flowchart BT
@@ -1407,7 +1551,7 @@ flowchart BT
 	NestHub <--> |Wifi|Router
 	android <--> |Wifi|Router
 ```
-### 6.3.1. [支援 Matter 的 Google 裝置](https://support.google.com/googlenest/answer/12391458?hl=zh-Hant&co=GENIE.Platform%3DAndroid)
+### 6.4.1. [支援 Matter 的 Google 裝置](https://support.google.com/googlenest/answer/12391458?hl=zh-Hant&co=GENIE.Platform%3DAndroid)
 
 > ## Matter 如何與 Google 服務搭配運作
 >
@@ -1421,7 +1565,7 @@ flowchart BT
 >
 > 歡迎前往 [Google 商店](https://home.google.com/explore-devices/featured-devices/#google-devices-with-matter)選購上述裝置。
 
-### 6.3.2. [配對 Matter 裝置](https://developers.home.google.com/matter/integration/pair?hl=zh-tw)
+### 6.4.2. [配對 Matter 裝置](https://developers.home.google.com/matter/integration/pair?hl=zh-tw)
 
 > ## 配對限制
 >
@@ -1456,6 +1600,14 @@ flowchart BT
 >
 > [ZAP documentation](https://github.com/project-chip/connectedhomeip/blob/master/docs/zap_and_codegen/zap_intro.md)
 
+![](https://raw.githubusercontent.com/project-chip/connectedhomeip/refs/heads/master/docs/zap_and_codegen/img/zap_compiler.png)
+
+### 7.1.1. ZAP tool
+
+> a zap editor
+>
+> start zap tool
+
 ```bash
 # 因為版本過新，會在編譯中出錯；避免安裝
 $ sudo dpkg -i ./zap-linux-x64.deb
@@ -1466,6 +1618,15 @@ $ cd connectedhomeip-123
 $ export PW_ZAP_CIPD_INSTALL_DIR=`pwd`/.environment/cipd/packages/zap
 ```
 
+#### bridge-app
+
+```bash
+# bridge-app
+$ ./scripts/tools/zap/run_zaptool.sh ./examples/bridge-app/bridge-common/bridge-app.zap
+```
+
+#### lighting-app
+
 ```bash
 # lighting-app
 $ ./scripts/tools/zap/run_zaptool.sh ./examples/lighting-app/lighting-common/lighting-app.zap
@@ -1474,6 +1635,66 @@ $ ./scripts/tools/zap/run_zaptool.sh ./examples/lighting-app/lighting-common/lig
 ![matter_zcl01](./images/matter_zcl01.png)
 
 ![matter_zcl02](./images/matter_zcl02.png)
+
+#### lock-app
+
+```bash
+# lock-app
+$ ./scripts/tools/zap/run_zaptool.sh ./examples/lock-app/lock-common/lock-app.zap
+```
+
+#### others
+
+```bash
+# lighting-app-data-mode-no-unique-id
+$ ./scripts/tools/zap/run_zaptool.sh ./examples/lighting-app-data-mode-no-unique-id/lighting-common/lighting-app.zap
+
+# all-clusters-minimal-app
+$ ./scripts/tools/zap/run_zaptool.sh ./examples/all-clusters-minimal-app/all-clusters-minimal-common/all-clusters-minimal-app.zap
+
+# all-clusters-app
+$ ./scripts/tools/zap/run_zaptool.sh ./examples/all-clusters-app/all-clusters-common/all-clusters-app.zap
+
+# contact-sensor-app
+$ ./scripts/tools/zap/run_zaptool.sh ./examples/contact-sensor-app/contact-sensor-common/contact-sensor-app.zap
+```
+
+### 7.1.2. Running code generation
+
+> .zap -> .matter
+>
+> To compile the .matter file for use in building, use:
+
+```bash
+./scripts/tools/zap/generate.py <location of the .zap file>
+```
+
+#### bridge-app
+
+```bash
+# bridge-app
+$ ./scripts/tools/zap/generate.py ./examples/bridge-app/bridge-common/bridge-app.zap
+```
+
+#### lighting-app
+
+```bash
+$ ./scripts/tools/zap/generate.py ./examples/lighting-app/lighting-common/lighting-app.zap
+```
+
+#### lock-app
+
+```bash
+# lock-app
+$ ./scripts/tools/zap/generate.py ./examples/lock-app/lock-common/lock-app.zap
+```
+
+#### all
+
+```bash
+# If there are changes to many .zap files, the following script can be used to recompile the .zap files for all the examples and the controller.
+$ ./scripts/tools/zap_regen_all.py
+```
 
 # 8. Deep dive into Matter
 
@@ -2030,6 +2251,14 @@ CHIP_ERROR InitCommissionableDataProvider(LinuxCommissionableDataProvider & prov
 
 ```
 
+# 9. [Testing Guides](https://github.com/project-chip/connectedhomeip/blob/master/docs/testing/index.md)
+
+> ## [Ensuring device conformance](https://github.com/project-chip/connectedhomeip/blob/master/docs/getting_started/changing_examples.md#ensuring-device-conformance)
+>
+> After changing the examples, it is important to ensure they remain spec compliant. Although there are numerous certification tests to check the various parts of the device, the tests most likely to be affected by changes to ZAP are the conformance tests, which ensure that the device included meets the conformance requirements for clusters and device types. To run conformance tests against the example app, see [Testing](https://github.com/project-chip/connectedhomeip/blob/master/docs/testing/index.md). The tests that ensure the device composition is spec compliant are found in [Device Basic Composition Test](https://github.com/project-chip/connectedhomeip/blob/master/src/python_testing/TC_DeviceBasicComposition.py) and [Device Conformance Tests](https://github.com/project-chip/connectedhomeip/blob/master/src/python_testing/TC_DeviceConformance.py).
+
+
+
 # ??? Virtual Device
 
 ```bash
@@ -2050,6 +2279,8 @@ $ ./linux/out/rootnode_onofflight_bbs1b7IaOV
 
 # ??? [`libfuzzer` unit tests](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#libfuzzer-unit-tests)
 
+# ??? [Coverage](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#coverage)
+
 # Footnote
 
 [^1]:
@@ -2059,13 +2290,17 @@ $ ./linux/out/rootnode_onofflight_bbs1b7IaOV
 
 # I. Study
 
-## I.1. [Connectivity Standards Alliance](http://csa-iot.org/)
+## I.1. Spec
+
+#### A. [Connectivity Standards Alliance](http://csa-iot.org/)
 
 >CSA 組織
 
-#### A. [Matter Specifications](https://csa-iot.org/developer-resource/specifications-download-request/)
+##### A.1. [Matter Specifications](https://csa-iot.org/developer-resource/specifications-download-request/)
 
-#### B. [Matter - The Foundation for Connected Things](https://csa-iot.org/all-solutions/matter/)
+##### A.2. [Matter - The Foundation for Connected Things](https://csa-iot.org/all-solutions/matter/)
+
+#### B. [Welcome to Matter’s documentation](https://project-chip.github.io/connectedhomeip-doc/index.html)
 
 ## I.2. 一些介紹
 
