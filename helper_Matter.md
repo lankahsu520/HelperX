@@ -68,7 +68,7 @@
 >   - 藍牙低功耗 (BLE) 4.2 以上版本
 > - 最新版本的 [Google Home 應用程式](https://play.google.com/store/apps/details?id=com.google.android.apps.chromecast.app&hl=zh_tw) ![img](https://lh3.googleusercontent.com/9MpaXj2oIHIZU4JiCl6Nos9Ac3VRocyuFxWcvgwnb7FRVsPTcLXGUdvWP8W8LqReE40=w18)
 > - 支援 Matter 的智慧住宅裝置。如果包裝上有 ![img](https://lh3.googleusercontent.com/3yeJZ0aNtlZqwUfGWY-2Q-AIAnykzH8EOPKwu3XDNSsfdnFIQN6Da5qYou0qXSiX9_4=w180) 標誌，就表示裝置支援 Matter
-> - [支援 Matter 的 Google 中樞裝置](https://support.google.com/googlenest/answer/12391458#matter-app)
+> - [支援 Matter 的 Google 中樞裝](https://support.google.com/googlenest/answer/12391458#matter-app)
 
 #### A. [Supported Matter clusters](https://developers.home.google.com/matter/clusters)
 
@@ -792,6 +792,7 @@ $ export PJ_GN_EXAMPLE=bridge-app
 $ export PJ_GN_ROOT=`pwd`/examples/${PJ_GN_EXAMPLE}/linux
 
 $ export PJ_GN_TARGET=linux-x64-light
+#$ export PJ_GN_TARGET=llinux-x64-light-rpc-no-ble-no-wifi-no-thread
 $ export PJ_GN_EXAMPLE=lighting-app
 $ export PJ_GN_ROOT=`pwd`/examples/${PJ_GN_EXAMPLE}/linux
 
@@ -1081,7 +1082,40 @@ $ export MATTER_IFACE_ID=`ip link show dev $MATTER_IFACE | grep $MATTER_IFACE | 
 
 #### chip-bridge-app
 
+> 提供亙動操作，動態新增和刪減
+
+| Device              | ch   | Functions              |
+| ------------------- | ---- | ---------------------- |
+| ComposedTempSensor1 |      |                        |
+|                     | t    | SetMeasuredValue …     |
+| ComposedTempSensor2 |      |                        |
+|                     | t    | SetMeasuredValue …     |
+| TempSensor1         |      |                        |
+|                     | t    | SetMeasuredValue       |
+|                     | u    | SetReachable(false)    |
+|                     | v    | SetReachable(true)     |
+| TempSensor2         |      |                        |
+|                     | t    | SetMeasuredValue …     |
+| ActionLight1        |      |                        |
+|                     | r    | SetLocation …          |
+| ActionLight2        |      |                        |
+|                     | r    | SetLocation …          |
+| ActionLight3        |      |                        |
+|                     | f    | SetLocation …          |
+| ActionLight3        |      |                        |
+| Light1              |      |                        |
+|                     | 5    | AddDeviceEndpoint …    |
+|                     | 4    | RemoveDeviceEndpoint … |
+|                     | b    | SetName("Light 1b")    |
+|                     | c    | Toggle()               |
+| Light2              |      |                        |
+|                     | 2    | AddDeviceEndpoint …    |
+|                     | b    | SetName("Light 2b")    |
+|                     | c    | Toggle()               |
+
 ```bash
+$ rm /tmp/chip_kvs
+
 $ ./chip-bridge-app --interface-id 2 --capabilities 4 --passcode 20231206 --discriminator 3849
 ```
 
@@ -1127,7 +1161,7 @@ $ ./chip-lighting-app --interface-id 2 --capabilities 4 --passcode 20231205 --di
 
 > https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0IRV01DWLA39G00
 
-![matter_QRCode01](./images/matter_QRCode01.png)
+### ![matter_QRCode01](./images/matter_QRCode01.png)
 
 ## 6.2. [chip-tool](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool)
 
@@ -1468,57 +1502,9 @@ $ chip-tool move-to-level 100 0
 $ chip-tool pairing unpair $MATTER_NODEID
 ```
 
-## 6.3. Android App
+# 7. IoT Home
 
-> 目前使用過的 App 並沒有一個完善所有功能。使用 GHSAFM-2.0.0-default-debug 去配對 lighting-app，也只能得到 onoff；而 Smart Life 配對下的結果也是不堪使用。
->
-
-```mermaid
-flowchart BT
-	subgraph Router[Router]
-	end
-	subgraph Phone[Phone]
-		SmartLife[Smart Life]
-		GHSAFM[GHSAFM-2.0.0-default-debug]
-	end
-	subgraph Pi4[Pi4 - Ubuntu arm64 22.04.xx 64-bit server]
-		chip-lighting-app[chip-lighting-app]
-	end
-	
-	Phone <--> |Wi-Fi|Router
-	Pi4 <--> |Lan|Router
-	
-	SmartLife<--> |Matter command| chip-lighting-app
-	GHSAFM<--> |Matter command| chip-lighting-app
-```
-### 6.3.1. Sample App for Matter APK
-
-> [Matter 專用的 Google Home 範例應用程式](https://developers.home.google.com/samples/matter-app?hl=zh-tw)
->
-> [sample-apps-for-matter-android](https://github.com/google-home/sample-apps-for-matter-android) - [GHSAFM-2.0.0-default-debug.apk](https://github.com/google-home/sample-apps-for-matter-android/releases/download/v2.0.0/GHSAFM-2.0.0-default-debug.apk)
-
-![matter_GHSAFM01](./images/matter_GHSAFM01.jpg)
-
-![matter_GHSAFM02](./images/matter_GHSAFM02.jpg)
-
-![matter_GHSAFM03](./images/matter_GHSAFM03.jpg)
-
-![matter_GHSAFM04](./images/matter_GHSAFM04.jpg)
-
-![matter_GHSAFM05](./images/matter_GHSAFM05.jpg)
-
-![matter_GHSAFM06](./images/matter_GHSAFM06.jpg)
-
-![matter_GHSAFM07](./images/matter_GHSAFM07.jpg)
-
-![matter_GHSAFM08](./images/matter_GHSAFM08.jpg)
-
-
-### 6.3.2. Smart Life (Android App)
-
-> [Google play](https://play.google.com/store/games?hl=zh_TW)上的軟體大都需要有一個 *Matter Gateway* 當中介者。而此軟體不用，方便測試。
-
-## 6.4. Google Home
+## 7.1. Google Family
 
 ```mermaid
 flowchart BT
@@ -1551,7 +1537,7 @@ flowchart BT
 	NestHub <--> |Wifi|Router
 	android <--> |Wifi|Router
 ```
-### 6.4.1. [支援 Matter 的 Google 裝置](https://support.google.com/googlenest/answer/12391458?hl=zh-Hant&co=GENIE.Platform%3DAndroid)
+### 7.1.1. [支援 Matter 的 Google 裝置](https://support.google.com/googlenest/answer/12391458?hl=zh-Hant&co=GENIE.Platform%3DAndroid)
 
 > ## Matter 如何與 Google 服務搭配運作
 >
@@ -1565,7 +1551,7 @@ flowchart BT
 >
 > 歡迎前往 [Google 商店](https://home.google.com/explore-devices/featured-devices/#google-devices-with-matter)選購上述裝置。
 
-### 6.4.2. [配對 Matter 裝置](https://developers.home.google.com/matter/integration/pair?hl=zh-tw)
+### 7.1.2. [配對 Matter 裝置](https://developers.home.google.com/matter/integration/pair?hl=zh-tw)
 
 > ## 配對限制
 >
@@ -1590,23 +1576,185 @@ flowchart BT
 
 ![matter_google_console](./images/matter_google_console.png)
 
-# 7. Tools
 
-## 7.1. [ZCL Advanced Platform (ZAP)](https://developers.home.google.com/matter/tools/zap)
 
-> github - [zap](https://github.com/project-chip/zap)
+### 7.1.3. Android App
+
+> 目前使用過的 App 並沒有一個完善所有功能。
+>
+> 使用 GHSAFM-2.0.0-default-debug 去配對 lighting-app，也只能得到 onoff；而 Smart Life 配對下的結果也是不堪使用。
+
+```mermaid
+flowchart BT
+	subgraph Router[Router]
+	end
+	subgraph Phone[Phone]
+		SmartLife[Smart Life]
+		GHSAFM[GHSAFM-2.0.0-default-debug]
+	end
+	subgraph Pi4[Pi4 - Ubuntu arm64 22.04.xx 64-bit server]
+		chip-lighting-app[chip-lighting-app]
+	end
+	
+	Phone <--> |Wi-Fi|Router
+	Pi4 <--> |Lan|Router
+	
+	SmartLife<--> |Matter command| chip-lighting-app
+	GHSAFM<--> |Matter command| chip-lighting-app
+```
+#### A. Sample App for Matter APK
+
+> [Matter 專用的 Google Home 範例應用程式](https://developers.home.google.com/samples/matter-app?hl=zh-tw)
+>
+> [sample-apps-for-matter-android](https://github.com/google-home/sample-apps-for-matter-android) - [GHSAFM-2.0.0-default-debug.apk](https://github.com/google-home/sample-apps-for-matter-android/releases/download/v2.0.0/GHSAFM-2.0.0-default-debug.apk)
+
+![matter_GHSAFM01](./images/matter_GHSAFM01.jpg)
+
+![matter_GHSAFM02](./images/matter_GHSAFM02.jpg)
+
+![matter_GHSAFM03](./images/matter_GHSAFM03.jpg)
+
+![matter_GHSAFM04](./images/matter_GHSAFM04.jpg)
+
+![matter_GHSAFM05](./images/matter_GHSAFM05.jpg)
+
+![matter_GHSAFM06](./images/matter_GHSAFM06.jpg)
+
+![matter_GHSAFM07](./images/matter_GHSAFM07.jpg)
+
+![matter_GHSAFM08](./images/matter_GHSAFM08.jpg)
+
+
+#### B. Smart Life (Android App)
+
+> [Google play](https://play.google.com/store/games?hl=zh_TW)上的軟體大都需要有一個 *Matter Gateway* 當中介者。而此軟體不用，方便測試。
+
+#### C. Home
+
+> 就連 google 出品的，也不堪使用。對接市面上有認證的設備，也讓人失望。
+
+## 7.2. Apple Family
+
+> 如果要有完善的對測環境，只能選擇使用 Apple。
+
+# 8. Cluster and Device Type development
+
+> - [Cluster and device type development](https://github.com/project-chip/connectedhomeip/blob/master/docs/cluster_and_device_type_dev/cluster_and_device_type_dev.md)
+> - [How To Add New Device Types & Clusters](https://github.com/project-chip/connectedhomeip/blob/master/docs/cluster_and_device_type_dev/how_to_add_new_dts_and_clusters.md)
+> - [Cluster Server design](https://github.com/project-chip/connectedhomeip/blob/master/docs/cluster_and_device_type_dev/unit_testing_clusters.md)
+
+## 8.1. [Clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)
+
+>[connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/
+>
+>基本設備的組成為 Device  / endpoint / cluster，而 cluster 可視為一項功能
+
+```bash
+$ ls connectedhomeip/src/app/clusters/
+access-control-server                    media-input-server
+account-login-server                     media-playback-server
+administrator-commissioning-server       mode-base-server
+air-quality-server                       mode-select-server
+application-basic-server                 network-commissioning
+application-launcher-server              occupancy-sensor-server
+audio-output-server                      on-off-server
+barrier-control-server                   operational-credentials-server
+basic-information                        operational-state-server
+bindings                                 ota-provider
+bridged-device-basic-information-server  ota-requestor
+channel-server                           power-source-configuration-server
+color-control-server                     power-source-server
+concentration-measurement-server         pump-configuration-and-control-client
+content-launch-server                    pump-configuration-and-control-server
+descriptor                               refrigerator-alarm-server
+diagnostic-logs-server                   resource-monitoring-server
+dishwasher-alarm-server                  sample-mei-server
+door-lock-server                         scenes-server
+ethernet-network-diagnostics-server      smoke-co-alarm-server
+fan-control-server                       software-diagnostics-server
+fault-injection-server                   switch-server
+fixed-label-server                       target-navigator-server
+general-commissioning-server             temperature-control-server
+general-diagnostics-server               test-cluster-server
+group-key-mgmt-server                    thermostat-client
+groups-server                            thermostat-server
+ias-zone-client                          thermostat-user-interface-configuration-server
+ias-zone-server                          thread-network-diagnostics-server
+icd-management-server                    time-format-localization-server
+identify-server                          time-synchronization-server
+keypad-input-server                      user-label-server
+laundry-washer-controls-server           wake-on-lan-server
+level-control                            wifi-network-diagnostics-server
+localization-configuration-server        window-covering-server
+low-power-server
+
+```
+
+### 0x0006 [on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters) - <font color="red">開 / 關 (On / Off) 功能</font>
+
+>[connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/[on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/on-off-server)/
+
+```bash
+chip-tool onoff toggle $MATTER_NODEID $MATTER_EPID
+
+chip-tool onoff on $MATTER_NODEID $MATTER_EPID
+chip-tool onoff off $MATTER_NODEID $MATTER_EPID
+```
+
+```bash
+Usage:
+  chip-tool onoff command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * off                                                                               |
+  | * on                                                                                |
+  | * toggle                                                                            |
+  | * off-with-effect                                                                   |
+  | * on-with-recall-global-scene                                                       |
+  | * on-with-timed-off                                                                 |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * force-write                                                                       |
+  | * write                                                                             |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * subscribe-event-by-id                                                             |
+  +-------------------------------------------------------------------------------------+
+
+```
+
+#### A. [on-off-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/on-off-server/on-off-server.cpp)
+
+> [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/[on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/on-off-server)/[on-off-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/on-off-server/on-off-server.cpp)
+
+### 0x0008 [level-control](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/level-control) - <font color="red">調光器 (Dimmer) 功能</font>
+
+> [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/[level-control](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/level-control)/
+
+# 9. Tools
+
+## 9.1. [ZCL Advanced Platform (ZAP)](https://developers.home.google.com/matter/tools/zap)
+
+> [zap](https://github.com/project-chip/zap) (github)
+>
+> ZAP stands for ZCL Advanced Platform. It is used to configure clusters, attributes and other entities for Matter and ZigbeePro applications.
 >
 > [ZAP releases](https://github.com/project-chip/zap/releases) - zap-linux-x64.deb
->
-> [ZAP documentation](https://github.com/project-chip/connectedhomeip/blob/master/docs/zap_and_codegen/zap_intro.md)
 
-![](https://raw.githubusercontent.com/project-chip/connectedhomeip/refs/heads/master/docs/zap_and_codegen/img/zap_compiler.png)
+### 9.1.1. [ZAP documentation](https://github.com/project-chip/connectedhomeip/blob/master/docs/zap_and_codegen/zap_intro.md)
 
-### 7.1.1. ZAP tool
+> The ZAP tool is a GUI tool that is used to generate a .zap file that describes the endpoint composition of a device. This includes the endpoints on the device, the clusters and device types on each endpoint, as well as the cluster features, attributes, commands and events. The .zap file is used by the ZAP compiler along with the cluster definitions files to generate an ember layer. This happens automatically as part of the build process, and the ember layer is compiled into the firmware.
 
-> a zap editor
->
-> start zap tool
+> .matter files are a human-readable version of the .zap that can be used for review
+
+![ZAP](https://raw.githubusercontent.com/project-chip/connectedhomeip/refs/heads/master/docs/zap_and_codegen/img/zap_compiler.png)
+
+### 9.1.2. ZAP tool
 
 ```bash
 # 因為版本過新，會在編譯中出錯；避免安裝
@@ -1659,9 +1807,11 @@ $ ./scripts/tools/zap/run_zaptool.sh ./examples/all-clusters-app/all-clusters-co
 $ ./scripts/tools/zap/run_zaptool.sh ./examples/contact-sensor-app/contact-sensor-common/contact-sensor-app.zap
 ```
 
-### 7.1.2. Running code generation
+### 9.1.3.  [Code generation](https://github.com/project-chip/connectedhomeip/blob/master/docs/zap_and_codegen/code_generation.md)
 
-> .zap -> .matter
+> 各位有用 word 去編輯文件吧，那你們會去了解 word 怎麼產生 doc。文件一直提 Human-readable，可是英文字母看的懂，但是組合起來，我是完全看不懂它要表達什麼意思，文章完全是流水帳，
+
+> 這邊唯一的重點就是要將 .zap -> .matter
 >
 > To compile the .matter file for use in building, use:
 
@@ -1696,11 +1846,56 @@ $ ./scripts/tools/zap/generate.py ./examples/lock-app/lock-common/lock-app.zap
 $ ./scripts/tools/zap_regen_all.py
 ```
 
-# 8. Deep dive into Matter
+## 9.2. [CHIP RPC CONSOLE](https://github.com/project-chip/connectedhomeip/blob/master/examples/common/pigweed/rpc_console/README.md)
+
+> This python application provides a console for interacting with rpc-enabled chip devices.
+>
+> The console uses the [pigweed pw_console](https://pigweed.dev/pw_console/), but with customizations to work better with CHIP, including containing all rpc proto files required for CHIP.
+
+> 只是一個測試工具。程式開發都已經沒時間了，還要去學怎麼使用，請開發者自行斟酌。
+
+### 9.2.1. Building
+
+```bash
+$ export PJ_GN_TARGET=rpc_console
+$ export PJ_GN_BUILD_DIR=`pwd`/build_xxx/${PJ_GN_TARGET}
+
+$ cd ./examples/common/pigweed/rpc_console
+$ gn gen ${PJ_GN_BUILD_DIR}
+$ ninja -C ${PJ_GN_BUILD_DIR}
+
+$ cd ${PJ_GN_BUILD_DIR}
+$ pip install chip_rpc_console_wheels/*.whl
+```
+
+### 9.2.2. Running
+
+```bash
+$ chip-console
+usage: chip-console [-h] [-d DEVICE] [-b BAUDRATE] [-r]
+                    [--token-databases elf_or_token_database [elf_or_token_database ...]] [-s SOCKET_ADDR]
+chip-console: error: one of the arguments -d/--device -s/--socket-addr is required
+
+$ chip-console -s localhost:33000
+```
+
+![matter_rpc01](./images/matter_rpc01.png)
+
+### 9.2.3. Commands
+
+```bash
+rpcs.chip.rpc.Device.GetDeviceInfo()
+
+rpcs.chip.rpc.Lighting.Get()
+
+rpcs.chip.rpc.Lighting.Set(on=True, level=128, color=protos.chip.rpc.LightingColor(hue=5, saturation=5))
+```
+
+# 10. Deep dive into Matter
 
 > 主要著重在 linux 上的開發
 
-## 8.0. CTAG
+## 10.1. CTAG
 
 > 要熟悉程式本身，就必須將程式碼加入專案之中，方便查尋。下面列出要收錄的目錄，避免加入一些不必要的程式。
 >
@@ -1739,9 +1934,9 @@ $ ./scripts/tools/zap_regen_all.py
 
 ```
 
-## 8.1. Data Model
+## 10.2. Data Model
 
-### 8.1.1. Elements of Matter
+### 10.2.1. Elements of Matter
 
 > 因為曾經有開發 Z-Wave 的經驗，對此定義並不陌生；類似的應用 [mctt_1st.md](https://github.com/lankahsu520/beeX/blob/main/doc/mctt_1st.md)。
 >
@@ -1804,7 +1999,7 @@ flowchart BT
 
 > Provides basic information about the node, like firmware version, manufacturer etc
 
-### 8.1.2. Examples of Devices
+### 10.2.2. Examples of Devices
 
 #### A. Dimmable Light & On/Off Light
 
@@ -1842,7 +2037,7 @@ flowchart BT
 
 ```
 
-### 8.1.3. Server(s) and Client(s)
+### 10.2.3. Server(s) and Client(s)
 
 ```mermaid
 flowchart LR
@@ -1947,101 +2142,9 @@ flowchart LR
 
 ```
 
-## 8.2. [Clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)
+## 10.3. Init & Options
 
->[connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/
->
->基本設備的組成為 Device  / endpoint / cluster，而 cluster 可視為一項功能
-```bash
-$ ls connectedhomeip/src/app/clusters/
-access-control-server                    media-input-server
-account-login-server                     media-playback-server
-administrator-commissioning-server       mode-base-server
-air-quality-server                       mode-select-server
-application-basic-server                 network-commissioning
-application-launcher-server              occupancy-sensor-server
-audio-output-server                      on-off-server
-barrier-control-server                   operational-credentials-server
-basic-information                        operational-state-server
-bindings                                 ota-provider
-bridged-device-basic-information-server  ota-requestor
-channel-server                           power-source-configuration-server
-color-control-server                     power-source-server
-concentration-measurement-server         pump-configuration-and-control-client
-content-launch-server                    pump-configuration-and-control-server
-descriptor                               refrigerator-alarm-server
-diagnostic-logs-server                   resource-monitoring-server
-dishwasher-alarm-server                  sample-mei-server
-door-lock-server                         scenes-server
-ethernet-network-diagnostics-server      smoke-co-alarm-server
-fan-control-server                       software-diagnostics-server
-fault-injection-server                   switch-server
-fixed-label-server                       target-navigator-server
-general-commissioning-server             temperature-control-server
-general-diagnostics-server               test-cluster-server
-group-key-mgmt-server                    thermostat-client
-groups-server                            thermostat-server
-ias-zone-client                          thermostat-user-interface-configuration-server
-ias-zone-server                          thread-network-diagnostics-server
-icd-management-server                    time-format-localization-server
-identify-server                          time-synchronization-server
-keypad-input-server                      user-label-server
-laundry-washer-controls-server           wake-on-lan-server
-level-control                            wifi-network-diagnostics-server
-localization-configuration-server        window-covering-server
-low-power-server
-
-```
-
-### 8.2.1. 0x0006 [on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters) - <font color="red">開 / 關 (On / Off) 功能</font>
-
->[connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/[on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/on-off-server)/
-
-```bash
-chip-tool onoff toggle $MATTER_NODEID $MATTER_EPID
-
-chip-tool onoff on $MATTER_NODEID $MATTER_EPID
-chip-tool onoff off $MATTER_NODEID $MATTER_EPID
-```
-
-```bash
-Usage:
-  chip-tool onoff command_name [param1 param2 ...]
-
-  +-------------------------------------------------------------------------------------+
-  | Commands:                                                                           |
-  +-------------------------------------------------------------------------------------+
-  | * command-by-id                                                                     |
-  | * off                                                                               |
-  | * on                                                                                |
-  | * toggle                                                                            |
-  | * off-with-effect                                                                   |
-  | * on-with-recall-global-scene                                                       |
-  | * on-with-timed-off                                                                 |
-  | * read-by-id                                                                        |
-  | * read                                                                              |
-  | * write-by-id                                                                       |
-  | * force-write                                                                       |
-  | * write                                                                             |
-  | * subscribe-by-id                                                                   |
-  | * subscribe                                                                         |
-  | * read-event-by-id                                                                  |
-  | * subscribe-event-by-id                                                             |
-  +-------------------------------------------------------------------------------------+
-
-```
-
-#### A. [on-off-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/on-off-server/on-off-server.cpp)
-
-> [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/[on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/on-off-server)/[on-off-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/on-off-server/on-off-server.cpp)
-
-### 8.2.2. 0x0008 [level-control](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/level-control) - <font color="red">調光器 (Dimmer) 功能</font>
-
-> [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/[level-control](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/level-control)/
-
-## 8.3. Init & Options
-
-### 8.3.0. Init
+### 10.3.1. Init
 
 #### - [AppMain.cpp](https://github.com/project-chip/connectedhomeip/blob/master/examples/platform/linux/AppMain.cpp)
 
@@ -2086,7 +2189,7 @@ CHIP_ERROR Server::Init(const ServerInitParams & initParams)
 }
 ```
 
-### 8.3.1. [Options.cpp](https://github.com/project-chip/connectedhomeip/blob/master/examples/platform/linux/Options.cpp)
+### 10.3.2. [Options.cpp](https://github.com/project-chip/connectedhomeip/blob/master/examples/platform/linux/Options.cpp)
 
 > [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[examples](https://github.com/project-chip/connectedhomeip/tree/master/examples)/[platform](https://github.com/project-chip/connectedhomeip/tree/master/examples/platform)/[linux](https://github.com/project-chip/connectedhomeip/tree/master/examples/platform/linux)/[Options.cpp](https://github.com/project-chip/connectedhomeip/blob/master/examples/platform/linux/Options.cpp)
 
@@ -2100,9 +2203,9 @@ initParams.interfaceId = LinuxDeviceOptions::GetInstance().interfaceId;
 
 #### --passcode, kDeviceOption_Passcode 0x1009
 
-## 8.4. Pair
+## 10.4. Pair
 
-### 8.4.1. passcode and discriminator
+### 10.4.1. passcode and discriminator
 
 #### A. [CHIPDeviceConfig.h](https://github.com/project-chip/connectedhomeip/blob/master/src/include/platform/CHIPDeviceConfig.h)
 
@@ -2251,13 +2354,11 @@ CHIP_ERROR InitCommissionableDataProvider(LinuxCommissionableDataProvider & prov
 
 ```
 
-# 9. [Testing Guides](https://github.com/project-chip/connectedhomeip/blob/master/docs/testing/index.md)
+# ??? [Testing Guides](https://github.com/project-chip/connectedhomeip/blob/master/docs/testing/index.md)
 
 > ## [Ensuring device conformance](https://github.com/project-chip/connectedhomeip/blob/master/docs/getting_started/changing_examples.md#ensuring-device-conformance)
 >
 > After changing the examples, it is important to ensure they remain spec compliant. Although there are numerous certification tests to check the various parts of the device, the tests most likely to be affected by changes to ZAP are the conformance tests, which ensure that the device included meets the conformance requirements for clusters and device types. To run conformance tests against the example app, see [Testing](https://github.com/project-chip/connectedhomeip/blob/master/docs/testing/index.md). The tests that ensure the device composition is spec compliant are found in [Device Basic Composition Test](https://github.com/project-chip/connectedhomeip/blob/master/src/python_testing/TC_DeviceBasicComposition.py) and [Device Conformance Tests](https://github.com/project-chip/connectedhomeip/blob/master/src/python_testing/TC_DeviceConformance.py).
-
-
 
 # ??? Virtual Device
 
