@@ -51,34 +51,7 @@
 
 ![[Architecture Overview](https://github.com/project-chip/connectedhomeip#architecture-overview)](https://project-chip.github.io/connectedhomeip-doc/_images/Matter_Arch_Overview.png)
 
-## 1.2.  Support List
-
-### 1.2.1. Google Home and android phone
-
-- [x] [在 Google Home 應用程式中管理支援 Matter 的裝置](https://support.google.com/googlenest/answer/13127223?hl=zh-HK)
-
-> ### 軟硬體需求
->
-> - Google 帳戶
-> - 家用 Wi-Fi 網路
-> - 如果是使用 [Thread](https://support.google.com/googlenest/answer/9249088) 的裝置，需要搭配 [Thread 邊界路由器](https://support.google.com/googlenest/answer/9249088#google-TBR-list)才能完成設定
-> - 搭載以下版本的手機或平板電腦：
->   - Android 8.1 以上版本
->   - Google Play 服務 22.48.14 以上版本
->   - 藍牙低功耗 (BLE) 4.2 以上版本
-> - 最新版本的 [Google Home 應用程式](https://play.google.com/store/apps/details?id=com.google.android.apps.chromecast.app&hl=zh_tw) ![img](https://lh3.googleusercontent.com/9MpaXj2oIHIZU4JiCl6Nos9Ac3VRocyuFxWcvgwnb7FRVsPTcLXGUdvWP8W8LqReE40=w18)
-> - 支援 Matter 的智慧住宅裝置。如果包裝上有 ![img](https://lh3.googleusercontent.com/3yeJZ0aNtlZqwUfGWY-2Q-AIAnykzH8EOPKwu3XDNSsfdnFIQN6Da5qYou0qXSiX9_4=w180) 標誌，就表示裝置支援 Matter
-> - [支援 Matter 的 Google 中樞裝](https://support.google.com/googlenest/answer/12391458#matter-app)
-
-#### A. [Supported Matter clusters](https://developers.home.google.com/matter/clusters)
-
-### 1.2.2. Apple Home and  iphone
-
-- [x] [Matter support in iOS 16](https://developer.apple.com/apple-home/matter/)
-
-- [x] [配對和管理 Matter 配件](https://support.apple.com/zh-tw/102135)
-
-## 1.3. Solve what
+## 1.2. Solve what
 
 #### A. 解決<font color="red">互聯互通</font>，不同廠家出產的產品都能亙通。
 
@@ -100,7 +73,7 @@
 >
 >另外無線設備有個很致命的問題，如有外力強佔某個無線波段，各位想想會怎麼樣？
 
-## 1.4.  But …
+## 1.3.  But …
 
 #### A. 都要上雲 ?
 
@@ -301,7 +274,7 @@ flowchart TD
 $ sudo apt update
 $ sudo apt -y upgrade
 
-$ sudo apt  -y install net-tools openssh-server
+$ sudo apt -y install net-tools openssh-server
 # to change the hostname
 $ hostname lanka-pi4-8g
 
@@ -836,7 +809,15 @@ $ ll build_xxx/linux-x64-tests/chip-tool
 
 > [CHIP Linux Lighting Example](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app/linux) - An example showing the use of CHIP on the Linux. The document will describe how to build and run CHIP Linux Lighting Example on Raspberry Pi. This doc is tested on **Ubuntu for Raspberry Pi Server 20.04 LTS (aarch64)** and **Ubuntu for Raspberry Pi Desktop 20.10 (aarch64)**
 
+> linux-x64-light-with-ui
+>
+> 增加 -with-ui
+>
+> ![matter_linux-x64-light-with-ui](./images/matter_linux-x64-light-with-ui01.png)
+
 #### linux-x64-lock ([lock-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lock-app))
+
+> [Lock Application for Linux](https://github.com/project-chip/connectedhomeip/tree/master/examples/lock-app/linux) - Application that showcases abilities of the Door Lock Cluster.
 
 #### linux-x64-tests (tests)
 
@@ -860,7 +841,9 @@ $ ll build_xxx/linux-x64-tests/chip-tool
 
 ```bash
 # 設邊選擇 Pi4 (arm64/aarch64);另外使用 clang進行編譯
-$ export PJ_GN_TARGET=linux-arm64-light-clang
+#$ export PJ_GN_TARGET=linux-arm64-light-clang
+# 這邊加入 -with-ui，方便顯示變化
+$ export PJ_GN_TARGET=linux-arm64-light-with-ui-clang
 $ export PJ_GN_EXAMPLE=lighting-app
 $ export PJ_GN_ROOT=`pwd`/examples/${PJ_GN_EXAMPLE}/linux
 
@@ -1061,9 +1044,12 @@ $ ll build_xxx/android-arm64-chip-tool/outputs/apk/debug/app-debug.apk
 ```bash
 $ export MATTER_PINCODE=20231206
 $ export MATTER_DISCRIMINATOR=3849
+
 # <None = 0, SoftAP = 1 << 0, BLE = 1 << 1, OnNetwork = 1 << 2>
 # BLE+OnNetwork
 $ export MATTER_DISCOVER=6
+# OnNetwork
+$ export MATTER_DISCOVER=4
 
 $ export MATTER_BLE_HCI=`hciconfig | grep hci0 | cut -d":" -f1 | cut -d"i" -f 2`
 $ hciconfig
@@ -1078,6 +1064,12 @@ $ export MATTER_IFACE_ID=`ip link show dev $MATTER_IFACE | grep $MATTER_IFACE | 
 
 $ export MATTER_IFACE=enp0s3
 $ export MATTER_IFACE_ID=`ip link show dev $MATTER_IFACE | grep $MATTER_IFACE | cut -d":" -f1`
+
+$ export MATTER_IFACE=enp0s8
+$ export MATTER_IFACE_ID=`ip link show dev $MATTER_IFACE | grep $MATTER_IFACE | cut -d":" -f1`
+
+$ export MATTER_KVS=/work/chip_kvs
+
 ```
 
 #### chip-bridge-app
@@ -1116,7 +1108,9 @@ $ export MATTER_IFACE_ID=`ip link show dev $MATTER_IFACE | grep $MATTER_IFACE | 
 ```bash
 $ rm /tmp/chip_kvs
 
-$ ./chip-bridge-app --interface-id 2 --capabilities 4 --passcode 20231206 --discriminator 3849
+$ ./chip-bridge-app \
+ --interface-id 2 --capabilities 4 \
+ --passcode 20241230 --discriminator 3999
 ```
 
 #### chip-lighting-app
@@ -1128,6 +1122,7 @@ $ ./chip-lighting-app \
  --capabilities $MATTER_DISCOVER \
  --passcode $MATTER_PINCODE \
  --discriminator $MATTER_DISCRIMINATOR
+ --KVS $MATTER_KVS
 ```
 
 ```bash
@@ -1136,32 +1131,86 @@ $ ./chip-lighting-app \
 [ "$MATTER_DISCOVER" != "" ] && MATTER_DISCOVER_ARG="--capabilities $MATTER_DISCOVER"
 [ "$MATTER_BLE_HCI" != "" ] && MATTER_BLE_HCI_ARG="--ble-device $MATTER_BLE_HCI"
 [ "$MATTER_IFACE_ID" != "" ] && MATTER_IFACE_ID_ARG="--interface-id $MATTER_IFACE_ID"
+[ "$MATTER_KVS" != "" ] && MATTER_KVS_ARG="--KVS $MATTER_KVS"
 
 $ ./chip-lighting-app \
  $MATTER_IFACE_ID_ARG \
  $MATTER_BLE_HCI_ARG \
  $MATTER_DISCOVER_ARG
  $MATTER_PINCODE_ARG \
- $MATTER_DISCRIMINATOR_ARG
+ $MATTER_DISCRIMINATOR_ARG \
+ $MATTER_KVS_ARG
 ```
 
 ```bash
 # 目前 demo 裏有個嚴重的 bug，unpair 後無法再進行 pair，需要刪除 /tmp/chip_kvs 後，再重啟 chip-lighting-app
+# 內建是指定在 /tmp/chip_kvs
 $ rm /tmp/chip_kvs
+$ [ "$MATTER_KVS" != "" ] && rm $MATTER_KVS
 
-# no ble
-$ ./chip-lighting-app --interface-id 2 --ble-device 0 --capabilities 4 --passcode 20231206 --discriminator 3849
+$ ./chip-lighting-app \
+ --interface-id 2 --ble-device 0 --capabilities 4 \
+ --passcode 20231206 --discriminator 3849 \
+ --KVS /tmp/chip_kvs
 
-$ ./chip-lighting-app --interface-id 2 --capabilities 4 --passcode 20231206 --discriminator 3849
-
-$ ./chip-lighting-app --interface-id 2 --capabilities 4 --passcode 20231205 --discriminator 3849
+$ ./chip-lighting-app \
+ --interface-id $MATTER_IFACE_ID --capabilities 4 \
+ --passcode 20231206 --discriminator 3849 \
+ $MATTER_KVS_ARG
 ```
 
-##### QR Code
+#### chip-tv-app
 
-> https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0IRV01DWLA39G00
+```bash
+$ [ "$MATTER_KVS" != "" ] && rm $MATTER_KVS
 
-### ![matter_QRCode01](./images/matter_QRCode01.png)
+$ ./chip-tv-app \
+ --interface-id $MATTER_IFACE_ID --capabilities 4 \
+ --passcode 20241231 --discriminator 3888 \
+ $MATTER_KVS_ARG
+
+> help
+  app             App commands. Usage: app [command_name]
+  exit            Exit the shell application
+  help            List out all top level commands
+  version         Output the software version
+  config          Manage device configuration. Usage to dump value: config [param_name] and to set some values (discriminator): config [param_name] [param_value].
+  device          Device management commands
+  onboardingcodes Dump device onboarding codes. Usage: onboardingcodes none|softap|ble|onnetwork [qrcode|qrcodeurl|manualpairingcode]
+  dns             DNS client commands
+  stat            Statistics commands
+  commissionee    Commissionee commands. Usage: commissionee [command_name]
+  controller      Controller commands. Usage: controller [command_name]
+Done
+
+> controller commission-onnetwork 20231206 3849 192.168.50.52 5540
+
+```
+
+#### fabric-sync
+
+```bash
+$ rm /tmp/chip_kvs
+
+$ ./fabric-bridge-app \
+ --interface-id $MATTER_IFACE_ID --capabilities 4 \
+ --passcode 20240101 --discriminator 3777 \
+ $MATTER_KVS_ARG
+
+$ ./fabric-sync \
+ --interface-id $MATTER_IFACE_ID --capabilities 4 \
+ --passcode 20231206 --discriminator 3849 \
+ $MATTER_KVS_ARG
+
+>>>
+pairing onnetwork 1 20231206
+pairing onnetwork 2 20231207
+
+onoff toggle 2 1
+
+> app add-device 2 20231206 192.168.50.52 5540
+> controller commission-onnetwork 20231206 3849 192.168.50.52 5540
+```
 
 ## 6.2. [chip-tool](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool)
 
@@ -1223,6 +1272,7 @@ $ chip-tool interactive start
 >>>
 
 pairing onnetwork 1 20231206
+pairing code 1 30510457783
 
 onoff toggle 1 1
 
@@ -1288,6 +1338,8 @@ $ chip-tool any read-by-id cluster-ids attribute-ids destination-id endpoint-ids
 
 # 6 (OnOff)
 any read-by-id 6 0xFFFFFFFF 1 1
+
+any read-by-id 6 0xFFFFFFFF 3 0
 ```
 
 ```bash
@@ -1478,7 +1530,54 @@ Usage:
 
 ```
 
+#### payload
+
+```bash
+$ chip-tool payload
+[1735613363.077] [135978:135978] [TOO] Missing command name
+Usage:
+  /snap/chip-tool/199/bin/chip-tool payload command_name [param1 param2 ...]
+
+Commands for parsing and generating setup payloads.
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * generate-qrcode                                                                   |
+  | * generate-manualcode                                                               |
+  | * parse-setup-payload                                                               |
+  | * parse-additional-data-payload                                                     |
+  | * verhoeff-verify                                                                   |
+  | * verhoeff-generate                                                                 |
+  +-------------------------------------------------------------------------------------+
+[1735613363.077] [135978:135978] [TOO] Run command failure: ../examples/chip-tool/commands/common/Commands.cpp:248: Error 0x0000002F
+```
+
+```bash
+$ chip-tool payload parse-setup-payload MT:-24J0IRV01DWLA39G00
+[1735613429.455] [136009:136009] [DL] ChipLinuxStorage::Init: Using KVS config file: /home/lanka/snap/chip-tool/common/chip_tool_kvs
+[1735613429.455] [136009:136009] [SPL] Parsing base38Representation: MT:-24J0IRV01DWLA39G00
+[1735613429.455] [136009:136009] [SPL] Version:             0
+[1735613429.455] [136009:136009] [SPL] VendorID:            65521
+[1735613429.455] [136009:136009] [SPL] ProductID:           32769
+[1735613429.455] [136009:136009] [SPL] Custom flow:         0    (STANDARD)
+[1735613429.455] [136009:136009] [SPL] Discovery Bitmask:   0x04 (On IP network)
+[1735613429.455] [136009:136009] [SPL] Long discriminator:  3849   (0xf09)
+[1735613429.455] [136009:136009] [SPL] Passcode:            20231206
+```
+
 ### 6.2.4. Test Case
+
+#### A. QR Code
+
+| passcode | discriminator | Payload                                                      | QR Code                                                      |
+| -------- | ------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 20231206 | 3849          | [MT:-24J0IRV01DWLA39G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0IRV01DWLA39G00) | ![matter_QRCode01](./images/matter_QRCode-20231206-3849.png) |
+| 20241230 | 3999          | [MT:-24J0SO527134S59G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0SO527134S59G00) | ![matter_QRCode-20241230-3999](./images/matter_QRCode-20241230-3999.png) |
+| 20241231 | 3888          | [MT:-24J0AFN006G4S59G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0AFN006G4S59G00) | ![matter_QRCode-20241231-3888](./images/matter_QRCode-20241231-3888.png) |
+|          |               |                                                              |                                                              |
+
+#### B. Commands Pool
 
 ```bash
 # default 20202021
@@ -1502,9 +1601,21 @@ $ chip-tool move-to-level 100 0
 $ chip-tool pairing unpair $MATTER_NODEID
 ```
 
-# 7. IoT Home
+# 7. Cloud Home
 
-## 7.1. Google Family
+## 7.1. Apple Family
+
+> 如果要有完善的對測環境，只能選擇使用 Apple。
+>
+> - [x] [Matter support in iOS 16](https://developer.apple.com/apple-home/matter/)
+>
+> - [x] [配對和管理 Matter 配件](https://support.apple.com/zh-tw/102135)
+
+#### A. iPhone
+
+![matter_iOS01](./images/matter_iOS01.png)
+
+## 7.2. Google Family
 
 ```mermaid
 flowchart BT
@@ -1537,7 +1648,22 @@ flowchart BT
 	NestHub <--> |Wifi|Router
 	android <--> |Wifi|Router
 ```
-### 7.1.1. [支援 Matter 的 Google 裝置](https://support.google.com/googlenest/answer/12391458?hl=zh-Hant&co=GENIE.Platform%3DAndroid)
+- [x] [在 Google Home 應用程式中管理支援 Matter 的裝置](https://support.google.com/googlenest/answer/13127223?hl=zh-HK)
+
+> ### 軟硬體需求
+>
+> - Google 帳戶
+> - 家用 Wi-Fi 網路
+> - 如果是使用 [Thread](https://support.google.com/googlenest/answer/9249088) 的裝置，需要搭配 [Thread 邊界路由器](https://support.google.com/googlenest/answer/9249088#google-TBR-list)才能完成設定
+> - 搭載以下版本的手機或平板電腦：
+>   - Android 8.1 以上版本
+>   - Google Play 服務 22.48.14 以上版本
+>   - 藍牙低功耗 (BLE) 4.2 以上版本
+> - 最新版本的 [Google Home 應用程式](https://play.google.com/store/apps/details?id=com.google.android.apps.chromecast.app&hl=zh_tw) ![img](https://lh3.googleusercontent.com/9MpaXj2oIHIZU4JiCl6Nos9Ac3VRocyuFxWcvgwnb7FRVsPTcLXGUdvWP8W8LqReE40=w18)
+> - 支援 Matter 的智慧住宅裝置。如果包裝上有 ![img](https://lh3.googleusercontent.com/3yeJZ0aNtlZqwUfGWY-2Q-AIAnykzH8EOPKwu3XDNSsfdnFIQN6Da5qYou0qXSiX9_4=w180) 標誌，就表示裝置支援 Matter
+> - [支援 Matter 的 Google 中樞裝](https://support.google.com/googlenest/answer/12391458#matter-app)
+
+### 7.2.1. [支援 Matter 的 Google 裝置](https://support.google.com/googlenest/answer/12391458?hl=zh-Hant&co=GENIE.Platform%3DAndroid)
 
 > ## Matter 如何與 Google 服務搭配運作
 >
@@ -1551,7 +1677,7 @@ flowchart BT
 >
 > 歡迎前往 [Google 商店](https://home.google.com/explore-devices/featured-devices/#google-devices-with-matter)選購上述裝置。
 
-### 7.1.2. [配對 Matter 裝置](https://developers.home.google.com/matter/integration/pair?hl=zh-tw)
+### 7.2.2. [配對 Matter 裝置](https://developers.home.google.com/matter/integration/pair?hl=zh-tw)
 
 > ## 配對限制
 >
@@ -1562,7 +1688,9 @@ flowchart BT
 > - 為了進行開發和實際測試，必須[在 Developer Console 中建立](https://developers.home.google.com/matter/integration/create?hl=zh-tw)專案，以及與對應 VID 和 PID 組合的整合作業。受試裝置的使用者必須是專案成員，或是被列入實測使用者清單。
 > - 產品必須通過 Alliance 認證，消費者才能使用。
 
-#### A. [ Developer Console 中建立](https://developers.home.google.com/matter/integration/create?hl=zh-tw)專案
+#### A. [Supported Matter clusters](https://developers.home.google.com/matter/clusters)
+
+#### B. [ Developer Console 中建立](https://developers.home.google.com/matter/integration/create?hl=zh-tw)專案
 
 > Project: matter20231207
 >
@@ -1578,7 +1706,7 @@ flowchart BT
 
 
 
-### 7.1.3. Android App
+### 7.2.3. Android App
 
 > 目前使用過的 App 並沒有一個完善所有功能。
 >
@@ -1629,13 +1757,15 @@ flowchart BT
 
 > [Google play](https://play.google.com/store/games?hl=zh_TW)上的軟體大都需要有一個 *Matter Gateway* 當中介者。而此軟體不用，方便測試。
 
+![matter_SmartLife01](./images/matter_SmartLife01.jpg)
+
 #### C. Home
 
 > 就連 google 出品的，也不堪使用。對接市面上有認證的設備，也讓人失望。
 
-## 7.2. Apple Family
+## 7.3. Xiaomi Family
 
-> 如果要有完善的對測環境，只能選擇使用 Apple。
+## 7.4. Tuya Family
 
 # 8. Cluster and Device Type development
 
@@ -1791,6 +1921,13 @@ $ ./scripts/tools/zap/run_zaptool.sh ./examples/lighting-app/lighting-common/lig
 $ ./scripts/tools/zap/run_zaptool.sh ./examples/lock-app/lock-common/lock-app.zap
 ```
 
+#### tv-app
+
+```bash
+# tv-app
+$ ./scripts/tools/zap/run_zaptool.sh ./examples/tv-app/tv-common/tv-app.zap
+```
+
 #### others
 
 ```bash
@@ -1805,6 +1942,10 @@ $ ./scripts/tools/zap/run_zaptool.sh ./examples/all-clusters-app/all-clusters-co
 
 # contact-sensor-app
 $ ./scripts/tools/zap/run_zaptool.sh ./examples/contact-sensor-app/contact-sensor-common/contact-sensor-app.zap
+
+# fabric-bridge-app
+$ ./scripts/tools/zap/run_zaptool.sh ./examples/fabric-bridge-app/fabric-bridge-common/fabric-bridge-app.zap
+
 ```
 
 ### 9.1.3.  [Code generation](https://github.com/project-chip/connectedhomeip/blob/master/docs/zap_and_codegen/code_generation.md)
@@ -2461,6 +2602,14 @@ $ ./linux/out/rootnode_onofflight_bbs1b7IaOV
 
 ```bash
 $ sudo snap install --classic kotlin
+```
+
+## II.2. /usr/include/SDL2/SDL_stdinc.h:440:9: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+
+```bash
+$ vi third_party/imgui/BUILD.gn
+# add
+cflags = [ "-Wno-implicit-fallthrough" ]
 ```
 
 # III. Glossary
