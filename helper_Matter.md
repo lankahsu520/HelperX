@@ -1068,13 +1068,76 @@ $ export MATTER_IFACE_ID=`ip link show dev $MATTER_IFACE | grep $MATTER_IFACE | 
 $ export MATTER_IFACE=enp0s8
 $ export MATTER_IFACE_ID=`ip link show dev $MATTER_IFACE | grep $MATTER_IFACE | cut -d":" -f1`
 
-$ export MATTER_KVS=/work/chip_kvs
+# 暫時不要設定這個
+#$ export MATTER_KVS=/work/chip_kvs
+```
+
+#### air-quality-sensor-app
+
+```bash
+$ ./air-quality-sensor-app \
+ --interface-id $MATTER_IFACE_ID --capabilities 4 \
+ --passcode 20250103 --discriminator 3887 \
+ $MATTER_KVS_ARG
+```
+
+> [air-quality-sensor-app.matter](https://github.com/project-chip/connectedhomeip/blob/master/examples/air-quality-sensor-app/air-quality-sensor-common/air-quality-sensor-app.matter)
+
+```matter
+  enum AirQualityEnum : enum8 {
+    kUnknown = 0;
+    kGood = 1;
+    kFair = 2;
+    kModerate = 3;
+    kPoor = 4;
+    kVeryPoor = 5;
+    kExtremelyPoor = 6;
+  }
+```
+
+```bash
+$ export MATTER_PID=`pidof air-quality-sensor-app`
+
+# Trigger air quality change event
+# Generate event `AirQuality`, to change the air quality value.
+$ echo '{"Name":"AirQuality","NewValue":3}' > /tmp/chip_air_quality_fifo_${MATTER_PID}
+
+# Trigger Humidity change event
+# Generate event `RelativeHumidityMeasurement`, to change the relative humidity
+# value (6000 for 60,0 %).
+$ echo '{"Name":"RelativeHumidityMeasurement","NewValue":6000}' > /tmp/chip_air_quality_fifo_${MATTER_PID}
+
+# Trigger concentration change event
+# Concentration change events can be trigger on the concentration measurement clusters.
+
+# Generate event `CarbonDioxideConcentrationMeasurement`, to change the CO2 value.
+$ echo '{"Name":"CarbonDioxideConcentrationMeasurement","NewValue":400}' > /tmp/chip_air_quality_fifo_${MATTER_PID}
+
+# Generate event `CarbonMonoxideConcentrationMeasurement`, to change the CO value.
+$ echo '{"Name":"CarbonMonoxideConcentrationMeasurement","NewValue":1}' > /tmp/chip_air_quality_fifo_${MATTER_PID}
+
+# Generate event `NitrogenDioxideConcentrationMeasurement`, to change the NO₂ value.
+$ echo '{"Name":"NitrogenDioxideConcentrationMeasurement","NewValue":1}' > /tmp/chip_air_quality_fifo_${MATTER_PID}
+
+# Generate event `Pm1ConcentrationMeasurement`, to change the PM1 value.
+$ echo '{"Name":"Pm1ConcentrationMeasurement","NewValue":1}' > /tmp/chip_air_quality_fifo_${MATTER_PID}
+
+# Generate event `Pm25ConcentrationMeasurement`, to change the PM2.5 value.
+$ echo '{"Name":"Pm25ConcentrationMeasurement","NewValue":2.5}' > /tmp/chip_air_quality_fifo_${MATTER_PID}
+
+# Generate event `Pm10ConcentrationMeasurement`, to change the PM10 value.
+$ echo '{"Name":"Pm10ConcentrationMeasurement","NewValue":10}' > /tmp/chip_air_quality_fifo_${MATTER_PID}
+
+# Generate event `TotalVolatileOrganicCompoundsConcentrationMeasurement`, to change the TVOC value.
+$ echo '{"Name":"TotalVolatileOrganicCompoundsConcentrationMeasurement","NewValue":100}' > /tmp/chip_air_quality_fifo_${MATTER_PID}
 
 ```
 
 #### chip-bridge-app
 
-> 提供亙動操作，動態新增和刪減
+> 提供亙動操作，動態新增和刪減，相關的程式碼請見
+>
+> main.cpp / void * bridge_polling_thread(void * context)
 
 | Device              | ch   | Functions              |
 | ------------------- | ---- | ---------------------- |
@@ -1575,7 +1638,7 @@ $ chip-tool payload parse-setup-payload MT:-24J0IRV01DWLA39G00
 | 20231206 | 3849          | [MT:-24J0IRV01DWLA39G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0IRV01DWLA39G00) | ![matter_QRCode01](./images/matter_QRCode-20231206-3849.png) |
 | 20241230 | 3999          | [MT:-24J0SO527134S59G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0SO527134S59G00) | ![matter_QRCode-20241230-3999](./images/matter_QRCode-20241230-3999.png) |
 | 20241231 | 3888          | [MT:-24J0AFN006G4S59G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0AFN006G4S59G00) | ![matter_QRCode-20241231-3888](./images/matter_QRCode-20241231-3888.png) |
-|          |               |                                                              |                                                              |
+| 20250103 | 3887          | [MT:-24J0SO527P6YY79G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0SO527P6YY79G00) | ![matter_QRCode-20250103-3887](./images/matter_QRCode-20250103-3887.png) |
 
 #### B. Commands Pool
 
@@ -2611,6 +2674,24 @@ $ vi third_party/imgui/BUILD.gn
 # add
 cflags = [ "-Wno-implicit-fallthrough" ]
 ```
+
+## II.3. examples/energy-management-app/energy-management-common/device-energy-management/src/DEMTestEventTriggers.cpp:125:106: error: conversion from ‘int’ to ‘short unsigned int’ may change value [-Werror=conversion]
+
+```bash
+$ vi examples/energy-management-app/linux/BUILD.gn
+# disable
+#cflags = [ "-Wconversion" ]
+```
+
+## II.4. "examples/air-quality-sensor-app/air-quality-sensor-common/src/air-quality-sensor-manager.cpp:145:67: error: format specifies type 'unsigned short' but the argument has type 'std::underlying_type_t<AirQualityEnum>' (aka 'unsigned char') [-Werror,-Wformat-type-confusion]"
+
+```bash
+$ vi examples/air-quality-sensor-app/air-quality-sensor-common/src/air-quality-sensor-manager.cpp
+
+    //ChipLogDetail(NotSpecified, "Updated AirQuality value: %huu", chip::to_underlying(newValue));
+    ChipLogDetail(NotSpecified, "Updated AirQuality value: %d", chip::to_underlying(newValue));
+```
+
 
 # III. Glossary
 
