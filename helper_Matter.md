@@ -809,11 +809,8 @@ $ ll build_xxx/linux-x64-tests/chip-tool
 
 > [CHIP Linux Lighting Example](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app/linux) - An example showing the use of CHIP on the Linux. The document will describe how to build and run CHIP Linux Lighting Example on Raspberry Pi. This doc is tested on **Ubuntu for Raspberry Pi Server 20.04 LTS (aarch64)** and **Ubuntu for Raspberry Pi Desktop 20.10 (aarch64)**
 
-> linux-x64-light-with-ui
+> linux-x64-light-with-ui, 增加 -with-ui
 >
-> 增加 -with-ui
->
-> ![matter_linux-x64-light-with-ui](./images/matter_linux-x64-light-with-ui01.png)
 
 #### linux-x64-lock ([lock-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lock-app))
 
@@ -1178,6 +1175,10 @@ $ ./chip-bridge-app \
 
 #### chip-lighting-app
 
+> linux-x64-light-with-ui
+
+![matter_linux-x64-light-with-ui](./images/matter_linux-x64-light-with-ui01.png)
+
 ```bash
 $ ./chip-lighting-app \
  --interface-id $MATTER_IFACE_ID \
@@ -1248,6 +1249,19 @@ Done
 
 > controller commission-onnetwork 20231206 3849 192.168.50.52 5540
 
+```
+
+#### contact-sensor-app
+
+> linux-x64-contact-sensor-with-ui
+
+![matter_linux-x64-contact-sensor-with-ui01](./images/matter_linux-x64-contact-sensor-with-ui01.png)
+
+```bash
+$ ./contact-sensor-app \
+ --interface-id $MATTER_IFACE_ID --capabilities 4 \
+ --passcode 20250103 --discriminator 3886 \
+ $MATTER_KVS_ARG
 ```
 
 #### fabric-sync
@@ -1639,6 +1653,7 @@ $ chip-tool payload parse-setup-payload MT:-24J0IRV01DWLA39G00
 | 20241230 | 3999          | [MT:-24J0SO527134S59G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0SO527134S59G00) | ![matter_QRCode-20241230-3999](./images/matter_QRCode-20241230-3999.png) |
 | 20241231 | 3888          | [MT:-24J0AFN006G4S59G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0AFN006G4S59G00) | ![matter_QRCode-20241231-3888](./images/matter_QRCode-20241231-3888.png) |
 | 20250103 | 3887          | [MT:-24J0SO527P6YY79G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0SO527P6YY79G00) | ![matter_QRCode-20250103-3887](./images/matter_QRCode-20250103-3887.png) |
+| 20250103 | 3886          | [MT:-24J0AFN00KA0648G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0AFN00KA0648G00) | ![matter_QRCode-20250103-3886](./images/matter_QRCode-20250103-3886.png) |
 
 #### B. Commands Pool
 
