@@ -69,7 +69,7 @@
 >
 >有 CSA 後面掛保證，就可以省掉這些疑問。
 
->此安全並不保證，Local 端的安全；如Matter Hub 或 Matter Bridge 下的設備，並不是都是使用 Matter 溝通，有可能是 Wi-Fi、 Zigbee or Z-Wave 等。
+>此安全並不保證於 Local 端的安全；如Matter Hub 或 Matter Bridge 下的設備，並不是都是使用 Matter 溝通，有可能是 Wi-Fi、 Zigbee or Z-Wave 等。
 >
 >另外無線設備有個很致命的問題，如有外力強佔某個無線波段，各位想想會怎麼樣？
 
@@ -78,6 +78,26 @@
 #### A. 都要上雲 ?
 
 #### B. 沒有 Matter hubs 怎麼辦 ?
+
+## 1.4. History
+
+#### 20240107
+
+> 再次進入 matter  世界，持續三星期的努力，也只能更進完善編譯的 codebase 環境。奉勸要如入的團隊或個人，要多評估自身能力和時間。
+>
+> a. 使用 gn 進行編譯就是一個敗筆，我不相信一位不會寫 Makefile 的軟體工程師，會能解決 gn 裏的問題 （因為你還要解決 python 版本不相容和其它衍生的問題）。third_party 中還放入 soft link - connectedhomeip，是不會用相對路徑，這是要搞死軟體工程師嗎？
+>
+> b. 或許因為我不是裏面的成員，也或許我看不懂英文，也沒有過多的時間和人力，也或許不如那些三百萬的打工仔，無法獲得完整的資料格式，至今查詢不到任何蛛絲馬跡。
+>
+> c. 同上，沒有一份完整的 API 文件。再來就是軟體設計雖有階層性，但是整份的 CHIP 複雜度，有編譯過的就知道。（就好像你要使用 OpenSSL 進行加密，你有需要去研究裏面是如何加密嗎）
+>
+> d. matter 主要交換資料於 network (ip mode) ，但是很少文件說明 Wi-Fi、Thread、BLE 之間的關係。
+>
+> e. 對測的工具或是環境很差，目前堪用的也只是 <font color="red">iOS</font>。
+
+#### 20231223
+
+> 當初只是為了滿足能透過 matter 的方式進行操作設備，不加思索的建立一份“可以”編譯的 codebase，完全不涉入其内涵。當然也很順利的完成簡易的範本。
 
 # 2. IoT (Internet of Things)
 
@@ -743,19 +763,19 @@ $ cd /work/bin/android
 $ unzip android-ndk-r26b-linux.zip
 ```
 
-### 5.3.3. CHIP [examples](https://github.com/project-chip/connectedhomeip/tree/master/examples)
+### 5.3.3. ubuntu x86_64 (Native-Compilation)
 
+> CHIP [examples](https://github.com/project-chip/connectedhomeip/tree/master/examples)
+>
 > - [Running your first example](https://github.com/project-chip/connectedhomeip/blob/master/docs/getting_started/first_example.md)
 >
->   很簡單的文件，看本篇就不用看這文章。
+>   很簡單的文件，看我寫的這篇文章就不用浪費時間去看。
 >
 > - [Changing examples](https://github.com/project-chip/connectedhomeip/blob/master/docs/getting_started/changing_examples.md)
 >
 >   主要是介紹 ZAP。
 >
 > - [SDK Architecture Overview](https://github.com/project-chip/connectedhomeip/blob/master/docs/getting_started/SDKBasics.md)
-
-### 5.3.4. ubuntu x86_64 (Native-Compilation)
 
 > Host: ubuntu x86_64
 
@@ -801,16 +821,29 @@ $ ll build_xxx/linux-x64-tests/chip-tool
 -rwxrwxr-x 1 lanka lanka 159226400 十一 24 10:51 build_xxx/linux-x64-tests/chip-tool*
 ```
 
+#### linux-x64-air-quality-sensor ([air-quality-sensor-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/air-quality-sensor-app))
+
+> [Matter Linux Air Quality Example](https://github.com/project-chip/connectedhomeip/tree/master/examples/air-quality-sensor-app/linux) - An example showing the use of Matter on the Linux. The document will describe how to build and run Matter Linux Air Quality Example on Raspberry Pi. This doc is tested on **Ubuntu for Raspberry Pi Server 20.04 LTS (aarch64)** and **Ubuntu for Raspberry Pi Desktop 20.10 (aarch64)**
+
+> linux-x64-air-quality-sensor-with-ui, 增加 -with-ui
+
 #### linux-x64-bridge ([bridge-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/bridge-app))
 
 > [Matter Linux Bridge Example](https://github.com/project-chip/connectedhomeip/tree/master/examples/bridge-app/linux) - An example demonstrating a simple lighting bridge and the use of dynamic endpoints. The document will describe the theory of operation and how to build and run Matter Linux Bridge Example on Raspberry Pi. This doc is tested on **Ubuntu for Raspberry Pi Server 20.04 LTS (aarch64)** and **Ubuntu for Raspberry Pi Desktop 20.10 (aarch64)**
+
+#### linux-x64-chip-tool ([chip-tool](https://github.com/project-chip/connectedhomeip/tree/master/examples/chip-tool))
+
+> [Matter Client Example](https://github.com/project-chip/connectedhomeip/tree/master/examples/chip-tool) - An example application that uses Matter to send messages to a Matter server.
+
+#### linux-x64-contact-sensor ([contact-sensor-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/contact-sensor-app))
+
+> [Matter Linux Contact Sensor Example](https://github.com/project-chip/connectedhomeip/tree/master/examples/contact-sensor-app/linux) - An example showing the use of CHIP on the Linux. This document will describe how to build and run Matter Linux Contact Sensor Example on Raspberry Pi. This document is tested on **Ubuntu for Raspberry Pi Server 20.04 LTS (aarch64)** and **Ubuntu for Raspberry 
 
 #### linux-x64-light ([lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app))
 
 > [CHIP Linux Lighting Example](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app/linux) - An example showing the use of CHIP on the Linux. The document will describe how to build and run CHIP Linux Lighting Example on Raspberry Pi. This doc is tested on **Ubuntu for Raspberry Pi Server 20.04 LTS (aarch64)** and **Ubuntu for Raspberry Pi Desktop 20.10 (aarch64)**
 
 > linux-x64-light-with-ui, 增加 -with-ui
->
 
 #### linux-x64-lock ([lock-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lock-app))
 
@@ -818,9 +851,24 @@ $ ll build_xxx/linux-x64-tests/chip-tool
 
 #### linux-x64-tests (tests)
 
-> <font color="red"> chip-tool 可以在這邊獲得</font>
+> 會得到一些工具，如果沒有說明文件，就算有了這些也是沒用的。<font color="red"> chip-tool 也可以在這邊獲得</font>。
+>
+> address-resolve-tool
+> chip-cert
+> chip-echo-requester
+> chip-echo-responder
+> chip-im-initiator
+> chip-im-responder
+> chip-shell
+> chip-tool
+> inet-layer-test-tool
+> spake2p
 
-### 5.3.5. Pi4 (Cross-Compilation)
+#### linux-x64-water-leak-detector ([water-leak-detector-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/water-leak-detector-app))
+
+> 
+
+### 5.3.4. Pi4 (Cross-Compilation)
 
 > Host: ubuntu x86_64
 >
@@ -877,7 +925,7 @@ $ file build_xxx/linux-arm64-light-clang/chip-lighting-app
 build_xxx/linux-arm64-light-clang/chip-lighting-app: ELF 64-bit LSB shared object, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, for GNU/Linux 3.7.0, BuildID[xxHash]=7587b1aefa363654, with debug_info, not stripped
 ```
 
-### 5.3.6. Silicon Labs (Cross-Compilation)
+### 5.3.4. Silicon Labs (Cross-Compilation)
 
 #### efr32-brd4187c-light
 
@@ -913,7 +961,7 @@ $ gn ls \
 	./build_xxx/${PJ_GN_TARGET}
 ```
 
-### 5.3.7. Texas Instruments (Cross-Compilation)
+### 5.3.6. Texas Instruments (Cross-Compilation)
 
 #### ti-cc13x2x7_26x2x7-lighting
 
@@ -949,7 +997,7 @@ $ gn ls \
 	./build_xxx/${PJ_GN_TARGET}
 ```
 
-### 5.3.8. android (Cross-Compilation)
+### 5.3.7. android (Cross-Compilation)
 
 #### [CHIPTool](https://github.com/project-chip/connectedhomeip/tree/master/examples/android/CHIPTool)
 
@@ -1066,17 +1114,25 @@ $ export MATTER_IFACE=enp0s8
 $ export MATTER_IFACE_ID=`ip link show dev $MATTER_IFACE | grep $MATTER_IFACE | cut -d":" -f1`
 
 # 暫時不要設定這個
-#$ export MATTER_KVS=/work/chip_kvs
+#$ export MATTER_KVS_PROVIDER/work/chip_kvs_provider
 ```
 
 #### air-quality-sensor-app
 
+> linux-x64-air-quality-sensor-with-ui
+>
+> 沒有什麼可利用的訊息
+
+![matter_linux-x64-air-quality-sensor-with-ui-ui01](./images/matter_linux-x64-air-quality-sensor-with-ui-ui01.png)
+
 ```bash
 $ ./air-quality-sensor-app \
  --interface-id $MATTER_IFACE_ID --capabilities 4 \
- --passcode 20250103 --discriminator 3887 \
- $MATTER_KVS_ARG
+ --passcode 20241231 --discriminator 3888 \
+ $MATTER_KVS_PROVIDER_ARG
 ```
+
+##### [Trigger event using air-quality-sensor-app event named pipe](https://github.com/project-chip/connectedhomeip/tree/master/examples/air-quality-sensor-app/linux#trigger-event-using-air-quality-sensor-app-event-named-pipe)
 
 > [air-quality-sensor-app.matter](https://github.com/project-chip/connectedhomeip/blob/master/examples/air-quality-sensor-app/air-quality-sensor-common/air-quality-sensor-app.matter)
 
@@ -1130,7 +1186,7 @@ $ echo '{"Name":"TotalVolatileOrganicCompoundsConcentrationMeasurement","NewValu
 
 ```
 
-#### chip-bridge-app
+#### bridge-app
 
 > 提供亙動操作，動態新增和刪減，相關的程式碼請見
 >
@@ -1173,7 +1229,50 @@ $ ./chip-bridge-app \
  --passcode 20241230 --discriminator 3999
 ```
 
-#### chip-lighting-app
+#### contact-sensor-app
+
+> linux-x64-contact-sensor-with-ui
+
+![matter_linux-x64-contact-sensor-with-ui01](./images/matter_linux-x64-contact-sensor-with-ui01.png)
+
+```bash
+$ ./contact-sensor-app \
+ --interface-id $MATTER_IFACE_ID --capabilities 4 \
+ --passcode 20250103 --discriminator 3886 \
+ $MATTER_KVS_PROVIDER_ARG
+```
+
+```rpc
+# rpc
+rpcs.chip.rpc.BooleanState.Get()
+```
+
+#### fabric-sync
+
+```bash
+$ rm /tmp/chip_kvs
+
+$ ./fabric-bridge-app \
+ --interface-id $MATTER_IFACE_ID --capabilities 4 \
+ --passcode 20240101 --discriminator 3777 \
+ $MATTER_KVS_PROVIDER_ARG
+
+$ ./fabric-sync \
+ --interface-id $MATTER_IFACE_ID --capabilities 4 \
+ --passcode 20231206 --discriminator 3849 \
+ $MATTER_KVS_PROVIDER_ARG
+
+>>>
+pairing onnetwork 1 20231206
+pairing onnetwork 2 20231207
+
+onoff toggle 2 1
+
+> app add-device 2 20231206 192.168.50.52 5540
+> controller commission-onnetwork 20231206 3849 192.168.50.52 5540
+```
+
+#### lighting-app
 
 > linux-x64-light-with-ui
 
@@ -1186,7 +1285,7 @@ $ ./chip-lighting-app \
  --capabilities $MATTER_DISCOVER \
  --passcode $MATTER_PINCODE \
  --discriminator $MATTER_DISCRIMINATOR
- --KVS $MATTER_KVS
+ --KVS $MATTER_KVS_PROVIDER
 ```
 
 ```bash
@@ -1195,7 +1294,7 @@ $ ./chip-lighting-app \
 [ "$MATTER_DISCOVER" != "" ] && MATTER_DISCOVER_ARG="--capabilities $MATTER_DISCOVER"
 [ "$MATTER_BLE_HCI" != "" ] && MATTER_BLE_HCI_ARG="--ble-device $MATTER_BLE_HCI"
 [ "$MATTER_IFACE_ID" != "" ] && MATTER_IFACE_ID_ARG="--interface-id $MATTER_IFACE_ID"
-[ "$MATTER_KVS" != "" ] && MATTER_KVS_ARG="--KVS $MATTER_KVS"
+[ "$MATTER_KVS_PROVIDER" != "" ] && MATTER_KVS_PROVIDER_ARG="--KVS $MATTER_KVS_PROVIDER"
 
 $ ./chip-lighting-app \
  $MATTER_IFACE_ID_ARG \
@@ -1203,14 +1302,14 @@ $ ./chip-lighting-app \
  $MATTER_DISCOVER_ARG
  $MATTER_PINCODE_ARG \
  $MATTER_DISCRIMINATOR_ARG \
- $MATTER_KVS_ARG
+ $MATTER_KVS_PROVIDER_ARG
 ```
 
 ```bash
 # 目前 demo 裏有個嚴重的 bug，unpair 後無法再進行 pair，需要刪除 /tmp/chip_kvs 後，再重啟 chip-lighting-app
 # 內建是指定在 /tmp/chip_kvs
 $ rm /tmp/chip_kvs
-$ [ "$MATTER_KVS" != "" ] && rm $MATTER_KVS
+$ [ "$MATTER_KVS_PROVIDER" != "" ] && rm $MATTER_KVS_PROVIDER
 
 $ ./chip-lighting-app \
  --interface-id 2 --ble-device 0 --capabilities 4 \
@@ -1220,18 +1319,90 @@ $ ./chip-lighting-app \
 $ ./chip-lighting-app \
  --interface-id $MATTER_IFACE_ID --capabilities 4 \
  --passcode 20231206 --discriminator 3849 \
- $MATTER_KVS_ARG
+ $MATTER_KVS_PROVIDER_ARG
 ```
 
-#### chip-tv-app
+##### [Trigger event using lighting-app event named pipe](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app/linux#trigger-hardwarefault-events)
 
 ```bash
-$ [ "$MATTER_KVS" != "" ] && rm $MATTER_KVS
+$ export MATTER_PID=`pidof chip-lighting-app`
+
+# Trigger SoftwareFault events
+# Generate event SoftwareFault when a software fault takes place on the Node.
+$ echo '{"Name":"SoftwareFault"}' > /tmp/chip_lighting_fifo-${MATTER_PID}
+
+# Trigger HardwareFault events
+# 這個自己看
+
+# Trigger Switch events
+# 下面測起來，沒有什麼反應
+# Concentration change events can be trigger on the concentration measurement clusters.
+# Generate event SwitchLatched, when the latching switch is moved to a new position.
+$ echo '{"Name":"SwitchLatched","NewPosition":3}' > /tmp/chip_lighting_fifo_${MATTER_PID}
+
+# Generate event InitialPress, when the momentary switch starts to be pressed.
+$ echo '{"Name":"InitialPress","NewPosition":3}' > /tmp/chip_lighting_fifo_${MATTER_PID}
+
+# Generate event LongPress, when the momentary switch has been pressed for a "long" time.
+$ echo '{"Name":"LongPress","NewPosition":3}' > /tmp/chip_lighting_fifo_${MATTER_PID}
+
+# Generate event ShortRelease, when the momentary switch has been released.
+$ echo '{"Name":"ShortRelease","PreviousPosition":3}' > /tmp/chip_lighting_fifo_${MATTER_PID}
+
+# Generate event LongRelease when the momentary switch has been released and after having been pressed for a long time.
+$ echo '{"Name":"LongRelease","PreviousPosition":3}' > /tmp/chip_lighting_fifo_${MATTER_PID}
+
+# Generate event MultiPressOngoing to indicate how many times the momentary switch has been pressed in a multi-press sequence, during that sequence.
+$ echo '{"Name":"MultiPressOngoing","NewPosition":3,"CurrentNumberOfPressesCounted":4}' > /tmp/chip_lighting_fifo_${MATTER_PID}
+
+# Generate event MultiPressComplete to indicate how many times the momentary switch has been pressed in a multi-press sequence, after it has been detected that the sequence has ended.
+$ echo '{"Name":"MultiPressComplete","PreviousPosition":3,"TotalNumberOfPressesCounted":2}' > /tmp/chip_lighting_fifo_${MATTER_PID}
+
+```
+
+```rpc
+# rpc
+rpcs.chip.rpc.Lighting.Get()
+rpcs.chip.rpc.Lighting.Set(on=True, level=128, color=protos.chip.rpc.LightingColor(hue=5, saturation=5))
+```
+
+#### lock-app
+
+```bash
+$ ./air-quality-sensor-app \
+ --interface-id $MATTER_IFACE_ID --capabilities 4 \
+ --passcode 20250104 --discriminator 3885 \
+ $MATTER_KVS_PROVIDER_ARG
+```
+
+##### Named Pipe Interface
+
+```bash
+$ export MATTER_PID=`pidof chip-lock-app`
+$ export MATTER_PID=`pidof linux-x64-lock-no-ble-no-wifi-no-thread`
+
+# Set Door State
+$ echo '{"Cmd":"SetDoorState","Params":{"EndpointId":1,"DoorState":1}}' > /tmp/chip_lock_app_fifo-${MATTER_PID}
+$ echo '{"Cmd":"SetDoorState","Params":{"EndpointId":1,"DoorState":2}}' > /tmp/chip_lock_app_fifo-${MATTER_PID}
+
+# Unlock
+echo '{"Cmd":"Unlock","Params":{"EndpointId":1,"OperationSource":4}}' > /tmp/chip_lock_app_fifo-${MATTER_PID}
+# Lock
+echo '{"Cmd":"Lock","Params":{"EndpointId":1,"OperationSource":4}}' > /tmp/chip_lock_app_fifo-${MATTER_PID}
+
+# Send Door Lock Alarm
+$ echo '{"Cmd":"SendDoorLockAlarm","Params":{"EndpointId":1,"AlarmCode":0}}' > /tmp/chip_lock_app_fifo-${MATTER_PID}
+```
+
+#### tv-app
+
+```bash
+$ [ "$MATTER_KVS_PROVIDER" != "" ] && rm $MATTER_KVS_PROVIDER
 
 $ ./chip-tv-app \
  --interface-id $MATTER_IFACE_ID --capabilities 4 \
  --passcode 20241231 --discriminator 3888 \
- $MATTER_KVS_ARG
+ $MATTER_KVS_PROVIDER_ARG
 
 > help
   app             App commands. Usage: app [command_name]
@@ -1251,42 +1422,17 @@ Done
 
 ```
 
-#### contact-sensor-app
+#### water-leak-detector-app
 
-> linux-x64-contact-sensor-with-ui
+> linux-x64-water-leak-detector-with-ui
 
-![matter_linux-x64-contact-sensor-with-ui01](./images/matter_linux-x64-contact-sensor-with-ui01.png)
-
-```bash
-$ ./contact-sensor-app \
- --interface-id $MATTER_IFACE_ID --capabilities 4 \
- --passcode 20250103 --discriminator 3886 \
- $MATTER_KVS_ARG
-```
-
-#### fabric-sync
+![matter_linux-x64-water-leak-detector-with-ui01](./images/matter_linux-x64-water-leak-detector-with-ui01.png)
 
 ```bash
-$ rm /tmp/chip_kvs
-
-$ ./fabric-bridge-app \
+$ ./water-leak-detector-app \
  --interface-id $MATTER_IFACE_ID --capabilities 4 \
- --passcode 20240101 --discriminator 3777 \
- $MATTER_KVS_ARG
-
-$ ./fabric-sync \
- --interface-id $MATTER_IFACE_ID --capabilities 4 \
- --passcode 20231206 --discriminator 3849 \
- $MATTER_KVS_ARG
-
->>>
-pairing onnetwork 1 20231206
-pairing onnetwork 2 20231207
-
-onoff toggle 2 1
-
-> app add-device 2 20231206 192.168.50.52 5540
-> controller commission-onnetwork 20231206 3849 192.168.50.52 5540
+ --passcode 20250105 --discriminator 3884 \
+ $MATTER_KVS_PROVIDER_ARG
 ```
 
 ## 6.2. [chip-tool](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool)
@@ -1647,13 +1793,18 @@ $ chip-tool payload parse-setup-payload MT:-24J0IRV01DWLA39G00
 
 #### A. QR Code
 
-| passcode | discriminator | Payload                                                      | QR Code                                                      |
-| -------- | ------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 20231206 | 3849          | [MT:-24J0IRV01DWLA39G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0IRV01DWLA39G00) | ![matter_QRCode01](./images/matter_QRCode-20231206-3849.png) |
-| 20241230 | 3999          | [MT:-24J0SO527134S59G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0SO527134S59G00) | ![matter_QRCode-20241230-3999](./images/matter_QRCode-20241230-3999.png) |
-| 20241231 | 3888          | [MT:-24J0AFN006G4S59G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0AFN006G4S59G00) | ![matter_QRCode-20241231-3888](./images/matter_QRCode-20241231-3888.png) |
-| 20250103 | 3887          | [MT:-24J0SO527P6YY79G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0SO527P6YY79G00) | ![matter_QRCode-20250103-3887](./images/matter_QRCode-20250103-3887.png) |
-| 20250103 | 3886          | [MT:-24J0AFN00KA0648G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0AFN00KA0648G00) | ![matter_QRCode-20250103-3886](./images/matter_QRCode-20250103-3886.png) |
+> 已下定義是個人使用，用於區別。請參照公司或其它再行定義。
+
+| passcode | discriminator | Payload                                                      | QR Code                                                      |                       |
+| -------- | ------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | --------------------- |
+| 20231206 | 3849          | [MT:-24J0IRV01DWLA39G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0IRV01DWLA39G00) | ![matter_QRCode01](./images/matter_QRCode-20231206-3849.png) | lighting-app          |
+| 20241230 | 3999          | [MT:-24J0SO527134S59G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0SO527134S59G00) | ![matter_QRCode-20241230-3999](./images/matter_QRCode-20241230-3999.png) | bridge-app            |
+| 20241231 | 3888          | [MT:-24J0AFN006G4S59G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0AFN006G4S59G00) | ![matter_QRCode-20241231-3888](./images/matter_QRCode-20241231-3888.png) | air-quality-sensor    |
+| 20250103 | 3887          | [MT:-24J0SO527P6YY79G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0SO527P6YY79G00) | ![matter_QRCode-20250103-3887](./images/matter_QRCode-20250103-3887.png) | energy-management-app |
+| 20250103 | 3886          | [MT:-24J0AFN00KA0648G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0AFN00KA0648G00) | ![matter_QRCode-20250103-3886](./images/matter_QRCode-20250103-3886.png) | contact-sensor-app    |
+| 20250104 | 3885          | [MT:-24J0C0R155KYY79G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0C0R155KYY79G00) | ![matter_QRCode-20250104-3885](images/matter_QRCode-20250104-3885.png) | lock-app              |
+| 20250105 | 3884          | [MT:-24J04QI14NXYY79G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J04QI14NXYY79G00) | ![matter_QRCode-20250105-3884](./images/matter_QRCode-20250105-3884.png) | water-leak-detector   |
+|          |               |                                                              |                                                              |                       |
 
 #### B. Commands Pool
 
@@ -1681,7 +1832,56 @@ $ chip-tool pairing unpair $MATTER_NODEID
 
 # 7. Cloud Home
 
-## 7.1. Apple Family
+## 7.1. Test
+
+### 7.1.1. Sample App for Matter APK (Android)
+
+> 目前使用過的 App 並沒有一個完善所有功能。
+>
+> 使用 GHSAFM-2.0.0-default-debug 去配對 lighting-app，也只能得到 onoff；而 Smart Life 配對下的結果也是不堪使用。
+
+```mermaid
+flowchart BT
+	subgraph Router[Router]
+	end
+	subgraph Phone[Phone]
+		SmartLife[Smart Life]
+		GHSAFM[GHSAFM-2.0.0-default-debug]
+	end
+	subgraph Pi4[Pi4 - Ubuntu arm64 22.04.xx 64-bit server]
+		chip-lighting-app[chip-lighting-app]
+	end
+	
+	Phone <--> |Wi-Fi|Router
+	Pi4 <--> |Lan|Router
+	
+	SmartLife<--> |Matter command| chip-lighting-app
+	GHSAFM<--> |Matter command| chip-lighting-app
+```
+
+> [Matter 專用的 Google Home 範例應用程式](https://developers.home.google.com/samples/matter-app?hl=zh-tw)
+>
+> [sample-apps-for-matter-android](https://github.com/google-home/sample-apps-for-matter-android) - [GHSAFM-2.0.0-default-debug.apk](https://github.com/google-home/sample-apps-for-matter-android/releases/download/v2.0.0/GHSAFM-2.0.0-default-debug.apk)
+
+#### lighting-app
+
+![matter_GHSAFM01](./images/matter_GHSAFM01.jpg)
+
+![matter_GHSAFM02](./images/matter_GHSAFM02.jpg)
+
+![matter_GHSAFM03](./images/matter_GHSAFM03.jpg)
+
+![matter_GHSAFM04](./images/matter_GHSAFM04.jpg)
+
+![matter_GHSAFM05](./images/matter_GHSAFM05.jpg)
+
+![matter_GHSAFM06](./images/matter_GHSAFM06.jpg)
+
+![matter_GHSAFM07](./images/matter_GHSAFM07.jpg)
+
+![matter_GHSAFM08](./images/matter_GHSAFM08.jpg)
+
+## 7.2. Apple Family
 
 > 如果要有完善的對測環境，只能選擇使用 Apple。
 >
@@ -1689,11 +1889,32 @@ $ chip-tool pairing unpair $MATTER_NODEID
 >
 > - [x] [配對和管理 Matter 配件](https://support.apple.com/zh-tw/102135)
 
-#### A. iPhone
+### 7.2.1. iPhone
 
-![matter_iOS01](./images/matter_iOS01.png)
+#### air-quality-sensor-app
 
-## 7.2. Google Family
+> 目前只有 AirQuality 可用。或許因為沒有認證過，無法考證其支援與否。
+>
+
+![matter_iOS-air-quality-sensor](./images/matter_iOS-air-quality-sensor.png)
+
+#### contact-sensor-app
+
+#### ![matter_iOS-contact-sensor-app](./images/matter_iOS-contact-sensor-app.jpg)
+
+#### lighting-app
+
+![matter_iOS-lighting-app](./images/matter_iOS-lighting-app.png)
+
+#### lock-app
+
+![matter_iOS-lock-app](./images/matter_iOS-lock-app.png)
+
+#### water-leak-detector-app
+
+> 或許因為沒有認證過，不支援狀態。
+
+## 7.3. Google Family
 
 ```mermaid
 flowchart BT
@@ -1741,7 +1962,7 @@ flowchart BT
 > - 支援 Matter 的智慧住宅裝置。如果包裝上有 ![img](https://lh3.googleusercontent.com/3yeJZ0aNtlZqwUfGWY-2Q-AIAnykzH8EOPKwu3XDNSsfdnFIQN6Da5qYou0qXSiX9_4=w180) 標誌，就表示裝置支援 Matter
 > - [支援 Matter 的 Google 中樞裝](https://support.google.com/googlenest/answer/12391458#matter-app)
 
-### 7.2.1. [支援 Matter 的 Google 裝置](https://support.google.com/googlenest/answer/12391458?hl=zh-Hant&co=GENIE.Platform%3DAndroid)
+### 7.3.1. [支援 Matter 的 Google 裝置](https://support.google.com/googlenest/answer/12391458?hl=zh-Hant&co=GENIE.Platform%3DAndroid)
 
 > ## Matter 如何與 Google 服務搭配運作
 >
@@ -1755,7 +1976,7 @@ flowchart BT
 >
 > 歡迎前往 [Google 商店](https://home.google.com/explore-devices/featured-devices/#google-devices-with-matter)選購上述裝置。
 
-### 7.2.2. [配對 Matter 裝置](https://developers.home.google.com/matter/integration/pair?hl=zh-tw)
+### 7.3.2. [配對 Matter 裝置](https://developers.home.google.com/matter/integration/pair?hl=zh-tw)
 
 > ## 配對限制
 >
@@ -1784,66 +2005,45 @@ flowchart BT
 
 
 
-### 7.2.3. Android App
-
-> 目前使用過的 App 並沒有一個完善所有功能。
->
-> 使用 GHSAFM-2.0.0-default-debug 去配對 lighting-app，也只能得到 onoff；而 Smart Life 配對下的結果也是不堪使用。
-
-```mermaid
-flowchart BT
-	subgraph Router[Router]
-	end
-	subgraph Phone[Phone]
-		SmartLife[Smart Life]
-		GHSAFM[GHSAFM-2.0.0-default-debug]
-	end
-	subgraph Pi4[Pi4 - Ubuntu arm64 22.04.xx 64-bit server]
-		chip-lighting-app[chip-lighting-app]
-	end
-	
-	Phone <--> |Wi-Fi|Router
-	Pi4 <--> |Lan|Router
-	
-	SmartLife<--> |Matter command| chip-lighting-app
-	GHSAFM<--> |Matter command| chip-lighting-app
-```
-#### A. Sample App for Matter APK
-
-> [Matter 專用的 Google Home 範例應用程式](https://developers.home.google.com/samples/matter-app?hl=zh-tw)
->
-> [sample-apps-for-matter-android](https://github.com/google-home/sample-apps-for-matter-android) - [GHSAFM-2.0.0-default-debug.apk](https://github.com/google-home/sample-apps-for-matter-android/releases/download/v2.0.0/GHSAFM-2.0.0-default-debug.apk)
-
-![matter_GHSAFM01](./images/matter_GHSAFM01.jpg)
-
-![matter_GHSAFM02](./images/matter_GHSAFM02.jpg)
-
-![matter_GHSAFM03](./images/matter_GHSAFM03.jpg)
-
-![matter_GHSAFM04](./images/matter_GHSAFM04.jpg)
-
-![matter_GHSAFM05](./images/matter_GHSAFM05.jpg)
-
-![matter_GHSAFM06](./images/matter_GHSAFM06.jpg)
-
-![matter_GHSAFM07](./images/matter_GHSAFM07.jpg)
-
-![matter_GHSAFM08](./images/matter_GHSAFM08.jpg)
-
-
-#### B. Smart Life (Android App)
-
-> [Google play](https://play.google.com/store/games?hl=zh_TW)上的軟體大都需要有一個 *Matter Gateway* 當中介者。而此軟體不用，方便測試。
-
-![matter_SmartLife01](./images/matter_SmartLife01.jpg)
-
-#### C. Home
+### 7.3.3. Home
 
 > 就連 google 出品的，也不堪使用。對接市面上有認證的設備，也讓人失望。
 
-## 7.3. Xiaomi Family
+## 7.4. Xiaomi Family
 
-## 7.4. Tuya Family
+## 7.5. Tuya Family
+
+### 7.5.1. Smart Life (Android)
+
+> [Google play](https://play.google.com/store/games?hl=zh_TW)上的軟體大都需要有一個 *Matter Gateway* 當中介者。而此軟體不用，方便測試。
+
+> <font color="red">請先用 iPhone 配對完，再分享給 Smart Life。</font>
+>
+> 不然你可能看到的是空空的畫面，或是動作後沒有反應。
+
+#### air-quality-sensor-app
+
+> 或許因為沒有認證過，無法考證其支援與否。
+
+#### contact-sensor-app
+
+![matter_SmartLife-contact-sensor-app](./images/matter_SmartLife-contact-sensor-app.jpg)
+
+#### lighting-app
+
+![matter_SmartLife-lighting-app](./images/matter_SmartLife-lighting-app.jpg)
+
+#### lock-app
+
+>alarm 無效
+
+![matter_SmartLife-lock-app](./images/matter_SmartLife-lock-app.jpg)
+
+#### water-leak-detector-app
+
+>或許因為沒有認證過，不支援狀態。
+
+![matter_SmartLife-water-leak-detector-app](./images/matter_SmartLife-water-leak-detector-app.jpg)
 
 # 8. Cluster and Device Type development
 
@@ -2120,6 +2320,8 @@ rpcs.chip.rpc.Lighting.Set(on=True, level=128, color=protos.chip.rpc.LightingCol
 >
 > 大家的工具不同，而身邊使用的工具是 Source Insight，只要大家習慣自己的工具即可。
 
+> base on linux version
+
 ```bash
 + examples/chip-tool
 - examples/chip-tool/third_party
@@ -2134,6 +2336,11 @@ rpcs.chip.rpc.Lighting.Set(on=True, level=128, color=protos.chip.rpc.LightingCol
 + examples/providers
 
 + src/
+
+- src/platform
++ src/platform/Linux
++ src/platform/logging
+
 - src/test_driver
 
 + scripts/
@@ -2414,13 +2621,42 @@ CHIP_ERROR Server::Init(const ServerInitParams & initParams)
 
 >參數的進入點
 
-#### --interface-id, kDeviceOption_InterfaceId 0x1010
+#### kDeviceOption_BleDevice
+
+#### kDeviceOption_WiFi
+
+#### kDeviceOption_Thread
+
+#### kDeviceOption_Version
+
+#### kDeviceOption_VendorID
+
+#### kDeviceOption_ProductID
+
+#### kDeviceOption_CustomFlow
+
+#### kDeviceOption_Capabilities
+
+#### kDeviceOption_Discriminator
+
+#### --passcode, kDeviceOption_Passcode
+
+#### kDeviceOption_Command
+
+#### kDeviceOption_PICS
+
+#### --KVS, kDeviceOption_KVS
+
+```bash
+// src/platform/Linux/CHIPPlatformConfig.h
+#define CHIP_CONFIG_KVS_PATH "/tmp/chip_kvs"
+```
+
+#### --interface-id, kDeviceOption_InterfaceId
 
 ```bash
 initParams.interfaceId = LinuxDeviceOptions::GetInstance().interfaceId;
 ```
-
-#### --passcode, kDeviceOption_Passcode 0x1009
 
 ## 10.4. Pair
 
