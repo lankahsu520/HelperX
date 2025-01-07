@@ -79,7 +79,7 @@
 
 #### B. 沒有 Matter hubs 怎麼辦 ?
 
-## 1.4. History
+## 1.4. 心得 DoReMi
 
 #### 20240107
 
