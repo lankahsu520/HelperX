@@ -691,6 +691,67 @@ sudo shutdown -P 20:00
 sudo shutdown -c
 ```
 
+#### screen - screen manager with VT100/ANSI terminal emulation
+
+> 當建立一個 ssh 連線後，想將一個 task 放入 background 執行，且不會因為 ssh 斷線而結束。
+>
+> 這時可以借用 screen
+
+> [screen 使用教學](https://hackmd.io/@jimmy801/linux_screen)
+>
+> [GNU screen 應用手記](https://datahunter.org/screen)
+
+```bash
+$ sudo apt install -y screen
+$ vi ~/.screenrc
+startup_message off
+vbell off
+
+defutf8 on
+defencoding utf8
+encoding utf8 utf8
+defscrollback 100000
+defshell -bash
+
+# sho status bar
+caption always "%3n %t%? @%u%?%? [%h]%?%=%c"
+
+$ vi ~/.bashrc
+# add the last line
+[ ! -z "$STY" ] && export PS1='[screen] \u@\h:\w\$ '
+
+# create a screen
+$ screen
+
+# ** in a screen **
+# run a task, 不建議放入background
+$ task_123
+
+# detach the screen without disturbing it
+Ctrl + A, Then press D
+
+# detach the screen then kill it
+Ctrl + A, Then press K
+
+# logout and  kill it
+Ctrl + D
+[screen is terminating]
+```
+
+```bash
+$ screen -list
+There is a screen on:
+        17543.pts-1.lanka-build20-vbx      (01/08/25 09:11:24)     (Detached)
+1 Socket in /run/screen/S-lanka.
+
+# resumes a detached screen session
+$ screen -r 17543.pts-1.lanka-build20-vbx
+
+# kill the screen session
+$ screen -S 17543.pts-1.lanka-build20-vbx -X quit 
+
+```
+
 ## 2.1. [Linux crontab 命令](https://www.runoob.com/linux/linux-comm-crontab.html)
 
 ```bash
