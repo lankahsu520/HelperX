@@ -815,12 +815,6 @@ $ gn ls \
  ./build_xxx/${PJ_GN_TARGET}
 ```
 
-```bash
-# linux-x64-tests
-$ ll build_xxx/linux-x64-tests/chip-tool
--rwxrwxr-x 1 lanka lanka 159226400 十一 24 10:51 build_xxx/linux-x64-tests/chip-tool*
-```
-
 #### linux-x64-air-quality-sensor ([air-quality-sensor-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/air-quality-sensor-app))
 
 > [Matter Linux Air Quality Example](https://github.com/project-chip/connectedhomeip/tree/master/examples/air-quality-sensor-app/linux) - An example showing the use of Matter on the Linux. The document will describe how to build and run Matter Linux Air Quality Example on Raspberry Pi. This doc is tested on **Ubuntu for Raspberry Pi Server 20.04 LTS (aarch64)** and **Ubuntu for Raspberry Pi Desktop 20.10 (aarch64)**
@@ -863,6 +857,16 @@ $ ll build_xxx/linux-x64-tests/chip-tool
 > chip-tool
 > inet-layer-test-tool
 > spake2p
+
+#### linux-x64-tv-app ([tv-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/tv-app))
+
+> [Matter TV Example](https://github.com/project-chip/connectedhomeip/tree/master/examples/tv-app/linux) - An example showing the use of CHIP on the Linux. The document will describe how to build and run Matter TV Example on Raspberry Pi. This doc is tested on **Ubuntu for Raspberry Pi Server 20.04 LTS (aarch64)** and **Ubuntu for Raspberry Pi Desktop 20.10 (aarch64)**
+
+>這邊建議使用不同的 listen port: 5640 和 5552（預設是 5540 和 5552）。
+
+```bash
+$ ./chip-tv-app --secured-device-port 5640 --secured-commissioner-port 5552
+```
 
 #### linux-x64-water-leak-detector ([water-leak-detector-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/water-leak-detector-app))
 
@@ -1267,6 +1271,7 @@ pairing onnetwork 1 20231206
 pairing onnetwork 2 20231207
 
 onoff toggle 2 1
+onoff toggle 
 
 > app add-device 2 20231206 192.168.50.52 5540
 > controller commission-onnetwork 20231206 3849 192.168.50.52 5540
@@ -1418,7 +1423,7 @@ $ ./chip-tv-app \
   controller      Controller commands. Usage: controller [command_name]
 Done
 
-> controller commission-onnetwork 20231206 3849 192.168.50.52 5540
+> controller commission-onnetwork 20231206 3849 192.168.50.28 5540
 
 ```
 
@@ -1435,363 +1440,7 @@ $ ./water-leak-detector-app \
  $MATTER_KVS_PROVIDER_ARG
 ```
 
-## 6.2. [chip-tool](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool)
-
-> run on PC - Ubuntu x86_64
-
->  [chip-tool](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool) is a C++ command line controller with an interactive shell. More information on chip-tool can be found in the [chip-tool guide](https://github.com/project-chip/connectedhomeip/blob/master/docs/development_controllers/chip-tool/chip_tool_guide.md).
->
-> [chip-repl](https://github.com/project-chip/connectedhomeip/blob/master/src/controller/python/chip-repl.py) is a shell for the python controller. The chip-repl is part of the python controller framework, often used for testing. More information about the python controller can be found in the [python testing](https://github.com/project-chip/connectedhomeip/blob/master/docs/testing/python.md) documentation.
-
-```mermaid
-flowchart BT
-	subgraph Router[Router]
-	end
-	subgraph ubuntu[PC - Ubuntu x86_64]
-		subgraph chip-tool[chip-tool]
-		end
-	end
-	subgraph Pi4[Pi4 - Ubuntu arm64 22.04.xx 64-bit server]
-		chip-lighting-app[chip-lighting-app]
-	end
-	
-	ubuntu <--> |Lan|Router
-	Pi4 <--> |Lan|Router
-	
-	chip-tool <--> |Matter command| chip-lighting-app
-```
-
-```bash
-# 你也可以透過 snap 安裝 chip-tool
-$ sudo snap install chip-tool
-
-$ tree -L 4 ~/snap/chip-tool/
-/home/lanka/snap/chip-tool/
-├── 199
-├── common
-│   ├── chip_tool_config.alpha.ini
-│   ├── chip_tool_config.ini
-│   ├── chip_tool_history
-│   └── chip_tool_kvs
-└── current -> 199
-
-3 directories, 4 files
-```
-
-### 6.2.1. CHIP Tool modes
-
-#### A. Single-command mode (default)
-
->  In this mode, the CHIP Tool will exit with a timeout error if any single command does not complete within a certain timeout period.
-
-#### B. Interactive mode
-
-> In this mode, a command will terminate with an error if it does not complete within the timeout period. However, the CHIP Tool will not be terminated and it will not terminate processes that previous commands have started. Moreover, when using the interactive mode, the CHIP Tool will establish a new CASE session only when there is no session available yet. On the following commands, it will use the existing session.
-
-```bash
-$ rm /tmp/chip_kvs
-
-$ chip-tool interactive start
->>>
-
-pairing onnetwork 1 20231206
-pairing code 1 30510457783
-
-onoff toggle 1 1
-
-pairing unpair 1
-```
-
-### 6.2.2. Commissioning
-
->  Matter devices can use different commissioning channels:
->
-> - Devices that are not yet connected to the target IP network use Bluetooth LE as the commissioning channel.
-> - Devices that have already joined an IP network only need to use the IP protocol for commissioning to the Matter network.
-
-#### A. Commissioning into a Thread network over Bluetooth LE
-
- ```bash
- $ chip-tool pairing ble-thread <node_id> hex:<operational_dataset> <pin_code> <discriminator>
- ```
-
-#### B. Commissioning into a Wi-Fi network over Bluetooth LE
-
- ```bash
- $ chip-tool pairing ble-wifi <node_id> <ssid> <password> <pin_code> <discriminator>
-
- $ chip-tool pairing ble-wifi <node_id> hex:<ssid> hex:<password> <pin_code> <discriminator>
- ```
-
-#### C. Commissioning into a network over IP
-
-```bash
-$ chip-tool pairing onnetwork <node_id> <pin_code>
-```
-
-#### D. Commissioning with long discriminator
-
-```bash
-$ chip-tool pairing onnetwork-long <node_id> <pin_code> <discriminator>
-```
-
-#### E. Commissioning with QR code payload or manual pairing code
-
-```bash
-$ chip-tool pairing code <node_id> <qrcode_payload-or-manual_code>
-```
-
-#### F. Forgetting the already-commissioned device
-
-```bash
-$ chip-tool pairing unpair <node_id>
-```
-
-### 6.2.3. [Matter Client Example](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
-
-> An example application that uses Matter to send messages to a Matter server.
->
-> - [Building the Example Application](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md#building-the-example-application)
-> - [Using the Client to Commission a Device](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md#using-the-client-to-commission-a-device)
-
-#### any
-
-```bash
-$ chip-tool any read-by-id cluster-ids attribute-ids destination-id endpoint-ids
-
-# 6 (OnOff)
-any read-by-id 6 0xFFFFFFFF 1 1
-
-any read-by-id 6 0xFFFFFFFF 3 0
-```
-
-```bash
-$ chip-tool any
-[1735096121.330] [29862:29862] [TOO] Missing command name
-Usage:
-  /snap/chip-tool/199/bin/chip-tool any command_name [param1 param2 ...]
-
-Commands for sending IM messages based on cluster id, not cluster name.
-
-  +-------------------------------------------------------------------------------------+
-  | Commands:                                                                           |
-  +-------------------------------------------------------------------------------------+
-  | * command-by-id                                                                     |
-  | * read-by-id                                                                        |
-  | * write-by-id                                                                       |
-  | * subscribe-by-id                                                                   |
-  | * read-event-by-id                                                                  |
-  | * subscribe-event-by-id                                                             |
-  | * read-none                                                                         |
-  | * read-all                                                                          |
-  | * subscribe-none                                                                    |
-  | * subscribe-all                                                                     |
-  +-------------------------------------------------------------------------------------+
-[1735096121.330] [29862:29862] [TOO] Run command failure: ../examples/chip-tool/commands/common/Commands.cpp:248: Error 0x0000002F
-```
-
-#### basicinformation
-
-```bash
-$ chip-tool basicinformation read vendor-name destination-id endpoint-ids
-$ chip-tool basicinformation read product-name destination-id endpoint-ids
-$ chip-tool basicinformation read software-version destination-id endpoint-ids
-```
-
-```bash
-$ chip-tool basicinformation
-[1735089497.974] [29288:29288] [TOO] Missing command name
-Usage:
-  /snap/chip-tool/199/bin/chip-tool basicinformation command_name [param1 param2 ...]
-
-  +-------------------------------------------------------------------------------------+
-  | Commands:                                                                           |
-  +-------------------------------------------------------------------------------------+
-  | * command-by-id                                                                     |
-  | * mfg-specific-ping                                                                 |
-  | * read-by-id                                                                        |
-  | * read                                                                              |
-  | * write-by-id                                                                       |
-  | * force-write                                                                       |
-  | * write                                                                             |
-  | * subscribe-by-id                                                                   |
-  | * subscribe                                                                         |
-  | * read-event-by-id                                                                  |
-  | * read-event                                                                        |
-  | * subscribe-event-by-id                                                             |
-  | * subscribe-event                                                                   |
-  +-------------------------------------------------------------------------------------+
-[1735089497.975] [29288:29288] [TOO] Run command failure: ../examples/chip-tool/commands/common/Commands.cpp:248: Error 0x0000002F
-```
-
-#### descriptor
-
-```bash
-# 列出 Endpoints
-$ chip-tool descriptor read parts-list destination-id endpoint-ids
-
-descriptor read parts-list 1 0xFFFF
-
-$ chip-tool descriptor read server-list destination-id endpoint-ids
-
-# 列出 Clusters - server
-descriptor read server-list 1 1
-
-# 列出 Clusters - client
-descriptor read client-list 1 1
-```
-
-```bash
-$ chip-tool descriptor
-[1735092397.593] [2083751:2083751] [TOO] Missing command name
-Usage:
-  /snap/chip-tool/199/bin/chip-tool descriptor command_name [param1 param2 ...]
-
-  +-------------------------------------------------------------------------------------+
-  | Commands:                                                                           |
-  +-------------------------------------------------------------------------------------+
-  | * command-by-id                                                                     |
-  | * read-by-id                                                                        |
-  | * read                                                                              |
-  | * write-by-id                                                                       |
-  | * force-write                                                                       |
-  | * subscribe-by-id                                                                   |
-  | * subscribe                                                                         |
-  | * read-event-by-id                                                                  |
-  | * subscribe-event-by-id                                                             |
-  +-------------------------------------------------------------------------------------+
-[1735092397.593] [2083751:2083751] [TOO] Run command failure: ../examples/chip-tool/commands/common/Commands.cpp:248: Error 0x0000002F
-```
-
-#### levelcontrol
-
-```bash
-$ chip-tool levelcontrol move-to-level Level TransitionTime OptionsMask OptionsOverride destination-id endpoint-id-ignored-for-group-commands 
-
-levelcontrol move-to-level 100 0 0 0 1 1
-levelcontrol move-to-level 0 0 0 0 1 1
-
-levelcontrol read current-level 1 1
-levelcontrol read max-level 1 1
-levelcontrol read min-level 1 1
-```
-
-```bash
-$ chip-tool levelcontrol
-[1735086925.738] [2079134:2079134] [TOO] Missing command name
-Usage:
-  /snap/chip-tool/199/bin/chip-tool levelcontrol command_name [param1 param2 ...]
-
-  +-------------------------------------------------------------------------------------+
-  | Commands:                                                                           |
-  +-------------------------------------------------------------------------------------+
-  | * command-by-id                                                                     |
-  | * move-to-level                                                                     |
-  | * move                                                                              |
-  | * step                                                                              |
-  | * stop                                                                              |
-  | * move-to-level-with-on-off                                                         |
-  | * move-with-on-off                                                                  |
-  | * step-with-on-off                                                                  |
-  | * stop-with-on-off                                                                  |
-  | * move-to-closest-frequency                                                         |
-  | * read-by-id                                                                        |
-  | * read                                                                              |
-  | * write-by-id                                                                       |
-  | * force-write                                                                       |
-  | * write                                                                             |
-  | * subscribe-by-id                                                                   |
-  | * subscribe                                                                         |
-  | * read-event-by-id                                                                  |
-  | * subscribe-event-by-id                                                             |
-  +-------------------------------------------------------------------------------------+
-[1735086925.739] [2079134:2079134] [TOO] Run command failure: ../examples/chip-tool/commands/common/Commands.cpp:248: Error 0x0000002F
-```
-
-#### onoff
-
-```bash
-$ chip-tool onoff toggle destination-id endpoint-id-ignored-for-group-commands
-
-onoff toggle 1 1
-onoff read on-off 1 1
-
-onoff on 1 1
-onoff off 1 1
-
-$ chip-tool onoff subscribe on-off min-interval max-interval destination-id endpoint-ids
-onoff subscribe on-off 2 3600 1 1
-```
-
-```bash
-$ chip-tool onoff
-[1735086896.238] [2079094:2079094] [TOO] Missing command name
-Usage:
-  /snap/chip-tool/199/bin/chip-tool onoff command_name [param1 param2 ...]
-
-  +-------------------------------------------------------------------------------------+
-  | Commands:                                                                           |
-  +-------------------------------------------------------------------------------------+
-  | * command-by-id                                                                     |
-  | * off                                                                               |
-  | * on                                                                                |
-  | * toggle                                                                            |
-  | * off-with-effect                                                                   |
-  | * on-with-recall-global-scene                                                       |
-  | * on-with-timed-off                                                                 |
-  | * read-by-id                                                                        |
-  | * read                                                                              |
-  | * write-by-id                                                                       |
-  | * force-write                                                                       |
-  | * write                                                                             |
-  | * subscribe-by-id                                                                   |
-  | * subscribe                                                                         |
-  | * read-event-by-id                                                                  |
-  | * subscribe-event-by-id                                                             |
-  +-------------------------------------------------------------------------------------+
-[1735086896.239] [2079094:2079094] [TOO] Run command failure: ../examples/chip-tool/commands/common/Commands.cpp:248: Error 0x0000002F
-
-```
-
-#### payload
-
-```bash
-$ chip-tool payload
-[1735613363.077] [135978:135978] [TOO] Missing command name
-Usage:
-  /snap/chip-tool/199/bin/chip-tool payload command_name [param1 param2 ...]
-
-Commands for parsing and generating setup payloads.
-
-  +-------------------------------------------------------------------------------------+
-  | Commands:                                                                           |
-  +-------------------------------------------------------------------------------------+
-  | * generate-qrcode                                                                   |
-  | * generate-manualcode                                                               |
-  | * parse-setup-payload                                                               |
-  | * parse-additional-data-payload                                                     |
-  | * verhoeff-verify                                                                   |
-  | * verhoeff-generate                                                                 |
-  +-------------------------------------------------------------------------------------+
-[1735613363.077] [135978:135978] [TOO] Run command failure: ../examples/chip-tool/commands/common/Commands.cpp:248: Error 0x0000002F
-```
-
-```bash
-$ chip-tool payload parse-setup-payload MT:-24J0IRV01DWLA39G00
-[1735613429.455] [136009:136009] [DL] ChipLinuxStorage::Init: Using KVS config file: /home/lanka/snap/chip-tool/common/chip_tool_kvs
-[1735613429.455] [136009:136009] [SPL] Parsing base38Representation: MT:-24J0IRV01DWLA39G00
-[1735613429.455] [136009:136009] [SPL] Version:             0
-[1735613429.455] [136009:136009] [SPL] VendorID:            65521
-[1735613429.455] [136009:136009] [SPL] ProductID:           32769
-[1735613429.455] [136009:136009] [SPL] Custom flow:         0    (STANDARD)
-[1735613429.455] [136009:136009] [SPL] Discovery Bitmask:   0x04 (On IP network)
-[1735613429.455] [136009:136009] [SPL] Long discriminator:  3849   (0xf09)
-[1735613429.455] [136009:136009] [SPL] Passcode:            20231206
-```
-
-### 6.2.4. Test Case
-
-#### A. QR Code
+## 6.2. QR Code
 
 > 已下定義是個人使用，用於區別。請參照公司或其它再行定義。
 
@@ -1804,31 +1453,7 @@ $ chip-tool payload parse-setup-payload MT:-24J0IRV01DWLA39G00
 | 20250103 | 3886          | [MT:-24J0AFN00KA0648G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0AFN00KA0648G00) | ![matter_QRCode-20250103-3886](./images/matter_QRCode-20250103-3886.png) | contact-sensor-app    |
 | 20250104 | 3885          | [MT:-24J0C0R155KYY79G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0C0R155KYY79G00) | ![matter_QRCode-20250104-3885](images/matter_QRCode-20250104-3885.png) | lock-app              |
 | 20250105 | 3884          | [MT:-24J04QI14NXYY79G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J04QI14NXYY79G00) | ![matter_QRCode-20250105-3884](./images/matter_QRCode-20250105-3884.png) | water-leak-detector   |
-|          |               |                                                              |                                                              |                       |
-
-#### B. Commands Pool
-
-```bash
-# default 20202021
-$ export MATTER_PINCODE=20231206
-# default 3840
-$ export MATTER_DISCRIMINATOR=3849
-
-$ export MATTER_NODEID=1
-$ export MATTER_EPID=1
-
-# Commissioning
-$ chip-tool pairing onnetwork $MATTER_NODEID $MATTER_PINCODE
-$ chip-tool pairing onnetwork 1 20231206
-
-# onoff-toggle
-$ chip-tool onoff toggle $MATTER_NODEID $MATTER_EPID
-
-$ chip-tool move-to-level 100 0
-
-# Unpairing
-$ chip-tool pairing unpair $MATTER_NODEID
-```
+| 20250109 | 3883          | [MT:-24J0YDA13JB-Y79G00](https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A-24J0YDA13JB-Y79G00) | ![matter_QRCode-20250109-3883](./images/matter_QRCode-20250109-3883.png) | tv-app                |
 
 # 7. Cloud Home
 
@@ -1886,6 +1511,8 @@ flowchart BT
 > 如果要有完善的對測環境，只能選擇使用 Apple。
 >
 > - [x] [Matter support in iOS 16](https://developer.apple.com/apple-home/matter/)
+>
+>   如果你有 iOS 18，則不需要家庭中樞也可以在「家庭」App 中加入和控制 Matter 配件。此外，使用 iPhone 15 Pro 或 iPhone 15 Pro Max 和後續機型，您不需要中樞也可以控制 Thread 配件。*然而，若要獲得最佳體驗，請[設定家庭中樞](https://support.apple.com/zh-tw/102557)以將支援的 Matter 和 Thread 配件加入「家庭」App。
 >
 > - [x] [配對和管理 Matter 配件](https://support.apple.com/zh-tw/102135)
 
@@ -2856,7 +2483,13 @@ $ ./linux/out/rootnode_onofflight_bbs1b7IaOV
 
 ##### A.2. [Matter - The Foundation for Connected Things](https://csa-iot.org/all-solutions/matter/)
 
+##### A.3. [Specifications Download Request](https://csa-iot.org/developer-resource/specifications-download-request/)
+
 #### B. [Welcome to Matter’s documentation](https://project-chip.github.io/connectedhomeip-doc/index.html)
+
+#### C. [Matter](https://developers.home.google.com/matter/get-started)
+
+#### D.  [Matter Standards Service](https://www.graniteriverlabs.com/zh-tw/matter-standard-csa-compliance-service)
 
 ## I.2. 一些介紹
 
@@ -2884,6 +2517,31 @@ $ ./linux/out/rootnode_onofflight_bbs1b7IaOV
 
 ![](https://www.eettaiwan.com/wp-content/uploads/sites/5/2022/10/20221019TA71P1.jpg)
 
+#### E. [Matter 系列](https://notes.leconiot.com/category/Matter/)
+
+> [Matter 系列之 什么是 Matter？](https://notes.leconiot.com/what_is_matter.html)
+>
+> 对比如上的 TCP/IP OSI 4/7 层模型，Matter 协议的主要实现在应用层，但是选择了 WiFi、以太网、802.15.4 Thread 和 BLE 作为 媒介层、网络层和传输层，其中 BLE 主要是用以入网配置。
+
+> [Matter 系列之 Commissioning](https://notes.leconiot.com/commissioning.html)
+> 文中介紹配對過程。算是很淺顯易懂。
+
+> [Matter 系列之 Data Model](https://notes.leconiot.com/device_data_model.html)
+>
+> 介紹 Node、Endpoint、Clusters 和 Attributes 的關係；另外就是 Commands 和 Events。
+>
+> Device Type 不是由 Matter Specificition 约定，它在 Device Library 文档描述，类似的应用 Cluster，是包含在 Application Cluster Library，这些文档都可以在由会员在 CSA 官网获取。
+>
+> **提示**：三份文档分别对应，《Connected Home over IP Specification》《Connected Home over IP Device Library》、《Connected Home over IP Application Clusters》。
+
+![](https://notes.leconiot.com/images/primer-node-endpoint-attribute.png)
+
+>  [Matter 系列之 Fabric](https://notes.leconiot.com/fabric.html)
+
+> [Matter 系列之 Device Attestation](https://notes.leconiot.com/device_attestation.html)
+>
+> 主要介紹設備獲取證書。這部分不是研究方向，跳過。
+
 ## I.3. 範例
 
 #### A. [开始使用基于 IP 的智能互联家居 (CHIP)](https://codelabs.developers.google.com/codelabs/chip-get-started?hl=zh-cn#0)
@@ -2894,9 +2552,7 @@ $ ./linux/out/rootnode_onofflight_bbs1b7IaOV
 
 #### C. Developer Center / [Matter Virtual Device Development Environment](https://developers.home.google.com/matter/tools/matter-virtual-device-development-environment)
 
-#### D. [Matter over Wi-Fi : Run lighting-app demo](https://community.silabs.com/s/article/Matter-over-Wi-Fi-Run-lighting-app-demo?language=en_US)
-
-> Silicon Labs Community
+#### D. [Multi Fabrics/Admin - How to add the second controller to end device.](https://community.silabs.com/s/article/Multi-Fabrics-Admin-second-controller?language=en_US)
 
 ## I.4. Vender
 
@@ -2943,8 +2599,15 @@ $ vi examples/air-quality-sensor-app/air-quality-sensor-common/src/air-quality-s
     ChipLogDetail(NotSpecified, "Updated AirQuality value: %d", chip::to_underlying(newValue));
 ```
 
-
 # III. Glossary
+
+#### commissionee
+
+> 一般指的就是終端設備
+
+#### commissioner
+
+> 一般指的就是主控端
 
 #### NOC, Node Operational Certificate
 

@@ -124,6 +124,10 @@
 
 > Matter（以前稱為 Project CHIP，Connected Home over IP）是一種物聯網（IoT）通信協議和平台，致力於促進智能家居設備之間的互操作性和互聯性。
 
+### 1.1.16. [helper_MatterController-chip-tool.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MatterController-chip-tool.md) - Matter Controller helper.
+
+> 因為角色特別吃重，特別將 Matter Controller 從 helper_Matter.md 獨立出來。
+
 ### 1.1.16. [helper_MultimediaMuxandDemux.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MultimediaMuxandDemux.md) - Multimedia Mux and Demux helper
 
 >除了用手機看 YouTube 外，有些基本常識還是補足一下。
