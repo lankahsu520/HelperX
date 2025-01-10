@@ -60,7 +60,9 @@ flowchart BT
 > - [Building the Example Application](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md#building-the-example-application)
 > - [Using the Client to Commission a Device](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md#using-the-client-to-commission-a-device)
 
-#### A. by snap
+### 1.2.1. How to get
+
+#### A. install by snap
 
 ```bash
 # 你也可以透過 snap 安裝 chip-tool
@@ -81,7 +83,7 @@ $ tree -L 4 ~/snap/chip-tool/
 
 #### B. build by myself
 
-# 2. Uses of mode
+# 2. Operate in three modes
 
 ## 2.1. Single-command mode (default)
 
@@ -303,6 +305,12 @@ $ chip-tool interactive start
 
 ```
 
+## 2.3. websocket mode
+
+```bash
+$ chip-tool interactive server --port 9002
+```
+
 # 3. chip-tool command_set_name
 
 > 以下用 interactive mode 進行操作
@@ -313,8 +321,6 @@ $ chip-tool interactive start
 
 ```bash
 >>> any
-[1736408479.127] [678961:678961] [TOO] Command: any
-[1736408479.127] [678961:678961] [TOO] Missing command name
 Usage:
    any command_name [param1 param2 ...]
 
@@ -334,23 +340,36 @@ Commands for sending IM messages based on cluster id, not cluster name.
   | * subscribe-none                                                                    |
   | * subscribe-all                                                                     |
   +-------------------------------------------------------------------------------------+
->>>
 ```
 
-#### any read-by-id
+#### [✔] any read-by-id
 
 ```bash
 >>> any read-by-id
-[1736408673.417] [678961:678961] [TOO] Command: any read-by-id
-[1736408673.417] [678961:678961] [TOO] InitArgs: Wrong arguments number: 0 instead of 4
 Usage:
    any read-by-id cluster-ids attribute-ids destination-id endpoint-ids [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--fabric-filtered] [--data-version] [--lit-icd-peer] [--timeout] [--allow-large-payload]
 
+cluster-ids:
+  Comma-separated list of cluster ids to read from (e.g. "6" or "8,0x201").
+  Allowed to be 0xFFFFFFFF to indicate a wildcard cluster.
+
+attribute-ids:
+  Comma-separated list of attribute ids to read (e.g. "0" or "1,0xFFFC,0xFFFD").
+  Allowed to be 0xFFFFFFFF to indicate a wildcard attribute.
+
+destination-id:
+  64-bit node or group identifier.
+  Group identifiers are detected by being in the 0xFFFF'FFFF'FFFF'xxxx range.
+
+endpoint-ids:
+  Comma-separated list of endpoint ids (e.g. "1" or "1,2,3").
+  Allowed to be 0xFFFF to indicate a wildcard endpoint.
+
 # 6 (OnOff)
 >>> any read-by-id 0x06 0xFFFFFFFF 1 1
+# 6 (OnOff) - 0 (attributeId)
+>>> any read-by-id 0x06 0 1 1
 ```
-
-
 
 ## 3.2. delay
 
@@ -358,8 +377,6 @@ Usage:
 
 ```bash
 >>> delay
-[1736408467.020] [678961:678961] [TOO] Command: delay
-[1736408467.020] [678961:678961] [TOO] Missing command name
 Usage:
    delay command_name [param1 param2 ...]
 
@@ -375,14 +392,28 @@ Commands for waiting for something to happen.
 >>>
 ```
 
+#### [✔] delay sleep
+
+> 暫停幾 milliseconds
+>
+> 此功能用意不知
+
+```bash
+>>> delay sleep 3000
+```
+
+#### delay  wait-for-commissionee
+
+```bash
+>>> delay wait-for-commissionee 1
+```
+
 ## 3.3. discover
 
 > Commands for device discovery.
 
 ```bash
 >>> discover
-[1736408445.015] [678961:678961] [TOO] Command: discover
-[1736408445.016] [678961:678961] [TOO] Missing command name
 Usage:
    discover command_name [param1 param2 ...]
 
@@ -404,8 +435,15 @@ Commands for device discovery.
   | * find-commissionable-by-instance-name                                              |
   | * commissioners                                                                     |
   +-------------------------------------------------------------------------------------+
->>>
 ```
+
+#### [✔] discover commissionables
+
+> 發現網路上 commissionable node
+
+#### [✔] discover commissioners
+
+> 發現網路上 commissioner node
 
 ## 3.4. groupsettings
 
@@ -413,8 +451,6 @@ Commands for device discovery.
 
 ```bash
 >>> groupsettings
-[1736408433.134] [678961:678961] [TOO] Command: groupsettings
-[1736408433.134] [678961:678961] [TOO] Missing command name
 Usage:
    groupsettings command_name [param1 param2 ...]
 
@@ -432,17 +468,16 @@ Commands for manipulating group keys and memberships for chip-tool itself.
   | * add-keysets                                                                       |
   | * remove-keyset                                                                     |
   +-------------------------------------------------------------------------------------+
->>>
 ```
 
 ## 3.5. icd
 
 > Commands for client-side ICD management.
+>
+> github: [icd](https://github.com/project-chip/connectedhomeip/tree/master/examples/chip-tool/commands/icd)
 
 ```bash
 >>> icd
-[1736408408.632] [678961:678961] [TOO] Command: icd
-[1736408408.632] [678961:678961] [TOO] Missing command name
 Usage:
    icd command_name [param1 param2 ...]
 
@@ -455,12 +490,36 @@ Commands for client-side ICD management.
   |   - List ICDs registed by this controller.                                          |
   | * wait-for-device                                                                   |
   +-------------------------------------------------------------------------------------+
->>>
+```
+
+#### icd list
+
+> github: [ICDCommand.h](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/commands/icd/ICDCommand.h)
+
+#### icd wait-for-device
+
+> github: [ICDCommand.h](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/commands/icd/ICDCommand.h)
+
+```bash
+>>> icd wait-for-device
+Usage:
+   icd wait-for-device destination-id stay-active-duration-seconds [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--lit-icd-peer] [--timeout] [--allow-large-payload]
+
+destination-id:
+  64-bit node or group identifier.
+  Group identifiers are detected by being in the 0xFFFF'FFFF'FFFF'xxxx range.
+
+stay-active-duration-seconds:
+  The requested duration in seconds for the device to stay active after check-in completes.
+
+>>> icd wait-for-device 0xFFFF 30
 ```
 
 ## 3.6. pairing
 
 > Commands for commissioning devices.
+>
+> github: [pairing](https://github.com/project-chip/connectedhomeip/tree/master/examples/chip-tool/commands/pairing)
 
 >  Matter devices can use different commissioning channels:
 >
@@ -508,20 +567,27 @@ Commands for commissioning devices.
   | * issue-noc-chain                                                                   |
   |   - Returns a base64-encoded NOC, ICAC, RCAC, and IPK prefixed with: 'base64:'      |
   +-------------------------------------------------------------------------------------+
->>>
 ```
 
-#### A. Commissioning into a Thread network over Bluetooth LE
+### 3.6.1. Commissioning and Forgetting
+
+#### pairing ble-thread
+
+> Commissioning into a Thread network over Bluetooth LE
+
+> 被配對設備有 BLE and Thread
 
  ```bash
 >>> pairing ble-thread
 Usage:
    pairing ble-thread node-id operationalDataset setup-pin-code discriminator [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--bypass-attestation-verifier] [--case-auth-tags] [--icd-registration] [--icd-check-in-nodeid] [--icd-monitored-subject] [--icd-client-type] [--icd-symmetric-key] [--icd-stay-active-duration] [--skip-commissioning-complete] [--country-code] [--time-zone] [--dst-offset] [--timeout]
-
->>>
  ```
 
-#### B. Commissioning into a Wi-Fi network over Bluetooth LE
+#### pairing ble-wifi
+
+> Commissioning into a Wi-Fi network over Bluetooth LE
+
+> 被配對設備有 BLE and Wi-Fi
 
  ```bash
 >>> pairing ble-wifi
@@ -531,56 +597,107 @@ Usage:
 >>>
  ```
 
-#### C. Commissioning into a network over IP
+#### [✔] pairing code
 
-```bash
->>> pairing onnetwork
-Usage:
-   pairing onnetwork node-id setup-pin-code [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--bypass-attestation-verifier] [--case-auth-tags] [--icd-registration] [--icd-check-in-nodeid] [--icd-monitored-subject] [--icd-client-type] [--icd-symmetric-key] [--icd-stay-active-duration] [--skip-commissioning-complete] [--pase-only] [--country-code] [--time-zone] [--dst-offset] [--timeout]
+> Commissioning with QR code payload or manual pairing code
 
->>>
-```
-
-#### D. Commissioning with long discriminator
-
-```bash
->>> pairing onnetwork-long 
-Usage:
-   pairing onnetwork-long node-id setup-pin-code discriminator [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--bypass-attestation-verifier] [--case-auth-tags] [--icd-registration] [--icd-check-in-nodeid] [--icd-monitored-subject] [--icd-client-type] [--icd-symmetric-key] [--icd-stay-active-duration] [--skip-commissioning-complete] [--pase-only] [--country-code] [--time-zone] [--dst-offset] [--timeout]
-
->>>
-```
-
-#### E. Commissioning with QR code payload or manual pairing code
+> 被配對設備基本上已經連上網路，使用 QR code or manual pairing code
 
 ```bash
 >>> pairing code
 Usage:
    pairing code node-id payload [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--bypass-attestation-verifier] [--case-auth-tags] [--icd-registration] [--icd-check-in-nodeid] [--icd-monitored-subject] [--icd-client-type] [--icd-symmetric-key] [--icd-stay-active-duration] [--skip-commissioning-complete] [--discover-once] [--use-only-onnetwork-discovery] [--country-code] [--time-zone] [--dst-offset] [--timeout]
 
->>>
+>>> pairing code 1 21718613662
 ```
 
-#### F. Forgetting the already-commissioned device
+#### [✔] pairing onnetwork
+
+> Commissioning into a network over IP
+
+> 被配對設備基本上已經連上網路，使用 setup-pin-code （一般量產的設備只會有 QR code，可以 payload parse-setup-payload 解析）
+
+```bash
+>>> pairing onnetwork
+Usage:
+   pairing onnetwork node-id setup-pin-code [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--bypass-attestation-verifier] [--case-auth-tags] [--icd-registration] [--icd-check-in-nodeid] [--icd-monitored-subject] [--icd-client-type] [--icd-symmetric-key] [--icd-stay-active-duration] [--skip-commissioning-complete] [--pase-only] [--country-code] [--time-zone] [--dst-offset] [--timeout]
+
+>>> pairing onnetwork 1 20231206
+```
+
+#### [✔] pairing onnetwork-long
+
+> Commissioning with long discriminator
+
+> 被配對設備基本上已經連上網路，使用 setup-pin-code 和 discriminator（一般量產的設備只會有 QR code，可以 payload parse-setup-payload 解析）
+
+```bash
+>>> pairing onnetwork-long 
+Usage:
+   pairing onnetwork-long node-id setup-pin-code discriminator [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--bypass-attestation-verifier] [--case-auth-tags] [--icd-registration] [--icd-check-in-nodeid] [--icd-monitored-subject] [--icd-client-type] [--icd-symmetric-key] [--icd-stay-active-duration] [--skip-commissioning-complete] [--pase-only] [--country-code] [--time-zone] [--dst-offset] [--timeout]
+
+>>> pairing onnetwork 1 20231206 3884
+```
+
+#### [✔] pairing unpair
+
+> Forgetting the already-commissioned device
+
+> 進行解配
 
 ```bash
 >>> pairing unpair
 Usage:
    pairing unpair node-id [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--bypass-attestation-verifier] [--case-auth-tags] [--icd-registration] [--icd-check-in-nodeid] [--icd-monitored-subject] [--icd-client-type] [--icd-symmetric-key] [--icd-stay-active-duration] [--timeout]
 
->>>
+>>> pairing unpair 1
+```
+
+#### [✔] pairing open-commissioning-window
+
+> 分享已配對之設備
+>
+> github: [OpenCommissioningWindowCommand.h](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/commands/pairing/OpenCommissioningWindowCommand.h)
+
+```bash
+>>> pairing open-commissioning-window
+Usage:
+   pairing open-commissioning-window node-id option window-timeout iteration discriminator [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--timeout]
+
+node-id:
+  Node to send command to.
+
+option:
+  1 to use Enhanced Commissioning Method.
+  0 to use Basic Commissioning Method.
+
+window-timeout:
+  Time, in seconds, before the commissioning window closes.
+
+iteration:
+  Number of PBKDF iterations to use to derive the verifier.  Ignored if 'option' is 0.
+
+discriminator:
+  Discriminator to use for advertising.  Ignored if 'option' is 0.
+
+>>> pairing open-commissioning-window 1 1 300 2000 3884
+[1736478513.589] [707435:707467] [CTL] Manual pairing code: [35008237717]
 ```
 
 ## 3.7. payload
 
 > Commands for parsing and generating setup payloads.
+>
+>  主要是用來生成配對碼和解析配對碼
+>
+> github: [payload](https://github.com/project-chip/connectedhomeip/tree/master/examples/chip-tool/commands/payload)
+
+> 請使用 Single-command mode
 
 ```bash
->>> payload
-[1736408377.265] [678961:678961] [TOO] Command: payload
-[1736408377.266] [678961:678961] [TOO] Missing command name
+$ chip-tool payload
 Usage:
-   payload command_name [param1 param2 ...]
+  chip-tool payload command_name [param1 param2 ...]
 
 Commands for parsing and generating setup payloads.
 
@@ -594,22 +711,94 @@ Commands for parsing and generating setup payloads.
   | * verhoeff-verify                                                                   |
   | * verhoeff-generate                                                                 |
   +-------------------------------------------------------------------------------------+
->>>
 ```
 
-#### payload parse-setup-payload
+#### [✔] payload  generate-qrcode
+
+> 用於產生 QR code
+>
+> github: [SetupPayloadGenerateCommand.h](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/commands/payload/SetupPayloadGenerateCommand.h)
+
+> --rendezvous, for Discovery Bitmask
+>
+> --commissioning-mode, for Custom flow
 
 ```bash
->>> payload parse-setup-payload MT:-24J0IRV01DWLA39G00
-[1736407855.826] [678778:678778] [TOO] Command: payload parse-setup-payload MT:-24J0IRV01DWLA39G00
-[1736407855.826] [678778:678778] [SPL] Parsing base38Representation: MT:-24J0IRV01DWLA39G00
-[1736407855.826] [678778:678778] [SPL] Version:             0
-[1736407855.826] [678778:678778] [SPL] VendorID:            65521
-[1736407855.826] [678778:678778] [SPL] ProductID:           32769
-[1736407855.826] [678778:678778] [SPL] Custom flow:         0    (STANDARD)
-[1736407855.827] [678778:678778] [SPL] Discovery Bitmask:   0x04 (On IP network)
-[1736407855.827] [678778:678778] [SPL] Long discriminator:  3849   (0xf09)
-[1736407855.827] [678778:678778] [SPL] Passcode:            20231206
+$ chip-tool payload
+Usage:
+  chip-tool payload generate-qrcode [--existing-payload] [--discriminator] [--setup-pin-code] [--version] [--vendor-id] [--product-id] [--commissioning-mode] [--allow-invalid-payload] [--rendezvous] [--tlvBytes]
+
+[--existing-payload]:
+  An existing setup payload to modify based on the other arguments.
+
+[--tlvBytes]:
+  Pre-encoded TLV for the optional part of the payload.  A nonempty value should be passed as "hex:" followed by the bytes in hex encoding.  Passing an empty string to override the TLV in an existing payload is allowed.
+```
+
+```bash
+$ chip-tool payload generate-qrcode help
+Usage:
+  chip-tool payload generate-qrcode [--existing-payload] [--discriminator] [--setup-pin-code] [--version] [--vendor-id] [--product-id] [--commissioning-mode] [--allow-invalid-payload] [--rendezvous] [--tlvBytes]
+
+[--existing-payload]:
+  An existing setup payload to modify based on the other arguments.
+
+[--tlvBytes]:
+  Pre-encoded TLV for the optional part of the payload.  A nonempty value should be passed as "hex:" followed by the bytes in hex encoding.  Passing an empty string to override the TLV in an existing payload is allowed.
+
+$ chip-tool payload generate-qrcode \
+ --version 0 --vendor-id 65521 --product-id 32769 \
+ --discriminator 3849 --setup-pin-code 20231206 \
+ --rendezvous 0x04
+
+[1736486495.495] [710278:710278] [DL] ChipLinuxStorage::Init: Using KVS config file: /home/lanka/snap/chip-tool/common/chip_tool_kvs
+[1736486495.495] [710278:710278] [TOO] QR Code: MT:-24J0IRV01DWLA39G00
+```
+
+#### [✔] payload generate-manualcode
+
+> 用於產生 manual pairing code
+>
+> github: [SetupPayloadGenerateCommand.h](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/commands/payload/SetupPayloadGenerateCommand.h)
+
+```bash
+$ chip-tool payload generate-manualcode help
+Usage:
+  chip-tool payload generate-manualcode [--existing-payload] [--discriminator] [--setup-pin-code] [--version] [--vendor-id] [--product-id] [--commissioning-mode] [--allow-invalid-payload] [--force-short-code]
+
+[--existing-payload]:
+  An existing setup payload to modify based on the other arguments.
+
+$ chip-tool payload generate-manualcode \
+ --version 0 --vendor-id 65521 --product-id 32769 \
+ --discriminator 3849 --setup-pin-code 20231206 \
+ --force-short-code 0
+
+[1736497683.504] [717987:717987] [DL] ChipLinuxStorage::Init: Using KVS config file: /home/lanka/snap/chip-tool/common/chip_tool_kvs
+[1736497683.504] [717987:717987] [TOO] Manual Code: 36250212347
+```
+
+
+
+#### [✔] payload parse-setup-payload
+
+> 解析指定的 payload
+>
+> github: [SetupPayloadParseCommand.h](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/commands/payload/SetupPayloadParseCommand.h)
+
+```bash
+$ chip-tool payload parse-setup-payload "MT:-24J0IRV01DWLA39G00"
+[1736479345.970] [707768:707768] [DL] ChipLinuxStorage::Init: Using KVS config file: /home/lanka/snap/chip-tool/common/chip_tool_kvs
+[1736479345.970] [707768:707768] [SPL] Parsing base38Representation: MT:-24J0IRV01DWLA39G00
+[1736479345.971] [707768:707768] [SPL] Version:             0
+[1736479345.971] [707768:707768] [SPL] VendorID:            65521
+[1736479345.971] [707768:707768] [SPL] ProductID:           32769
+[1736479345.971] [707768:707768] [SPL] Custom flow:         0    (STANDARD)
+[1736479345.971] [707768:707768] [SPL] Discovery Bitmask:   0x04 (On IP network)
+[1736479345.971] [707768:707768] [SPL] Long discriminator:  3849   (0xf09)
+[1736479345.971] [707768:707768] [SPL] Passcode:            20231206
+
+$ chip-tool payload parse-additional-data-payload "MT:-24J0IRV01DWLA39G00"
 ```
 
 ## 3.8. sessionmanagement
@@ -633,12 +822,15 @@ Commands for managing CASE and PASE session state.
   | * expire-case-sessions                                                              |
   |   - Expires (evicts) all local CASE sessions to the given node id.                  |
   +-------------------------------------------------------------------------------------+
->>>
 ```
 
-## 3.9. subscriptions
+## 3.9. [✔] subscriptions
 
 > Commands for shutting down subscriptions.
+>
+> 這邊只有移除 subscriptions
+>
+> github: [SubscriptionsCommands.h](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/commands/clusters/SubscriptionsCommands.h)
 
 ```bash
 >>> subscriptions
@@ -659,17 +851,37 @@ Commands for shutting down subscriptions.
   | * shutdown-all                                                                      |
   |   - Shut down all subscriptions to all nodes.                                       |
   +-------------------------------------------------------------------------------------+
->>>
 ```
 
-## 3.10. interactive
-
-> Commands for starting long-lived interactive modes.
+#### [✔] subscriptions shutdown-one
 
 ```bash
->>> interactive
-[1736406701.652] [678778:678778] [TOO] Command: interactive
-[1736406701.652] [678778:678778] [TOO] Missing command name
+# SubscriptionID: 0xb8136265
+>>> subscriptions shutdown-one 0xb8136265 1
+```
+
+#### [✔] subscriptions shutdown-all-for-node
+
+```bash
+>>> subscriptions shutdown-all-for-node 1
+```
+
+[✔] subscriptions shutdown-all
+
+```bash
+>>> subscriptions shutdown-all
+```
+
+## 3.10. [✔] interactive
+
+> Commands for starting long-lived interactive modes.
+>
+> github: [interactive](https://github.com/project-chip/connectedhomeip/tree/master/examples/chip-tool/commands/interactive)
+
+> 請使用 Single-command mode
+
+```bash
+$ chip-tool interactive
 Usage:
    interactive command_name [param1 param2 ...]
 
@@ -683,17 +895,90 @@ Commands for starting long-lived interactive modes.
   | * server                                                                            |
   |   - Start a websocket server that can receive commands sent by another process.     |
   +-------------------------------------------------------------------------------------+
->>>
 ```
 
-## 3.10. storage
+#### [✔] interactive start
+
+> github: [InteractiveCommands.h](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/commands/interactive/InteractiveCommands.h)
+
+```bash
+$ chip-tool interactive start
+```
+
+#### [✔] interactive server
+
+> 使用 websocket 與 chip-tool 進行亙動。
+
+> 目前測試：
+>
+> event 失敗
+>
+> SubscriptionID不會回傳
+
+> github: [InteractiveCommands.h](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/commands/interactive/InteractiveCommands.h)
+>
+> github: [WebSocketServer.cpp](https://github.com/project-chip/connectedhomeip/blob/master/examples/common/websocket-server/WebSocketServer.cpp)
+
+```bash
+$ chip-tool interactive server help
+Usage:
+  /snap/chip-tool/199/bin/chip-tool interactive server [--paa-trust-store-path] [--cd-trust-store                                                                                           -path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-truste                                                                                           d-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to]                                                                                            [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--advertise-operational] [--po                                                                                           rt]
+
+Start a websocket server that can receive commands sent by another process.
+
+[--paa-trust-store-path]:
+  Path to directory holding PAA certificate information.  Can be absolute or relative to the curr                                                                                           ent working directory.
+
+[--cd-trust-store-path]:
+  Path to directory holding CD certificate information.  Can be absolute or relative to the curre                                                                                           nt working directory.
+
+[--commissioner-name]:
+  Name of fabric to use. Valid values are "alpha", "beta", "gamma", and integers greater than or                                                                                            equal to 4.  The default if not specified is "alpha".
+
+[--commissioner-nodeid]:
+  The node id to use for chip-tool.  If not provided, kTestControllerNodeId (112233, 0x1B669) wil                                                                                           l be used.
+
+[--use-max-sized-certs]:
+  Maximize the size of operational certificates. If not provided or 0 ("false"), normally sized o                                                                                           perational certificates are generated.
+
+[--only-allow-trusted-cd-keys]:
+  Only allow trusted CD verifying keys (disallow test keys). If not provided or 0 ("false"), untr                                                                                           usted CD verifying keys are allowed. If 1 ("true"), test keys are disallowed.
+
+[--dac-revocation-set-path]:
+  Path to JSON file containing the device attestation revocation set. This argument caches the pa                                                                                           th to the revocation set. Once set, this will be used by all commands in interactive mode.
+
+[--trace-to]:
+  Trace destinations, comma-separated (json:log, json:<path>, perfetto, perfetto:<path>)
+
+[--storage-directory]:
+  Directory to place chip-tool's storage files in.  Defaults to $TMPDIR, with fallback to /tmp
+
+[--commissioner-vendor-id]:
+  The vendor id to use for chip-tool. If not provided, chip::VendorId::TestVendor1 (65521, 0xFFF1                                                                                           ) will be used.
+
+[--advertise-operational]:
+  Advertise operational node over DNS-SD and accept incoming CASE sessions.
+
+[--port]:
+  Port the websocket will listen to. Defaults to 9002.
+```
+
+```bash
+$ chip-tool interactive server --port 9002
+```
+
+> ws://127.0.0.1:9002
+
+![matter_chip-tool01](./images/matter_chip-tool01.png)
+
+## 3.11. [✔] storage
 
 > Commands for managing persistent data stored by chip-tool.
+>
+> github: [storage](https://github.com/project-chip/connectedhomeip/tree/master/examples/chip-tool/commands/storage)
 
 ```bash
 >>> storage
-[1736408310.102] [678961:678961] [TOO] Command: storage
-[1736408310.102] [678961:678961] [TOO] Missing command name
 Usage:
    storage command_name [param1 param2 ...]
 
@@ -704,8 +989,9 @@ Commands for managing persistent data stored by chip-tool.
   +-------------------------------------------------------------------------------------+
   | * clear-all                                                                         |
   +-------------------------------------------------------------------------------------+
->>>
 ```
+
+#### [✔] storage clear-all
 
 # 4. chip-tool cluster_name
 
@@ -963,6 +1249,27 @@ Usage:
   | * feature-map                                                                       |
   | * cluster-revision                                                                  |
   +-------------------------------------------------------------------------------------+
+```
+
+```bash
+>>> onoff subscribe on-off
+Usage:
+   onoff subscribe on-off min-interval max-interval destination-id endpoint-ids [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--fabric-filtered] [--data-version] [--keepSubscriptions] [--auto-resubscribe] [--lit-icd-peer] [--timeout] [--allow-large-payload]
+
+min-interval:
+  Server should not send a new report if less than this number of seconds has elapsed since the last report.
+
+max-interval:
+  Server must send a report if this number of seconds has elapsed since the last report.
+
+destination-id:
+  64-bit node or group identifier.
+  Group identifiers are detected by being in the 0xFFFF'FFFF'FFFF'xxxx range.
+
+endpoint-ids:
+  Comma-separated list of endpoint ids (e.g. "1" or "1,2,3").
+  Allowed to be 0xFFFF to indicate a wildcard endpoint.
+
 >>> onoff subscribe on-off 2 3600 1 1
 ```
 
@@ -1012,6 +1319,9 @@ $ chip-tool interactive start
 >>> levelcontrol read current-level 1 1
 >>> levelcontrol read max-level 1 1
 >>> levelcontrol read min-level 1 1
+
+>>> subscriptions shutdown-one 0xb8136265 1
+>>> subscriptions shutdown-all-for-node 1
 
 >>> pairing unpair 1
 ```
