@@ -123,12 +123,16 @@
 ### 1.1.15. [helper_Matter.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Matter.md) - Matter helper.
 
 > Matter（以前稱為 Project CHIP，Connected Home over IP）是一種物聯網（IoT）通信協議和平台，致力於促進智能家居設備之間的互操作性和互聯性。
+>
+> 撰寫該篇文章的用意是要進行 Matter 的開發。既然 CHIP 已經提供相關解決方案，用就對了！
+>
+> 至於艱深的文件， 只會省略過去。就好像你要使用 OpenSSL 進行加密，知道編譯時怎麼連結，知道如何使用就好，有必要去細究裏面是如何加密嗎。
 
 ### 1.1.16. [helper_MatterController-chip-tool.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MatterController-chip-tool.md) - Matter Controller helper.
 
 > 因為角色特別吃重，特別將 Matter Controller 從 helper_Matter.md 獨立出來。
 
-### 1.1.16. [helper_MultimediaMuxandDemux.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MultimediaMuxandDemux.md) - Multimedia Mux and Demux helper
+### 1.1.16a. [helper_MultimediaMuxandDemux.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MultimediaMuxandDemux.md) - Multimedia Mux and Demux helper
 
 >除了用手機看 YouTube 外，有些基本常識還是補足一下。
 
