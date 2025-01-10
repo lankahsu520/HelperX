@@ -89,15 +89,15 @@
 
 > 再次進入 matter  世界，持續三星期的努力，也只能更進完善編譯的 codebase 環境。奉勸要如入的團隊或個人，要多評估自身能力和時間。
 >
-> a. 使用 gn 進行編譯就是一個敗筆，我不相信一位不會寫 Makefile 的軟體工程師，會能解決 gn 裏的問題 （因為你還要解決 python 版本不相容和其它衍生的問題）。build_overrides 和 third_party 這兩個 soft link，是不會在督譯時指定相對路徑，這是要搞死軟體工程師嗎？
+> a. 使用 gn 進行編譯就是一個敗筆，我不相信一位不會寫 Makefile 的軟體工程師，會能解決 gn 裏的問題 （因為你還要解決 python 版本不相容和其它衍生的問題）。build_overrides 和 third_party 這兩個 soft link，是不會在編譯時指定相對路徑，這樣的跳轉，在編譯上是不容易追蹤。
 >
 > b. 或許因為我不是裏面的成員，也或許我看不懂英文，也沒有過多的時間和人力，也或許不如那些三百萬的打工仔，無法獲得完整的資料格式，至今查詢不到任何蛛絲馬跡。
 >
 > c. 同上，沒有一份完整的 API 文件。再來就是軟體設計雖有階層性，但是整份的 CHIP 複雜度，有編譯過的就知道。
 >
-> d. matter 主要交換資料於 network (ip mode) ，但是很少文件說明 Wi-Fi、Thread、BLE 之間的關係。
+> d. matter 交換資料是運行在網路（ip mode）之上 ，但是很少文件說明 Wi-Fi、Thread、BLE 之間的關係。
 >
-> e. 對測的工具或是使用環境很差，目前堪用的也只是 <font color="red">iOS</font>。
+> e. 對測的工具或是使用情境還不到量產的階段，目前堪用的也只是 <font color="red">iOS</font>。
 
 #### 20231223
 
@@ -591,7 +591,17 @@ $ ninja -C ${PJ_GN_BUILD_DIR}/${PJ_GN_TARGET} \
 
 > 建議使用此方法
 
+```bash
+$ ./scripts/build/build_examples.py \
+ --out-prefix ./build_xxx \
+ --target linux-x64-light build
+```
+
 ##### B.1. target vs function
+
+```bash
+$ ./scripts/build/build_examples.py targets
+```
 
 | target                                 | Build???Target                                 |
 | -------------------------------------- | ---------------------------------------------- |
@@ -2612,6 +2622,10 @@ $ vi examples/air-quality-sensor-app/air-quality-sensor-common/src/air-quality-s
 #### commissioner
 
 > 一般指的就是主控端
+
+#### ICD, Intermittently Connected Device
+
+> 間歇性連接設備
 
 #### NOC, Node Operational Certificate
 
