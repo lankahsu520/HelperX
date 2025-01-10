@@ -3455,6 +3455,17 @@ $ yt-dlp -f 140+133 "https://www.youtube.com/watch?v=a_9_38JpdYU" -o 20240527084
 $ yt-dlp -f 140 "https://www.youtube.com/watch?v=a_9_38JpdYU" -o 20240527084746
 ```
 
+# 24. Application
+
+## 24.1. Opera
+
+```bash
+$ sudo sh -c 'echo "deb [arch=amd64] https://deb.opera.com/opera-stable/ stable non-free" > /etc/apt/sources.list.d/opera-stable.list'
+$ wget -qO- https://deb.opera.com/archive.key | sudo apt-key add -
+$ sudo apt update
+$ sudo apt install -y opera-stable
+```
+
 # Appendix
 
 # I. Study
