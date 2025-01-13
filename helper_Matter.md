@@ -87,7 +87,7 @@
 
 #### 20240107
 
-> 再次進入 matter  世界，持續三星期的努力，也只能更進完善編譯的 codebase 環境。奉勸要如入的團隊或個人，要多評估自身能力和時間。
+> 再次進入 matter  世界，持續三星期的努力，也只能更進完善編譯的 codebase 環境。奉勸要加入的團隊或個人，要多評估自身能力和時間。
 >
 > a. 使用 gn 進行編譯就是一個敗筆，我不相信一位不會寫 Makefile 的軟體工程師，會能解決 gn 裏的問題 （因為你還要解決 python 版本不相容和其它衍生的問題）。build_overrides 和 third_party 這兩個 soft link，是不會在編譯時指定相對路徑，這樣的跳轉，在編譯上是不容易追蹤。
 >
@@ -1135,7 +1135,7 @@ $ export MATTER_IFACE_ID=`ip link show dev $MATTER_IFACE | grep $MATTER_IFACE | 
 #$ export MATTER_KVS_PROVIDER/work/chip_kvs_provider
 ```
 
-#### air-quality-sensor-app
+#### [✔] air-quality-sensor-app
 
 > linux-x64-air-quality-sensor-with-ui
 >
@@ -1204,7 +1204,7 @@ $ echo '{"Name":"TotalVolatileOrganicCompoundsConcentrationMeasurement","NewValu
 
 ```
 
-#### bridge-app
+#### [✔] bridge-app
 
 > 提供亙動操作，動態新增和刪減，相關的程式碼請見
 >
@@ -1247,7 +1247,7 @@ $ ./chip-bridge-app \
  --passcode 20241230 --discriminator 3999
 ```
 
-#### contact-sensor-app
+#### [✔] contact-sensor-app
 
 > linux-x64-contact-sensor-with-ui
 
@@ -1265,7 +1265,7 @@ $ ./contact-sensor-app \
 rpcs.chip.rpc.BooleanState.Get()
 ```
 
-#### fabric-sync
+#### [⚑] fabric-sync
 
 ```bash
 $ rm /tmp/chip_kvs
@@ -1291,7 +1291,7 @@ onoff toggle
 > controller commission-onnetwork 20231206 3849 192.168.50.52 5540
 ```
 
-#### lighting-app
+#### [✔] lighting-app
 
 > linux-x64-light-with-ui
 
@@ -1385,7 +1385,7 @@ rpcs.chip.rpc.Lighting.Get()
 rpcs.chip.rpc.Lighting.Set(on=True, level=128, color=protos.chip.rpc.LightingColor(hue=5, saturation=5))
 ```
 
-#### lock-app
+#### [✔] lock-app
 
 ```bash
 $ ./air-quality-sensor-app \
@@ -1413,7 +1413,7 @@ echo '{"Cmd":"Lock","Params":{"EndpointId":1,"OperationSource":4}}' > /tmp/chip_
 $ echo '{"Cmd":"SendDoorLockAlarm","Params":{"EndpointId":1,"AlarmCode":0}}' > /tmp/chip_lock_app_fifo-${MATTER_PID}
 ```
 
-#### tv-app
+#### [✔] tv-app
 
 ```bash
 $ [ "$MATTER_KVS_PROVIDER" != "" ] && rm $MATTER_KVS_PROVIDER
@@ -1441,7 +1441,7 @@ Done
 
 ```
 
-#### water-leak-detector-app
+#### [✔] water-leak-detector-app
 
 > linux-x64-water-leak-detector-with-ui
 
@@ -1502,7 +1502,7 @@ flowchart BT
 >
 > [sample-apps-for-matter-android](https://github.com/google-home/sample-apps-for-matter-android) - [GHSAFM-2.0.0-default-debug.apk](https://github.com/google-home/sample-apps-for-matter-android/releases/download/v2.0.0/GHSAFM-2.0.0-default-debug.apk)
 
-#### lighting-app
+#### [✔] lighting-app
 
 ![matter_GHSAFM01](./images/matter_GHSAFM01.jpg)
 
@@ -1532,26 +1532,26 @@ flowchart BT
 
 ### 7.2.1. iPhone
 
-#### air-quality-sensor-app
+#### [✔] air-quality-sensor-app
 
 > 目前只有 AirQuality 可用。或許因為沒有認證過，無法考證其支援與否。
 >
 
 ![matter_iOS-air-quality-sensor](./images/matter_iOS-air-quality-sensor.png)
 
-#### contact-sensor-app
+#### [✔] contact-sensor-app
 
 #### ![matter_iOS-contact-sensor-app](./images/matter_iOS-contact-sensor-app.jpg)
 
-#### lighting-app
+#### [✔] lighting-app
 
 ![matter_iOS-lighting-app](./images/matter_iOS-lighting-app.png)
 
-#### lock-app
+#### [✔] lock-app
 
 ![matter_iOS-lock-app](./images/matter_iOS-lock-app.png)
 
-#### water-leak-detector-app
+#### [✔] water-leak-detector-app
 
 > 或許因為沒有認證過，不支援狀態。
 
@@ -1662,25 +1662,25 @@ flowchart BT
 >
 > 不然你可能看到的是空空的畫面，或是動作後沒有反應。
 
-#### air-quality-sensor-app
+#### [✔] air-quality-sensor-app
 
 > 或許因為沒有認證過，無法考證其支援與否。
 
-#### contact-sensor-app
+#### [✔] contact-sensor-app
 
 ![matter_SmartLife-contact-sensor-app](./images/matter_SmartLife-contact-sensor-app.jpg)
 
-#### lighting-app
+#### [✔] lighting-app
 
 ![matter_SmartLife-lighting-app](./images/matter_SmartLife-lighting-app.jpg)
 
-#### lock-app
+#### [✔] lock-app
 
 >alarm 無效
 
 ![matter_SmartLife-lock-app](./images/matter_SmartLife-lock-app.jpg)
 
-#### water-leak-detector-app
+#### [✔] water-leak-detector-app
 
 >或許因為沒有認證過，不支援狀態。
 
@@ -1815,14 +1815,14 @@ $ cd connectedhomeip-123
 $ export PW_ZAP_CIPD_INSTALL_DIR=`pwd`/.environment/cipd/packages/zap
 ```
 
-#### bridge-app
+#### [✔] bridge-app
 
 ```bash
 # bridge-app
 $ ./scripts/tools/zap/run_zaptool.sh ./examples/bridge-app/bridge-common/bridge-app.zap
 ```
 
-#### lighting-app
+#### [✔] lighting-app
 
 ```bash
 # lighting-app
@@ -1833,21 +1833,21 @@ $ ./scripts/tools/zap/run_zaptool.sh ./examples/lighting-app/lighting-common/lig
 
 ![matter_zcl02](./images/matter_zcl02.png)
 
-#### lock-app
+#### [✔] lock-app
 
 ```bash
 # lock-app
 $ ./scripts/tools/zap/run_zaptool.sh ./examples/lock-app/lock-common/lock-app.zap
 ```
 
-#### tv-app
+#### [✔] tv-app
 
 ```bash
 # tv-app
 $ ./scripts/tools/zap/run_zaptool.sh ./examples/tv-app/tv-common/tv-app.zap
 ```
 
-#### others
+#### [✔] others
 
 ```bash
 # lighting-app-data-mode-no-unique-id
@@ -1879,27 +1879,27 @@ $ ./scripts/tools/zap/run_zaptool.sh ./examples/fabric-bridge-app/fabric-bridge-
 ./scripts/tools/zap/generate.py <location of the .zap file>
 ```
 
-#### bridge-app
+#### [✔] bridge-app
 
 ```bash
 # bridge-app
 $ ./scripts/tools/zap/generate.py ./examples/bridge-app/bridge-common/bridge-app.zap
 ```
 
-#### lighting-app
+#### [✔] lighting-app
 
 ```bash
 $ ./scripts/tools/zap/generate.py ./examples/lighting-app/lighting-common/lighting-app.zap
 ```
 
-#### lock-app
+#### [✔] lock-app
 
 ```bash
 # lock-app
 $ ./scripts/tools/zap/generate.py ./examples/lock-app/lock-common/lock-app.zap
 ```
 
-#### all
+#### [✔] all
 
 ```bash
 # If there are changes to many .zap files, the following script can be used to recompile the .zap files for all the examples and the controller.

@@ -315,7 +315,11 @@ $ chip-tool interactive server --port 9002
 
 > 以下用 interactive mode 進行操作
 
-## 3.1. any
+```bash
+$ chip-tool interactive start
+```
+
+## 3.1. [⚑] any
 
 > Commands for sending IM messages based on cluster id, not cluster name.
 
@@ -365,13 +369,55 @@ endpoint-ids:
   Comma-separated list of endpoint ids (e.g. "1" or "1,2,3").
   Allowed to be 0xFFFF to indicate a wildcard endpoint.
 
+[--paa-trust-store-path]:
+  Path to directory holding PAA certificate information.  Can be absolute or relative to the current working directory.
+
+[--cd-trust-store-path]:
+  Path to directory holding CD certificate information.  Can be absolute or relative to the current working directory.
+
+[--commissioner-name]:
+  Name of fabric to use. Valid values are "alpha", "beta", "gamma", and integers greater than or equal to 4.  The default if not specified is "alpha".
+
+[--commissioner-nodeid]:
+  The node id to use for chip-tool.  If not provided, kTestControllerNodeId (112233, 0x1B669) will be used.
+
+[--use-max-sized-certs]:
+  Maximize the size of operational certificates. If not provided or 0 ("false"), normally sized operational certificates are generated.
+
+[--only-allow-trusted-cd-keys]:
+  Only allow trusted CD verifying keys (disallow test keys). If not provided or 0 ("false"), untrusted CD verifying keys are allowed. If 1 ("true"), test keys are disallowed.
+
+[--dac-revocation-set-path]:
+  Path to JSON file containing the device attestation revocation set. This argument caches the path to the revocation set. Once set, this will be used by all commands in interactive mode.
+
+[--trace-to]:
+  Trace destinations, comma-separated (json:log, json:<path>, perfetto, perfetto:<path>)
+
+[--storage-directory]:
+  Directory to place chip-tool's storage files in.  Defaults to $TMPDIR, with fallback to /tmp
+
+[--commissioner-vendor-id]:
+  The vendor id to use for chip-tool. If not provided, chip::VendorId::TestVendor1 (65521, 0xFFF1) will be used.
+
+[--fabric-filtered]:
+  Boolean indicating whether to do a fabric-filtered read. Defaults to true.
+
+[--data-version]:
+  Comma-separated list of data versions for the clusters being read.
+
+[--lit-icd-peer]:
+  Whether to treat the peer as a LIT ICD. false: Always no, true: Always yes, (not set): Yes if the peer is registered to this controller.
+
+[--allow-large-payload]:
+  If true, indicates that the session should allow large application payloads (which requires a TCP connection).Defaults to false, which uses a UDP+MRP session.
+
 # 6 (OnOff)
 >>> any read-by-id 0x06 0xFFFFFFFF 1 1
 # 6 (OnOff) - 0 (attributeId)
 >>> any read-by-id 0x06 0 1 1
 ```
 
-## 3.2. delay
+## 3.2. [⚑] delay
 
 > Commands for waiting for something to happen.
 
@@ -389,7 +435,6 @@ Commands for waiting for something to happen.
   | * wait-for-commissionee                                                             |
   |   - Establish a CASE session to the provided node id.                               |
   +-------------------------------------------------------------------------------------+
->>>
 ```
 
 #### [✔] delay sleep
@@ -402,13 +447,13 @@ Commands for waiting for something to happen.
 >>> delay sleep 3000
 ```
 
-#### delay  wait-for-commissionee
+#### [⚑] delay  wait-for-commissionee
 
 ```bash
 >>> delay wait-for-commissionee 1
 ```
 
-## 3.3. discover
+## 3.3. [⚑] discover
 
 > Commands for device discovery.
 
@@ -445,7 +490,7 @@ Commands for device discovery.
 
 > 發現網路上 commissioner node
 
-## 3.4. groupsettings
+## 3.4. [⚑] groupsettings
 
 > Commands for manipulating group keys and memberships for chip-tool itself.
 
@@ -470,7 +515,7 @@ Commands for manipulating group keys and memberships for chip-tool itself.
   +-------------------------------------------------------------------------------------+
 ```
 
-## 3.5. icd
+## 3.5. [⚑] icd
 
 > Commands for client-side ICD management.
 >
@@ -492,11 +537,11 @@ Commands for client-side ICD management.
   +-------------------------------------------------------------------------------------+
 ```
 
-#### icd list
+#### [⚑] icd list
 
 > github: [ICDCommand.h](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/commands/icd/ICDCommand.h)
 
-#### icd wait-for-device
+#### [⚑] icd wait-for-device
 
 > github: [ICDCommand.h](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/commands/icd/ICDCommand.h)
 
@@ -515,7 +560,7 @@ stay-active-duration-seconds:
 >>> icd wait-for-device 0xFFFF 30
 ```
 
-## 3.6. pairing
+## 3.6. [⚑] pairing
 
 > Commands for commissioning devices.
 >
@@ -569,33 +614,74 @@ Commands for commissioning devices.
   +-------------------------------------------------------------------------------------+
 ```
 
-### 3.6.1. Commissioning and Forgetting
+#### [✔] pairing unpair
 
-#### pairing ble-thread
+> Forgetting the already-commissioned device
 
-> Commissioning into a Thread network over Bluetooth LE
+> 進行解配
 
-> 被配對設備有 BLE and Thread
-
- ```bash
->>> pairing ble-thread
+```bash
+>>> pairing unpair
 Usage:
-   pairing ble-thread node-id operationalDataset setup-pin-code discriminator [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--bypass-attestation-verifier] [--case-auth-tags] [--icd-registration] [--icd-check-in-nodeid] [--icd-monitored-subject] [--icd-client-type] [--icd-symmetric-key] [--icd-stay-active-duration] [--skip-commissioning-complete] [--country-code] [--time-zone] [--dst-offset] [--timeout]
- ```
+   pairing unpair node-id [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--bypass-attestation-verifier] [--case-auth-tags] [--icd-registration] [--icd-check-in-nodeid] [--icd-monitored-subject] [--icd-client-type] [--icd-symmetric-key] [--icd-stay-active-duration] [--timeout]
 
-#### pairing ble-wifi
+[--paa-trust-store-path]:
+  Path to directory holding PAA certificate information.  Can be absolute or relative to the current working directory.
 
-> Commissioning into a Wi-Fi network over Bluetooth LE
+[--cd-trust-store-path]:
+  Path to directory holding CD certificate information.  Can be absolute or relative to the current working directory.
 
-> 被配對設備有 BLE and Wi-Fi
+[--commissioner-name]:
+  Name of fabric to use. Valid values are "alpha", "beta", "gamma", and integers greater than or equal to 4.  The default if not specified is "alpha".
 
- ```bash
->>> pairing ble-wifi
-Usage:
-   pairing ble-wifi node-id ssid password setup-pin-code discriminator [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--bypass-attestation-verifier] [--case-auth-tags] [--icd-registration] [--icd-check-in-nodeid] [--icd-monitored-subject] [--icd-client-type] [--icd-symmetric-key] [--icd-stay-active-duration] [--skip-commissioning-complete] [--country-code] [--time-zone] [--dst-offset] [--timeout]
+[--commissioner-nodeid]:
+  The node id to use for chip-tool.  If not provided, kTestControllerNodeId (112233, 0x1B669) will be used.
 
->>>
- ```
+[--use-max-sized-certs]:
+  Maximize the size of operational certificates. If not provided or 0 ("false"), normally sized operational certificates are generated.
+
+[--only-allow-trusted-cd-keys]:
+  Only allow trusted CD verifying keys (disallow test keys). If not provided or 0 ("false"), untrusted CD verifying keys are allowed. If 1 ("true"), test keys are disallowed.
+
+[--dac-revocation-set-path]:
+  Path to JSON file containing the device attestation revocation set. This argument caches the path to the revocation set. Once set, this will be used by all commands in interactive mode.
+
+[--trace-to]:
+  Trace destinations, comma-separated (json:log, json:<path>, perfetto, perfetto:<path>)
+
+[--storage-directory]:
+  Directory to place chip-tool's storage files in.  Defaults to $TMPDIR, with fallback to /tmp
+
+[--commissioner-vendor-id]:
+  The vendor id to use for chip-tool. If not provided, chip::VendorId::TestVendor1 (65521, 0xFFF1) will be used.
+
+[--bypass-attestation-verifier]:
+  Bypass the attestation verifier. If not provided or false, the attestation verifier is not bypassed. If true, the commissioning will continue in case of attestation verification failure.
+
+[--case-auth-tags]:
+  The CATs to be encoded in the NOC sent to the commissionee
+
+[--icd-registration]:
+  Whether to register for check-ins from ICDs during commissioning. Default: false
+
+[--icd-check-in-nodeid]:
+  The check-in node id for the ICD, default: node id of the commissioner.
+
+[--icd-monitored-subject]:
+  The monitored subject of the ICD, default: The node id used for icd-check-in-nodeid.
+
+[--icd-client-type]:
+  The ClientType of the client registering, default: Permanent client - 0
+
+[--icd-symmetric-key]:
+  The 16 bytes ICD symmetric key, default: randomly generated.
+
+[--icd-stay-active-duration]:
+  If set, a LIT ICD that is commissioned will be requested to stay active for this many milliseconds
+
+
+>>> pairing unpair 1
+```
 
 #### [✔] pairing code
 
@@ -608,8 +694,241 @@ Usage:
 Usage:
    pairing code node-id payload [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--bypass-attestation-verifier] [--case-auth-tags] [--icd-registration] [--icd-check-in-nodeid] [--icd-monitored-subject] [--icd-client-type] [--icd-symmetric-key] [--icd-stay-active-duration] [--skip-commissioning-complete] [--discover-once] [--use-only-onnetwork-discovery] [--country-code] [--time-zone] [--dst-offset] [--timeout]
 
->>> pairing code 1 21718613662
+[--paa-trust-store-path]:
+  Path to directory holding PAA certificate information.  Can be absolute or relative to the current working directory.
+
+[--cd-trust-store-path]:
+  Path to directory holding CD certificate information.  Can be absolute or relative to the current working directory.
+
+[--commissioner-name]:
+  Name of fabric to use. Valid values are "alpha", "beta", "gamma", and integers greater than or equal to 4.  The default if not specified is "alpha".
+
+[--commissioner-nodeid]:
+  The node id to use for chip-tool.  If not provided, kTestControllerNodeId (112233, 0x1B669) will be used.
+
+[--use-max-sized-certs]:
+  Maximize the size of operational certificates. If not provided or 0 ("false"), normally sized operational certificates are generated.
+
+[--only-allow-trusted-cd-keys]:
+  Only allow trusted CD verifying keys (disallow test keys). If not provided or 0 ("false"), untrusted CD verifying keys are allowed. If 1 ("true"), test keys are disallowed.
+
+[--dac-revocation-set-path]:
+  Path to JSON file containing the device attestation revocation set. This argument caches the path to the revocation set. Once set, this will be used by all commands in interactive mode.
+
+[--trace-to]:
+  Trace destinations, comma-separated (json:log, json:<path>, perfetto, perfetto:<path>)
+
+[--storage-directory]:
+  Directory to place chip-tool's storage files in.  Defaults to $TMPDIR, with fallback to /tmp
+
+[--commissioner-vendor-id]:
+  The vendor id to use for chip-tool. If not provided, chip::VendorId::TestVendor1 (65521, 0xFFF1) will be used.
+
+[--bypass-attestation-verifier]:
+  Bypass the attestation verifier. If not provided or false, the attestation verifier is not bypassed. If true, the commissioning will continue in case of attestation verification failure.
+
+[--case-auth-tags]:
+  The CATs to be encoded in the NOC sent to the commissionee
+
+[--icd-registration]:
+  Whether to register for check-ins from ICDs during commissioning. Default: false
+
+[--icd-check-in-nodeid]:
+  The check-in node id for the ICD, default: node id of the commissioner.
+
+[--icd-monitored-subject]:
+  The monitored subject of the ICD, default: The node id used for icd-check-in-nodeid.
+
+[--icd-client-type]:
+  The ClientType of the client registering, default: Permanent client - 0
+
+[--icd-symmetric-key]:
+  The 16 bytes ICD symmetric key, default: randomly generated.
+
+[--icd-stay-active-duration]:
+  If set, a LIT ICD that is commissioned will be requested to stay active for this many milliseconds
+
+[--country-code]:
+  Country code to use to set the Basic Information cluster's Location attribute
+
+[--time-zone]:
+  TimeZone list to use when setting Time Synchronization cluster's TimeZone attribute
+
+[--dst-offset]:
+  DSTOffset list to use when setting Time Synchronization cluster's DSTOffset attribute
+
+>>> pairing code 1 33726345678
+>>> pairing code 2 30510457783
+>>> pairing code 2 22403330697 --paa-trust-store-path /work/paa-root-certs
 ```
+
+#### [⚑] pairing code-paseonly
+
+#### [⚑] pairing code-wifi
+
+#### [⚑] pairing code-thread
+
+#### [⚑] pairing code-wifi-thread
+
+#### [⚑] pairing ble-wifi
+
+> Commissioning into a Wi-Fi network over Bluetooth LE
+
+> 被配對設備有 BLE and Wi-Fi
+
+ ```bash
+>>> pairing ble-wifi
+Usage:
+   pairing ble-wifi node-id ssid password setup-pin-code discriminator [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--bypass-attestation-verifier] [--case-auth-tags] [--icd-registration] [--icd-check-in-nodeid] [--icd-monitored-subject] [--icd-client-type] [--icd-symmetric-key] [--icd-stay-active-duration] [--skip-commissioning-complete] [--country-code] [--time-zone] [--dst-offset] [--timeout]
+
+[--paa-trust-store-path]:
+  Path to directory holding PAA certificate information.  Can be absolute or relative to the current working directory.
+
+[--cd-trust-store-path]:
+  Path to directory holding CD certificate information.  Can be absolute or relative to the current working directory.
+
+[--commissioner-name]:
+  Name of fabric to use. Valid values are "alpha", "beta", "gamma", and integers greater than or equal to 4.  The default if not specified is "alpha".
+
+[--commissioner-nodeid]:
+  The node id to use for chip-tool.  If not provided, kTestControllerNodeId (112233, 0x1B669) will be used.
+
+[--use-max-sized-certs]:
+  Maximize the size of operational certificates. If not provided or 0 ("false"), normally sized operational certificates are generated.
+
+[--only-allow-trusted-cd-keys]:
+  Only allow trusted CD verifying keys (disallow test keys). If not provided or 0 ("false"), untrusted CD verifying keys are allowed. If 1 ("true"), test keys are disallowed.
+
+[--dac-revocation-set-path]:
+  Path to JSON file containing the device attestation revocation set. This argument caches the path to the revocation set. Once set, this will be used by all commands in interactive mode.
+
+[--trace-to]:
+  Trace destinations, comma-separated (json:log, json:<path>, perfetto, perfetto:<path>)
+
+[--storage-directory]:
+  Directory to place chip-tool's storage files in.  Defaults to $TMPDIR, with fallback to /tmp
+
+[--commissioner-vendor-id]:
+  The vendor id to use for chip-tool. If not provided, chip::VendorId::TestVendor1 (65521, 0xFFF1) will be used.
+
+[--bypass-attestation-verifier]:
+  Bypass the attestation verifier. If not provided or false, the attestation verifier is not bypassed. If true, the commissioning will continue in case of attestation verification failure.
+
+[--case-auth-tags]:
+  The CATs to be encoded in the NOC sent to the commissionee
+
+[--icd-registration]:
+  Whether to register for check-ins from ICDs during commissioning. Default: false
+
+[--icd-check-in-nodeid]:
+  The check-in node id for the ICD, default: node id of the commissioner.
+
+[--icd-monitored-subject]:
+  The monitored subject of the ICD, default: The node id used for icd-check-in-nodeid.
+
+[--icd-client-type]:
+  The ClientType of the client registering, default: Permanent client - 0
+
+[--icd-symmetric-key]:
+  The 16 bytes ICD symmetric key, default: randomly generated.
+
+[--icd-stay-active-duration]:
+  If set, a LIT ICD that is commissioned will be requested to stay active for this many milliseconds
+
+[--country-code]:
+  Country code to use to set the Basic Information cluster's Location attribute
+
+[--time-zone]:
+  TimeZone list to use when setting Time Synchronization cluster's TimeZone attribute
+
+[--dst-offset]:
+  DSTOffset list to use when setting Time Synchronization cluster's DSTOffset attribute
+ ```
+
+#### [⚑] pairing ble-thread
+
+> Commissioning into a Thread network over Bluetooth LE
+
+> 被配對設備有 BLE and Thread
+
+ ```bash
+>>> pairing ble-thread
+Usage:
+   pairing ble-thread node-id operationalDataset setup-pin-code discriminator [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--bypass-attestation-verifier] [--case-auth-tags] [--icd-registration] [--icd-check-in-nodeid] [--icd-monitored-subject] [--icd-client-type] [--icd-symmetric-key] [--icd-stay-active-duration] [--skip-commissioning-complete] [--country-code] [--time-zone] [--dst-offset] [--timeout]
+
+[--paa-trust-store-path]:
+  Path to directory holding PAA certificate information.  Can be absolute or relative to the current working directory.
+
+[--cd-trust-store-path]:
+  Path to directory holding CD certificate information.  Can be absolute or relative to the current working directory.
+
+[--commissioner-name]:
+  Name of fabric to use. Valid values are "alpha", "beta", "gamma", and integers greater than or equal to 4.  The default if not specified is "alpha".
+
+[--commissioner-nodeid]:
+  The node id to use for chip-tool.  If not provided, kTestControllerNodeId (112233, 0x1B669) will be used.
+
+[--use-max-sized-certs]:
+  Maximize the size of operational certificates. If not provided or 0 ("false"), normally sized operational certificates are generated.
+
+[--only-allow-trusted-cd-keys]:
+  Only allow trusted CD verifying keys (disallow test keys). If not provided or 0 ("false"), untrusted CD verifying keys are allowed. If 1 ("true"), test keys are disallowed.
+
+[--dac-revocation-set-path]:
+  Path to JSON file containing the device attestation revocation set. This argument caches the path to the revocation set. Once set, this will be used by all commands in interactive mode.
+
+[--trace-to]:
+  Trace destinations, comma-separated (json:log, json:<path>, perfetto, perfetto:<path>)
+
+[--storage-directory]:
+  Directory to place chip-tool's storage files in.  Defaults to $TMPDIR, with fallback to /tmp
+
+[--commissioner-vendor-id]:
+  The vendor id to use for chip-tool. If not provided, chip::VendorId::TestVendor1 (65521, 0xFFF1) will be used.
+
+[--bypass-attestation-verifier]:
+  Bypass the attestation verifier. If not provided or false, the attestation verifier is not bypassed. If true, the commissioning will continue in case of attestation verification failure.
+
+[--case-auth-tags]:
+  The CATs to be encoded in the NOC sent to the commissionee
+
+[--icd-registration]:
+  Whether to register for check-ins from ICDs during commissioning. Default: false
+
+[--icd-check-in-nodeid]:
+  The check-in node id for the ICD, default: node id of the commissioner.
+
+[--icd-monitored-subject]:
+  The monitored subject of the ICD, default: The node id used for icd-check-in-nodeid.
+
+[--icd-client-type]:
+  The ClientType of the client registering, default: Permanent client - 0
+
+[--icd-symmetric-key]:
+  The 16 bytes ICD symmetric key, default: randomly generated.
+
+[--icd-stay-active-duration]:
+  If set, a LIT ICD that is commissioned will be requested to stay active for this many milliseconds
+
+[--country-code]:
+  Country code to use to set the Basic Information cluster's Location attribute
+
+[--time-zone]:
+  TimeZone list to use when setting Time Synchronization cluster's TimeZone attribute
+
+[--dst-offset]:
+  DSTOffset list to use when setting Time Synchronization cluster's DSTOffset attribute
+ ```
+
+#### [⚑] pairing softap
+
+#### [⚑] pairing already-discovered
+
+#### [⚑] pairing already-discovered-by-index
+
+#### [⚑] pairing already-discovered-by-index-with-wifi
+
+#### [⚑] already-discovered-by-index-with-code
 
 #### [✔] pairing onnetwork
 
@@ -622,8 +941,74 @@ Usage:
 Usage:
    pairing onnetwork node-id setup-pin-code [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--bypass-attestation-verifier] [--case-auth-tags] [--icd-registration] [--icd-check-in-nodeid] [--icd-monitored-subject] [--icd-client-type] [--icd-symmetric-key] [--icd-stay-active-duration] [--skip-commissioning-complete] [--pase-only] [--country-code] [--time-zone] [--dst-offset] [--timeout]
 
+[--paa-trust-store-path]:
+  Path to directory holding PAA certificate information.  Can be absolute or relative to the current working directory.
+
+[--cd-trust-store-path]:
+  Path to directory holding CD certificate information.  Can be absolute or relative to the current working directory.
+
+[--commissioner-name]:
+  Name of fabric to use. Valid values are "alpha", "beta", "gamma", and integers greater than or equal to 4.  The default if not specified is "alpha".
+
+[--commissioner-nodeid]:
+  The node id to use for chip-tool.  If not provided, kTestControllerNodeId (112233, 0x1B669) will be used.
+
+[--use-max-sized-certs]:
+  Maximize the size of operational certificates. If not provided or 0 ("false"), normally sized operational certificates are generated.
+
+[--only-allow-trusted-cd-keys]:
+  Only allow trusted CD verifying keys (disallow test keys). If not provided or 0 ("false"), untrusted CD verifying keys are allowed. If 1 ("true"), test keys are disallowed.
+
+[--dac-revocation-set-path]:
+  Path to JSON file containing the device attestation revocation set. This argument caches the path to the revocation set. Once set, this will be used by all commands in interactive mode.
+
+[--trace-to]:
+  Trace destinations, comma-separated (json:log, json:<path>, perfetto, perfetto:<path>)
+
+[--storage-directory]:
+  Directory to place chip-tool's storage files in.  Defaults to $TMPDIR, with fallback to /tmp
+
+[--commissioner-vendor-id]:
+  The vendor id to use for chip-tool. If not provided, chip::VendorId::TestVendor1 (65521, 0xFFF1) will be used.
+
+[--bypass-attestation-verifier]:
+  Bypass the attestation verifier. If not provided or false, the attestation verifier is not bypassed. If true, the commissioning will continue in case of attestation verification failure.
+
+[--case-auth-tags]:
+  The CATs to be encoded in the NOC sent to the commissionee
+
+[--icd-registration]:
+  Whether to register for check-ins from ICDs during commissioning. Default: false
+
+[--icd-check-in-nodeid]:
+  The check-in node id for the ICD, default: node id of the commissioner.
+
+[--icd-monitored-subject]:
+  The monitored subject of the ICD, default: The node id used for icd-check-in-nodeid.
+
+[--icd-client-type]:
+  The ClientType of the client registering, default: Permanent client - 0
+
+[--icd-symmetric-key]:
+  The 16 bytes ICD symmetric key, default: randomly generated.
+
+[--icd-stay-active-duration]:
+  If set, a LIT ICD that is commissioned will be requested to stay active for this many milliseconds
+
+[--country-code]:
+  Country code to use to set the Basic Information cluster's Location attribute
+
+[--time-zone]:
+  TimeZone list to use when setting Time Synchronization cluster's TimeZone attribute
+
+[--dst-offset]:
+  DSTOffset list to use when setting Time Synchronization cluster's DSTOffset attribute
+
+
 >>> pairing onnetwork 1 20231206
 ```
+
+#### [⚑] pairing onnetwork-short
 
 #### [✔] pairing onnetwork-long
 
@@ -632,26 +1017,88 @@ Usage:
 > 被配對設備基本上已經連上網路，使用 setup-pin-code 和 discriminator（一般量產的設備只會有 QR code，可以 payload parse-setup-payload 解析）
 
 ```bash
->>> pairing onnetwork-long 
+>>> pairing onnetwork-long
 Usage:
    pairing onnetwork-long node-id setup-pin-code discriminator [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--bypass-attestation-verifier] [--case-auth-tags] [--icd-registration] [--icd-check-in-nodeid] [--icd-monitored-subject] [--icd-client-type] [--icd-symmetric-key] [--icd-stay-active-duration] [--skip-commissioning-complete] [--pase-only] [--country-code] [--time-zone] [--dst-offset] [--timeout]
+
+[--paa-trust-store-path]:
+  Path to directory holding PAA certificate information.  Can be absolute or relative to the current working directory.
+
+[--cd-trust-store-path]:
+  Path to directory holding CD certificate information.  Can be absolute or relative to the current working directory.
+
+[--commissioner-name]:
+  Name of fabric to use. Valid values are "alpha", "beta", "gamma", and integers greater than or equal to 4.  The default if not specified is "alpha".
+
+[--commissioner-nodeid]:
+  The node id to use for chip-tool.  If not provided, kTestControllerNodeId (112233, 0x1B669) will be used.
+
+[--use-max-sized-certs]:
+  Maximize the size of operational certificates. If not provided or 0 ("false"), normally sized operational certificates are generated.
+
+[--only-allow-trusted-cd-keys]:
+  Only allow trusted CD verifying keys (disallow test keys). If not provided or 0 ("false"), untrusted CD verifying keys are allowed. If 1 ("true"), test keys are disallowed.
+
+[--dac-revocation-set-path]:
+  Path to JSON file containing the device attestation revocation set. This argument caches the path to the revocation set. Once set, this will be used by all commands in interactive mode.
+
+[--trace-to]:
+  Trace destinations, comma-separated (json:log, json:<path>, perfetto, perfetto:<path>)
+
+[--storage-directory]:
+  Directory to place chip-tool's storage files in.  Defaults to $TMPDIR, with fallback to /tmp
+
+[--commissioner-vendor-id]:
+  The vendor id to use for chip-tool. If not provided, chip::VendorId::TestVendor1 (65521, 0xFFF1) will be used.
+
+[--bypass-attestation-verifier]:
+  Bypass the attestation verifier. If not provided or false, the attestation verifier is not bypassed. If true, the commissioning will continue in case of attestation verification failure.
+
+[--case-auth-tags]:
+  The CATs to be encoded in the NOC sent to the commissionee
+
+[--icd-registration]:
+  Whether to register for check-ins from ICDs during commissioning. Default: false
+
+[--icd-check-in-nodeid]:
+  The check-in node id for the ICD, default: node id of the commissioner.
+
+[--icd-monitored-subject]:
+  The monitored subject of the ICD, default: The node id used for icd-check-in-nodeid.
+
+[--icd-client-type]:
+  The ClientType of the client registering, default: Permanent client - 0
+
+[--icd-symmetric-key]:
+  The 16 bytes ICD symmetric key, default: randomly generated.
+
+[--icd-stay-active-duration]:
+  If set, a LIT ICD that is commissioned will be requested to stay active for this many milliseconds
+
+[--country-code]:
+  Country code to use to set the Basic Information cluster's Location attribute
+
+[--time-zone]:
+  TimeZone list to use when setting Time Synchronization cluster's TimeZone attribute
+
+[--dst-offset]:
+  DSTOffset list to use when setting Time Synchronization cluster's DSTOffset attribute
+
 
 >>> pairing onnetwork 1 20231206 3884
 ```
 
-#### [✔] pairing unpair
+#### [⚑] pairing onnetwork-vendor
 
-> Forgetting the already-commissioned device
+#### [⚑] pairing onnetwork-commissioning-mode
 
-> 進行解配
+#### [⚑] pairing onnetwork-commissioner
 
-```bash
->>> pairing unpair
-Usage:
-   pairing unpair node-id [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--bypass-attestation-verifier] [--case-auth-tags] [--icd-registration] [--icd-check-in-nodeid] [--icd-monitored-subject] [--icd-client-type] [--icd-symmetric-key] [--icd-stay-active-duration] [--timeout]
+#### [⚑] pairing onnetwork-device-type
 
->>> pairing unpair 1
-```
+#### [⚑] pairing onnetwork-instance-name
+
+#### [⚑] pairing  start-udc-server
 
 #### [✔] pairing open-commissioning-window
 
@@ -680,11 +1127,75 @@ iteration:
 discriminator:
   Discriminator to use for advertising.  Ignored if 'option' is 0.
 
+[--paa-trust-store-path]:
+  Path to directory holding PAA certificate information.  Can be absolute or relative to the current working directory.
+
+[--cd-trust-store-path]:
+  Path to directory holding CD certificate information.  Can be absolute or relative to the current working directory.
+
+[--commissioner-name]:
+  Name of fabric to use. Valid values are "alpha", "beta", "gamma", and integers greater than or equal to 4.  The default if not specified is "alpha".
+
+[--commissioner-nodeid]:
+  The node id to use for chip-tool.  If not provided, kTestControllerNodeId (112233, 0x1B669) will be used.
+
+[--use-max-sized-certs]:
+  Maximize the size of operational certificates. If not provided or 0 ("false"), normally sized operational certificates are generated.
+
+[--only-allow-trusted-cd-keys]:
+  Only allow trusted CD verifying keys (disallow test keys). If not provided or 0 ("false"), untrusted CD verifying keys are allowed. If 1 ("true"), test keys are disallowed.
+
+[--dac-revocation-set-path]:
+  Path to JSON file containing the device attestation revocation set. This argument caches the path to the revocation set. Once set, this will be used by all commands in interactive mode.
+
+[--trace-to]:
+  Trace destinations, comma-separated (json:log, json:<path>, perfetto, perfetto:<path>)
+
+[--storage-directory]:
+  Directory to place chip-tool's storage files in.  Defaults to $TMPDIR, with fallback to /tmp
+
+[--commissioner-vendor-id]:
+  The vendor id to use for chip-tool. If not provided, chip::VendorId::TestVendor1 (65521, 0xFFF1) will be used.
+
+[--timeout]:
+  Time, in seconds, before this command is considered to have timed out.
+
+
 >>> pairing open-commissioning-window 1 1 300 2000 3884
 [1736478513.589] [707435:707467] [CTL] Manual pairing code: [35008237717]
 ```
 
-## 3.7. payload
+#### [✔] pairing get-commissioner-node-id
+
+```bash
+>>> pairing get-commissioner-node-id
+[1736738898.495] [741148:741179] [TOO] Command: pairing get-commissioner-node-id
+[1736738898.495] [741148:741179] [TOO] Commissioner Node Id 0x:000000000001B669
+
+#** websocket **
+[2025-01-13 11:28:18] pairing get-commissioner-node-id
+[2025-01-13 11:28:18] {  "results": [{"value":{"nodeId":112233}}],"logs": [{  "module": "TOO",  "category": "Info",  "message": "Q29tbWFuZDogcGFpcmluZyBnZXQtY29tbWlzc2lvbmVyLW5vZGUtaWQg"},{  "module": "TOO",  "category": "Info",  "message": "Q29tbWlzc2lvbmVyIE5vZGUgSWQgMHg6MDAwMDAwMDAwMDAxQjY2OQ=="}]}
+```
+
+#### [✔] pairing get-commissioner-root-certificate
+
+> Returns a base64-encoded RCAC prefixed with: 'base64:'
+
+```bash
+>>> pairing get-commissioner-root-certificate
+[1736739276.267] [741148:741148] [TOO] Command: pairing get-commissioner-root-certificate
+[1736739276.267] [741148:741179] [TOO] RCAC: base64:FTABAQEkAgE3AyQUARgmBIAigScmBYAlTTo3BiQUARgkBwEkCAEwCUEEqsTFR/uQGsisWIU2sQb61ZjOWwa8HR0IvVx9aembO8pnfxYBmXgkwMH7p0nGXCla7dftkNpk076lw1mBl18JdDcKNQEpARgkAmAwBBRvNvXk8ooY6MKAsGmXQfsIUH/kkjAFFG829eTyihjowoCwaZdB+whQf+SSGDALQCsl7LygeHr/TcMul7ZV5QlahCSnBtBLUEPC2wv3auIn/eiChbiynDshm5ln6+REHmi+Gj1xJFXLDigt3rY1sPAY
+
+#** websocket **
+[2025-01-13 11:34:36] pairing get-commissioner-root-certificate
+[2025-01-13 11:34:36] {  "results": [{"value":{"RCAC":"base64:FTABAQEkAgE3AyQUARgmBIAigScmBYAlTTo3BiQUARgkBwEkCAEwCUEEqsTFR/uQGsisWIU2sQb61ZjOWwa8HR0IvVx9aembO8pnfxYBmXgkwMH7p0nGXCla7dftkNpk076lw1mBl18JdDcKNQEpARgkAmAwBBRvNvXk8ooY6MKAsGmXQfsIUH/kkjAFFG829eTyihjowoCwaZdB+whQf+SSGDALQCsl7LygeHr/TcMul7ZV5QlahCSnBtBLUEPC2wv3auIn/eiChbiynDshm5ln6+REHmi+Gj1xJFXLDigt3rY1sPAY"}}],"logs": [{  "module": "TOO",  "category": "Info",  "message": "Q29tbWFuZDogcGFpcmluZyBnZXQtY29tbWlzc2lvbmVyLXJvb3QtY2VydGlmaWNhdGUg"},{  "module": "TOO",  "category": "Info",  "message": "UkNBQzogYmFzZTY0OkZUQUJBUUVrQWdFM0F5UVVBUmdtQklBaWdTY21CWUFsVFRvM0JpUVVBUmdrQndFa0NBRXdDVUVFcXNURlIvdVFHc2lzV0lVMnNRYjYxWmpPV3dhOEhSMEl2Vng5YWVtYk84cG5meFlCbVhna3dNSDdwMG5HWENsYTdkZnRrTnBrMDc2bHcxbUJsMThKZERjS05RRXBBUmdrQW1Bd0JCUnZOdlhrOG9vWTZNS0FzR21YUWZzSVVIL2trakFGRkc4MjllVHlpaGpvd29Dd2FaZEIrd2hRZitTU0dEQUxRQ3NsN0x5Z2VIci9UY011bDdaVjVRbGFoQ1NuQnRCTFVFUEMyd3YzYXVJbi9laUNoYml5bkRzaG01bG42K1JFSG1pK0dqMXhKRlhMRGlndDNyWTFzUEFZ"}]}
+```
+
+#### [⚑] pairing  issue-noc-chain
+
+> Returns a base64-encoded NOC, ICAC, RCAC, and IPK prefixed with: 'base64:'
+
+## 3.7. [⚑] payload
 
 > Commands for parsing and generating setup payloads.
 >
@@ -746,6 +1257,7 @@ Usage:
 [--tlvBytes]:
   Pre-encoded TLV for the optional part of the payload.  A nonempty value should be passed as "hex:" followed by the bytes in hex encoding.  Passing an empty string to override the TLV in an existing payload is allowed.
 
+
 $ chip-tool payload generate-qrcode \
  --version 0 --vendor-id 65521 --product-id 32769 \
  --discriminator 3849 --setup-pin-code 20231206 \
@@ -769,6 +1281,7 @@ Usage:
 [--existing-payload]:
   An existing setup payload to modify based on the other arguments.
 
+
 $ chip-tool payload generate-manualcode \
  --version 0 --vendor-id 65521 --product-id 32769 \
  --discriminator 3849 --setup-pin-code 20231206 \
@@ -777,8 +1290,6 @@ $ chip-tool payload generate-manualcode \
 [1736497683.504] [717987:717987] [DL] ChipLinuxStorage::Init: Using KVS config file: /home/lanka/snap/chip-tool/common/chip_tool_kvs
 [1736497683.504] [717987:717987] [TOO] Manual Code: 36250212347
 ```
-
-
 
 #### [✔] payload parse-setup-payload
 
@@ -800,6 +1311,12 @@ $ chip-tool payload parse-setup-payload "MT:-24J0IRV01DWLA39G00"
 
 $ chip-tool payload parse-additional-data-payload "MT:-24J0IRV01DWLA39G00"
 ```
+
+#### [⚑] payload parse-additional-data-payload
+
+#### [⚑] payload verhoeff-verify
+
+#### [⚑] payload verhoeff-generate
 
 ## 3.8. sessionmanagement
 
@@ -823,6 +1340,10 @@ Commands for managing CASE and PASE session state.
   |   - Expires (evicts) all local CASE sessions to the given node id.                  |
   +-------------------------------------------------------------------------------------+
 ```
+
+#### [⚑] sessionmanagement send-close-session  
+
+#### [⚑] sessionmanagement send-close-session  
 
 ## 3.9. [✔] subscriptions
 
@@ -866,7 +1387,7 @@ Commands for shutting down subscriptions.
 >>> subscriptions shutdown-all-for-node 1
 ```
 
-[✔] subscriptions shutdown-all
+#### [✔] subscriptions shutdown-all
 
 ```bash
 >>> subscriptions shutdown-all
@@ -922,30 +1443,30 @@ $ chip-tool interactive start
 ```bash
 $ chip-tool interactive server help
 Usage:
-  /snap/chip-tool/199/bin/chip-tool interactive server [--paa-trust-store-path] [--cd-trust-store                                                                                           -path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-truste                                                                                           d-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to]                                                                                            [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--advertise-operational] [--po                                                                                           rt]
+  /snap/chip-tool/199/bin/chip-tool interactive server [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--advertise-operational] [--port]
 
 Start a websocket server that can receive commands sent by another process.
 
 [--paa-trust-store-path]:
-  Path to directory holding PAA certificate information.  Can be absolute or relative to the curr                                                                                           ent working directory.
+  Path to directory holding PAA certificate information.  Can be absolute or relative to the current working directory.
 
 [--cd-trust-store-path]:
-  Path to directory holding CD certificate information.  Can be absolute or relative to the curre                                                                                           nt working directory.
+  Path to directory holding CD certificate information.  Can be absolute or relative to the current working directory.
 
 [--commissioner-name]:
-  Name of fabric to use. Valid values are "alpha", "beta", "gamma", and integers greater than or                                                                                            equal to 4.  The default if not specified is "alpha".
+  Name of fabric to use. Valid values are "alpha", "beta", "gamma", and integers greater than or equal to 4.  The default if not specified is "alpha".
 
 [--commissioner-nodeid]:
-  The node id to use for chip-tool.  If not provided, kTestControllerNodeId (112233, 0x1B669) wil                                                                                           l be used.
+  The node id to use for chip-tool.  If not provided, kTestControllerNodeId (112233, 0x1B669) will be used.
 
 [--use-max-sized-certs]:
-  Maximize the size of operational certificates. If not provided or 0 ("false"), normally sized o                                                                                           perational certificates are generated.
+  Maximize the size of operational certificates. If not provided or 0 ("false"), normally sized operational certificates are generated.
 
 [--only-allow-trusted-cd-keys]:
-  Only allow trusted CD verifying keys (disallow test keys). If not provided or 0 ("false"), untr                                                                                           usted CD verifying keys are allowed. If 1 ("true"), test keys are disallowed.
+  Only allow trusted CD verifying keys (disallow test keys). If not provided or 0 ("false"), untrusted CD verifying keys are allowed. If 1 ("true"), test keys are disallowed.
 
 [--dac-revocation-set-path]:
-  Path to JSON file containing the device attestation revocation set. This argument caches the pa                                                                                           th to the revocation set. Once set, this will be used by all commands in interactive mode.
+  Path to JSON file containing the device attestation revocation set. This argument caches the path to the revocation set. Once set, this will be used by all commands in interactive mode.
 
 [--trace-to]:
   Trace destinations, comma-separated (json:log, json:<path>, perfetto, perfetto:<path>)
@@ -954,7 +1475,7 @@ Start a websocket server that can receive commands sent by another process.
   Directory to place chip-tool's storage files in.  Defaults to $TMPDIR, with fallback to /tmp
 
 [--commissioner-vendor-id]:
-  The vendor id to use for chip-tool. If not provided, chip::VendorId::TestVendor1 (65521, 0xFFF1                                                                                           ) will be used.
+  The vendor id to use for chip-tool. If not provided, chip::VendorId::TestVendor1 (65521, 0xFFF1) will be used.
 
 [--advertise-operational]:
   Advertise operational node over DNS-SD and accept incoming CASE sessions.
@@ -995,7 +1516,7 @@ Commands for managing persistent data stored by chip-tool.
 
 # 4. chip-tool cluster_name
 
-## 4.1. basicinformation
+## 4.1. [⚑] basicinformation
 
 ```bash
 >>> basicinformation
@@ -1024,12 +1545,10 @@ Usage:
 >>>
 ```
 
-#### basicinformation read
+#### [⚑] basicinformation read
 
 ```bash
 >>> basicinformation read
-[1736410274.443] [679162:679162] [TOO] Command: basicinformation read
-[1736410274.443] [679162:679162] [TOO] Missing attribute name
 Usage:
    basicinformation read attribute-name [param1 param2 ...]
 
@@ -1066,21 +1585,87 @@ Usage:
   | * feature-map                                                                       |
   | * cluster-revision                                                                  |
   +-------------------------------------------------------------------------------------+
->>>
-
->>> basicinformation read vendor-name 1 0xFFFF --timeout 5
-
->>> basicinformation read product-name 1 0xFFFF --timeout 5
-
->>> basicinformation read software-version 1 0xFFFF --timeout 5
 ```
 
-## 4.2. descriptor
+##### [✔] basicinformation read vendor-name
+
+```bash
+>>> basicinformation read vendor-name
+Usage:
+   basicinformation read vendor-name destination-id endpoint-ids [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--fabric-filtered] [--data-version] [--lit-icd-peer] [--timeout] [--allow-large-payload]
+
+destination-id:
+  64-bit node or group identifier.
+  Group identifiers are detected by being in the 0xFFFF'FFFF'FFFF'xxxx range.
+
+endpoint-ids:
+  Comma-separated list of endpoint ids (e.g. "1" or "1,2,3").
+  Allowed to be 0xFFFF to indicate a wildcard endpoint.
+
+[--paa-trust-store-path]:
+  Path to directory holding PAA certificate information.  Can be absolute or relative to the current working directory.
+
+[--cd-trust-store-path]:
+  Path to directory holding CD certificate information.  Can be absolute or relative to the current working directory.
+
+[--commissioner-name]:
+  Name of fabric to use. Valid values are "alpha", "beta", "gamma", and integers greater than or equal to 4.  The default if not specified is "alpha".
+
+[--commissioner-nodeid]:
+  The node id to use for chip-tool.  If not provided, kTestControllerNodeId (112233, 0x1B669) will be used.
+
+[--use-max-sized-certs]:
+  Maximize the size of operational certificates. If not provided or 0 ("false"), normally sized operational certificates are generated.
+
+[--only-allow-trusted-cd-keys]:
+  Only allow trusted CD verifying keys (disallow test keys). If not provided or 0 ("false"), untrusted CD verifying keys are allowed. If 1 ("true"), test keys are disallowed.
+
+[--dac-revocation-set-path]:
+  Path to JSON file containing the device attestation revocation set. This argument caches the path to the revocation set. Once set, this will be used by all commands in interactive mode.
+
+[--trace-to]:
+  Trace destinations, comma-separated (json:log, json:<path>, perfetto, perfetto:<path>)
+
+[--storage-directory]:
+  Directory to place chip-tool's storage files in.  Defaults to $TMPDIR, with fallback to /tmp
+
+[--commissioner-vendor-id]:
+  The vendor id to use for chip-tool. If not provided, chip::VendorId::TestVendor1 (65521, 0xFFF1) will be used.
+
+[--fabric-filtered]:
+  Boolean indicating whether to do a fabric-filtered read. Defaults to true.
+
+[--data-version]:
+  Comma-separated list of data versions for the clusters being read.
+
+[--lit-icd-peer]:
+  Whether to treat the peer as a LIT ICD. false: Always no, true: Always yes, (not set): Yes if the peer is registered to this controller.
+
+[--allow-large-payload]:
+  If true, indicates that the session should allow large application payloads (which requires a TCP connection).Defaults to false, which uses a UDP+MRP session.
+
+
+>>> basicinformation read vendor-name 1 0xFFFF --timeout 5
+[1736745935.655] [741148:741179] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0001 DataVersion: 2162863878
+[1736745935.655] [741148:741179] [TOO]   VendorName: TEST_VENDOR
+[1736745935.655] [741148:741179] [EM] <<< [E:56347i S:45642 M:104055614 (Ack:180954555)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fe80::da3a:ddff:fe0f:4c8a%enp0s3]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+
+>>> basicinformation read product-name 1 0xFFFF --timeout 5
+[1736745950.233] [741148:741179] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0003 DataVersion: 2162863878
+[1736745950.233] [741148:741179] [TOO]   ProductName: TEST_PRODUCT
+[1736745950.233] [741148:741179] [EM] <<< [E:56348i S:45642 M:104055616 (Ack:180954556)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fe80::da3a:ddff:fe0f:4c8a%enp0s3]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+
+>>> basicinformation read software-version 1 0xFFFF --timeout 5
+[1736745964.533] [741148:741179] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0009 DataVersion: 2162863878
+[1736745964.533] [741148:741179] [TOO]   SoftwareVersion: 1
+[1736745964.533] [741148:741179] [EM] <<< [E:56349i S:45642 M:104055618 (Ack:180954557)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fe80::da3a:ddff:fe0f:4c8a%enp0s3]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+
+```
+
+## 4.2. [⚑] descriptor
 
 ```bash
 >>> descriptor
-[1736409936.647] [679162:679162] [TOO] Command: descriptor
-[1736409936.647] [679162:679162] [TOO] Missing command name
 Usage:
    descriptor command_name [param1 param2 ...]
 
@@ -1097,15 +1682,12 @@ Usage:
   | * read-event-by-id                                                                  |
   | * subscribe-event-by-id                                                             |
   +-------------------------------------------------------------------------------------+
->>>
 ```
 
-#### descriptor read
+#### [⚑] descriptor read
 
 ```bash
 >>> descriptor read
-[1736410109.831] [679162:679162] [TOO] Command: descriptor read
-[1736410109.831] [679162:679162] [TOO] Missing attribute name
 Usage:
    descriptor read attribute-name [param1 param2 ...]
 
@@ -1124,23 +1706,221 @@ Usage:
   | * feature-map                                                                       |
   | * cluster-revision                                                                  |
   +-------------------------------------------------------------------------------------+
->>>
-
->>> descriptor read parts-list 1 0xFFFF
-
-# 列出 Clusters - server
->>> descriptor read server-list 1 1
-
-# 列出 Clusters - client
->>> descriptor read client-list 1 1
 ```
 
-## 4.3. levelcontrol
+```bash
+>>> descriptor read server-list
+Usage:
+   descriptor read server-list destination-id endpoint-ids [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--fabric-filtered] [--data-version] [--lit-icd-peer] [--timeout] [--allow-large-payload]
+
+destination-id:
+  64-bit node or group identifier.
+  Group identifiers are detected by being in the 0xFFFF'FFFF'FFFF'xxxx range.
+
+endpoint-ids:
+  Comma-separated list of endpoint ids (e.g. "1" or "1,2,3").
+  Allowed to be 0xFFFF to indicate a wildcard endpoint.
+
+[--paa-trust-store-path]:
+  Path to directory holding PAA certificate information.  Can be absolute or relative to the current working directory.
+
+[--cd-trust-store-path]:
+  Path to directory holding CD certificate information.  Can be absolute or relative to the current working directory.
+
+[--commissioner-name]:
+  Name of fabric to use. Valid values are "alpha", "beta", "gamma", and integers greater than or equal to 4.  The default if not specified is "alpha".
+
+[--commissioner-nodeid]:
+  The node id to use for chip-tool.  If not provided, kTestControllerNodeId (112233, 0x1B669) will be used.
+
+[--use-max-sized-certs]:
+  Maximize the size of operational certificates. If not provided or 0 ("false"), normally sized operational certificates are generated.
+
+[--only-allow-trusted-cd-keys]:
+  Only allow trusted CD verifying keys (disallow test keys). If not provided or 0 ("false"), untrusted CD verifying keys are allowed. If 1 ("true"), test keys are disallowed.
+
+[--dac-revocation-set-path]:
+  Path to JSON file containing the device attestation revocation set. This argument caches the path to the revocation set. Once set, this will be used by all commands in interactive mode.
+
+[--trace-to]:
+  Trace destinations, comma-separated (json:log, json:<path>, perfetto, perfetto:<path>)
+
+[--storage-directory]:
+  Directory to place chip-tool's storage files in.  Defaults to $TMPDIR, with fallback to /tmp
+
+[--commissioner-vendor-id]:
+  The vendor id to use for chip-tool. If not provided, chip::VendorId::TestVendor1 (65521, 0xFFF1) will be used.
+
+[--fabric-filtered]:
+  Boolean indicating whether to do a fabric-filtered read. Defaults to true.
+
+[--data-version]:
+  Comma-separated list of data versions for the clusters being read.
+
+[--lit-icd-peer]:
+  Whether to treat the peer as a LIT ICD. false: Always no, true: Always yes, (not set): Yes if the peer is registered to this controller.
+
+[--allow-large-payload]:
+  If true, indicates that the session should allow large application payloads (which requires a TCP connection).Defaults to false, which uses a UDP+MRP session.
+
+
+>>> descriptor read parts-list 1 0xFFFF
+```
+
+##### [✔] descriptor read device-type-list
+
+```bash
+>>> descriptor read device-type-list 1 0
+[1736752826.910] [742255:742286] [TOO] Endpoint: 0 Cluster: 0x0000_001D Attribute 0x0000_0000 DataVersion: 4024051695
+[1736752826.910] [742255:742286] [TOO]   DeviceTypeList: 1 entries
+[1736752826.910] [742255:742286] [TOO]     [1]: {
+[1736752826.910] [742255:742286] [TOO]       DeviceType: 22 (Matter Root Node)
+[1736752826.910] [742255:742286] [TOO]       Revision: 1
+[1736752826.910] [742255:742286] [TOO]      }
+[1736752826.910] [742255:742286] [EM] <<< [E:28687i S:37850 M:267009731 (Ack:13951014)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fd91:956f:2946:1a48:da3a:ddff:fe0f:4c8a]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+
+>>> descriptor read device-type-list 1 1
+[1736752710.990] [742255:742286] [TOO] Endpoint: 1 Cluster: 0x0000_001D Attribute 0x0000_0000 DataVersion: 54305427
+[1736752710.990] [742255:742286] [TOO]   DeviceTypeList: 1 entries
+[1736752710.990] [742255:742286] [TOO]     [1]: {
+[1736752710.990] [742255:742286] [TOO]       DeviceType: 257 (Matter Dimmable Light)
+[1736752710.990] [742255:742286] [TOO]       Revision: 1
+[1736752710.990] [742255:742286] [TOO]      }
+[1736752710.990] [742255:742286] [EM] <<< [E:28673i S:37851 M:182180450 (Ack:174155331)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fe80::da3a:ddff:fe0f:4c8a%enp0s3]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+
+```
+
+##### [✔] descriptor read server-list
+
+> 列出 Clusters - server
+
+```bash
+>>> descriptor read server-list 1 0
+[1736752995.266] [742255:742286] [TOO] Endpoint: 0 Cluster: 0x0000_001D Attribute 0x0000_0001 DataVersion: 4024051695
+[1736752995.266] [742255:742286] [TOO]   ServerList: 18 entries
+[1736752995.266] [742255:742286] [TOO]     [1]: 29 (Descriptor)
+[1736752995.266] [742255:742286] [TOO]     [2]: 31 (AccessControl)
+[1736752995.266] [742255:742286] [TOO]     [3]: 40 (BasicInformation)
+[1736752995.266] [742255:742286] [TOO]     [4]: 42 (OtaSoftwareUpdateRequestor)
+[1736752995.266] [742255:742286] [TOO]     [5]: 48 (GeneralCommissioning)
+[1736752995.266] [742255:742286] [TOO]     [6]: 49 (NetworkCommissioning)
+[1736752995.266] [742255:742286] [TOO]     [7]: 50 (DiagnosticLogs)
+[1736752995.266] [742255:742286] [TOO]     [8]: 51 (GeneralDiagnostics)
+[1736752995.266] [742255:742286] [TOO]     [9]: 52 (SoftwareDiagnostics)
+[1736752995.266] [742255:742286] [TOO]     [10]: 53 (ThreadNetworkDiagnostics)
+[1736752995.266] [742255:742286] [TOO]     [11]: 54 (WiFiNetworkDiagnostics)
+[1736752995.266] [742255:742286] [TOO]     [12]: 55 (EthernetNetworkDiagnostics)
+[1736752995.266] [742255:742286] [TOO]     [13]: 59 (Switch)
+[1736752995.266] [742255:742286] [TOO]     [14]: 60 (AdministratorCommissioning)
+[1736752995.266] [742255:742286] [TOO]     [15]: 62 (OperationalCredentials)
+[1736752995.266] [742255:742286] [TOO]     [16]: 63 (GroupKeyManagement)
+[1736752995.266] [742255:742286] [TOO]     [17]: 64 (FixedLabel)
+[1736752995.266] [742255:742286] [TOO]     [18]: 65 (UserLabel)
+[1736752995.266] [742255:742286] [EM] <<< [E:28693i S:37850 M:267009743 (Ack:13951020)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fd91:956f:2946:1a48:da3a:ddff:fe0f:4c8a]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+
+>>> descriptor read server-list 1 1
+[1736753021.782] [742255:742286] [TOO] Endpoint: 1 Cluster: 0x0000_001D Attribute 0x0000_0001 DataVersion: 1682947382
+[1736753021.782] [742255:742286] [TOO]   ServerList: 7 entries
+[1736753021.782] [742255:742286] [TOO]     [1]: 3 (Identify)
+[1736753021.782] [742255:742286] [TOO]     [2]: 4 (Groups)
+[1736753021.782] [742255:742286] [TOO]     [3]: 6 (OnOff)
+[1736753021.782] [742255:742286] [TOO]     [4]: 8 (LevelControl)
+[1736753021.782] [742255:742286] [TOO]     [5]: 29 (Descriptor)
+[1736753021.782] [742255:742286] [TOO]     [6]: 98 (ScenesManagement)
+[1736753021.782] [742255:742286] [TOO]     [7]: 768 (ColorControl)
+[1736753021.782] [742255:742286] [EM] <<< [E:28694i S:37850 M:267009745 (Ack:13951021)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fd91:956f:2946:1a48:da3a:ddff:fe0f:4c8a]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+
+>>> descriptor read server-list 1 0xFFFF
+[1736753269.034] [742255:742286] [TOO] Endpoint: 0 Cluster: 0x0000_001D Attribute 0x0000_0001 DataVersion: 4024051695
+[1736753269.034] [742255:742286] [TOO]   ServerList: 18 entries
+[1736753269.034] [742255:742286] [TOO]     [1]: 29 (Descriptor)
+[1736753269.034] [742255:742286] [TOO]     [2]: 31 (AccessControl)
+[1736753269.034] [742255:742286] [TOO]     [3]: 40 (BasicInformation)
+[1736753269.034] [742255:742286] [TOO]     [4]: 42 (OtaSoftwareUpdateRequestor)
+[1736753269.034] [742255:742286] [TOO]     [5]: 48 (GeneralCommissioning)
+[1736753269.034] [742255:742286] [TOO]     [6]: 49 (NetworkCommissioning)
+[1736753269.034] [742255:742286] [TOO]     [7]: 50 (DiagnosticLogs)
+[1736753269.034] [742255:742286] [TOO]     [8]: 51 (GeneralDiagnostics)
+[1736753269.034] [742255:742286] [TOO]     [9]: 52 (SoftwareDiagnostics)
+[1736753269.034] [742255:742286] [TOO]     [10]: 53 (ThreadNetworkDiagnostics)
+[1736753269.034] [742255:742286] [TOO]     [11]: 54 (WiFiNetworkDiagnostics)
+[1736753269.034] [742255:742286] [TOO]     [12]: 55 (EthernetNetworkDiagnostics)
+[1736753269.034] [742255:742286] [TOO]     [13]: 59 (Switch)
+[1736753269.034] [742255:742286] [TOO]     [14]: 60 (AdministratorCommissioning)
+[1736753269.034] [742255:742286] [TOO]     [15]: 62 (OperationalCredentials)
+[1736753269.034] [742255:742286] [TOO]     [16]: 63 (GroupKeyManagement)
+[1736753269.034] [742255:742286] [TOO]     [17]: 64 (FixedLabel)
+[1736753269.034] [742255:742286] [TOO]     [18]: 65 (UserLabel)
+[1736753269.034] [742255:742286] [TOO] Endpoint: 1 Cluster: 0x0000_001D Attribute 0x0000_0001 DataVersion: 1682947382
+[1736753269.034] [742255:742286] [TOO]   ServerList: 7 entries
+[1736753269.034] [742255:742286] [TOO]     [1]: 3 (Identify)
+[1736753269.034] [742255:742286] [TOO]     [2]: 4 (Groups)
+[1736753269.034] [742255:742286] [TOO]     [3]: 6 (OnOff)
+[1736753269.034] [742255:742286] [TOO]     [4]: 8 (LevelControl)
+[1736753269.034] [742255:742286] [TOO]     [5]: 29 (Descriptor)
+[1736753269.034] [742255:742286] [TOO]     [6]: 98 (ScenesManagement)
+[1736753269.034] [742255:742286] [TOO]     [7]: 768 (ColorControl)
+[1736753269.034] [742255:742286] [EM] <<< [E:28706i S:37850 M:267009769 (Ack:13951033)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fd91:956f:2946:1a48:da3a:ddff:fe0f:4c8a]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+```
+
+##### [✔] descriptor read client-list
+
+> 列出 Clusters - client
+
+```bash
+>>> descriptor read client-list 1 0
+[1736753113.575] [742255:742286] [TOO] Endpoint: 0 Cluster: 0x0000_001D Attribute 0x0000_0002 DataVersion: 4024051695
+[1736753113.575] [742255:742286] [TOO]   ClientList: 1 entries
+[1736753113.575] [742255:742286] [TOO]     [1]: 41 (OtaSoftwareUpdateProvider)
+[1736753113.575] [742255:742286] [EM] <<< [E:28700i S:37850 M:267009757 (Ack:13951027)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fd91:956f:2946:1a48:da3a:ddff:fe0f:4c8a]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+
+>>> descriptor read client-list 1 1
+[1736753126.568] [742255:742286] [TOO] Endpoint: 1 Cluster: 0x0000_001D Attribute 0x0000_0002 DataVersion: 1682947382
+[1736753126.568] [742255:742286] [TOO]   ClientList: 0 entries
+[1736753126.568] [742255:742286] [EM] <<< [E:28701i S:37850 M:267009759 (Ack:13951028)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fd91:956f:2946:1a48:da3a:ddff:fe0f:4c8a]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+
+>>> descriptor read client-list 1 0xFFFF
+[1736753225.485] [742255:742286] [TOO] Endpoint: 0 Cluster: 0x0000_001D Attribute 0x0000_0002 DataVersion: 4024051695
+[1736753225.485] [742255:742286] [TOO]   ClientList: 1 entries
+[1736753225.485] [742255:742286] [TOO]     [1]: 41 (OtaSoftwareUpdateProvider)
+[1736753225.485] [742255:742286] [TOO] Endpoint: 1 Cluster: 0x0000_001D Attribute 0x0000_0002 DataVersion: 1682947382
+[1736753225.485] [742255:742286] [TOO]   ClientList: 0 entries
+[1736753225.485] [742255:742286] [EM] <<< [E:28705i S:37850 M:267009767 (Ack:13951032)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fd91:956f:2946:1a48:da3a:ddff:fe0f:4c8a]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+```
+
+#### [⚑] descriptor subscribe
+
+```bash
+>>> descriptor subscribe
+Usage:
+   descriptor subscribe attribute-name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Attributes:                                                                         |
+  +-------------------------------------------------------------------------------------+
+  | * device-type-list                                                                  |
+  | * server-list                                                                       |
+  | * client-list                                                                       |
+  | * parts-list                                                                        |
+  | * tag-list                                                                          |
+  | * generated-command-list                                                            |
+  | * accepted-command-list                                                             |
+  | * event-list                                                                        |
+  | * attribute-list                                                                    |
+  | * feature-map                                                                       |
+  | * cluster-revision                                                                  |
+  +-------------------------------------------------------------------------------------+
+```
+
+```bash
+descriptor subscribe server-list 2 3600 1 0xFFFF
+descriptor subscribe event-list 2 3600 1 0xFFFF
+```
+
+## 4.3. [✚] levelcontrol
 
 ```bash
 >>> levelcontrol
-[1736410450.959] [679162:679162] [TOO] Command: levelcontrol
-[1736410450.959] [679162:679162] [TOO] Missing command name
 Usage:
    levelcontrol command_name [param1 param2 ...]
 
@@ -1167,38 +1947,25 @@ Usage:
   | * read-event-by-id                                                                  |
   | * subscribe-event-by-id                                                             |
   +-------------------------------------------------------------------------------------+
->>>
-```
 
-#### levelcontrol move-to-level
-
-```bash
->>> levelcontrol move-to-level
-[1736410480.614] [679162:679162] [TOO] Command: levelcontrol move-to-level
-[1736410480.614] [679162:679162] [TOO] InitArgs: Wrong arguments number: 0 instead of 6
-Usage:
-   levelcontrol move-to-level Level TransitionTime OptionsMask OptionsOverride destination-id endpoint-id-ignored-for-group-commands [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--timedInteractionTimeoutMs] [--busyWaitForMs] [--suppressResponse] [--repeat-count] [--repeat-delay-ms] [--lit-icd-peer] [--timeout] [--allow-large-payload]
-
-destination-id:
-  64-bit node or group identifier.
-  Group identifiers are detected by being in the 0xFFFF'FFFF'FFFF'xxxx range.
-
-endpoint-id-ignored-for-group-commands:
-  Endpoint the command is targeted at.
 
 >>> levelcontrol move-to-level 100 0 0 0 1 1
 >>> levelcontrol move-to-level 200 0 0 0 1 1
 >>> levelcontrol read current-level 1 1
+
 >>> levelcontrol read max-level 1 1
 >>> levelcontrol read min-level 1 1
+
+>>> levelcontrol write max-level 1 1
+>>> levelcontrol write min-level 1 1
+
+>>> levelcontrol subscribe current-level 2 3600 1 1
 ```
 
-## 4.4. onoff
+## 4.4. [✚] onoff
 
 ```bash
 >>> onoff
-[1736410866.317] [679290:679290] [TOO] Command: onoff
-[1736410866.317] [679290:679290] [TOO] Missing command name
 Usage:
    onoff command_name [param1 param2 ...]
 
@@ -1222,73 +1989,8 @@ Usage:
   | * read-event-by-id                                                                  |
   | * subscribe-event-by-id                                                             |
   +-------------------------------------------------------------------------------------+
->>>
-```
-
-#### onoff subscribe
-
-```bash
->>> onoff subscribe
-[1736411060.809] [679290:679290] [TOO] Command: onoff subscribe
-[1736411060.809] [679290:679290] [TOO] Missing attribute name
-Usage:
-   onoff subscribe attribute-name [param1 param2 ...]
-
-  +-------------------------------------------------------------------------------------+
-  | Attributes:                                                                         |
-  +-------------------------------------------------------------------------------------+
-  | * on-off                                                                            |
-  | * global-scene-control                                                              |
-  | * on-time                                                                           |
-  | * off-wait-time                                                                     |
-  | * start-up-on-off                                                                   |
-  | * generated-command-list                                                            |
-  | * accepted-command-list                                                             |
-  | * event-list                                                                        |
-  | * attribute-list                                                                    |
-  | * feature-map                                                                       |
-  | * cluster-revision                                                                  |
-  +-------------------------------------------------------------------------------------+
-```
-
-```bash
->>> onoff subscribe on-off
-Usage:
-   onoff subscribe on-off min-interval max-interval destination-id endpoint-ids [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--fabric-filtered] [--data-version] [--keepSubscriptions] [--auto-resubscribe] [--lit-icd-peer] [--timeout] [--allow-large-payload]
-
-min-interval:
-  Server should not send a new report if less than this number of seconds has elapsed since the last report.
-
-max-interval:
-  Server must send a report if this number of seconds has elapsed since the last report.
-
-destination-id:
-  64-bit node or group identifier.
-  Group identifiers are detected by being in the 0xFFFF'FFFF'FFFF'xxxx range.
-
-endpoint-ids:
-  Comma-separated list of endpoint ids (e.g. "1" or "1,2,3").
-  Allowed to be 0xFFFF to indicate a wildcard endpoint.
 
 >>> onoff subscribe on-off 2 3600 1 1
-```
-
-#### onoff toggle
-
-```bash
->>> onoff toggle
-[1736410899.280] [679290:679290] [TOO] Command: onoff toggle
-[1736410899.280] [679290:679290] [TOO] InitArgs: Wrong arguments number: 0 instead of 2
-Usage:
-   onoff toggle destination-id endpoint-id-ignored-for-group-commands [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--timedInteractionTimeoutMs] [--busyWaitForMs] [--suppressResponse] [--repeat-count] [--repeat-delay-ms] [--lit-icd-peer] [--timeout] [--allow-large-payload]
-
-destination-id:
-  64-bit node or group identifier.
-  Group identifiers are detected by being in the 0xFFFF'FFFF'FFFF'xxxx range.
-
-endpoint-id-ignored-for-group-commands:
-  Endpoint the command is targeted at.
-
 >>> onoff toggle 1 1
 >>> onoff read on-off 1 1
 >>> onoff on 1 1
