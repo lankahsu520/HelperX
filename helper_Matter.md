@@ -1,4 +1,5 @@
 # Matter
+
 [![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
 [![GitHub license][license-image]][license-url]
 [![GitHub stars][stars-image]][stars-url]
@@ -47,9 +48,9 @@
 
 > Matter aims to build a universal IPv6-based communication protocol for smart home devices. The protocol defines the application layer that will be deployed on devices and the different link layers to help maintain interoperability.
 
-![Project Connected Home over IP](https://3.bp.blogspot.com/-QShQOMiBSAA/XfqwNc1yOxI/AAAAAAAAIew/Mro7PR6cGUEF58hMmc4b9GBLXgB11qB4QCLcBGAsYHQ/s1600/Project%2BConnected%2BHome%2Bover%2BIP%2BProposal%2Bin%2BGraphical%2BForm%2B%2528No%2BLogos%2Bwithout%2BDetail%2Band%2BBackground%2529.jpg)
+<img src="https://3.bp.blogspot.com/-QShQOMiBSAA/XfqwNc1yOxI/AAAAAAAAIew/Mro7PR6cGUEF58hMmc4b9GBLXgB11qB4QCLcBGAsYHQ/s1600/Project%2BConnected%2BHome%2Bover%2BIP%2BProposal%2Bin%2BGraphical%2BForm%2B%2528No%2BLogos%2Bwithout%2BDetail%2Band%2BBackground%2529.jpg" alt="Project Connected Home over IP" style="zoom:33%;" />
 
-![[Architecture Overview](https://github.com/project-chip/connectedhomeip#architecture-overview)](https://project-chip.github.io/connectedhomeip-doc/_images/Matter_Arch_Overview.png)
+<img src="https://project-chip.github.io/connectedhomeip-doc/_images/Matter_Arch_Overview.png" alt="[Architecture Overview](https://github.com/project-chip/connectedhomeip#architecture-overview)" style="zoom:33%;" />
 
 ## 1.2. Solve what
 
@@ -85,7 +86,22 @@
 >
 > 至於艱深的文件， 只會省略過去。就好像你要使用 OpenSSL 進行加密，知道編譯時怎麼連結，知道如何使用就好，有必要去細究裏面是如何加密嗎。
 
-#### 20240107
+> iPhone13, iOS 18.1.1.1;
+>
+> iPadOS 17.6.1;
+>
+> Apple TV MN893TA/A, 16.6 (20M73)
+>
+> HomePod MY5G2TA/A, 18.2 (22K155)
+
+#### 20250115
+
+##### [Tapo P400M](https://www.tp-link.com/tw/home-networking/smart-plug/tapo-p400m/)
+> 不要先用 Tapo 進行配對。由 Tapo 分享會失敗。
+>
+> <img src="https://static.tp-link.com/upload/image-line/Tapo_P400M_US_1.0_overview_normal_20250115022533k.png" alt="Tapo P400M" style="zoom:33%;" />
+
+#### 20250107
 
 > 再次進入 matter  世界，持續三星期的努力，也只能更進完善編譯的 codebase 環境。奉勸要加入的團隊或個人，要多評估自身能力和時間。
 >
@@ -283,7 +299,7 @@ flowchart TD
 
 ### 4.1.1. Burn Ubuntu *22.04.xx* 64-bit *server* OS  on a micro SD card
 
-![matter002](./images/matter002.png)
+<img src="./images/matter002.png" alt="matter002" style="zoom: 67%;" />
 
 ### 4.1.2. Installing prerequisites on Pi4
 
@@ -413,6 +429,8 @@ $ file /bin/bash
 
 ### 5.1.1.  Offical - [connectedhomeip](https://github.com/project-chip/connectedhomeip)
 
+> github: [connectedhomeip](https://github.com/project-chip/connectedhomeip)
+
 > Building Host: ubuntu 20.04 x86_64
 
 > 以下可以選定要使用的 Repository，畢竟全部就要24G，對一些抱持 **keep the cost down** 的上司，員工真的很難為。
@@ -502,7 +520,7 @@ $ gn --version
 
 ## 5.3. [Building Matter](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#building-matter)
 
-> [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[docs](https://github.com/project-chip/connectedhomeip/tree/master/docs)/[guides](https://github.com/project-chip/connectedhomeip/tree/master/docs/guides)/[BUILDING.md](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md)
+> github: [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[docs](https://github.com/project-chip/connectedhomeip/tree/master/docs)/[guides](https://github.com/project-chip/connectedhomeip/tree/master/docs/guides)/[BUILDING.md](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md)
 
 ```mermaid
 flowchart TD
@@ -585,7 +603,7 @@ $ ninja -C ${PJ_GN_BUILD_DIR}/${PJ_GN_TARGET} \
  check
 ```
 
-#### B. [`build_examples.py`](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#using-build_examplespy)
+#### B. [build_examples.py](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#using-build_examplespy)
 
 >The script `./scripts/build/build_examples.py` provides a uniform build interface into using `gn`, `cmake`, `ninja` and other tools as needed to compile various platforms.
 
@@ -894,9 +912,120 @@ $ ./chip-tv-app --secured-device-port 5640 --secured-commissioner-port 5552
 >
 > 請先準備好你的 Toolchain，尤其是裏面的 sysroot，請設定環境變數
 >
-> export SYSROOT_AARCH64=/work/aarch64-linux-gnu
+> export SYSROOT_AARCH64=/work/aarch64-linux-gnu-2004
 
 > sysroot 最簡單的製作方式，就是找一台 Pi4 ，開機後進入系統，把 /lib、 /usr/include 和 /usr/lib 把包即可
+
+```bash
+$ tree -L 2 /work/aarch64-linux-gnu-2004
+/work/aarch64-linux-gnu-2004
+├── lib
+│   ├── aarch64-linux-gnu
+│   ├── accountsservice
+│   ├── apparmor
+│   ├── apt
+│   ├── bfd-plugins
+│   ├── binfmt.d
+│   ├── bluetooth
+│   ├── byobu
+│   ├── cloud-init
+│   ├── cnf-update-db
+│   ├── command-not-found
+│   ├── compat-ld
+│   ├── console-setup
+│   ├── cpp
+│   ├── crda
+│   ├── cryptsetup
+│   ├── dbus-1.0
+│   ├── dpkg
+│   ├── dracut
+│   ├── eject
+│   ├── environment.d
+│   ├── file
+│   ├── finalrd
+│   ├── firmware
+│   ├── gcc
+│   ├── girepository-1.0
+│   ├── git-core
+│   ├── gnupg
+│   ├── gnupg2
+│   ├── gold-ld
+│   ├── groff
+│   ├── hdparm
+│   ├── init
+│   ├── initcpio
+│   ├── initramfs-tools
+│   ├── kernel
+│   ├── klibc
+│   ├── klibc-lbL2PP0WqEKZBTt1bTcN7It5Usc.so
+│   ├── language-selector
+│   ├── ld-linux-aarch64.so.1
+│   ├── libdmmp.so
+│   ├── libdmmp.so.0.2.0
+│   ├── libhandle.so.1
+│   ├── libhandle.so.1.0.3
+│   ├── libmpathcmd.so
+│   ├── libmpathcmd.so.0
+│   ├── libmpathpersist.so
+│   ├── libmpathpersist.so.0
+│   ├── libmultipath.so
+│   ├── libmultipath.so.0
+│   ├── linux
+│   ├── linux-firmware-raspi2
+│   ├── locale
+│   ├── lsb
+│   ├── man-db
+│   ├── mime
+│   ├── modprobe.d
+│   ├── modules
+│   ├── modules-load.d
+│   ├── multipath
+│   ├── nagios
+│   ├── netplan
+│   ├── networkd-dispatcher
+│   ├── NetworkManager
+│   ├── open-iscsi
+│   ├── openssh
+│   ├── os-release
+│   ├── packagekit
+│   ├── pkgconfig
+│   ├── pkg-config.multiarch
+│   ├── pm-utils
+│   ├── policykit-1
+│   ├── python2.7
+│   ├── python3
+│   ├── python3.8
+│   ├── python3.9
+│   ├── recovery-mode
+│   ├── rsyslog
+│   ├── sasl2
+│   ├── sftp-server
+│   ├── snapd
+│   ├── software-properties
+│   ├── ssl
+│   ├── sudo
+│   ├── sysctl.d
+│   ├── systemd
+│   ├── sysusers.d
+│   ├── tc
+│   ├── terminfo
+│   ├── tmpfiles.d
+│   ├── u-boot
+│   ├── ubuntu-advantage
+│   ├── ubuntu-release-upgrader
+│   ├── udev
+│   ├── udisks2
+│   ├── ufw
+│   ├── update-notifier
+│   ├── valgrind
+│   ├── X11
+│   └── xfsprogs
+└── usr
+    ├── include
+    └── lib
+
+86 directories, 18 files
+```
 
 #### linux-arm64-light-clang ([lighting-app](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app))
 
@@ -1105,34 +1234,41 @@ $ ll build_xxx/android-arm64-chip-tool/outputs/apk/debug/app-debug.apk
 >    A 12-bit unsigned integer match the value which a device advertises during commissioning.
 
 ```bash
-$ export MATTER_PINCODE=20231206
-$ export MATTER_DISCRIMINATOR=3849
+MATTER_PINCODE=20231206
+MATTER_DISCRIMINATOR=3849
+# 預設儲存資料放在 /tmp/chip_kvs，如果要重新配對請刪除
+MATTER_KVS_PROVIDER=/work/IoT/matter/chip_app/chip_kvs
 
 # <None = 0, SoftAP = 1 << 0, BLE = 1 << 1, OnNetwork = 1 << 2>
 # BLE+OnNetwork
-$ export MATTER_DISCOVER=6
+#MATTER_DISCOVER=6
 # OnNetwork
-$ export MATTER_DISCOVER=4
+MATTER_DISCOVER=4
 
-$ export MATTER_BLE_HCI=`hciconfig | grep hci0 | cut -d":" -f1 | cut -d"i" -f 2`
-$ hciconfig
-hci0:   Type: Primary  Bus: UART
-        BD Address: D8:3A:DD:0F:4C:8C  ACL MTU: 1021:8  SCO MTU: 64:1
-        UP RUNNING
-        RX bytes:2634 acl:0 sco:0 events:250 errors:0
-        TX bytes:17998 acl:0 sco:0 commands:250 errors:0
+#MATTER_IFACE=eth0
+MATTER_IFACE=enp0s3
+MATTER_IFACE_ID=`ip link show dev $MATTER_IFACE | grep $MATTER_IFACE | cut -d":" -f1`
 
-$ export MATTER_IFACE=eth0
-$ export MATTER_IFACE_ID=`ip link show dev $MATTER_IFACE | grep $MATTER_IFACE | cut -d":" -f1`
+MATTER_BLE_HCI=hci0
+MATTER_BLE_HCI_ID=`hciconfig | grep ${MATTER_BLE_HCI} | cut -d":" -f1 | cut -d"i" -f 2`
 
-$ export MATTER_IFACE=enp0s3
-$ export MATTER_IFACE_ID=`ip link show dev $MATTER_IFACE | grep $MATTER_IFACE | cut -d":" -f1`
+[ "$MATTER_PINCODE" != "" ] && MATTER_PINCODE_ARG="--passcode $MATTER_PINCODE"
+[ "$MATTER_DISCRIMINATOR" != "" ] && MATTER_DISCRIMINATOR_ARG="--discriminator $MATTER_DISCRIMINATOR"
+[ "$MATTER_KVS_PROVIDER" != "" ] && MATTER_KVS_PROVIDER_ARG="--KVS $MATTER_KVS_PROVIDER"
+[ "$MATTER_IFACE_ID" != "" ] && MATTER_IFACE_ID_ARG="--interface-id $MATTER_IFACE_ID"
 
-$ export MATTER_IFACE=enp0s8
-$ export MATTER_IFACE_ID=`ip link show dev $MATTER_IFACE | grep $MATTER_IFACE | cut -d":" -f1`
+[ "$MATTER_DISCOVER" != "" ] && MATTER_DISCOVER_ARG="--capabilities $MATTER_DISCOVER"
+[ "$MATTER_BLE_HCI_ID" != "" ] && MATTER_BLE_HCI_ID_ARG="--ble-device $MATTER_BLE_HCI_ID"
 
-# 暫時不要設定這個
-#$ export MATTER_KVS_PROVIDER/work/chip_kvs_provider
+#[ ! -z "${MATTER_KVS_PROVIDER}" ] && [ -f "${MATTER_KVS_PROVIDER}" ] && rm ${MATTER_KVS_PROVIDER}
+
+./${MATTER_DAEMON} \
+ $MATTER_IFACE_ID_ARG \
+ $MATTER_BLE_HCI_ID_ARG \
+ $MATTER_DISCOVER_ARG \
+ $MATTER_PINCODE_ARG \
+ $MATTER_DISCRIMINATOR_ARG \
+ $MATTER_KVS_PROVIDER_ARG
 ```
 
 #### [✔] air-quality-sensor-app
@@ -1145,7 +1281,7 @@ $ export MATTER_IFACE_ID=`ip link show dev $MATTER_IFACE | grep $MATTER_IFACE | 
 
 ```bash
 $ ./air-quality-sensor-app \
- --interface-id $MATTER_IFACE_ID --capabilities 4 \
+ --interface-id 2 --capabilities 4 \
  --passcode 20241231 --discriminator 3888 \
  $MATTER_KVS_PROVIDER_ARG
 ```
@@ -1206,7 +1342,7 @@ $ echo '{"Name":"TotalVolatileOrganicCompoundsConcentrationMeasurement","NewValu
 
 #### [✔] bridge-app
 
-> 提供亙動操作，動態新增和刪減，相關的程式碼請見
+> 範例裏提供亙動操作，動態新增和刪減，相關的程式碼請見
 >
 > main.cpp / void * bridge_polling_thread(void * context)
 
@@ -1240,11 +1376,13 @@ $ echo '{"Name":"TotalVolatileOrganicCompoundsConcentrationMeasurement","NewValu
 |                     | c    | Toggle()               |
 
 ```bash
-$ rm /tmp/chip_kvs
+# 預設儲存資料放在 /tmp/chip_kvs，如果要重新配對請刪除
+$ rm /work/IoT/matter/chip_app/chip_kvs
 
 $ ./chip-bridge-app \
  --interface-id 2 --capabilities 4 \
- --passcode 20241230 --discriminator 3999
+ --passcode 20241230 --discriminator 3999 \
+ --KVS /work/IoT/matter/chip_app/chip_kvs
 ```
 
 #### [✔] contact-sensor-app
@@ -1255,7 +1393,7 @@ $ ./chip-bridge-app \
 
 ```bash
 $ ./contact-sensor-app \
- --interface-id $MATTER_IFACE_ID --capabilities 4 \
+ --interface-id 2 --capabilities 4 \
  --passcode 20250103 --discriminator 3886 \
  $MATTER_KVS_PROVIDER_ARG
 ```
@@ -1268,15 +1406,16 @@ rpcs.chip.rpc.BooleanState.Get()
 #### [⚑] fabric-sync
 
 ```bash
-$ rm /tmp/chip_kvs
+# 預設儲存資料放在 /tmp/chip_kvs，如果要重新配對請刪除
+$ rm /work/IoT/matter/chip_app/chip_kvs
 
 $ ./fabric-bridge-app \
- --interface-id $MATTER_IFACE_ID --capabilities 4 \
+ --interface-id 2 --capabilities 4 \
  --passcode 20240101 --discriminator 3777 \
  $MATTER_KVS_PROVIDER_ARG
 
 $ ./fabric-sync \
- --interface-id $MATTER_IFACE_ID --capabilities 4 \
+ --interface-id 2 --capabilities 4 \
  --passcode 20231206 --discriminator 3849 \
  $MATTER_KVS_PROVIDER_ARG
 
@@ -1295,50 +1434,18 @@ onoff toggle
 
 > linux-x64-light-with-ui
 
-![matter_linux-x64-light-with-ui](./images/matter_linux-x64-light-with-ui01.png)
+<img src="./images/matter_linux-x64-light-with-ui01.png" alt="matter_linux-x64-light-with-ui" style="zoom: 67%;" />
 
 ```bash
-$ ./chip-lighting-app \
- --interface-id $MATTER_IFACE_ID \
- --ble-device $MATTER_BLE_HCI \
- --capabilities $MATTER_DISCOVER \
- --passcode $MATTER_PINCODE \
- --discriminator $MATTER_DISCRIMINATOR
- --KVS $MATTER_KVS_PROVIDER
-```
-
-```bash
-[ "$MATTER_PINCODE" != "" ] && MATTER_PINCODE_ARG="--passcode $MATTER_PINCODE"
-[ "$MATTER_DISCRIMINATOR" != "" ] && MATTER_DISCRIMINATOR_ARG="--discriminator $MATTER_DISCRIMINATOR"
-[ "$MATTER_DISCOVER" != "" ] && MATTER_DISCOVER_ARG="--capabilities $MATTER_DISCOVER"
-[ "$MATTER_BLE_HCI" != "" ] && MATTER_BLE_HCI_ARG="--ble-device $MATTER_BLE_HCI"
-[ "$MATTER_IFACE_ID" != "" ] && MATTER_IFACE_ID_ARG="--interface-id $MATTER_IFACE_ID"
-[ "$MATTER_KVS_PROVIDER" != "" ] && MATTER_KVS_PROVIDER_ARG="--KVS $MATTER_KVS_PROVIDER"
+# 預設儲存資料放在 /tmp/chip_kvs，如果要重新配對請刪除
+$ rm /work/IoT/matter/chip_app/chip_kvs
 
 $ ./chip-lighting-app \
- $MATTER_IFACE_ID_ARG \
- $MATTER_BLE_HCI_ARG \
- $MATTER_DISCOVER_ARG
- $MATTER_PINCODE_ARG \
- $MATTER_DISCRIMINATOR_ARG \
- $MATTER_KVS_PROVIDER_ARG
-```
-
-```bash
-# 目前 demo 裏有個嚴重的 bug，unpair 後無法再進行 pair，需要刪除 /tmp/chip_kvs 後，再重啟 chip-lighting-app
-# 內建是指定在 /tmp/chip_kvs
-$ rm /tmp/chip_kvs
-$ [ "$MATTER_KVS_PROVIDER" != "" ] && rm $MATTER_KVS_PROVIDER
-
-$ ./chip-lighting-app \
- --interface-id 2 --ble-device 0 --capabilities 4 \
- --passcode 20231206 --discriminator 3849 \
- --KVS /tmp/chip_kvs
-
-$ ./chip-lighting-app \
- --interface-id $MATTER_IFACE_ID --capabilities 4 \
+ --interface-id 2 --capabilities 4 \
  --passcode 20231206 --discriminator 3849 \
  $MATTER_KVS_PROVIDER_ARG
+
+$ ./chip-lighting-app --interface-id 2 --ble-device 0 --capabilities 6 --passcode 20231206 --discriminator 3849 --KVS /work/IoT/matter/chip_app/chip_kvs
 ```
 
 ##### [Trigger event using lighting-app event named pipe](https://github.com/project-chip/connectedhomeip/tree/master/examples/lighting-app/linux#trigger-hardwarefault-events)
@@ -1389,7 +1496,7 @@ rpcs.chip.rpc.Lighting.Set(on=True, level=128, color=protos.chip.rpc.LightingCol
 
 ```bash
 $ ./air-quality-sensor-app \
- --interface-id $MATTER_IFACE_ID --capabilities 4 \
+ --interface-id 2 --capabilities 4 \
  --passcode 20250104 --discriminator 3885 \
  $MATTER_KVS_PROVIDER_ARG
 ```
@@ -1419,7 +1526,7 @@ $ echo '{"Cmd":"SendDoorLockAlarm","Params":{"EndpointId":1,"AlarmCode":0}}' > /
 $ [ "$MATTER_KVS_PROVIDER" != "" ] && rm $MATTER_KVS_PROVIDER
 
 $ ./chip-tv-app \
- --interface-id $MATTER_IFACE_ID --capabilities 4 \
+ --interface-id 2 --capabilities 4 \
  --passcode 20241231 --discriminator 3888 \
  $MATTER_KVS_PROVIDER_ARG
 
@@ -1449,7 +1556,7 @@ Done
 
 ```bash
 $ ./water-leak-detector-app \
- --interface-id $MATTER_IFACE_ID --capabilities 4 \
+ --interface-id 2 --capabilities 4 \
  --passcode 20250105 --discriminator 3884 \
  $MATTER_KVS_PROVIDER_ARG
 ```
@@ -1471,12 +1578,10 @@ $ ./water-leak-detector-app \
 
 # 7. Cloud Home
 
-## 7.1. Test
+## 7.1. Testing App
 
 ### 7.1.1. Sample App for Matter APK (Android)
 
-> 目前使用過的 App 並沒有一個完善所有功能。
->
 > 使用 GHSAFM-2.0.0-default-debug 去配對 lighting-app，也只能得到 onoff；而 Smart Life 配對下的結果也是不堪使用。
 
 ```mermaid
@@ -1504,26 +1609,24 @@ flowchart BT
 
 #### [✔] lighting-app
 
-![matter_GHSAFM01](./images/matter_GHSAFM01.jpg)
+<img src="./images/matter_GHSAFM01.jpg" alt="matter_GHSAFM01" style="zoom:33%;" />
 
-![matter_GHSAFM02](./images/matter_GHSAFM02.jpg)
+<img src="./images/matter_GHSAFM02.jpg" alt="matter_GHSAFM02" style="zoom:33%;" />
 
-![matter_GHSAFM03](./images/matter_GHSAFM03.jpg)
+<img src="./images/matter_GHSAFM03.jpg" alt="matter_GHSAFM03" style="zoom:33%;" />
 
-![matter_GHSAFM04](./images/matter_GHSAFM04.jpg)
+<img src="./images/matter_GHSAFM04.jpg" alt="matter_GHSAFM04" style="zoom:33%;" />
 
-![matter_GHSAFM05](./images/matter_GHSAFM05.jpg)
+<img src="./images/matter_GHSAFM05.jpg" alt="matter_GHSAFM05" style="zoom:33%;" />
 
-![matter_GHSAFM06](./images/matter_GHSAFM06.jpg)
+<img src="./images/matter_GHSAFM06.jpg" alt="matter_GHSAFM06" style="zoom:33%;" />
 
-![matter_GHSAFM07](./images/matter_GHSAFM07.jpg)
+<img src="./images/matter_GHSAFM07.jpg" alt="matter_GHSAFM07" style="zoom:33%;" />
 
-![matter_GHSAFM08](./images/matter_GHSAFM08.jpg)
+<img src="./images/matter_GHSAFM08.jpg" alt="matter_GHSAFM08" style="zoom:33%;" />
 
 ## 7.2. Apple Family
 
-> 如果要有完善的對測環境，只能選擇使用 Apple。
->
 > - [x] [Matter support in iOS 16](https://developer.apple.com/apple-home/matter/)
 >
 >   如果你有 iOS 18，則不需要家庭中樞也可以在「家庭」App 中加入和控制 Matter 配件。此外，使用 iPhone 15 Pro 或 iPhone 15 Pro Max 和後續機型，您不需要中樞也可以控制 Thread 配件。*然而，若要獲得最佳體驗，請[設定家庭中樞](https://support.apple.com/zh-tw/102557)以將支援的 Matter 和 Thread 配件加入「家庭」App。
@@ -1537,19 +1640,19 @@ flowchart BT
 > 目前只有 AirQuality 可用。或許因為沒有認證過，無法考證其支援與否。
 >
 
-![matter_iOS-air-quality-sensor](./images/matter_iOS-air-quality-sensor.png)
+<img src="./images/matter_iOS-air-quality-sensor.png" alt="matter_iOS-air-quality-sensor" style="zoom:33%;" />
 
 #### [✔] contact-sensor-app
 
-#### ![matter_iOS-contact-sensor-app](./images/matter_iOS-contact-sensor-app.jpg)
+<img src="./images/matter_iOS-contact-sensor-app.jpg" alt="matter_iOS-contact-sensor-app" style="zoom:33%;" />
 
 #### [✔] lighting-app
 
-![matter_iOS-lighting-app](./images/matter_iOS-lighting-app.png)
+<img src="./images/matter_iOS-lighting-app.png" alt="matter_iOS-lighting-app" style="zoom:33%;" />
 
 #### [✔] lock-app
 
-![matter_iOS-lock-app](./images/matter_iOS-lock-app.png)
+<img src="./images/matter_iOS-lock-app.png" alt="matter_iOS-lock-app" style="zoom:33%;" />
 
 #### [✔] water-leak-detector-app
 
@@ -1648,7 +1751,10 @@ flowchart BT
 
 ### 7.3.3. Home
 
-> 就連 google 出品的，也不堪使用。對接市面上有認證的設備，也讓人失望。
+
+#### [✔] lighting-app
+
+<img src="./images/matter_Android-lighting-app.jpg" alt="matter_Android-lighting-app" style="zoom:33%;" />
 
 ## 7.4. Xiaomi Family
 
@@ -1668,23 +1774,23 @@ flowchart BT
 
 #### [✔] contact-sensor-app
 
-![matter_SmartLife-contact-sensor-app](./images/matter_SmartLife-contact-sensor-app.jpg)
+<img src="./images/matter_SmartLife-contact-sensor-app.jpg" alt="matter_SmartLife-contact-sensor-app" style="zoom:33%;" />
 
 #### [✔] lighting-app
 
-![matter_SmartLife-lighting-app](./images/matter_SmartLife-lighting-app.jpg)
+<img src="./images/matter_SmartLife-lighting-app.jpg" alt="matter_SmartLife-lighting-app" style="zoom:33%;" />
 
 #### [✔] lock-app
 
 >alarm 無效
 
-![matter_SmartLife-lock-app](./images/matter_SmartLife-lock-app.jpg)
+<img src="./images/matter_SmartLife-lock-app.jpg" alt="matter_SmartLife-lock-app" style="zoom:33%;" />
 
 #### [✔] water-leak-detector-app
 
 >或許因為沒有認證過，不支援狀態。
 
-![matter_SmartLife-water-leak-detector-app](./images/matter_SmartLife-water-leak-detector-app.jpg)
+<img src="./images/matter_SmartLife-water-leak-detector-app.jpg" alt="matter_SmartLife-water-leak-detector-app" style="zoom:33%;" />
 
 # 8. Cluster and Device Type development
 
@@ -1696,7 +1802,7 @@ flowchart BT
 
 >[connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/
 >
->基本設備的組成為 Device  / endpoint / cluster，而 cluster 可視為一項功能
+>基本設備的組成為 device (node)  / endpoint / cluster，而 cluster 可視為一項功能
 
 ```bash
 $ ls connectedhomeip/src/app/clusters/
@@ -1739,52 +1845,6 @@ low-power-server
 
 ```
 
-### 0x0006 [on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters) - <font color="red">開 / 關 (On / Off) 功能</font>
-
->[connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/[on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/on-off-server)/
-
-```bash
-chip-tool onoff toggle $MATTER_NODEID $MATTER_EPID
-
-chip-tool onoff on $MATTER_NODEID $MATTER_EPID
-chip-tool onoff off $MATTER_NODEID $MATTER_EPID
-```
-
-```bash
-Usage:
-  chip-tool onoff command_name [param1 param2 ...]
-
-  +-------------------------------------------------------------------------------------+
-  | Commands:                                                                           |
-  +-------------------------------------------------------------------------------------+
-  | * command-by-id                                                                     |
-  | * off                                                                               |
-  | * on                                                                                |
-  | * toggle                                                                            |
-  | * off-with-effect                                                                   |
-  | * on-with-recall-global-scene                                                       |
-  | * on-with-timed-off                                                                 |
-  | * read-by-id                                                                        |
-  | * read                                                                              |
-  | * write-by-id                                                                       |
-  | * force-write                                                                       |
-  | * write                                                                             |
-  | * subscribe-by-id                                                                   |
-  | * subscribe                                                                         |
-  | * read-event-by-id                                                                  |
-  | * subscribe-event-by-id                                                             |
-  +-------------------------------------------------------------------------------------+
-
-```
-
-#### A. [on-off-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/on-off-server/on-off-server.cpp)
-
-> [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/[on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/on-off-server)/[on-off-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/on-off-server/on-off-server.cpp)
-
-### 0x0008 [level-control](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/level-control) - <font color="red">調光器 (Dimmer) 功能</font>
-
-> [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[src](https://github.com/project-chip/connectedhomeip/tree/master/src)/[app](https://github.com/project-chip/connectedhomeip/tree/master/src/app)/[clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)/[level-control](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/level-control)/
-
 # 9. Tools
 
 ## 9.1. [ZCL Advanced Platform (ZAP)](https://developers.home.google.com/matter/tools/zap)
@@ -1801,7 +1861,7 @@ Usage:
 
 > .matter files are a human-readable version of the .zap that can be used for review
 
-![ZAP](https://raw.githubusercontent.com/project-chip/connectedhomeip/refs/heads/master/docs/zap_and_codegen/img/zap_compiler.png)
+<img src="https://raw.githubusercontent.com/project-chip/connectedhomeip/refs/heads/master/docs/zap_and_codegen/img/zap_compiler.png" alt="ZAP" style="zoom:33%;" />
 
 ### 9.1.2. ZAP tool
 
