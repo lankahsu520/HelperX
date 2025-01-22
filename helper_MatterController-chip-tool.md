@@ -85,17 +85,24 @@ $ tree -L 4 ~/snap/chip-tool/
 
 # 2. Operate in three modes
 
+> [--paa-trust-store-path]:
+>   Path to directory holding PAA certificate information.  Can be absolute or relative to the current working directory.
+>
+> [production/paa-root-certs](https://github.com/project-chip/connectedhomeip/tree/master/credentials/production/paa-root-certs): 如果要與市面上販售之設備進行配對，請將檔案放入指定之目錄
+>
+> [--storage-directory]:
+>   Directory to place chip-tool's storage files in.  Defaults to $TMPDIR, with fallback to /tmp
+
 ## 2.1. Single-command mode (default)
 
 >  In this mode, the CHIP Tool will exit with a timeout error if any single command does not complete within a certain timeout period.
 
 ```bash
 $ chip-tool
-[1736406389.476] [678821:678821] [TOO] Missing cluster or command set name
 Usage:
-  /snap/chip-tool/199/bin/chip-tool cluster_name command_name [param1 param2 ...]
+  chip-tool cluster_name command_name [param1 param2 ...]
 or:
-  /snap/chip-tool/199/bin/chip-tool command_set_name command_name [param1 param2 ...]
+  chip-tool command_set_name command_name [param1 param2 ...]
 
   +-------------------------------------------------------------------------------------+
   | Clusters:                                                                           |
@@ -115,6 +122,7 @@ or:
   | * booleanstate                                                                      |
   | * booleanstateconfiguration                                                         |
   | * bridgeddevicebasicinformation                                                     |
+  | * cameraavstreammanagement                                                          |
   | * carbondioxideconcentrationmeasurement                                             |
   | * carbonmonoxideconcentrationmeasurement                                            |
   | * channel                                                                           |
@@ -221,9 +229,11 @@ or:
   | * waterheatermanagement                                                             |
   | * waterheatermode                                                                   |
   | * webrtctransportprovider                                                           |
+  | * webrtctransportrequestor                                                          |
   | * wifinetworkdiagnostics                                                            |
   | * wifinetworkmanagement                                                             |
   | * windowcovering                                                                    |
+  | * zonemanagement                                                                    |
   +-------------------------------------------------------------------------------------+
 
   +-------------------------------------------------------------------------------------+
@@ -252,7 +262,6 @@ or:
   | * storage                                                                           |
   |   - Commands for managing persistent data stored by chip-tool.                      |
   +-------------------------------------------------------------------------------------+
-[1736406389.476] [678821:678821] [TOO] Run command failure: ../examples/chip-tool/commands/common/Commands.cpp:230: Error 0x0000002F
 ```
 
 ## 2.2. Interactive mode
@@ -260,63 +269,21 @@ or:
 > In this mode, a command will terminate with an error if it does not complete within the timeout period. However, the CHIP Tool will not be terminated and it will not terminate processes that previous commands have started. Moreover, when using the interactive mode, the CHIP Tool will establish a new CASE session only when there is no session available yet. On the following commands, it will use the existing session.
 
 ```bash
-$ chip-tool interactive start
-[1736406127.408] [678778:678778] [DL] ChipLinuxStorage::Init: Using KVS config file: /home/lanka/snap/chip-tool/common/chip_tool_kvs
-[1736406127.411] [678778:678778] [DL] ChipLinuxStorage::Init: Attempt to re-initialize with KVS config file: /tmp/chip_kvs
-[1736406127.412] [678778:678778] [DL] ChipLinuxStorage::Init: Using KVS config file: /tmp/chip_factory.ini
-[1736406127.413] [678778:678778] [DL] ChipLinuxStorage::Init: Using KVS config file: /tmp/chip_config.ini
-[1736406127.413] [678778:678778] [DL] ChipLinuxStorage::Init: Using KVS config file: /tmp/chip_counters.ini
-[1736406127.414] [678778:678778] [DL] Wrote settings to /tmp/chip_counters.ini
-[1736406127.414] [678778:678778] [DL] NVS set: chip-counters/reboot-count = 3 (0x3)
-[1736406127.417] [678778:678778] [DL] Got Ethernet interface: enp0s3
-[1736406127.417] [678778:678778] [DL] Found the primary Ethernet interface:enp0s3
-[1736406127.417] [678778:678778] [DL] Failed to get WiFi interface
-[1736406127.417] [678778:678778] [DL] Failed to reset WiFi statistic counts
-[1736406127.417] [678778:678778] [IN] UDP::Init bind&listen port=0
-[1736406127.417] [678778:678778] [IN] UDP::Init bound to port=58623
-[1736406127.417] [678778:678778] [IN] UDP::Init bind&listen port=0
-[1736406127.417] [678778:678778] [IN] UDP::Init bound to port=59430
-[1736406127.417] [678778:678778] [IN] BLEBase::Init - setting/overriding transport
-[1736406127.417] [678778:678778] [IN] TransportMgr initialized
-[1736406127.417] [678778:678778] [FP] Initializing FabricTable from persistent storage
-[1736406127.417] [678778:678778] [TS] Last Known Good Time: 2023-10-14T01:16:48
-[1736406127.418] [678778:678778] [FP] Fabric index 0x1 was retrieved from storage. Compressed FabricId 0x219D881E54F0F01B, FabricId 0x0000000000000001, NodeId 0x000000000001B669, VendorId 0xFFF1
-[1736406127.419] [678778:678778] [ZCL] Using ZAP configuration...
-[1736406127.419] [678778:678778] [IN] CASE Server enabling CASE session setups
-[1736406127.419] [678778:678778] [IN] SecureSession[0x564018813480]: Allocated Type:2 LSID:26269
-[1736406127.419] [678778:678778] [SC] Allocated SecureSession (0x564018813480) - waiting for Sigma1 msg
-[1736406127.419] [678778:678778] [IM] WARNING ┌────────────────────────────────────────────────────
-[1736406127.419] [678778:678778] [IM] WARNING │ Interaction Model Engine running in 'Checked' mode.
-[1736406127.419] [678778:678778] [IM] WARNING │ This executes BOTH ember and data-model code paths.
-[1736406127.419] [678778:678778] [IM] WARNING │ which is inefficient and consumes more flash space.
-[1736406127.419] [678778:678778] [IM] WARNING │ This should be done for testing only.
-[1736406127.419] [678778:678778] [IM] WARNING └────────────────────────────────────────────────────
-[1736406127.419] [678778:678778] [CTL] System State Initialized...
-[1736406127.420] [678778:678778] [CTL] Setting attestation nonce to random value
-[1736406127.420] [678778:678778] [CTL] Setting CSR nonce to random value
-[1736406127.420] [678778:678778] [IN] UDP::Init bind&listen port=5550
-[1736406127.420] [678778:678778] [IN] UDP::Init bound to port=5550
-[1736406127.420] [678778:678778] [IN] UDP::Init bind&listen port=5550
-[1736406127.420] [678778:678778] [IN] UDP::Init bound to port=5550
-[1736406127.420] [678778:678778] [IN] TransportMgr initialized
-[1736406127.420] [678778:678802] [DL] CHIP task running
-[1736406127.420] [678778:678802] [DL] HandlePlatformSpecificBLEEvent 32786
->>>
-
+$ chip-tool interactive start --storage-directory /work/IoT/matter/chip-tool --trace_file /tmp/chip-tool-123.log --paa-trust-store-path /work/IoT/matter/paa-root-certs
 ```
 
 ## 2.3. websocket mode
 
 ```bash
-$ chip-tool interactive server --port 9002
+$ chip-tool interactive server --port 9002 --storage-directory /work/IoT/matter/chip-tool --trace_file /tmp/chip-tool-123.log --paa-trust-store-path /work/IoT/matter/paa-root-certs
 ```
 
 # 3. chip-tool command_set_name
 
-> 以下用 interactive mode 進行操作
+> 以下大部分用 interactive mode 進行操作
 
 ```bash
-$ chip-tool interactive start
+$ chip-tool interactive start --storage-directory /work/IoT/matter/chip-tool --trace_file /tmp/chip-tool-123.log --paa-trust-store-path /work/IoT/matter/paa-root-certs
 ```
 
 ## 3.1. [⚑] any
@@ -486,9 +453,43 @@ Commands for device discovery.
 
 > 發現網路上 commissionable node
 
+```bash
+>>> discover commissionables
+[1736835694.442] [752301:752331] [DIS] Discovered commissionable/commissioner node:
+[1736835694.442] [752301:752331] [DIS]  Hostname: 080027337352
+[1736835694.442] [752301:752331] [DIS]  IP Address #1: fe80::d49:8acb:9f1b:c4cf
+[1736835694.442] [752301:752331] [DIS]  IP Address #2: fd95:6f29:461a:4860:d39b:f6b1:830c:7a4f
+[1736835694.442] [752301:752331] [DIS]  IP Address #3: fd95:6f29:461a:4860:6545:6058:601c:ea2
+[1736835694.442] [752301:752331] [DIS]  IP Address #4: fd91:956f:2946:1a48:453e:be21:1a78:27ba
+[1736835694.442] [752301:752331] [DIS]  IP Address #5: fd91:956f:2946:1a48:27de:bdb6:e6ca:299e
+[1736835694.442] [752301:752331] [DIS]  Port: 5540
+[1736835694.442] [752301:752331] [DIS]  Mrp Interval idle: not present
+[1736835694.442] [752301:752331] [DIS]  Mrp Interval active: not present
+[1736835694.442] [752301:752331] [DIS]  Mrp Active Threshold: not present
+[1736835694.442] [752301:752331] [DIS]  TCP Client Supported: 0
+[1736835694.442] [752301:752331] [DIS]  TCP Server Supported: 0
+[1736835694.442] [752301:752331] [DIS]  ICD: not present
+[1736835694.442] [752301:752331] [DIS]  Rotating ID: 01005FDB39737473FB22B819CEBB1084AFD5
+[1736835694.442] [752301:752331] [DIS]  Device Name: Test Bulb
+[1736835694.442] [752301:752331] [DIS]  Vendor ID: 65521
+[1736835694.442] [752301:752331] [DIS]  Product ID: 32769
+[1736835694.442] [752301:752331] [DIS]  Device Type: 257
+[1736835694.442] [752301:752331] [DIS]  Long Discriminator: 3849
+[1736835694.442] [752301:752331] [DIS]  Pairing Hint: 33
+[1736835694.442] [752301:752331] [DIS]  Instance Name: F8E6D53FB75B6847
+[1736835694.442] [752301:752331] [DIS]  Commissioning Mode: 1
+[1736835694.442] [752301:752331] [DIS]  Supports Commissioner Generated Passcode: false
+[1736835694.443] [752301:752331] [CTL] Filter type none; all matches will fail
+```
+
 #### [✔] discover commissioners
 
 > 發現網路上 commissioner node
+
+```bash
+>>> discover commissioners
+
+```
 
 ## 3.4. [⚑] groupsettings
 
@@ -759,12 +760,94 @@ Usage:
 
 >>> pairing code 1 33726345678
 >>> pairing code 2 30510457783
->>> pairing code 2 22403330697 --paa-trust-store-path /work/paa-root-certs
 ```
 
 #### [⚑] pairing code-paseonly
 
-#### [⚑] pairing code-wifi
+#### [✔] pairing code-wifi
+
+> chip-tool 執行的平台必需要有 BLE
+
+```bash
+>>> pairing code-wifi
+Usage:
+   pairing code-wifi node-id ssid password payload [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--bypass-attestation-verifier] [--case-auth-tags] [--icd-registration] [--icd-check-in-nodeid] [--icd-monitored-subject] [--icd-client-type] [--icd-symmetric-key] [--icd-stay-active-duration] [--skip-commissioning-complete] [--discover-once] [--use-only-onnetwork-discovery] [--country-code] [--time-zone] [--dst-offset] [--require-tc-acknowledgements] [--tc-acknowledgements] [--tc-acknowledgements-version] [--timeout]
+
+[--paa-trust-store-path]:
+  Path to directory holding PAA certificate information.  Can be absolute or relative to the current working directory.
+
+[--cd-trust-store-path]:
+  Path to directory holding CD certificate information.  Can be absolute or relative to the current working directory.
+
+[--commissioner-name]:
+  Name of fabric to use. Valid values are "alpha", "beta", "gamma", and integers greater than or equal to 4.  The default if not specified is "alpha".
+
+[--commissioner-nodeid]:
+  The node id to use for chip-tool.  If not provided, kTestControllerNodeId (112233, 0x1B669) will be used.
+
+[--use-max-sized-certs]:
+  Maximize the size of operational certificates. If not provided or 0 ("false"), normally sized operational certificates are generated.
+
+[--only-allow-trusted-cd-keys]:
+  Only allow trusted CD verifying keys (disallow test keys). If not provided or 0 ("false"), untrusted CD verifying keys are allowed. If 1 ("true"), test keys are disallowed.
+
+[--dac-revocation-set-path]:
+  Path to JSON file containing the device attestation revocation set. This argument caches the path to the revocation set. Once set, this will be used by all commands in interactive mode.
+
+[--trace-to]:
+  Trace destinations, comma-separated (json:log, json:<path>, perfetto, perfetto:<path>)
+
+[--storage-directory]:
+  Directory to place chip-tool's storage files in.  Defaults to $TMPDIR, with fallback to /tmp
+
+[--commissioner-vendor-id]:
+  The vendor id to use for chip-tool. If not provided, chip::VendorId::TestVendor1 (65521, 0xFFF1) will be used.
+
+[--bypass-attestation-verifier]:
+  Bypass the attestation verifier. If not provided or false, the attestation verifier is not bypassed. If true, the commissioning will continue in case of attestation verification failure.
+
+[--case-auth-tags]:
+  The CATs to be encoded in the NOC sent to the commissionee
+
+[--icd-registration]:
+  Whether to register for check-ins from ICDs during commissioning. Default: false
+
+[--icd-check-in-nodeid]:
+  The check-in node id for the ICD, default: node id of the commissioner.
+
+[--icd-monitored-subject]:
+  The monitored subject of the ICD, default: The node id used for icd-check-in-nodeid.
+
+[--icd-client-type]:
+  The ClientType of the client registering, default: Permanent client - 0
+
+[--icd-symmetric-key]:
+  The 16 bytes ICD symmetric key, default: randomly generated.
+
+[--icd-stay-active-duration]:
+  If set, a LIT ICD that is commissioned will be requested to stay active for this many milliseconds
+
+[--country-code]:
+  Country code to use to set the Basic Information cluster's Location attribute
+
+[--time-zone]:
+  TimeZone list to use when setting Time Synchronization cluster's TimeZone attribute
+
+[--dst-offset]:
+  DSTOffset list to use when setting Time Synchronization cluster's DSTOffset attribute
+
+[--require-tc-acknowledgements]:
+  Indicates whether Terms and Conditions acknowledgements are required during commissioning. If set to true, the tc-acknowledgements and tc-acknowledgements-version arguments must be provided for the commissioning to succeed. If false, the T&C acknowledgement step will be skipped.
+
+[--tc-acknowledgements]:
+  Bit-field value indicating which Terms and Conditions have been accepted by the user. This value is sent to the device during commissioning via the General Commissioning cluster
+
+[--tc-acknowledgements-version]:
+  Version number of the Terms and Conditions that were accepted by the user. This value is sent to the device during commissioning to indicate which T&C version was acknowledged
+
+
+>>> pairing code-wifi 3 Lanka520 Lanka520 01234567890
+```
 
 #### [⚑] pairing code-thread
 
@@ -1160,10 +1243,29 @@ discriminator:
 [--timeout]:
   Time, in seconds, before this command is considered to have timed out.
 
-
 >>> pairing open-commissioning-window 1 1 300 2000 3884
 [1736478513.589] [707435:707467] [CTL] Manual pairing code: [35008237717]
+
+>>> pairing open-commissioning-window 3 1 300 2000 0
+[1737514856.300] [1533:1535] [CTL] Successfully opened pairing window on the device
+[1737514856.301] [1533:1535] [CTL] Manual pairing code: [00374612132]
+[1737514856.301] [1533:1535] [CTL] SetupQRCode: [MT:04CT0KQM00AJVZ4-F00]
+
 ```
+
+##### iPhone - Turn On Pairing Mode
+
+<img src="./images/matter_iOS-lighting-app-share01.png" alt="matter_iOS-lighting-app-share01" style="zoom:33%;" />
+
+<img src="./images/matter_iOS-lighting-app-share02.png" alt="matter_iOS-lighting-app-share02" style="zoom:33%;" />
+
+<img src="./images/matter_iOS-lighting-app-share03.png" alt="matter_iOS-lighting-app-share03" style="zoom:33%;" />
+
+##### iPhone - Connected Services
+
+<img src="./images/matter_iOS-lighting-app-share04.png" alt="matter_iOS-lighting-app-share03" style="zoom:33%;" />
+
+<img src="./images/matter_iOS-lighting-app-share05.png" alt="matter_iOS-lighting-app-share03" style="zoom:33%;" />
 
 #### [✔] pairing get-commissioner-node-id
 
@@ -1263,9 +1365,15 @@ $ chip-tool payload generate-qrcode \
  --discriminator 3849 --setup-pin-code 20231206 \
  --rendezvous 0x04
 
-[1736486495.495] [710278:710278] [DL] ChipLinuxStorage::Init: Using KVS config file: /home/lanka/snap/chip-tool/common/chip_tool_kvs
-[1736486495.495] [710278:710278] [TOO] QR Code: MT:-24J0IRV01DWLA39G00
+[1736918552.523] [764297:764297] [DL] ChipLinuxStorage::Init: Using KVS config file: /tmp/chip_tool_kvs
+[1736918552.523] [764297:764297] [TOO] QR Code: MT:-24J0IRV01DWLA39G00
 ```
+
+##### [qrcode](https://project-chip.github.io/connectedhomeip/qrcode.html)
+
+> generate the **QRcode payload** to **QR Code**
+
+<img src="./images/matter_QRCode-generate.png" alt="matter_QRCode-generate" style="zoom: 50%;" />
 
 #### [✔] payload generate-manualcode
 
@@ -1287,8 +1395,8 @@ $ chip-tool payload generate-manualcode \
  --discriminator 3849 --setup-pin-code 20231206 \
  --force-short-code 0
 
-[1736497683.504] [717987:717987] [DL] ChipLinuxStorage::Init: Using KVS config file: /home/lanka/snap/chip-tool/common/chip_tool_kvs
-[1736497683.504] [717987:717987] [TOO] Manual Code: 36250212347
+[1736918592.799] [764298:764298] [DL] ChipLinuxStorage::Init: Using KVS config file: /tmp/chip_tool_kvs
+[1736918592.799] [764298:764298] [TOO] Manual Code: 36250212347
 ```
 
 #### [✔] payload parse-setup-payload
@@ -1299,17 +1407,26 @@ $ chip-tool payload generate-manualcode \
 
 ```bash
 $ chip-tool payload parse-setup-payload "MT:-24J0IRV01DWLA39G00"
-[1736479345.970] [707768:707768] [DL] ChipLinuxStorage::Init: Using KVS config file: /home/lanka/snap/chip-tool/common/chip_tool_kvs
-[1736479345.970] [707768:707768] [SPL] Parsing base38Representation: MT:-24J0IRV01DWLA39G00
-[1736479345.971] [707768:707768] [SPL] Version:             0
-[1736479345.971] [707768:707768] [SPL] VendorID:            65521
-[1736479345.971] [707768:707768] [SPL] ProductID:           32769
-[1736479345.971] [707768:707768] [SPL] Custom flow:         0    (STANDARD)
-[1736479345.971] [707768:707768] [SPL] Discovery Bitmask:   0x04 (On IP network)
-[1736479345.971] [707768:707768] [SPL] Long discriminator:  3849   (0xf09)
-[1736479345.971] [707768:707768] [SPL] Passcode:            20231206
+[1736918610.341] [764299:764299] [DL] ChipLinuxStorage::Init: Using KVS config file: /tmp/chip_tool_kvs
+[1736918610.341] [764299:764299] [SPL] Parsing base38Representation: MT:-24J0IRV01DWLA39G00
+[1736918610.341] [764299:764299] [SPL] Version:             0
+[1736918610.341] [764299:764299] [SPL] VendorID:            65521
+[1736918610.341] [764299:764299] [SPL] ProductID:           32769
+[1736918610.341] [764299:764299] [SPL] Custom flow:         0    (STANDARD)
+[1736918610.341] [764299:764299] [SPL] Discovery Bitmask:   0x04 (On IP network)
+[1736918610.341] [764299:764299] [SPL] Long discriminator:  3849   (0xf09)
+[1736918610.341] [764299:764299] [SPL] Passcode:            20231206
 
-$ chip-tool payload parse-additional-data-payload "MT:-24J0IRV01DWLA39G00"
+$ chip-tool payload parse-setup-payload "MT:04CT0KQM000AP67V710"
+[1737516127.790] [6739:6739] [DL] ChipLinuxStorage::Init: Using KVS config file: /tmp/chip_tool_kvs
+[1737516127.790] [6739:6739] [SPL] Parsing base38Representation: MT:04CT0KQM000AP67V710
+[1737516127.790] [6739:6739] [SPL] Version:             0
+[1737516127.790] [6739:6739] [SPL] VendorID:            4488
+[1737516127.790] [6739:6739] [SPL] ProductID:           259
+[1737516127.790] [6739:6739] [SPL] Custom flow:         0    (STANDARD)
+[1737516127.790] [6739:6739] [SPL] Discovery Bitmask:   0x04 (On IP network)
+[1737516127.790] [6739:6739] [SPL] Long discriminator:  0   (0x0)
+[1737516127.790] [6739:6739] [SPL] Passcode:            57078310
 ```
 
 #### [⚑] payload parse-additional-data-payload
@@ -1423,7 +1540,7 @@ Commands for starting long-lived interactive modes.
 > github: [InteractiveCommands.h](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/commands/interactive/InteractiveCommands.h)
 
 ```bash
-$ chip-tool interactive start
+$ chip-tool interactive start --storage-directory /work/IoT/matter/chip-tool --trace_file /tmp/chip-tool-123.log --paa-trust-store-path /work/IoT/matter/paa-root-certs
 ```
 
 #### [✔] interactive server
@@ -1443,7 +1560,7 @@ $ chip-tool interactive start
 ```bash
 $ chip-tool interactive server help
 Usage:
-  /snap/chip-tool/199/bin/chip-tool interactive server [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--advertise-operational] [--port]
+  chip-tool interactive server [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--advertise-operational] [--port]
 
 Start a websocket server that can receive commands sent by another process.
 
@@ -1490,7 +1607,7 @@ $ chip-tool interactive server --port 9002
 
 > ws://127.0.0.1:9002
 
-![matter_chip-tool01](./images/matter_chip-tool01.png)
+<img src="./images/matter_chip-tool01.png" alt="matter_chip-tool01" style="zoom: 33%;" />
 
 ## 3.11. [✔] storage
 
@@ -1516,12 +1633,70 @@ Commands for managing persistent data stored by chip-tool.
 
 # 4. chip-tool cluster_name
 
-## 4.1. [⚑] basicinformation
+> github: [clusters](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters)
+>
+> 基本設備的組成為 device (node)  / endpoint / cluster，而 cluster 可視為一項功能
+
+```bash
+$ ls connectedhomeip/src/app/clusters/
+access-control-server                    low-power-server
+account-login-server                     media-input-server
+administrator-commissioning-server       media-playback-server
+air-quality-server                       messages-server
+application-basic-server                 microwave-oven-control-server
+application-launcher-server              mode-base-server
+audio-output-server                      mode-select-server
+basic-information                        network-commissioning
+bindings                                 occupancy-sensor-server
+boolean-state-configuration-server       on-off-server
+bridged-device-basic-information-server  operational-credentials-server
+channel-server                           operational-state-server
+chime-server                             ota-provider
+color-control-server                     ota-requestor
+commissioner-control-server              power-source-configuration-server
+concentration-measurement-server         power-source-server
+content-app-observer                     power-topology-server
+content-control-server                   pump-configuration-and-control-client
+content-launch-server                    pump-configuration-and-control-server
+descriptor                               refrigerator-alarm-server
+device-energy-management-server          resource-monitoring-server
+diagnostic-logs-server                   sample-mei-server
+dishwasher-alarm-server                  scenes-server
+door-lock-server                         service-area-server
+ecosystem-information-server             smoke-co-alarm-server
+electrical-energy-measurement-server     software-diagnostics-server
+electrical-power-measurement-server      switch-server
+energy-evse-server                       target-navigator-server
+energy-preference-server                 temperature-control-server
+ethernet-network-diagnostics-server      test-cluster-server
+fan-control-server                       thermostat-client
+fault-injection-server                   thermostat-server
+fixed-label-server                       thermostat-user-interface-configuration-server
+general-commissioning-server             thread-border-router-management-server
+general-diagnostics-server               thread-network-diagnostics-server
+group-key-mgmt-server                    thread-network-directory-server
+groups-server                            time-format-localization-server
+ias-zone-client                          time-synchronization-server
+ias-zone-server                          user-label-server
+icd-management-server                    valve-configuration-and-control-server
+identify-server                          wake-on-lan-server
+keypad-input-server                      water-heater-management-server
+laundry-dryer-controls-server            wifi-network-diagnostics-server
+laundry-washer-controls-server           wifi-network-management-server
+level-control                            window-covering-server
+localization-configuration-server
+```
+
+## 4.1. [✚] basicinformation - 0x00000028
+
+> <font color="red"> 基本資訊</font>
+>
+> github: [basic-information](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/basic-information)
+>
+> github: [basic-information.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/basic-information/basic-information.cpp)
 
 ```bash
 >>> basicinformation
-[1736409246.363] [678961:678961] [TOO] Command: basicinformation
-[1736409246.363] [678961:678961] [TOO] Missing command name
 Usage:
    basicinformation command_name [param1 param2 ...]
 
@@ -1542,10 +1717,9 @@ Usage:
   | * subscribe-event-by-id                                                             |
   | * subscribe-event                                                                   |
   +-------------------------------------------------------------------------------------+
->>>
 ```
 
-#### [⚑] basicinformation read
+##### basicinformation read
 
 ```bash
 >>> basicinformation read
@@ -1585,84 +1759,54 @@ Usage:
   | * feature-map                                                                       |
   | * cluster-revision                                                                  |
   +-------------------------------------------------------------------------------------+
-```
 
-##### [✔] basicinformation read vendor-name
-
-```bash
->>> basicinformation read vendor-name
-Usage:
-   basicinformation read vendor-name destination-id endpoint-ids [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--fabric-filtered] [--data-version] [--lit-icd-peer] [--timeout] [--allow-large-payload]
-
-destination-id:
-  64-bit node or group identifier.
-  Group identifiers are detected by being in the 0xFFFF'FFFF'FFFF'xxxx range.
-
-endpoint-ids:
-  Comma-separated list of endpoint ids (e.g. "1" or "1,2,3").
-  Allowed to be 0xFFFF to indicate a wildcard endpoint.
-
-[--paa-trust-store-path]:
-  Path to directory holding PAA certificate information.  Can be absolute or relative to the current working directory.
-
-[--cd-trust-store-path]:
-  Path to directory holding CD certificate information.  Can be absolute or relative to the current working directory.
-
-[--commissioner-name]:
-  Name of fabric to use. Valid values are "alpha", "beta", "gamma", and integers greater than or equal to 4.  The default if not specified is "alpha".
-
-[--commissioner-nodeid]:
-  The node id to use for chip-tool.  If not provided, kTestControllerNodeId (112233, 0x1B669) will be used.
-
-[--use-max-sized-certs]:
-  Maximize the size of operational certificates. If not provided or 0 ("false"), normally sized operational certificates are generated.
-
-[--only-allow-trusted-cd-keys]:
-  Only allow trusted CD verifying keys (disallow test keys). If not provided or 0 ("false"), untrusted CD verifying keys are allowed. If 1 ("true"), test keys are disallowed.
-
-[--dac-revocation-set-path]:
-  Path to JSON file containing the device attestation revocation set. This argument caches the path to the revocation set. Once set, this will be used by all commands in interactive mode.
-
-[--trace-to]:
-  Trace destinations, comma-separated (json:log, json:<path>, perfetto, perfetto:<path>)
-
-[--storage-directory]:
-  Directory to place chip-tool's storage files in.  Defaults to $TMPDIR, with fallback to /tmp
-
-[--commissioner-vendor-id]:
-  The vendor id to use for chip-tool. If not provided, chip::VendorId::TestVendor1 (65521, 0xFFF1) will be used.
-
-[--fabric-filtered]:
-  Boolean indicating whether to do a fabric-filtered read. Defaults to true.
-
-[--data-version]:
-  Comma-separated list of data versions for the clusters being read.
-
-[--lit-icd-peer]:
-  Whether to treat the peer as a LIT ICD. false: Always no, true: Always yes, (not set): Yes if the peer is registered to this controller.
-
-[--allow-large-payload]:
-  If true, indicates that the session should allow large application payloads (which requires a TCP connection).Defaults to false, which uses a UDP+MRP session.
-
-
+# 製造商名稱
 >>> basicinformation read vendor-name 1 0xFFFF --timeout 5
-[1736745935.655] [741148:741179] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0001 DataVersion: 2162863878
-[1736745935.655] [741148:741179] [TOO]   VendorName: TEST_VENDOR
-[1736745935.655] [741148:741179] [EM] <<< [E:56347i S:45642 M:104055614 (Ack:180954555)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fe80::da3a:ddff:fe0f:4c8a%enp0s3]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+[1736825929.794] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0001 DataVersion: 2908716060
+[1736825929.794] [750639:750673] [TOO]   VendorName: TEST_VENDOR
 
+# 製造商ID
+>>> basicinformation read vendor-id 1 0xFFFF --timeout 5
+[1736826236.190] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0002 DataVersion: 2908716060
+[1736826236.190] [750639:750673] [TOO]   VendorID: 65521
+
+# 產品名稱
 >>> basicinformation read product-name 1 0xFFFF --timeout 5
-[1736745950.233] [741148:741179] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0003 DataVersion: 2162863878
-[1736745950.233] [741148:741179] [TOO]   ProductName: TEST_PRODUCT
-[1736745950.233] [741148:741179] [EM] <<< [E:56348i S:45642 M:104055616 (Ack:180954556)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fe80::da3a:ddff:fe0f:4c8a%enp0s3]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+[1736825974.738] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0003 DataVersion: 2908716060
+[1736825974.738] [750639:750673] [TOO]   ProductName: TEST_PRODUCT
 
+# 產品ID
+>>> basicinformation read product-id 1 0xFFFF --timeout 5
+[1736826292.534] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0004 DataVersion: 2908716060
+[1736826292.534] [750639:750673] [TOO]   ProductID: 32769
+
+# 產品序號
+[1736826338.623] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_000F DataVersion: 2908716060
+[1736826338.623] [750639:750673] [TOO]   SerialNumber: TEST_SN
+
+# 軟體版本
 >>> basicinformation read software-version 1 0xFFFF --timeout 5
-[1736745964.533] [741148:741179] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0009 DataVersion: 2162863878
-[1736745964.533] [741148:741179] [TOO]   SoftwareVersion: 1
-[1736745964.533] [741148:741179] [EM] <<< [E:56349i S:45642 M:104055618 (Ack:180954557)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fe80::da3a:ddff:fe0f:4c8a%enp0s3]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+[1736826013.427] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0009 DataVersion: 2908716060
+[1736826013.427] [750639:750673] [TOO]   SoftwareVersion: 1
+
+>>> basicinformation read software-version-string  1 0xFFFF --timeout 5
+[1736826105.530] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_000A DataVersion: 2908716060
+[1736826105.530] [750639:750673] [TOO]   SoftwareVersionString: 1.0
+
+# 硬體版本
+>>> basicinformation read hardware-version 1 0xFFFF --timeout 5
+[1736826153.282] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0007 DataVersion: 2908716060
+[1736826153.282] [750639:750673] [TOO]   HardwareVersion: 0
 
 ```
 
-## 4.2. [⚑] descriptor
+## 4.2. [✚] descriptor - 0x0000001D
+
+> <font color="red"> 描述功能</font>
+>
+> github: [descriptor](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/descriptor)
+>
+> github: [descriptor.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/descriptor/descriptor.cpp)
 
 ```bash
 >>> descriptor
@@ -1684,7 +1828,7 @@ Usage:
   +-------------------------------------------------------------------------------------+
 ```
 
-#### [⚑] descriptor read
+##### descriptor read
 
 ```bash
 >>> descriptor read
@@ -1706,189 +1850,73 @@ Usage:
   | * feature-map                                                                       |
   | * cluster-revision                                                                  |
   +-------------------------------------------------------------------------------------+
-```
-
-```bash
->>> descriptor read server-list
-Usage:
-   descriptor read server-list destination-id endpoint-ids [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--fabric-filtered] [--data-version] [--lit-icd-peer] [--timeout] [--allow-large-payload]
-
-destination-id:
-  64-bit node or group identifier.
-  Group identifiers are detected by being in the 0xFFFF'FFFF'FFFF'xxxx range.
-
-endpoint-ids:
-  Comma-separated list of endpoint ids (e.g. "1" or "1,2,3").
-  Allowed to be 0xFFFF to indicate a wildcard endpoint.
-
-[--paa-trust-store-path]:
-  Path to directory holding PAA certificate information.  Can be absolute or relative to the current working directory.
-
-[--cd-trust-store-path]:
-  Path to directory holding CD certificate information.  Can be absolute or relative to the current working directory.
-
-[--commissioner-name]:
-  Name of fabric to use. Valid values are "alpha", "beta", "gamma", and integers greater than or equal to 4.  The default if not specified is "alpha".
-
-[--commissioner-nodeid]:
-  The node id to use for chip-tool.  If not provided, kTestControllerNodeId (112233, 0x1B669) will be used.
-
-[--use-max-sized-certs]:
-  Maximize the size of operational certificates. If not provided or 0 ("false"), normally sized operational certificates are generated.
-
-[--only-allow-trusted-cd-keys]:
-  Only allow trusted CD verifying keys (disallow test keys). If not provided or 0 ("false"), untrusted CD verifying keys are allowed. If 1 ("true"), test keys are disallowed.
-
-[--dac-revocation-set-path]:
-  Path to JSON file containing the device attestation revocation set. This argument caches the path to the revocation set. Once set, this will be used by all commands in interactive mode.
-
-[--trace-to]:
-  Trace destinations, comma-separated (json:log, json:<path>, perfetto, perfetto:<path>)
-
-[--storage-directory]:
-  Directory to place chip-tool's storage files in.  Defaults to $TMPDIR, with fallback to /tmp
-
-[--commissioner-vendor-id]:
-  The vendor id to use for chip-tool. If not provided, chip::VendorId::TestVendor1 (65521, 0xFFF1) will be used.
-
-[--fabric-filtered]:
-  Boolean indicating whether to do a fabric-filtered read. Defaults to true.
-
-[--data-version]:
-  Comma-separated list of data versions for the clusters being read.
-
-[--lit-icd-peer]:
-  Whether to treat the peer as a LIT ICD. false: Always no, true: Always yes, (not set): Yes if the peer is registered to this controller.
-
-[--allow-large-payload]:
-  If true, indicates that the session should allow large application payloads (which requires a TCP connection).Defaults to false, which uses a UDP+MRP session.
 
 
+# 列出該設備有多少 endpoint
 >>> descriptor read parts-list 1 0xFFFF
-```
+[1736825419.951] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_001D Attribute 0x0000_0003 DataVersion: 818204359
+[1736825419.951] [750639:750673] [TOO]   PartsList: 1 entries
+[1736825419.951] [750639:750673] [TOO]     [1]: 1
+[1736825419.951] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_001D Attribute 0x0000_0003 DataVersion: 731862665
+[1736825419.951] [750639:750673] [TOO]   PartsList: 0 entries
 
-##### [✔] descriptor read device-type-list
+# 列出該設備所有的 device-type-list
+>>> descriptor read device-type-list 1 0xFFFF
+[1736825222.476] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_001D Attribute 0x0000_0000 DataVersion: 818204359
+[1736825222.476] [750639:750673] [TOO]   DeviceTypeList: 1 entries
+[1736825222.476] [750639:750673] [TOO]     [1]: {
+[1736825222.476] [750639:750673] [TOO]       DeviceType: 22 (Matter Root Node)
+[1736825222.476] [750639:750673] [TOO]       Revision: 1
+[1736825222.476] [750639:750673] [TOO]      }
+[1736825222.476] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_001D Attribute 0x0000_0000 DataVersion: 731862665
+[1736825222.476] [750639:750673] [TOO]   DeviceTypeList: 1 entries
+[1736825222.476] [750639:750673] [TOO]     [1]: {
+[1736825222.476] [750639:750673] [TOO]       DeviceType: 257 (Matter Dimmable Light)
+[1736825222.476] [750639:750673] [TOO]       Revision: 1
+[1736825222.476] [750639:750673] [TOO]      }
 
-```bash
->>> descriptor read device-type-list 1 0
-[1736752826.910] [742255:742286] [TOO] Endpoint: 0 Cluster: 0x0000_001D Attribute 0x0000_0000 DataVersion: 4024051695
-[1736752826.910] [742255:742286] [TOO]   DeviceTypeList: 1 entries
-[1736752826.910] [742255:742286] [TOO]     [1]: {
-[1736752826.910] [742255:742286] [TOO]       DeviceType: 22 (Matter Root Node)
-[1736752826.910] [742255:742286] [TOO]       Revision: 1
-[1736752826.910] [742255:742286] [TOO]      }
-[1736752826.910] [742255:742286] [EM] <<< [E:28687i S:37850 M:267009731 (Ack:13951014)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fd91:956f:2946:1a48:da3a:ddff:fe0f:4c8a]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
-
->>> descriptor read device-type-list 1 1
-[1736752710.990] [742255:742286] [TOO] Endpoint: 1 Cluster: 0x0000_001D Attribute 0x0000_0000 DataVersion: 54305427
-[1736752710.990] [742255:742286] [TOO]   DeviceTypeList: 1 entries
-[1736752710.990] [742255:742286] [TOO]     [1]: {
-[1736752710.990] [742255:742286] [TOO]       DeviceType: 257 (Matter Dimmable Light)
-[1736752710.990] [742255:742286] [TOO]       Revision: 1
-[1736752710.990] [742255:742286] [TOO]      }
-[1736752710.990] [742255:742286] [EM] <<< [E:28673i S:37851 M:182180450 (Ack:174155331)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fe80::da3a:ddff:fe0f:4c8a%enp0s3]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
-
-```
-
-##### [✔] descriptor read server-list
-
-> 列出 Clusters - server
-
-```bash
->>> descriptor read server-list 1 0
-[1736752995.266] [742255:742286] [TOO] Endpoint: 0 Cluster: 0x0000_001D Attribute 0x0000_0001 DataVersion: 4024051695
-[1736752995.266] [742255:742286] [TOO]   ServerList: 18 entries
-[1736752995.266] [742255:742286] [TOO]     [1]: 29 (Descriptor)
-[1736752995.266] [742255:742286] [TOO]     [2]: 31 (AccessControl)
-[1736752995.266] [742255:742286] [TOO]     [3]: 40 (BasicInformation)
-[1736752995.266] [742255:742286] [TOO]     [4]: 42 (OtaSoftwareUpdateRequestor)
-[1736752995.266] [742255:742286] [TOO]     [5]: 48 (GeneralCommissioning)
-[1736752995.266] [742255:742286] [TOO]     [6]: 49 (NetworkCommissioning)
-[1736752995.266] [742255:742286] [TOO]     [7]: 50 (DiagnosticLogs)
-[1736752995.266] [742255:742286] [TOO]     [8]: 51 (GeneralDiagnostics)
-[1736752995.266] [742255:742286] [TOO]     [9]: 52 (SoftwareDiagnostics)
-[1736752995.266] [742255:742286] [TOO]     [10]: 53 (ThreadNetworkDiagnostics)
-[1736752995.266] [742255:742286] [TOO]     [11]: 54 (WiFiNetworkDiagnostics)
-[1736752995.266] [742255:742286] [TOO]     [12]: 55 (EthernetNetworkDiagnostics)
-[1736752995.266] [742255:742286] [TOO]     [13]: 59 (Switch)
-[1736752995.266] [742255:742286] [TOO]     [14]: 60 (AdministratorCommissioning)
-[1736752995.266] [742255:742286] [TOO]     [15]: 62 (OperationalCredentials)
-[1736752995.266] [742255:742286] [TOO]     [16]: 63 (GroupKeyManagement)
-[1736752995.266] [742255:742286] [TOO]     [17]: 64 (FixedLabel)
-[1736752995.266] [742255:742286] [TOO]     [18]: 65 (UserLabel)
-[1736752995.266] [742255:742286] [EM] <<< [E:28693i S:37850 M:267009743 (Ack:13951020)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fd91:956f:2946:1a48:da3a:ddff:fe0f:4c8a]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
-
->>> descriptor read server-list 1 1
-[1736753021.782] [742255:742286] [TOO] Endpoint: 1 Cluster: 0x0000_001D Attribute 0x0000_0001 DataVersion: 1682947382
-[1736753021.782] [742255:742286] [TOO]   ServerList: 7 entries
-[1736753021.782] [742255:742286] [TOO]     [1]: 3 (Identify)
-[1736753021.782] [742255:742286] [TOO]     [2]: 4 (Groups)
-[1736753021.782] [742255:742286] [TOO]     [3]: 6 (OnOff)
-[1736753021.782] [742255:742286] [TOO]     [4]: 8 (LevelControl)
-[1736753021.782] [742255:742286] [TOO]     [5]: 29 (Descriptor)
-[1736753021.782] [742255:742286] [TOO]     [6]: 98 (ScenesManagement)
-[1736753021.782] [742255:742286] [TOO]     [7]: 768 (ColorControl)
-[1736753021.782] [742255:742286] [EM] <<< [E:28694i S:37850 M:267009745 (Ack:13951021)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fd91:956f:2946:1a48:da3a:ddff:fe0f:4c8a]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
-
+# 列出 server-list
 >>> descriptor read server-list 1 0xFFFF
-[1736753269.034] [742255:742286] [TOO] Endpoint: 0 Cluster: 0x0000_001D Attribute 0x0000_0001 DataVersion: 4024051695
-[1736753269.034] [742255:742286] [TOO]   ServerList: 18 entries
-[1736753269.034] [742255:742286] [TOO]     [1]: 29 (Descriptor)
-[1736753269.034] [742255:742286] [TOO]     [2]: 31 (AccessControl)
-[1736753269.034] [742255:742286] [TOO]     [3]: 40 (BasicInformation)
-[1736753269.034] [742255:742286] [TOO]     [4]: 42 (OtaSoftwareUpdateRequestor)
-[1736753269.034] [742255:742286] [TOO]     [5]: 48 (GeneralCommissioning)
-[1736753269.034] [742255:742286] [TOO]     [6]: 49 (NetworkCommissioning)
-[1736753269.034] [742255:742286] [TOO]     [7]: 50 (DiagnosticLogs)
-[1736753269.034] [742255:742286] [TOO]     [8]: 51 (GeneralDiagnostics)
-[1736753269.034] [742255:742286] [TOO]     [9]: 52 (SoftwareDiagnostics)
-[1736753269.034] [742255:742286] [TOO]     [10]: 53 (ThreadNetworkDiagnostics)
-[1736753269.034] [742255:742286] [TOO]     [11]: 54 (WiFiNetworkDiagnostics)
-[1736753269.034] [742255:742286] [TOO]     [12]: 55 (EthernetNetworkDiagnostics)
-[1736753269.034] [742255:742286] [TOO]     [13]: 59 (Switch)
-[1736753269.034] [742255:742286] [TOO]     [14]: 60 (AdministratorCommissioning)
-[1736753269.034] [742255:742286] [TOO]     [15]: 62 (OperationalCredentials)
-[1736753269.034] [742255:742286] [TOO]     [16]: 63 (GroupKeyManagement)
-[1736753269.034] [742255:742286] [TOO]     [17]: 64 (FixedLabel)
-[1736753269.034] [742255:742286] [TOO]     [18]: 65 (UserLabel)
-[1736753269.034] [742255:742286] [TOO] Endpoint: 1 Cluster: 0x0000_001D Attribute 0x0000_0001 DataVersion: 1682947382
-[1736753269.034] [742255:742286] [TOO]   ServerList: 7 entries
-[1736753269.034] [742255:742286] [TOO]     [1]: 3 (Identify)
-[1736753269.034] [742255:742286] [TOO]     [2]: 4 (Groups)
-[1736753269.034] [742255:742286] [TOO]     [3]: 6 (OnOff)
-[1736753269.034] [742255:742286] [TOO]     [4]: 8 (LevelControl)
-[1736753269.034] [742255:742286] [TOO]     [5]: 29 (Descriptor)
-[1736753269.034] [742255:742286] [TOO]     [6]: 98 (ScenesManagement)
-[1736753269.034] [742255:742286] [TOO]     [7]: 768 (ColorControl)
-[1736753269.034] [742255:742286] [EM] <<< [E:28706i S:37850 M:267009769 (Ack:13951033)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fd91:956f:2946:1a48:da3a:ddff:fe0f:4c8a]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
-```
+[1736823539.973] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_001D Attribute 0x0000_0001 DataVersion: 818204359
+[1736823539.973] [750639:750673] [TOO]   ServerList: 18 entries
+[1736823539.973] [750639:750673] [TOO]     [1]: 29 (Descriptor)
+[1736823539.973] [750639:750673] [TOO]     [2]: 31 (AccessControl)
+[1736823539.973] [750639:750673] [TOO]     [3]: 40 (BasicInformation)
+[1736823539.973] [750639:750673] [TOO]     [4]: 42 (OtaSoftwareUpdateRequestor)
+[1736823539.973] [750639:750673] [TOO]     [5]: 48 (GeneralCommissioning)
+[1736823539.973] [750639:750673] [TOO]     [6]: 49 (NetworkCommissioning)
+[1736823539.973] [750639:750673] [TOO]     [7]: 50 (DiagnosticLogs)
+[1736823539.973] [750639:750673] [TOO]     [8]: 51 (GeneralDiagnostics)
+[1736823539.973] [750639:750673] [TOO]     [9]: 52 (SoftwareDiagnostics)
+[1736823539.973] [750639:750673] [TOO]     [10]: 53 (ThreadNetworkDiagnostics)
+[1736823539.973] [750639:750673] [TOO]     [11]: 54 (WiFiNetworkDiagnostics)
+[1736823539.973] [750639:750673] [TOO]     [12]: 55 (EthernetNetworkDiagnostics)
+[1736823539.973] [750639:750673] [TOO]     [13]: 59 (Switch)
+[1736823539.973] [750639:750673] [TOO]     [14]: 60 (AdministratorCommissioning)
+[1736823539.973] [750639:750673] [TOO]     [15]: 62 (OperationalCredentials)
+[1736823539.973] [750639:750673] [TOO]     [16]: 63 (GroupKeyManagement)
+[1736823539.973] [750639:750673] [TOO]     [17]: 64 (FixedLabel)
+[1736823539.973] [750639:750673] [TOO]     [18]: 65 (UserLabel)
+[1736823539.973] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_001D Attribute 0x0000_0001 DataVersion: 731862665
+[1736823539.973] [750639:750673] [TOO]   ServerList: 7 entries
+[1736823539.973] [750639:750673] [TOO]     [1]: 3 (Identify)
+[1736823539.973] [750639:750673] [TOO]     [2]: 4 (Groups)
+[1736823539.973] [750639:750673] [TOO]     [3]: 6 (OnOff)
+[1736823539.973] [750639:750673] [TOO]     [4]: 8 (LevelControl)
+[1736823539.973] [750639:750673] [TOO]     [5]: 29 (Descriptor)
+[1736823539.973] [750639:750673] [TOO]     [6]: 98 (ScenesManagement)
+[1736823539.973] [750639:750673] [TOO]     [7]: 768 (ColorControl)
 
-##### [✔] descriptor read client-list
-
-> 列出 Clusters - client
-
-```bash
->>> descriptor read client-list 1 0
-[1736753113.575] [742255:742286] [TOO] Endpoint: 0 Cluster: 0x0000_001D Attribute 0x0000_0002 DataVersion: 4024051695
-[1736753113.575] [742255:742286] [TOO]   ClientList: 1 entries
-[1736753113.575] [742255:742286] [TOO]     [1]: 41 (OtaSoftwareUpdateProvider)
-[1736753113.575] [742255:742286] [EM] <<< [E:28700i S:37850 M:267009757 (Ack:13951027)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fd91:956f:2946:1a48:da3a:ddff:fe0f:4c8a]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
-
->>> descriptor read client-list 1 1
-[1736753126.568] [742255:742286] [TOO] Endpoint: 1 Cluster: 0x0000_001D Attribute 0x0000_0002 DataVersion: 1682947382
-[1736753126.568] [742255:742286] [TOO]   ClientList: 0 entries
-[1736753126.568] [742255:742286] [EM] <<< [E:28701i S:37850 M:267009759 (Ack:13951028)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fd91:956f:2946:1a48:da3a:ddff:fe0f:4c8a]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
-
+# 列出 client-list
 >>> descriptor read client-list 1 0xFFFF
-[1736753225.485] [742255:742286] [TOO] Endpoint: 0 Cluster: 0x0000_001D Attribute 0x0000_0002 DataVersion: 4024051695
-[1736753225.485] [742255:742286] [TOO]   ClientList: 1 entries
-[1736753225.485] [742255:742286] [TOO]     [1]: 41 (OtaSoftwareUpdateProvider)
-[1736753225.485] [742255:742286] [TOO] Endpoint: 1 Cluster: 0x0000_001D Attribute 0x0000_0002 DataVersion: 1682947382
-[1736753225.485] [742255:742286] [TOO]   ClientList: 0 entries
-[1736753225.485] [742255:742286] [EM] <<< [E:28705i S:37850 M:267009767 (Ack:13951032)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [F01B] [UDP:[fd91:956f:2946:1a48:da3a:ddff:fe0f:4c8a]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+[1736823600.489] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_001D Attribute 0x0000_0002 DataVersion: 818204359
+[1736823600.489] [750639:750673] [TOO]   ClientList: 1 entries
+[1736823600.489] [750639:750673] [TOO]     [1]: 41 (OtaSoftwareUpdateProvider)
+[1736823600.489] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_001D Attribute 0x0000_0002 DataVersion: 731862665
+[1736823600.489] [750639:750673] [TOO]   ClientList: 0 entries
 ```
 
-#### [⚑] descriptor subscribe
+##### descriptor subscribe
 
 ```bash
 >>> descriptor subscribe
@@ -1910,14 +1938,48 @@ Usage:
   | * feature-map                                                                       |
   | * cluster-revision                                                                  |
   +-------------------------------------------------------------------------------------+
+
+
+# 可以註冊監聽的 server-list
+>>> descriptor subscribe server-list 2 3600 1 0xFFFF
+[1736823289.885] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_001D Attribute 0x0000_0001 DataVersion: 818204359
+[1736823289.885] [750639:750673] [TOO]   ServerList: 18 entries
+[1736823289.885] [750639:750673] [TOO]     [1]: 29 (Descriptor)
+[1736823289.885] [750639:750673] [TOO]     [2]: 31 (AccessControl)
+[1736823289.885] [750639:750673] [TOO]     [3]: 40 (BasicInformation)
+[1736823289.885] [750639:750673] [TOO]     [4]: 42 (OtaSoftwareUpdateRequestor)
+[1736823289.885] [750639:750673] [TOO]     [5]: 48 (GeneralCommissioning)
+[1736823289.885] [750639:750673] [TOO]     [6]: 49 (NetworkCommissioning)
+[1736823289.885] [750639:750673] [TOO]     [7]: 50 (DiagnosticLogs)
+[1736823289.885] [750639:750673] [TOO]     [8]: 51 (GeneralDiagnostics)
+[1736823289.885] [750639:750673] [TOO]     [9]: 52 (SoftwareDiagnostics)
+[1736823289.885] [750639:750673] [TOO]     [10]: 53 (ThreadNetworkDiagnostics)
+[1736823289.885] [750639:750673] [TOO]     [11]: 54 (WiFiNetworkDiagnostics)
+[1736823289.885] [750639:750673] [TOO]     [12]: 55 (EthernetNetworkDiagnostics)
+[1736823289.885] [750639:750673] [TOO]     [13]: 59 (Switch)
+[1736823289.885] [750639:750673] [TOO]     [14]: 60 (AdministratorCommissioning)
+[1736823289.885] [750639:750673] [TOO]     [15]: 62 (OperationalCredentials)
+[1736823289.885] [750639:750673] [TOO]     [16]: 63 (GroupKeyManagement)
+[1736823289.885] [750639:750673] [TOO]     [17]: 64 (FixedLabel)
+[1736823289.885] [750639:750673] [TOO]     [18]: 65 (UserLabel)
+[1736823289.885] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_001D Attribute 0x0000_0001 DataVersion: 731862665
+[1736823289.885] [750639:750673] [TOO]   ServerList: 7 entries
+[1736823289.885] [750639:750673] [TOO]     [1]: 3 (Identify)
+[1736823289.885] [750639:750673] [TOO]     [2]: 4 (Groups)
+[1736823289.885] [750639:750673] [TOO]     [3]: 6 (OnOff)
+[1736823289.885] [750639:750673] [TOO]     [4]: 8 (LevelControl)
+[1736823289.885] [750639:750673] [TOO]     [5]: 29 (Descriptor)
+[1736823289.885] [750639:750673] [TOO]     [6]: 98 (ScenesManagement)
+[1736823289.885] [750639:750673] [TOO]     [7]: 768 (ColorControl)
 ```
 
-```bash
-descriptor subscribe server-list 2 3600 1 0xFFFF
-descriptor subscribe event-list 2 3600 1 0xFFFF
-```
+## pairing ble-wifi node-id ssid password setup-pin-code discriminator4.3. [✚] levelcontrol - 0x00000008
 
-## 4.3. [✚] levelcontrol
+> <font color="red">調光器 (Dimmer) 功能</font>
+>
+> github: [level-control](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/level-control)
+>
+> github: [on-off-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/on-off-server/on-off-server.cpp)
 
 ```bash
 >>> levelcontrol
@@ -1947,22 +2009,112 @@ Usage:
   | * read-event-by-id                                                                  |
   | * subscribe-event-by-id                                                             |
   +-------------------------------------------------------------------------------------+
-
-
->>> levelcontrol move-to-level 100 0 0 0 1 1
->>> levelcontrol move-to-level 200 0 0 0 1 1
->>> levelcontrol read current-level 1 1
-
->>> levelcontrol read max-level 1 1
->>> levelcontrol read min-level 1 1
-
->>> levelcontrol write max-level 1 1
->>> levelcontrol write min-level 1 1
-
->>> levelcontrol subscribe current-level 2 3600 1 1
 ```
 
-## 4.4. [✚] onoff
+##### levelcontrol move-to-level
+
+```bash
+>>> levelcontrol move-to-level 100 0 0 0 1 1
+[1736822839.979] [750639:750673] [DMG] Received Command Response Status for Endpoint=1 Cluster=0x0000_0008 Command=0x0000_0000 Status=0x0
+
+>>> levelcontrol move-to-level 200 0 0 0 1 1
+[1736822875.477] [750639:750673] [DMG] Received Command Response Status for Endpoint=1 Cluster=0x0000_0008 Command=0x0000_0000 Status=0x0
+```
+
+##### levelcontrol read
+
+```bash
+>>> levelcontrol read
+Usage:
+   levelcontrol read attribute-name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Attributes:                                                                         |
+  +-------------------------------------------------------------------------------------+
+  | * current-level                                                                     |
+  | * remaining-time                                                                    |
+  | * min-level                                                                         |
+  | * max-level                                                                         |
+  | * current-frequency                                                                 |
+  | * min-frequency                                                                     |
+  | * max-frequency                                                                     |
+  | * options                                                                           |
+  | * on-off-transition-time                                                            |
+  | * on-level                                                                          |
+  | * on-transition-time                                                                |
+  | * off-transition-time                                                               |
+  | * default-move-rate                                                                 |
+  | * start-up-current-level                                                            |
+  | * generated-command-list                                                            |
+  | * accepted-command-list                                                             |
+  | * event-list                                                                        |
+  | * attribute-list                                                                    |
+  | * feature-map                                                                       |
+  | * cluster-revision                                                                  |
+  +-------------------------------------------------------------------------------------+
+
+
+# 讀取 levelcontrol 的目前的數值
+>>> levelcontrol read current-level 1 1
+[1736822951.591] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0008 Attribute 0x0000_0000 DataVersion: 4022424782
+[1736822951.591] [750639:750673] [TOO]   CurrentLevel: 200
+
+# 讀取 levelcontrol 的最大值為多少
+>>> levelcontrol read max-level 1 1
+[1736822971.245] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0008 Attribute 0x0000_0003 DataVersion: 4022424782
+[1736822971.245] [750639:750673] [TOO]   MaxLevel: 254
+
+# 讀取 levelcontrol 的最小值為多少
+>>> levelcontrol read min-level 1 1
+[1736822987.625] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0008 Attribute 0x0000_0002 DataVersion: 4022424782
+[1736822987.625] [750639:750673] [TOO]   MinLevel: 1
+```
+
+##### levelcontrol subscribe
+
+```bash
+>>> lcontrol subscribe
+Usage:
+   levelcontrol subscribe attribute-name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Attributes:                                                                         |
+  +-------------------------------------------------------------------------------------+
+  | * current-level                                                                     |
+  | * remaining-time                                                                    |
+  | * min-level                                                                         |
+  | * max-level                                                                         |
+  | * current-frequency                                                                 |
+  | * min-frequency                                                                     |
+  | * max-frequency                                                                     |
+  | * options                                                                           |
+  | * on-off-transition-time                                                            |
+  | * on-level                                                                          |
+  | * on-transition-time                                                                |
+  | * off-transition-time                                                               |
+  | * default-move-rate                                                                 |
+  | * start-up-current-level                                                            |
+  | * generated-command-list                                                            |
+  | * accepted-command-list                                                             |
+  | * event-list                                                                        |
+  | * attribute-list                                                                    |
+  | * feature-map                                                                       |
+  | * cluster-revision                                                                  |
+  +-------------------------------------------------------------------------------------+
+
+
+# 註冊監聽 levelcontrol 的變化
+>>> levelcontrol subscribe current-level 2 3600 1 1
+[1736823008.862] [750639:750673] [DMG] Subscription established with SubscriptionID = 0x17532287 MinInterval = 2s MaxInterval = 3600s Peer = 01:0000000000000001
+```
+
+## 4.4. [✚] onoff - 0x00000006
+
+> <font color="red">開 / 關 (On / Off) 功能</font>
+>
+> github: [on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/on-off-server)
+>
+> github: [on-off-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/on-off-server/on-off-server.cpp)
 
 ```bash
 >>> onoff
@@ -1989,27 +2141,114 @@ Usage:
   | * read-event-by-id                                                                  |
   | * subscribe-event-by-id                                                             |
   +-------------------------------------------------------------------------------------+
+```
 
->>> onoff subscribe on-off 2 3600 1 1
+##### onoff toggle/on/off
+
+```bash
+# 切换 on-off 的數值
 >>> onoff toggle 1 1
->>> onoff read on-off 1 1
+[1736823175.178] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0006 Attribute 0x0000_0000 DataVersion: 343485665
+[1736823175.178] [750639:750673] [TOO]   OnOff: FALSE
+
+# 將 on-off 設定 on
 >>> onoff on 1 1
+[1736823162.414] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0006 Attribute 0x0000_0000 DataVersion: 343485664
+[1736823162.414] [750639:750673] [TOO]   OnOff: TRUE
+
+# 將 on-off 設定 off
 >>> onoff off 1 1
+[1736823130.450] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0006 Attribute 0x0000_0000 DataVersion: 343485663
+[1736823130.450] [750639:750673] [TOO]   OnOff: FALSE
+```
+
+##### onoff read
+
+```bash
+>>> Usage:
+   onoff read attribute-name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Attributes:                                                                         |
+  +-------------------------------------------------------------------------------------+
+  | * on-off                                                                            |
+  | * global-scene-control                                                              |
+  | * on-time                                                                           |
+  | * off-wait-time                                                                     |
+  | * start-up-on-off                                                                   |
+  | * generated-command-list                                                            |
+  | * accepted-command-list                                                             |
+  | * event-list                                                                        |
+  | * attribute-list                                                                    |
+  | * feature-map                                                                       |
+  | * cluster-revision                                                                  |
+  +-------------------------------------------------------------------------------------+
+
+
+# 讀取 on-off 目前的數值
+>>> onoff read on-off 1 1
+[1736821792.963] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0006 Attribute 0x0000_0000 DataVersion: 343485660
+[1736821792.963] [750639:750673] [TOO]   OnOff: TRUE
+
+# 讀取 on-off 有什麼属性
+>>> onoff read attribute-list 1 1
+[1736821639.792] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0006 Attribute 0x0000_FFFB DataVersion: 343485660
+[1736821639.792] [750639:750673] [TOO]   AttributeList: 10 entries
+[1736821639.792] [750639:750673] [TOO]     [1]: 0 (OnOff)
+[1736821639.792] [750639:750673] [TOO]     [2]: 16384 (GlobalSceneControl)
+[1736821639.792] [750639:750673] [TOO]     [3]: 16385 (OnTime)
+[1736821639.792] [750639:750673] [TOO]     [4]: 16386 (OffWaitTime)
+[1736821639.792] [750639:750673] [TOO]     [5]: 16387 (StartUpOnOff)
+[1736821639.792] [750639:750673] [TOO]     [6]: 65528 (GeneratedCommandList)
+[1736821639.792] [750639:750673] [TOO]     [7]: 65529 (AcceptedCommandList)
+[1736821639.792] [750639:750673] [TOO]     [8]: 65531 (AttributeList)
+[1736821639.792] [750639:750673] [TOO]     [9]: 65532 (FeatureMap)
+[1736821639.792] [750639:750673] [TOO]     [10]: 65533 (ClusterRevision)
+```
+
+##### onoff subscribe
+
+```bash
+>>> onoff subscribe
+Usage:
+   onoff subscribe attribute-name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Attributes:                                                                         |
+  +-------------------------------------------------------------------------------------+
+  | * on-off                                                                            |
+  | * global-scene-control                                                              |
+  | * on-time                                                                           |
+  | * off-wait-time                                                                     |
+  | * start-up-on-off                                                                   |
+  | * generated-command-list                                                            |
+  | * accepted-command-list                                                             |
+  | * event-list                                                                        |
+  | * attribute-list                                                                    |
+  | * feature-map                                                                       |
+  | * cluster-revision                                                                  |
+  +-------------------------------------------------------------------------------------+
+
+
+# 註冊監聽 on-off 的狀態
+>>> onoff subscribe on-off 2 3600 1 1
+[1736822503.043] [750639:750673] [DMG] Subscription established with SubscriptionID = 0xe84f4b2c MinInterval = 2s MaxInterval = 3600s Peer = 01:0000000000000001
 ```
 
 # 5. Examples
 
 ```bash
-$ rm /tmp/chip_kvs
+# 預設儲存資料放在 /tmp/chip_tool_kvs，如果要重新配對請刪除
+$ chip-tool interactive start --storage-directory /work/IoT/matter/chip-tool --trace_file /tmp/chip-tool-123.log --paa-trust-store-path /work/IoT/matter/paa-root-certs
 
-$ chip-tool interactive start
 >>>
-
-# 未配對之設備
+# 未配對之設備，但是已經連上
 >>> pairing onnetwork 1 20231206
+
 # 已配對之設備
 >>> pairing code 1 21718613662
 
+# nodeid: 1
 >>> onoff toggle 1 1
 >>> onoff read on-off 1 1
 >>> onoff on 1 1
@@ -2026,6 +2265,27 @@ $ chip-tool interactive start
 >>> subscriptions shutdown-all-for-node 1
 
 >>> pairing unpair 1
+
+# nodeid: 2
+# 當要配對已過認證的設備
+>>> pairing code 2 30330221131
+#or
+chip-tool pairing code 2 30330221131 --paa-trust-store-path /work/IoT/matter/paa-root-certs
+
+>>> onoff toggle 2 1
+
+>>> pairing unpair 2
+
+# nodeid: 3
+# 未配對之設備，但是已經連上
+>>> pairing code-wifi 3 Lanka520 Lanka520 01234567890
+
+>>> onoff toggle 3 1
+>>> onoff toggle 3 2
+
+>>> pairing open-commissioning-window 3 1 300 2000 0
+
+>>> pairing unpair 3
 ```
 
 ```bash
