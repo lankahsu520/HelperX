@@ -719,7 +719,9 @@ caption always "%3n %t%? @%u%?%? [%h]%?%=%c"
 $ vi ~/.bashrc
 # add the last line
 [ ! -z "$STY" ] && export PS1='[screen] \u@\h:\w\$ '
+```
 
+```bash
 # create a screen
 $ screen
 
@@ -746,10 +748,12 @@ There is a screen on:
 
 # resumes a detached screen session
 $ screen -r 17543.pts-1.lanka-build20-vbx
+# or
+$ alias screen-one="screen -r `screen -list | grep Detached | awk -F ' ' '{print $1}'`"
+$ screen-one
 
 # kill the screen session
 $ screen -S 17543.pts-1.lanka-build20-vbx -X quit 
-
 ```
 
 ## 2.1. [Linux crontab 命令](https://www.runoob.com/linux/linux-comm-crontab.html)
