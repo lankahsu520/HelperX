@@ -964,12 +964,78 @@ helper_linux.md:748:function grep-include()
 ```bash
 [[ $ABC == ?(-)+([0-9]) ]] && echo "$ABC is an integer"
 [[ $ABC == ?(-)+([:digit:]) ]] && echo "$ABC is an integer"
+
+function is-integer()
+{
+	HINT="Usage: ${FUNCNAME[0]} <string>"
+	STR1="$1"
+
+	RE='^[+-]?[0-9]+([0-9]+)?$'
+	if [ ! -z "${STR1}" ]; then
+		[[ ${STR1} =~ ${RE} ]] && echo "$STR1 is an integer" && return 0
+		echo "$STR1 isn't an integer" && return 1
+	else
+		echo $HINT
+		return 1
+	fi
+}
+```
+
+```bash
+$ is-integer "abc"; echo [$?]
+abc isn't an integer
+[1]
+$ is-integer "1234"; echo [$?]
+1234 is an integer
+[0]
+$ is-integer "1234.12"; echo [$?]
+1234.12 isn't an integer
+[1]
+$ is-integer "-1234"; echo [$?]
+-1234 is an integer
+[0]
+$ is-integer "+1234"; echo [$?]
++1234 is an integer
+[0]
 ```
 
 #### number checker
 
 ```bash
-[ ! -z "${ABC##*[!0-9]*}" ] && echo "is a number" || echo "is not a number";
+[ ! -z "${ABC##*[!0-9.]*}" ] && echo "is a number" || echo "is not a number";
+
+function is-number()
+{
+	HINT="Usage: ${FUNCNAME[0]} <string>"
+	STR1="$1"
+
+	RE='^[+-]?[0-9]+([.][0-9]+)?$'
+	if [ ! -z "${STR1}" ]; then
+		[[ ${STR1} =~ ${RE} ]] && echo "$STR1 is an number" && return 0
+		echo "$STR1 isn't an number" && return 1
+	else
+		echo $HINT
+		return 1
+	fi
+}
+```
+
+```bash
+$ is-number "abc"; echo [$?]
+abc isn't an number
+[1]
+$ is-number "1234"; echo [$?]
+1234 is an number
+[0]
+$ is-number "1234.12"; echo [$?]
+1234.12 is an number
+[0]
+$ is-number "-1234"; echo [$?]
+-1234 is an number
+[0]
+$ is-number "+1234"; echo [$?]
++1234 is an number
+[0]
 ```
 
 #### trim
@@ -978,7 +1044,7 @@ helper_linux.md:748:function grep-include()
 ABC="    abc    "
 function ltrim()
 {
-	HINT="Usage: ${FUNCNAME[0]} <file>"
+	HINT="Usage: ${FUNCNAME[0]} <string>"
 	STR1="$1"
 
 	if [ ! -z "${STR1}" ]; then
@@ -990,7 +1056,7 @@ function ltrim()
 
 function rtrim()
 {
-	HINT="Usage: ${FUNCNAME[0]} <file>"
+	HINT="Usage: ${FUNCNAME[0]} <string>"
 	STR1="$1"
 
 	if [ ! -z "${STR1}" ]; then
@@ -1002,7 +1068,7 @@ function rtrim()
 
 function trim()
 {
-	HINT="Usage: ${FUNCNAME[0]} <file>"
+	HINT="Usage: ${FUNCNAME[0]} <string>"
 	STR1="$1"
 
 	if [ ! -z "${STR1}" ]; then
