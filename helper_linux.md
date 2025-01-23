@@ -972,6 +972,74 @@ helper_linux.md:748:function grep-include()
 [ ! -z "${ABC##*[!0-9]*}" ] && echo "is a number" || echo "is not a number";
 ```
 
+#### trim
+
+```bash
+ABC="    abc    "
+function ltrim()
+{
+	HINT="Usage: ${FUNCNAME[0]} <file>"
+	STR1="$1"
+
+	if [ ! -z "${STR1}" ]; then
+		echo "${STR1##+([[:space:]])}"
+	else
+		echo $HINT
+	fi
+}
+
+function rtrim()
+{
+	HINT="Usage: ${FUNCNAME[0]} <file>"
+	STR1="$1"
+
+	if [ ! -z "${STR1}" ]; then
+		echo "${STR1%%+([[:space:]])}"
+	else
+		echo $HINT
+	fi
+}
+
+function trim()
+{
+	HINT="Usage: ${FUNCNAME[0]} <file>"
+	STR1="$1"
+
+	if [ ! -z "${STR1}" ]; then
+		STR1=`ltrim "${STR1}"`
+		STR1=`rtrim "${STR1}"`
+		echo "${STR1}"
+	else
+		echo $HINT
+	fi
+}
+```
+
+```bash
+# 其實在參數傳遞時就會移除 SPACE，如果沒有注意細節是發現不了的
+$ ABC="    abc    "
+$ echo [${ABC}]
+[ abc ]
+$ echo ["${ABC}"]
+[    abc    ]
+
+$ echo [`ltrim "${ABC}"`]
+[abc ]
+$ echo ["`ltrim "${ABC}"`"]
+[abc    ]
+
+$ echo [`rtrim "${ABC}"`]
+[ abc]
+$ echo ["`rtrim "${ABC}"`"]
+[    abc]
+
+$ echo [`trim "${ABC}"`]
+[abc]
+$ echo ["`trim "${ABC}"`"]
+[abc]
+
+```
+
 #### sed - stream editor for filtering and transforming text
 
 ```bash
