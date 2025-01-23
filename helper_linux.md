@@ -3445,8 +3445,13 @@ error: This plugin does not support protected videos, try youtube-dl instead
 
 > [output-template](https://github.com/yt-dlp/yt-dlp#output-template)
 
+> [yt-dlp-youtube-oauth2](https://github.com/coletdjnz/yt-dlp-youtube-oauth2)
+
 ```bash
 $ pip install --upgrade yt-dlp
+
+#ERROR: [youtube] : Sign in to confirm you’re not a bot. This helps protect our community. Learn more
+$ python3 -m pip install -U https://github.com/coletdjnz/yt-dlp-youtube-oauth2/archive/refs/heads/master.zip
 ```
 
 ```bash
