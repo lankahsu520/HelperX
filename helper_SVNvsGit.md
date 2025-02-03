@@ -237,7 +237,10 @@ $ git branch -d new-branch
 # force to delete
 $ git branch -D new-branch
 # rename
-$ git branch -m new-branch new-branch1
+$ git branch -m old-branch new-branch
+# push
+$ git push origin :old-branch new-branch
+
 ```
 
 #### git checkout
@@ -1445,6 +1448,23 @@ fatal: Exiting because of unfinished merge.
 $ git reset --merge
 $ git push -f
 ```
+
+## II.3. fatal: cannot do a partial commit during a merge.
+
+> 當 BranchA -> B 時，有部分衝突，就算解決了，還是沒有辦法commit。雖然已用肉眼解決了 conflict 或是還原該 conflict 檔案。
+>
+> 個人覺得這是 git 的 bugs；試試以下指令，多試幾次，就可以了
+
+```bash
+$ git commit -am 'Merge branch BranchA into BranchB'
+
+or
+
+$ git commit -a ./
+fatal: paths './ ...' with -a does not make sense
+```
+
+
 
 # III. Glossary
 
