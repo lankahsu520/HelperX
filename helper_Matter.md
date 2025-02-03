@@ -94,13 +94,6 @@
 >
 > HomePod MY5G2TA/A, 18.2 (22K155)
 
-#### 20250115
-
-##### [Tapo P400M](https://www.tp-link.com/tw/home-networking/smart-plug/tapo-p400m/)
-> 不要先用 Tapo 進行配對。由 Tapo 分享會失敗。
->
-> <img src="https://static.tp-link.com/upload/image-line/Tapo_P400M_US_1.0_overview_normal_20250115022533k.png" alt="Tapo P400M" style="zoom:33%;" />
-
 #### 20250107
 
 > 再次進入 matter  世界，持續三星期的努力，也只能更進完善編譯的 codebase 環境。奉勸要加入的團隊或個人，要多評估自身能力和時間。
@@ -2616,7 +2609,7 @@ $ ./linux/out/rootnode_onofflight_bbs1b7IaOV
 >
 > 主要介紹設備獲取證書。這部分不是研究方向，跳過。
 
-## I.3. 範例
+## I.3. 範例&產品
 
 #### A. [开始使用基于 IP 的智能互联家居 (CHIP)](https://codelabs.developers.google.com/codelabs/chip-get-started?hl=zh-cn#0)
 
@@ -2627,6 +2620,18 @@ $ ./linux/out/rootnode_onofflight_bbs1b7IaOV
 #### C. Developer Center / [Matter Virtual Device Development Environment](https://developers.home.google.com/matter/tools/matter-virtual-device-development-environment)
 
 #### D. [Multi Fabrics/Admin - How to add the second controller to end device.](https://community.silabs.com/s/article/Multi-Fabrics-Admin-second-controller?language=en_US)
+
+#### E. Eve Energy
+
+> [支援 Matter 的功耗監測智慧插座 | 美版 Eve Energy 開箱](https://urhomekit.com/blog/eve_energy/)
+>
+> <img src="https://shoplineimg.com/654de7ad9b81d900388b27bd/65d5a9f332f0de002357ef3f/2000x.webp?source_format=jpg" style="zoom:50%;" />
+
+#### F. [Tapo P400M](https://www.tp-link.com/tw/home-networking/smart-plug/tapo-p400m/)
+
+> 不要先用 Tapo 進行配對。由 Tapo 分享會失敗。
+>
+> <img src="https://static.tp-link.com/upload/image-line/Tapo_P400M_US_1.0_overview_normal_20250115022533k.png" alt="Tapo P400M" style="zoom: 50%;" />
 
 ## I.4. Vender
 
