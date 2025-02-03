@@ -31,12 +31,14 @@
 
 #### A. Caller and Answer
 
-![Topology](./images/SIP0001_topology.jpg)
 > [OpenSIPS 权威指南 / 第一章：介绍SIP#理解SIP架构](https://erhuabushuo.gitbooks.io/opensips-definitive-guide/content/chapter1.html)
+
+![Topology](./images/SIP0001_topology.jpg)
 #### B. Components
 
-![Topology](./images/SIP0002_topology.jpg)
 > [OpenSIPS 权威指南 / 第一章：介绍SIP#理解SIP架构](https://erhuabushuo.gitbooks.io/opensips-definitive-guide/content/chapter1.html)
+
+![Topology](./images/SIP0002_topology.jpg)
 #### C. over PSTN
 
   ```mermaid
@@ -75,43 +77,61 @@ sequenceDiagram
 	RServer->>UAC: SIP/2.0 200 OK
 
 ```
-![09_proxy](./images/SIP0003_register.jpg)
-
-> [OpenSIPS 权威指南 / 第一章：介绍SIP#SIP注册过程](https://erhuabushuo.gitbooks.io/opensips-definitive-guide/content/chapter1.html)
-
 ### 1.2.2. A Call
 
-> UAC (User Agent Client) and UAS (User Agent Server)
+> [SIP 簡介](https://github.com/Ci-Jie/OpenSIPS)
+
+> 以下是很簡單的示意圖。如果實際操作後，會發現有些許不同處。
 
 #### A. Simple
 
+>A call B
+
 ```mermaid
-flowchart LR
-	UAC[User Agent Client]
-	UAS[User Agent Server]
+sequenceDiagram
+	participant PhoneA as Phone A
+	participant SipServer as Sip Server
+	participant PhoneB as User Phone B
 
-	SServers[SIP Servers]
-
-	UAC <--> SServers <--> UAS
+	PhoneA->>PhoneB: INVITE
+	PhoneB->>PhoneA: Trying
+	PhoneB->>PhoneA: SIP/2.0 180 Ringing
+	PhoneB->>PhoneA: SIP/2.0 200 OK
+	PhoneA->>PhoneB: ACK
+	PhoneA-->PhoneB: RTP
 ```
-![09_proxy](./images/SIP0009_proxy.jpg)
 
-> [OpenSIPS 权威指南 / 第一章：介绍SIP#Proxy 服务器](https://erhuabushuo.gitbooks.io/opensips-definitive-guide/content/chapter1.html)
+#### B. [SIP/2.0 407 Proxy Authentication Required](https://wiki.kolmisoft.com/index.php/SIP/2.0_407_Proxy_Authentication_Required)
 
-![15_dialog](./images/SIP0015_dialog.jpg)
-[OpenSIPS 权威指南 / 第一章：介绍SIP#SIP dialog 流程](https://erhuabushuo.gitbooks.io/opensips-definitive-guide/content/chapter1.html)
+> A call B
 
-![sip-server](./images/SIP0008_invite.png)
->[SIP 簡介](https://github.com/Ci-Jie/OpenSIPS)
-#### B. Redirect
+```mermaid
+sequenceDiagram
+	participant PhoneA as Phone A
+	participant SipServer as Sip Server
+	participant PhoneB as User Phone B
 
-![10_redirect](./images/SIP0010_redirect.jpg)
+	PhoneA->>PhoneB: INVITE
+	PhoneB->>PhoneA: SIP/2.0 407 Proxy Authentication Required
+	PhoneA->>PhoneB: ACK
+	PhoneA->>PhoneB: INVITE with Proxy-Authorization
+	PhoneB->>PhoneA: SIP/2.0 100 Trying
+	PhoneB->>PhoneA: SIP/2.0 180 Ringing
+	PhoneB->>PhoneA: SIP/2.0 200 Ok
+	PhoneA->>PhoneB: ACK
+	PhoneA->>PhoneB: INFO
+	PhoneB->>PhoneA: SIP/2.0 200 Ok
+	PhoneA-->PhoneB: RTP
+```
+#### C. Redirect
 
 > [OpenSIPS 权威指南 / 第一章：介绍SIP#Redirect 服务器](https://erhuabushuo.gitbooks.io/opensips-definitive-guide/content/chapter1.html)
 
+![10_redirect](./images/SIP0010_redirect.jpg)
+
 ## 1.3. Requests and Responses 
 
-##### A. Requests/Method
+#### A. Requests/Method
 
 - ACK: Acknowledges an INVITE
 - BYE: Terminates an existing session
@@ -127,7 +147,7 @@ flowchart LR
 - SUBSCRIBE: Established a session to receive future updates
 - UPDATE: Updates a session state information
 
-##### B. Responses
+#### B. Responses
 
 - 1XX: Information Messages. (訊息通知，請求處理中尚未完成。)
 - 2XX: Successful Responses. (請求處理成功。)
@@ -1261,6 +1281,15 @@ https://www.microsip.org
 
 # III. Glossary
 
+#### UAC, User Agent Client
+
+> 負責發起 SIP 請求的端點。它的主要作用是向 **UAS (User Agent Server)** 發送 SIP 訊息，以建立、修改或終止 VoIP 通話、視訊會議或即時訊息會話。
+>
+
+####  UAS, User Agent Server
+
+> 負責接收並回應 **UAC (User Agent Client)** 所發送的 SIP 請求的端點。UAS 的主要任務是處理來自 UAC 的通話或會話請求，並提供相應的回應，例如接受、拒絕或轉發請求。
+
 # IV. Tool Usage
 
 ## IV.1. [asterisk cli Usage](https://wiki.asterisk.org/wiki/display/AST/Asterisk+Command+Line+Interface)
@@ -1279,13 +1308,20 @@ certain conditions. Type 'core show license' for details.
 =========================================================================
 Connected to Asterisk 16.2.1~dfsg-2ubuntu1 currently running on build20-vbx (pid = 1940)
 build20-vbx*CLI>?
-!              acl            ael            agent          agi            aoc            ari            bridge         calendar       cc             cdr
-cel            channel        cli            confbridge     config         core           database       devstate       dialplan       dnsmgr         fax
-features       file           group          hangup         help           http           iax2           indication     keys           local          logger
-malloc         manager        media          mgcp           minivm         mixmonitor     module         moh            no             odbc           originate
-parking        phoneprov      pjproject      pjsip          presencestate  pri            queue          realtime       reload         rtcp           rtp
-say            sip            sorcery        stun           test           timing         udptl          ulimit         voicemail      xmldoc         xmpp
-
+!              acl            ael            agent          agi
+aoc            ari            bridge         calendar       cc
+cdr            cel            channel        cli            confbridge
+config         core           dahdi          database       devstate
+dialplan       dnsmgr         fax            features       file
+group          hangup         help           http           iax2
+indication     keys           local          logger         malloc
+manager        media          mfcr2          mgcp           minivm
+mixmonitor     module         moh            no             odbc
+originate      parking        phoneprov      pjproject      pjsip
+presencestate  pri            queue          realtime       reload
+rtcp           rtp            say            sip            sorcery
+ss7            stun           test           timing         transcoder
+udptl          ulimit         voicemail      xmldoc         xmpp
 ```
 
 #### A. pjsip
