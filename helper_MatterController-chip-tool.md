@@ -1687,24 +1687,29 @@ level-control                            window-covering-server
 localization-configuration-server
 ```
 
-## 4.1. [✚] basicinformation - 0x00000028
+## 4.1. [✚] onoff - 0x00000006 (6)
 
-> <font color="red"> 基本資訊</font>
+> <font color="red">開 / 關 (On / Off) 功能</font>
 >
-> github: [basic-information](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/basic-information)
+> github: [on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/on-off-server)
 >
-> github: [basic-information.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/basic-information/basic-information.cpp)
+> github: [on-off-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/on-off-server/on-off-server.cpp)
 
 ```bash
->>> basicinformation
+>>> onoff
 Usage:
-   basicinformation command_name [param1 param2 ...]
+   onoff command_name [param1 param2 ...]
 
   +-------------------------------------------------------------------------------------+
   | Commands:                                                                           |
   +-------------------------------------------------------------------------------------+
   | * command-by-id                                                                     |
-  | * mfg-specific-ping                                                                 |
+  | * off                                                                               |
+  | * on                                                                                |
+  | * toggle                                                                            |
+  | * off-with-effect                                                                   |
+  | * on-with-recall-global-scene                                                       |
+  | * on-with-timed-off                                                                 |
   | * read-by-id                                                                        |
   | * read                                                                              |
   | * write-by-id                                                                       |
@@ -1713,45 +1718,43 @@ Usage:
   | * subscribe-by-id                                                                   |
   | * subscribe                                                                         |
   | * read-event-by-id                                                                  |
-  | * read-event                                                                        |
   | * subscribe-event-by-id                                                             |
-  | * subscribe-event                                                                   |
   +-------------------------------------------------------------------------------------+
 ```
 
-##### basicinformation read
+#### onoff toggle/on/off
 
 ```bash
->>> basicinformation read
-Usage:
-   basicinformation read attribute-name [param1 param2 ...]
+# 切换 on-off 的數值
+>>> onoff toggle 1 1
+[1736823175.178] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0006 Attribute 0x0000_0000 DataVersion: 343485665
+[1736823175.178] [750639:750673] [TOO]   OnOff: FALSE
+
+# 將 on-off 設定 on
+>>> onoff on 1 1
+[1736823162.414] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0006 Attribute 0x0000_0000 DataVersion: 343485664
+[1736823162.414] [750639:750673] [TOO]   OnOff: TRUE
+
+# 將 on-off 設定 off
+>>> onoff off 1 1
+[1736823130.450] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0006 Attribute 0x0000_0000 DataVersion: 343485663
+[1736823130.450] [750639:750673] [TOO]   OnOff: FALSE
+```
+
+#### onoff read
+
+```bash
+>>> Usage:
+   onoff read attribute-name [param1 param2 ...]
 
   +-------------------------------------------------------------------------------------+
   | Attributes:                                                                         |
   +-------------------------------------------------------------------------------------+
-  | * data-model-revision                                                               |
-  | * vendor-name                                                                       |
-  | * vendor-id                                                                         |
-  | * product-name                                                                      |
-  | * product-id                                                                        |
-  | * node-label                                                                        |
-  | * location                                                                          |
-  | * hardware-version                                                                  |
-  | * hardware-version-string                                                           |
-  | * software-version                                                                  |
-  | * software-version-string                                                           |
-  | * manufacturing-date                                                                |
-  | * part-number                                                                       |
-  | * product-url                                                                       |
-  | * product-label                                                                     |
-  | * serial-number                                                                     |
-  | * local-config-disabled                                                             |
-  | * reachable                                                                         |
-  | * unique-id                                                                         |
-  | * capability-minima                                                                 |
-  | * product-appearance                                                                |
-  | * specification-version                                                             |
-  | * max-paths-per-invoke                                                              |
+  | * on-off                                                                            |
+  | * global-scene-control                                                              |
+  | * on-time                                                                           |
+  | * off-wait-time                                                                     |
+  | * start-up-on-off                                                                   |
   | * generated-command-list                                                            |
   | * accepted-command-list                                                             |
   | * event-list                                                                        |
@@ -1760,47 +1763,193 @@ Usage:
   | * cluster-revision                                                                  |
   +-------------------------------------------------------------------------------------+
 
-# 製造商名稱
->>> basicinformation read vendor-name 1 0xFFFF --timeout 5
-[1736825929.794] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0001 DataVersion: 2908716060
-[1736825929.794] [750639:750673] [TOO]   VendorName: TEST_VENDOR
 
-# 製造商ID
->>> basicinformation read vendor-id 1 0xFFFF --timeout 5
-[1736826236.190] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0002 DataVersion: 2908716060
-[1736826236.190] [750639:750673] [TOO]   VendorID: 65521
+# 讀取 on-off 目前的數值
+>>> onoff read on-off 1 1
+[1736821792.963] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0006 Attribute 0x0000_0000 DataVersion: 343485660
+[1736821792.963] [750639:750673] [TOO]   OnOff: TRUE
 
-# 產品名稱
->>> basicinformation read product-name 1 0xFFFF --timeout 5
-[1736825974.738] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0003 DataVersion: 2908716060
-[1736825974.738] [750639:750673] [TOO]   ProductName: TEST_PRODUCT
-
-# 產品ID
->>> basicinformation read product-id 1 0xFFFF --timeout 5
-[1736826292.534] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0004 DataVersion: 2908716060
-[1736826292.534] [750639:750673] [TOO]   ProductID: 32769
-
-# 產品序號
-[1736826338.623] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_000F DataVersion: 2908716060
-[1736826338.623] [750639:750673] [TOO]   SerialNumber: TEST_SN
-
-# 軟體版本
->>> basicinformation read software-version 1 0xFFFF --timeout 5
-[1736826013.427] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0009 DataVersion: 2908716060
-[1736826013.427] [750639:750673] [TOO]   SoftwareVersion: 1
-
->>> basicinformation read software-version-string  1 0xFFFF --timeout 5
-[1736826105.530] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_000A DataVersion: 2908716060
-[1736826105.530] [750639:750673] [TOO]   SoftwareVersionString: 1.0
-
-# 硬體版本
->>> basicinformation read hardware-version 1 0xFFFF --timeout 5
-[1736826153.282] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0007 DataVersion: 2908716060
-[1736826153.282] [750639:750673] [TOO]   HardwareVersion: 0
-
+# 讀取 on-off 有什麼属性
+>>> onoff read attribute-list 1 1
+[1736821639.792] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0006 Attribute 0x0000_FFFB DataVersion: 343485660
+[1736821639.792] [750639:750673] [TOO]   AttributeList: 10 entries
+[1736821639.792] [750639:750673] [TOO]     [1]: 0 (OnOff)
+[1736821639.792] [750639:750673] [TOO]     [2]: 16384 (GlobalSceneControl)
+[1736821639.792] [750639:750673] [TOO]     [3]: 16385 (OnTime)
+[1736821639.792] [750639:750673] [TOO]     [4]: 16386 (OffWaitTime)
+[1736821639.792] [750639:750673] [TOO]     [5]: 16387 (StartUpOnOff)
+[1736821639.792] [750639:750673] [TOO]     [6]: 65528 (GeneratedCommandList)
+[1736821639.792] [750639:750673] [TOO]     [7]: 65529 (AcceptedCommandList)
+[1736821639.792] [750639:750673] [TOO]     [8]: 65531 (AttributeList)
+[1736821639.792] [750639:750673] [TOO]     [9]: 65532 (FeatureMap)
+[1736821639.792] [750639:750673] [TOO]     [10]: 65533 (ClusterRevision)
 ```
 
-## 4.2. [✚] descriptor - 0x0000001D
+#### onoff subscribe
+
+```bash
+>>> onoff subscribe
+Usage:
+   onoff subscribe attribute-name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Attributes:                                                                         |
+  +-------------------------------------------------------------------------------------+
+  | * on-off                                                                            |
+  | * global-scene-control                                                              |
+  | * on-time                                                                           |
+  | * off-wait-time                                                                     |
+  | * start-up-on-off                                                                   |
+  | * generated-command-list                                                            |
+  | * accepted-command-list                                                             |
+  | * event-list                                                                        |
+  | * attribute-list                                                                    |
+  | * feature-map                                                                       |
+  | * cluster-revision                                                                  |
+  +-------------------------------------------------------------------------------------+
+
+
+# 註冊監聽 on-off 的狀態
+>>> onoff subscribe on-off 2 3600 1 1
+[1736822503.043] [750639:750673] [DMG] Subscription established with SubscriptionID = 0xe84f4b2c MinInterval = 2s MaxInterval = 3600s Peer = 01:0000000000000001
+```
+
+## 4.2. [✚] levelcontrol - 0x00000008 (8)
+
+> <font color="red">調光器 (Dimmer) 功能</font>
+>
+> github: [level-control](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/level-control)
+>
+> github: [on-off-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/on-off-server/on-off-server.cpp)
+
+```bash
+>>> levelcontrol
+Usage:
+   levelcontrol command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * move-to-level                                                                     |
+  | * move                                                                              |
+  | * step                                                                              |
+  | * stop                                                                              |
+  | * move-to-level-with-on-off                                                         |
+  | * move-with-on-off                                                                  |
+  | * step-with-on-off                                                                  |
+  | * stop-with-on-off                                                                  |
+  | * move-to-closest-frequency                                                         |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * force-write                                                                       |
+  | * write                                                                             |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * subscribe-event-by-id                                                             |
+  +-------------------------------------------------------------------------------------+
+```
+
+#### levelcontrol move-to-level
+
+```bash
+>>> levelcontrol move-to-level 100 0 0 0 1 1
+[1736822839.979] [750639:750673] [DMG] Received Command Response Status for Endpoint=1 Cluster=0x0000_0008 Command=0x0000_0000 Status=0x0
+
+>>> levelcontrol move-to-level 200 0 0 0 1 1
+[1736822875.477] [750639:750673] [DMG] Received Command Response Status for Endpoint=1 Cluster=0x0000_0008 Command=0x0000_0000 Status=0x0
+```
+
+#### levelcontrol read
+
+```bash
+>>> levelcontrol read
+Usage:
+   levelcontrol read attribute-name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Attributes:                                                                         |
+  +-------------------------------------------------------------------------------------+
+  | * current-level                                                                     |
+  | * remaining-time                                                                    |
+  | * min-level                                                                         |
+  | * max-level                                                                         |
+  | * current-frequency                                                                 |
+  | * min-frequency                                                                     |
+  | * max-frequency                                                                     |
+  | * options                                                                           |
+  | * on-off-transition-time                                                            |
+  | * on-level                                                                          |
+  | * on-transition-time                                                                |
+  | * off-transition-time                                                               |
+  | * default-move-rate                                                                 |
+  | * start-up-current-level                                                            |
+  | * generated-command-list                                                            |
+  | * accepted-command-list                                                             |
+  | * event-list                                                                        |
+  | * attribute-list                                                                    |
+  | * feature-map                                                                       |
+  | * cluster-revision                                                                  |
+  +-------------------------------------------------------------------------------------+
+
+
+# 讀取 levelcontrol 的目前的數值
+>>> levelcontrol read current-level 1 1
+[1736822951.591] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0008 Attribute 0x0000_0000 DataVersion: 4022424782
+[1736822951.591] [750639:750673] [TOO]   CurrentLevel: 200
+
+# 讀取 levelcontrol 的最大值為多少
+>>> levelcontrol read max-level 1 1
+[1736822971.245] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0008 Attribute 0x0000_0003 DataVersion: 4022424782
+[1736822971.245] [750639:750673] [TOO]   MaxLevel: 254
+
+# 讀取 levelcontrol 的最小值為多少
+>>> levelcontrol read min-level 1 1
+[1736822987.625] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0008 Attribute 0x0000_0002 DataVersion: 4022424782
+[1736822987.625] [750639:750673] [TOO]   MinLevel: 1
+```
+
+#### levelcontrol subscribe
+
+```bash
+>>> lcontrol subscribe
+Usage:
+   levelcontrol subscribe attribute-name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Attributes:                                                                         |
+  +-------------------------------------------------------------------------------------+
+  | * current-level                                                                     |
+  | * remaining-time                                                                    |
+  | * min-level                                                                         |
+  | * max-level                                                                         |
+  | * current-frequency                                                                 |
+  | * min-frequency                                                                     |
+  | * max-frequency                                                                     |
+  | * options                                                                           |
+  | * on-off-transition-time                                                            |
+  | * on-level                                                                          |
+  | * on-transition-time                                                                |
+  | * off-transition-time                                                               |
+  | * default-move-rate                                                                 |
+  | * start-up-current-level                                                            |
+  | * generated-command-list                                                            |
+  | * accepted-command-list                                                             |
+  | * event-list                                                                        |
+  | * attribute-list                                                                    |
+  | * feature-map                                                                       |
+  | * cluster-revision                                                                  |
+  +-------------------------------------------------------------------------------------+
+
+
+# 註冊監聽 levelcontrol 的變化
+>>> levelcontrol subscribe current-level 2 3600 1 1
+[1736823008.862] [750639:750673] [DMG] Subscription established with SubscriptionID = 0x17532287 MinInterval = 2s MaxInterval = 3600s Peer = 01:0000000000000001
+```
+
+## 4.3. [✚] descriptor - 0x0000001D (29)
 
 > <font color="red"> 描述功能</font>
 >
@@ -1828,7 +1977,7 @@ Usage:
   +-------------------------------------------------------------------------------------+
 ```
 
-##### descriptor read
+#### descriptor read
 
 ```bash
 >>> descriptor read
@@ -1916,7 +2065,7 @@ Usage:
 [1736823600.489] [750639:750673] [TOO]   ClientList: 0 entries
 ```
 
-##### descriptor subscribe
+#### descriptor subscribe
 
 ```bash
 >>> descriptor subscribe
@@ -1973,32 +2122,273 @@ Usage:
 [1736823289.885] [750639:750673] [TOO]     [7]: 768 (ColorControl)
 ```
 
-## pairing ble-wifi node-id ssid password setup-pin-code discriminator4.3. [✚] levelcontrol - 0x00000008
+## 4.4. [✚] accesscontrol - 0x0000001F (31)
 
-> <font color="red">調光器 (Dimmer) 功能</font>
+> <font color="red">???</font>
 >
-> github: [level-control](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/level-control)
+> github: [access-control-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/access-control-server)
 >
-> github: [on-off-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/on-off-server/on-off-server.cpp)
+> github: [access-control-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/access-control-server/access-control-server.cpp)
 
 ```bash
->>> levelcontrol
+>>> accesscontrol
 Usage:
-   levelcontrol command_name [param1 param2 ...]
+   accesscontrol command_name [param1 param2 ...]
 
   +-------------------------------------------------------------------------------------+
   | Commands:                                                                           |
   +-------------------------------------------------------------------------------------+
   | * command-by-id                                                                     |
-  | * move-to-level                                                                     |
-  | * move                                                                              |
-  | * step                                                                              |
-  | * stop                                                                              |
-  | * move-to-level-with-on-off                                                         |
-  | * move-with-on-off                                                                  |
-  | * step-with-on-off                                                                  |
-  | * stop-with-on-off                                                                  |
-  | * move-to-closest-frequency                                                         |
+  | * review-fabric-restrictions                                                        |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * write                                                                             |
+  | * force-write                                                                       |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * read-event                                                                        |
+  | * subscribe-event-by-id                                                             |
+  | * subscribe-event                                                                   |
+  +-------------------------------------------------------------------------------------+
+```
+
+#### accesscontrol read
+
+```bash
+>>> accesscontrol read
+Usage:
+   accesscontrol read attribute-name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Attributes:                                                                         |
+  +-------------------------------------------------------------------------------------+
+  | * acl                                                                               |
+  | * extension                                                                         |
+  | * subjects-per-access-control-entry                                                 |
+  | * targets-per-access-control-entry                                                  |
+  | * access-control-entries-per-fabric                                                 |
+  | * commissioning-arl                                                                 |
+  | * arl                                                                               |
+  | * generated-command-list                                                            |
+  | * accepted-command-list                                                             |
+  | * attribute-list                                                                    |
+  | * feature-map                                                                       |
+  | * cluster-revision                                                                  |
+  +-------------------------------------------------------------------------------------+
+
+
+>>> accesscontrol read access-control-entries-per-fabric 1 0xFFFF
+[1737618838.103] [11844:11846] [TOO] Endpoint: 0 Cluster: 0x0000_001F Attribute 0x0000_0004 DataVersion: 2849537026
+[1737618838.103] [11844:11846] [TOO]   AccessControlEntriesPerFabric: 4
+[1737618838.104] [11844:11846] [EM] <<< [E:8548i S:40432 M:176802074 (Ack:181434682)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [646B] [UDP:[fe80::da3a:ddff:fe0f:4c8a%eth0]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+
+```
+
+## 4.5. [✚] basicinformation - 0x00000028 (40)
+
+> <font color="red"> 基本資訊</font>
+>
+> github: [basic-information](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/basic-information)
+>
+> github: [basic-information.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/basic-information/basic-information.cpp)
+
+```bash
+>>> basicinformation
+Usage:
+   basicinformation command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * mfg-specific-ping                                                                 |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * force-write                                                                       |
+  | * write                                                                             |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * read-event                                                                        |
+  | * subscribe-event-by-id                                                             |
+  | * subscribe-event                                                                   |
+  +-------------------------------------------------------------------------------------+
+```
+
+#### basicinformation read
+
+```bash
+>>> basicinformation read
+Usage:
+   basicinformation read attribute-name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Attributes:                                                                         |
+  +-------------------------------------------------------------------------------------+
+  | * data-model-revision                                                               |
+  | * vendor-name                                                                       |
+  | * vendor-id                                                                         |
+  | * product-name                                                                      |
+  | * product-id                                                                        |
+  | * node-label                                                                        |
+  | * location                                                                          |
+  | * hardware-version                                                                  |
+  | * hardware-version-string                                                           |
+  | * software-version                                                                  |
+  | * software-version-string                                                           |
+  | * manufacturing-date                                                                |
+  | * part-number                                                                       |
+  | * product-url                                                                       |
+  | * product-label                                                                     |
+  | * serial-number                                                                     |
+  | * local-config-disabled                                                             |
+  | * reachable                                                                         |
+  | * unique-id                                                                         |
+  | * capability-minima                                                                 |
+  | * product-appearance                                                                |
+  | * specification-version                                                             |
+  | * max-paths-per-invoke                                                              |
+  | * generated-command-list                                                            |
+  | * accepted-command-list                                                             |
+  | * event-list                                                                        |
+  | * attribute-list                                                                    |
+  | * feature-map                                                                       |
+  | * cluster-revision                                                                  |
+  +-------------------------------------------------------------------------------------+
+
+# 製造商名稱
+>>> basicinformation read vendor-name 1 0xFFFF --timeout 5
+[1736825929.794] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0001 DataVersion: 2908716060
+[1736825929.794] [750639:750673] [TOO]   VendorName: TEST_VENDOR
+
+# 製造商ID
+>>> basicinformation read vendor-id 1 0xFFFF --timeout 5
+[1736826236.190] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0002 DataVersion: 2908716060
+[1736826236.190] [750639:750673] [TOO]   VendorID: 65521
+
+# 產品名稱
+>>> basicinformation read product-name 1 0xFFFF --timeout 5
+[1736825974.738] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0003 DataVersion: 2908716060
+[1736825974.738] [750639:750673] [TOO]   ProductName: TEST_PRODUCT
+
+# 產品ID
+>>> basicinformation read product-id 1 0xFFFF --timeout 5
+[1736826292.534] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0004 DataVersion: 2908716060
+[1736826292.534] [750639:750673] [TOO]   ProductID: 32769
+
+# 產品序號
+>>> basicinformation read serial-number 1 0xFFFF --timeout 5
+[1736826338.623] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_000F DataVersion: 2908716060
+[1736826338.623] [750639:750673] [TOO]   SerialNumber: TEST_SN
+
+# 軟體版本
+>>> basicinformation read software-version 1 0xFFFF --timeout 5
+[1736826013.427] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0009 DataVersion: 2908716060
+[1736826013.427] [750639:750673] [TOO]   SoftwareVersion: 1
+
+>>> basicinformation read software-version-string  1 0xFFFF --timeout 5
+[1736826105.530] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_000A DataVersion: 2908716060
+[1736826105.530] [750639:750673] [TOO]   SoftwareVersionString: 1.0
+
+# 硬體版本
+>>> basicinformation read hardware-version 1 0xFFFF --timeout 5
+[1736826153.282] [750639:750673] [TOO] Endpoint: 0 Cluster: 0x0000_0028 Attribute 0x0000_0007 DataVersion: 2908716060
+[1736826153.282] [750639:750673] [TOO]   HardwareVersion: 0
+
+```
+
+## 4.6. [✚] otasoftwareupdaterequestor - 0x0000002A (42)
+
+> <font color="red">???</font>
+>
+> github: [ota-requestor](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/ota-requestor)
+>
+> github: [ota-requestor-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/ota-requestor/ota-requestor-server.cpp)
+
+```bash
+>>> otasoftwareupdaterequestor
+Usage:
+   otasoftwareupdaterequestor command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * announce-otaprovider                                                              |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * write                                                                             |
+  | * force-write                                                                       |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * read-event                                                                        |
+  | * subscribe-event-by-id                                                             |
+  | * subscribe-event                                                                   |
+  +-------------------------------------------------------------------------------------+
+```
+
+## 4.7. [✚] generalcommissioning - 0x00000030 (48)
+
+> <font color="red">???</font>
+>
+> github: [general-commissioning-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/general-commissioning-server)
+>
+> github: [general-commissioning-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/general-commissioning-server/general-commissioning-server.cpp)
+
+```bash
+>>> generalcommissioning
+Usage:
+   generalcommissioning command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * arm-fail-safe                                                                     |
+  | * set-regulatory-config                                                             |
+  | * commissioning-complete                                                            |
+  | * set-tcacknowledgements                                                            |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * write                                                                             |
+  | * force-write                                                                       |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * subscribe-event-by-id                                                             |
+  +-------------------------------------------------------------------------------------+
+```
+
+## 4.8. [✚] networkcommissioning - 0x00000031 (49)
+
+> <font color="red">???</font>
+>
+> github: [network-commissioning](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/network-commissioning)
+>
+> github: [network-commissioning.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/network-commissioning/network-commissioning.cpp)
+
+```bash
+>>> networkcommissioning
+Usage:
+   networkcommissioning command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * scan-networks                                                                     |
+  | * add-or-update-wi-fi-network                                                       |
+  | * add-or-update-thread-network                                                      |
+  | * remove-network                                                                    |
+  | * connect-network                                                                   |
+  | * reorder-network                                                                   |
+  | * query-identity                                                                    |
   | * read-by-id                                                                        |
   | * read                                                                              |
   | * write-by-id                                                                       |
@@ -2011,131 +2401,61 @@ Usage:
   +-------------------------------------------------------------------------------------+
 ```
 
-##### levelcontrol move-to-level
+#### networkcommissioning read
 
 ```bash
->>> levelcontrol move-to-level 100 0 0 0 1 1
-[1736822839.979] [750639:750673] [DMG] Received Command Response Status for Endpoint=1 Cluster=0x0000_0008 Command=0x0000_0000 Status=0x0
-
->>> levelcontrol move-to-level 200 0 0 0 1 1
-[1736822875.477] [750639:750673] [DMG] Received Command Response Status for Endpoint=1 Cluster=0x0000_0008 Command=0x0000_0000 Status=0x0
-```
-
-##### levelcontrol read
-
-```bash
->>> levelcontrol read
+>>> networkcommissioning read
 Usage:
-   levelcontrol read attribute-name [param1 param2 ...]
+   networkcommissioning read attribute-name [param1 param2 ...]
 
   +-------------------------------------------------------------------------------------+
   | Attributes:                                                                         |
   +-------------------------------------------------------------------------------------+
-  | * current-level                                                                     |
-  | * remaining-time                                                                    |
-  | * min-level                                                                         |
-  | * max-level                                                                         |
-  | * current-frequency                                                                 |
-  | * min-frequency                                                                     |
-  | * max-frequency                                                                     |
-  | * options                                                                           |
-  | * on-off-transition-time                                                            |
-  | * on-level                                                                          |
-  | * on-transition-time                                                                |
-  | * off-transition-time                                                               |
-  | * default-move-rate                                                                 |
-  | * start-up-current-level                                                            |
+  | * max-networks                                                                      |
+  | * networks                                                                          |
+  | * scan-max-time-seconds                                                             |
+  | * connect-max-time-seconds                                                          |
+  | * interface-enabled                                                                 |
+  | * last-networking-status                                                            |
+  | * last-network-id                                                                   |
+  | * last-connect-error-value                                                          |
+  | * supported-wi-fi-bands                                                             |
+  | * supported-thread-features                                                         |
+  | * thread-version                                                                    |
   | * generated-command-list                                                            |
   | * accepted-command-list                                                             |
-  | * event-list                                                                        |
   | * attribute-list                                                                    |
   | * feature-map                                                                       |
   | * cluster-revision                                                                  |
   +-------------------------------------------------------------------------------------+
 
-
-# 讀取 levelcontrol 的目前的數值
->>> levelcontrol read current-level 1 1
-[1736822951.591] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0008 Attribute 0x0000_0000 DataVersion: 4022424782
-[1736822951.591] [750639:750673] [TOO]   CurrentLevel: 200
-
-# 讀取 levelcontrol 的最大值為多少
->>> levelcontrol read max-level 1 1
-[1736822971.245] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0008 Attribute 0x0000_0003 DataVersion: 4022424782
-[1736822971.245] [750639:750673] [TOO]   MaxLevel: 254
-
-# 讀取 levelcontrol 的最小值為多少
->>> levelcontrol read min-level 1 1
-[1736822987.625] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0008 Attribute 0x0000_0002 DataVersion: 4022424782
-[1736822987.625] [750639:750673] [TOO]   MinLevel: 1
+>>> networkcommissioning read interface-enabled 1 0xFFFF
+>>> networkcommissioning read last-networking-status 1 0xFFFF
+>>> networkcommissioning read last-network-id 1 0xFFFF
 ```
 
-##### levelcontrol subscribe
+## 4.9. [✚] diagnosticlogs - 0x00000032 (50)
+
+> <font color="red">???</font>
+>
+> github: [diagnostic-logs-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/diagnostic-logs-server)
+>
+> github: [diagnostic-logs-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/diagnostic-logs-server/diagnostic-logs-server.cpp)
 
 ```bash
->>> lcontrol subscribe
+>>> diagnosticlogs
 Usage:
-   levelcontrol subscribe attribute-name [param1 param2 ...]
-
-  +-------------------------------------------------------------------------------------+
-  | Attributes:                                                                         |
-  +-------------------------------------------------------------------------------------+
-  | * current-level                                                                     |
-  | * remaining-time                                                                    |
-  | * min-level                                                                         |
-  | * max-level                                                                         |
-  | * current-frequency                                                                 |
-  | * min-frequency                                                                     |
-  | * max-frequency                                                                     |
-  | * options                                                                           |
-  | * on-off-transition-time                                                            |
-  | * on-level                                                                          |
-  | * on-transition-time                                                                |
-  | * off-transition-time                                                               |
-  | * default-move-rate                                                                 |
-  | * start-up-current-level                                                            |
-  | * generated-command-list                                                            |
-  | * accepted-command-list                                                             |
-  | * event-list                                                                        |
-  | * attribute-list                                                                    |
-  | * feature-map                                                                       |
-  | * cluster-revision                                                                  |
-  +-------------------------------------------------------------------------------------+
-
-
-# 註冊監聽 levelcontrol 的變化
->>> levelcontrol subscribe current-level 2 3600 1 1
-[1736823008.862] [750639:750673] [DMG] Subscription established with SubscriptionID = 0x17532287 MinInterval = 2s MaxInterval = 3600s Peer = 01:0000000000000001
-```
-
-## 4.4. [✚] onoff - 0x00000006
-
-> <font color="red">開 / 關 (On / Off) 功能</font>
->
-> github: [on-off-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/on-off-server)
->
-> github: [on-off-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/on-off-server/on-off-server.cpp)
-
-```bash
->>> onoff
-Usage:
-   onoff command_name [param1 param2 ...]
+   diagnosticlogs command_name [param1 param2 ...]
 
   +-------------------------------------------------------------------------------------+
   | Commands:                                                                           |
   +-------------------------------------------------------------------------------------+
   | * command-by-id                                                                     |
-  | * off                                                                               |
-  | * on                                                                                |
-  | * toggle                                                                            |
-  | * off-with-effect                                                                   |
-  | * on-with-recall-global-scene                                                       |
-  | * on-with-timed-off                                                                 |
+  | * retrieve-logs-request                                                             |
   | * read-by-id                                                                        |
   | * read                                                                              |
   | * write-by-id                                                                       |
   | * force-write                                                                       |
-  | * write                                                                             |
   | * subscribe-by-id                                                                   |
   | * subscribe                                                                         |
   | * read-event-by-id                                                                  |
@@ -2143,96 +2463,491 @@ Usage:
   +-------------------------------------------------------------------------------------+
 ```
 
-##### onoff toggle/on/off
+## 4.10. [✚] generaldiagnostics - 0x00000033 (51)
+
+> <font color="red">???</font>
+>
+> github: [general-diagnostics-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/general-diagnostics-server)
+>
+> github: [general-diagnostics-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/general-diagnostics-server/general-diagnostics-server.cpp)
 
 ```bash
-# 切换 on-off 的數值
->>> onoff toggle 1 1
-[1736823175.178] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0006 Attribute 0x0000_0000 DataVersion: 343485665
-[1736823175.178] [750639:750673] [TOO]   OnOff: FALSE
-
-# 將 on-off 設定 on
->>> onoff on 1 1
-[1736823162.414] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0006 Attribute 0x0000_0000 DataVersion: 343485664
-[1736823162.414] [750639:750673] [TOO]   OnOff: TRUE
-
-# 將 on-off 設定 off
->>> onoff off 1 1
-[1736823130.450] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0006 Attribute 0x0000_0000 DataVersion: 343485663
-[1736823130.450] [750639:750673] [TOO]   OnOff: FALSE
-```
-
-##### onoff read
-
-```bash
->>> Usage:
-   onoff read attribute-name [param1 param2 ...]
-
-  +-------------------------------------------------------------------------------------+
-  | Attributes:                                                                         |
-  +-------------------------------------------------------------------------------------+
-  | * on-off                                                                            |
-  | * global-scene-control                                                              |
-  | * on-time                                                                           |
-  | * off-wait-time                                                                     |
-  | * start-up-on-off                                                                   |
-  | * generated-command-list                                                            |
-  | * accepted-command-list                                                             |
-  | * event-list                                                                        |
-  | * attribute-list                                                                    |
-  | * feature-map                                                                       |
-  | * cluster-revision                                                                  |
-  +-------------------------------------------------------------------------------------+
-
-
-# 讀取 on-off 目前的數值
->>> onoff read on-off 1 1
-[1736821792.963] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0006 Attribute 0x0000_0000 DataVersion: 343485660
-[1736821792.963] [750639:750673] [TOO]   OnOff: TRUE
-
-# 讀取 on-off 有什麼属性
->>> onoff read attribute-list 1 1
-[1736821639.792] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0006 Attribute 0x0000_FFFB DataVersion: 343485660
-[1736821639.792] [750639:750673] [TOO]   AttributeList: 10 entries
-[1736821639.792] [750639:750673] [TOO]     [1]: 0 (OnOff)
-[1736821639.792] [750639:750673] [TOO]     [2]: 16384 (GlobalSceneControl)
-[1736821639.792] [750639:750673] [TOO]     [3]: 16385 (OnTime)
-[1736821639.792] [750639:750673] [TOO]     [4]: 16386 (OffWaitTime)
-[1736821639.792] [750639:750673] [TOO]     [5]: 16387 (StartUpOnOff)
-[1736821639.792] [750639:750673] [TOO]     [6]: 65528 (GeneratedCommandList)
-[1736821639.792] [750639:750673] [TOO]     [7]: 65529 (AcceptedCommandList)
-[1736821639.792] [750639:750673] [TOO]     [8]: 65531 (AttributeList)
-[1736821639.792] [750639:750673] [TOO]     [9]: 65532 (FeatureMap)
-[1736821639.792] [750639:750673] [TOO]     [10]: 65533 (ClusterRevision)
-```
-
-##### onoff subscribe
-
-```bash
->>> onoff subscribe
+>>> generaldiagnostics
 Usage:
-   onoff subscribe attribute-name [param1 param2 ...]
+   generaldiagnostics command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * test-event-trigger                                                                |
+  | * time-snapshot                                                                     |
+  | * payload-test-request                                                              |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * force-write                                                                       |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * read-event                                                                        |
+  | * subscribe-event-by-id                                                             |
+  | * subscribe-event                                                                   |
+  +-------------------------------------------------------------------------------------+
+```
+
+## 4.11. [✚] softwarediagnostics - 0x00000034 (52)
+
+> <font color="red">???</font>
+>
+> github: [software-diagnostics-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/software-diagnostics-server)
+>
+> github: [software-diagnostics-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/software-diagnostics-server/software-diagnostics-server.cpp)
+
+```bash
+>>> softwarediagnostics
+Usage:
+   softwarediagnostics command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * reset-watermarks                                                                  |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * force-write                                                                       |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * read-event                                                                        |
+  | * subscribe-event-by-id                                                             |
+  | * subscribe-event                                                                   |
+  +-------------------------------------------------------------------------------------+
+```
+
+## 4.12. [✚] threadnetworkdiagnostics - 0x00000035 (53)
+
+> <font color="red">???</font>
+>
+> github: [thread-network-diagnostics-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/thread-network-diagnostics-server)
+>
+> github: [thread-network-diagnostics-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/thread-network-diagnostics-server/thread-network-diagnostics-server.cpp)
+
+```bash
+>>> threadnetworkdiagnostics
+Usage:
+   threadnetworkdiagnostics command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * reset-counts                                                                      |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * force-write                                                                       |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * read-event                                                                        |
+  | * subscribe-event-by-id                                                             |
+  | * subscribe-event                                                                   |
+  +-------------------------------------------------------------------------------------+
+```
+
+## 4.13. [✚] wifinetworkdiagnostics - 0x00000036 (54)
+
+> <font color="red">???</font>
+>
+> github: [wifi-network-diagnostics-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/wifi-network-diagnostics-server)
+>
+> github: [wifi-network-diagnostics-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/wifi-network-diagnostics-server/wifi-network-diagnostics-server.cpp)
+
+```bash
+>>> wifinetworkdiagnostics
+Usage:
+   wifinetworkdiagnostics command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * reset-counts                                                                      |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * force-write                                                                       |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * read-event                                                                        |
+  | * subscribe-event-by-id                                                             |
+  | * subscribe-event                                                                   |
+  +-------------------------------------------------------------------------------------+
+```
+
+## 4.14. [✚] ethernetnetworkdiagnostics - 0x00000037 (55)
+
+> <font color="red">???</font>
+>
+> github: [ethernet-network-diagnostics-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/ethernet-network-diagnostics-server)
+>
+> github: [ethernet-network-diagnostics-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/ethernet-network-diagnostics-server/ethernet-network-diagnostics-server.cpp)
+
+```bash
+>>> ethernetnetworkdiagnostics
+UUsage:
+   ethernetnetworkdiagnostics command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * reset-counts                                                                      |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * force-write                                                                       |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * subscribe-event-by-id                                                             |
+  +-------------------------------------------------------------------------------------+
+```
+
+## 4.15. [✚] switch - 0x0000003B (59)
+
+> <font color="red">???</font>
+>
+> github: [switch-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/switch-server)
+>
+> github: [switch-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/switch-server/switch-server.cpp)
+
+```bash
+>>> switch
+Usage:
+   switch command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * force-write                                                                       |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * read-event                                                                        |
+  | * subscribe-event-by-id                                                             |
+  | * subscribe-event                                                                   |
+  +-------------------------------------------------------------------------------------+
+```
+
+## 4.16. [✚] administratorcommissioning - 0x0000003C (60)
+
+> <font color="red">???</font>
+>
+> github: [administrator-commissioning-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/administrator-commissioning-server)
+>
+> github: [administrator-commissioning-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/administrator-commissioning-server/administrator-commissioning-server.cpp)
+
+```bash
+>>> administratorcommissioning
+Usage:
+   administratorcommissioning command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * open-commissioning-window                                                         |
+  | * open-basic-commissioning-window                                                   |
+  | * revoke-commissioning                                                              |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * force-write                                                                       |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * subscribe-event-by-id                                                             |
+  +-------------------------------------------------------------------------------------+
+```
+
+#### administratorcommissioning read
+
+```bash
+>>> administratorcommissioning read
+Usage:
+   administratorcommissioning read attribute-name [param1 param2 ...]
 
   +-------------------------------------------------------------------------------------+
   | Attributes:                                                                         |
   +-------------------------------------------------------------------------------------+
-  | * on-off                                                                            |
-  | * global-scene-control                                                              |
-  | * on-time                                                                           |
-  | * off-wait-time                                                                     |
-  | * start-up-on-off                                                                   |
+  | * window-status                                                                     |
+  | * admin-fabric-index                                                                |
+  | * admin-vendor-id                                                                   |
   | * generated-command-list                                                            |
   | * accepted-command-list                                                             |
-  | * event-list                                                                        |
   | * attribute-list                                                                    |
   | * feature-map                                                                       |
   | * cluster-revision                                                                  |
   +-------------------------------------------------------------------------------------+
 
+>>> administratorcommissioning read window-status  1 0xFFFF --timeout 5
+>>> administratorcommissioning read admin-fabric-index 1 0xFFFF --timeout 5
+>>> administratorcommissioning read admin-vendor-id 1 0xFFFF --timeout 5
 
-# 註冊監聽 on-off 的狀態
->>> onoff subscribe on-off 2 3600 1 1
-[1736822503.043] [750639:750673] [DMG] Subscription established with SubscriptionID = 0xe84f4b2c MinInterval = 2s MaxInterval = 3600s Peer = 01:0000000000000001
+```
+
+## 4.17. [✚] operationalcredentials - 0x0000003E (62)
+
+> <font color="red">???</font>
+>
+> github: [perational-credentials-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/operational-credentials-server)
+>
+> github: [operational-credentials-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/operational-credentials-server/operational-credentials-server.cpp)
+
+```bash
+>>> operationalcredentials
+Usage:
+   operationalcredentials command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * attestation-request                                                               |
+  | * certificate-chain-request                                                         |
+  | * csrrequest                                                                        |
+  | * add-noc                                                                           |
+  | * update-noc                                                                        |
+  | * update-fabric-label                                                               |
+  | * remove-fabric                                                                     |
+  | * add-trusted-root-certificate                                                      |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * force-write                                                                       |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * subscribe-event-by-id                                                             |
+  +-------------------------------------------------------------------------------------+
+```
+
+#### operationalcredentials remove-fabric
+
+```bash
+>>> operationalcredentials remove-fabric
+Usage:
+   operationalcredentials remove-fabric FabricIndex destination-id endpoint-id-ignored-for-group-commands [--paa-trust-store-path] [--cd-trust-store-path] [--commissioner-name] [--commissioner-nodeid] [--use-max-sized-certs] [--only-allow-trusted-cd-keys] [--dac-revocation-set-path] [--trace_file] [--trace_log] [--trace_decode] [--trace-to] [--ble-adapter] [--storage-directory] [--commissioner-vendor-id] [--timedInteractionTimeoutMs] [--busyWaitForMs] [--suppressResponse] [--repeat-count] [--repeat-delay-ms] [--lit-icd-peer] [--timeout] [--allow-large-payload]
+
+destination-id:
+  64-bit node or group identifier.
+  Group identifiers are detected by being in the 0xFFFF'FFFF'FFFF'xxxx range.
+
+endpoint-id-ignored-for-group-commands:
+  Endpoint the command is targeted at.
+
+[--paa-trust-store-path]:
+  Path to directory holding PAA certificate information.  Can be absolute or relative to the current working directory.
+
+[--cd-trust-store-path]:
+  Path to directory holding CD certificate information.  Can be absolute or relative to the current working directory.
+
+[--commissioner-name]:
+  Name of fabric to use. Valid values are "alpha", "beta", "gamma", and integers greater than or equal to 4.  The default if not specified is "alpha".
+
+[--commissioner-nodeid]:
+  The node id to use for chip-tool.  If not provided, kTestControllerNodeId (112233, 0x1B669) will be used.
+
+[--use-max-sized-certs]:
+  Maximize the size of operational certificates. If not provided or 0 ("false"), normally sized operational certificates 
+  
+  are generated.
+
+[--only-allow-trusted-cd-keys]:
+  Only allow trusted CD verifying keys (disallow test keys). If not provided or 0 ("false"), untrusted CD verifying keys are allowed. If 1 ("true"), test keys are disallowed.
+
+[--dac-revocation-set-path]:
+  Path to JSON file containing the device attestation revocation set. This argument caches the path to the revocation set. Once set, this will be used by all commands in interactive mode.
+
+[--trace-to]:
+  Trace destinations, comma-separated (json:log, json:<path>, perfetto, perfetto:<path>)
+
+[--storage-directory]:
+  Directory to place chip-tool's storage files in.  Defaults to $TMPDIR, with fallback to /tmp
+
+[--commissioner-vendor-id]:
+  The vendor id to use for chip-tool. If not provided, chip::VendorId::TestVendor1 (65521, 0xFFF1) will be used.
+
+[--timedInteractionTimeoutMs]:
+  If provided, do a timed invoke with the given timed interaction timeout. See "7.6.10. Timed Interaction" in the Matter specification.
+
+[--busyWaitForMs]:
+  If provided, block the main thread processing for the given time right after sending a command.
+
+[--lit-icd-peer]:
+  Whether to treat the peer as a LIT ICD. false: Always no, true: Always yes, (not set): Yes if the peer is registered to this controller.
+
+[--allow-large-payload]:
+  If true, indicates that the session should allow large application payloads (which requires a TCP connection).Defaults to false, which uses a UDP+MRP session.
+
+
+# 強制解綁 node: 1 和 FabricIndex: 3
+>>> operationalcredentials remove-fabric 3 1 0 --timeout 5
+```
+
+#### operationalcredentials read
+
+```bash
+>>> operationalcredentials read
+Usage:
+   operationalcredentials read attribute-name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Attributes:                                                                         |
+  +-------------------------------------------------------------------------------------+
+  | * nocs                                                                              |
+  | * fabrics                                                                           |
+  | * supported-fabrics                                                                 |
+  | * commissioned-fabrics                                                              |
+  | * trusted-root-certificates                                                         |
+  | * current-fabric-index                                                              |
+  | * generated-command-list                                                            |
+  | * accepted-command-list                                                             |
+  | * attribute-list                                                                    |
+  | * feature-map                                                                       |
+  | * cluster-revision                                                                  |
+  +-------------------------------------------------------------------------------------+
+
+>>> operationalcredentials read nocs 1 0xFFFF --timeout 5
+
+>>> operationalcredentials read fabrics 1 0xFFFF --timeout 5
+[1737612321.226] [11185:11187] [TOO] Endpoint: 0 Cluster: 0x0000_003E Attribute 0x0000_0001 DataVersion: 3867288700
+[1737612321.226] [11185:11187] [TOO]   Fabrics: 1 entries
+[1737612321.226] [11185:11187] [TOO]     [1]: {
+[1737612321.226] [11185:11187] [TOO]       RootPublicKey: 04C851E78733CF46917B71736145F914CA592A279001CA029BA40B54C60DE59985375CC395D41F8CA327FDCB935950F9D4D30071D36AED3FE0C828E5569539EE31
+[1737612321.226] [11185:11187] [TOO]       VendorID: 65521
+[1737612321.226] [11185:11187] [TOO]       FabricID: 1
+[1737612321.226] [11185:11187] [TOO]       NodeID: 1
+[1737612321.226] [11185:11187] [TOO]       Label:
+[1737612321.226] [11185:11187] [TOO]       FabricIndex: 5
+[1737612321.226] [11185:11187] [TOO]      }
+
+>>> operationalcredentials read supported-fabrics 1 0xFFFF --timeout 5
+[1737612448.346] [11185:11187] [TOO] Endpoint: 0 Cluster: 0x0000_003E Attribute 0x0000_0002 DataVersion: 3867288700
+[1737612448.346] [11185:11187] [TOO]   SupportedFabrics: 16
+[1737612448.347] [11185:11187] [EM] <<< [E:38833i S:48132 M:100961184 (Ack:105607910)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [646B] [UDP:[fe80::da3a:ddff:fe0f:4c8a%eth0]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+
+# node: 1 已加入到 4 個 controller 環境中
+>>> operationalcredentials read commissioned-fabrics 1 0xFFFF --timeout 5
+[1737613195.774] [11185:11187] [TOO] Endpoint: 0 Cluster: 0x0000_003E Attribute 0x0000_0003 DataVersion: 3867288706
+[1737613195.774] [11185:11187] [TOO]   CommissionedFabrics: 4
+[1737613195.775] [11185:11187] [EM] <<< [E:38848i S:48132 M:100961212 (Ack:105607924)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [646B] [UDP:[fe80::da3a:ddff:fe0f:4c8a%eth0]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+
+# 目前此 controller 在此 node: 1 裏的 FabricIndex: 5
+>>> operationalcredentials read current-fabric-index 1 0xFFFF --timeout 5
+[1737612598.991] [11185:11187] [TOO] Endpoint: 0 Cluster: 0x0000_003E Attribute 0x0000_0005 DataVersion: 3867288700
+[1737612598.991] [11185:11187] [TOO]   CurrentFabricIndex: 5
+[1737612598.993] [11185:11187] [EM] <<< [E:38841i S:48132 M:100961198 (Ack:105607917)] (S) Msg TX from 000000000001B669 to 1:0000000000000001 [646B] [UDP:[fe80::da3a:ddff:fe0f:4c8a%eth0]:5540] --- Type 0000:10 (SecureChannel:StandaloneAck) (B:34)
+
+```
+
+## 4.18. [✚] groupkeymanagement - 0x0000003F (63)
+
+> <font color="red">???</font>
+>
+> github: [group-key-mgmt-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/group-key-mgmt-server)
+>
+> github: [group-key-mgmt-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/group-key-mgmt-server/group-key-mgmt-server.cpp)
+
+```bash
+>>> groupkeymanagement
+Usage:
+   groupkeymanagement command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * key-set-write                                                                     |
+  | * key-set-read                                                                      |
+  | * key-set-remove                                                                    |
+  | * key-set-read-all-indices                                                          |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * write                                                                             |
+  | * force-write                                                                       |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * subscribe-event-by-id                                                             |
+  +-------------------------------------------------------------------------------------+
+```
+
+## 4.19. [✚] fixedlabel - 0x00000040 (64)
+
+> <font color="red">???</font>
+>
+> github: [fixed-label-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/fixed-label-server)
+>
+> github: [fixed-label-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/fixed-label-server/fixed-label-server.cpp)
+
+```bash
+>>> fixedlabel
+Usage:
+   fixedlabel command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * force-write                                                                       |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * subscribe-event-by-id                                                             |
+  +-------------------------------------------------------------------------------------+
+```
+
+## 4.20. [✚] userlabel - 0x00000041 (65)
+
+> <font color="red">???</font>
+>
+> github: [user-label-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/user-label-server)
+>
+> github: [user-label-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/user-label-server/user-label-server.cpp)
+
+```bash
+>>> userlabel
+Usage:
+   userlabel command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * write                                                                             |
+  | * force-write                                                                       |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * subscribe-event-by-id                                                             |
+  +-------------------------------------------------------------------------------------+
 ```
 
 # 5. Examples
@@ -2247,6 +2962,8 @@ $ chip-tool interactive start --storage-directory /work/IoT/matter/chip-tool --t
 
 # 已配對之設備
 >>> pairing code 1 21718613662
+
+>>> basicinformation read vendor-name 1 0xFFFF --timeout 5
 
 # nodeid: 1
 >>> onoff toggle 1 1
@@ -2272,6 +2989,8 @@ $ chip-tool interactive start --storage-directory /work/IoT/matter/chip-tool --t
 #or
 chip-tool pairing code 2 30330221131 --paa-trust-store-path /work/IoT/matter/paa-root-certs
 
+>>> basicinformation read vendor-name 2 0xFFFF --timeout 5
+
 >>> onoff toggle 2 1
 
 >>> pairing unpair 2
@@ -2285,29 +3004,21 @@ chip-tool pairing code 2 30330221131 --paa-trust-store-path /work/IoT/matter/paa
 
 >>> pairing open-commissioning-window 3 1 300 2000 0
 
+>>> basicinformation read vendor-name 3 0xFFFF --timeout 5
+>>> basicinformation read vendor-id 3 0xFFFF --timeout 5
+>>> basicinformation read product-name 3 0xFFFF --timeout 5
+>>> basicinformation read product-id 3 0xFFFF --timeout 5
+>>> basicinformation read serial-number 3 0xFFFF --timeout 5
+
+>>> basicinformation read software-version 3 0xFFFF --timeout 5
+>>> basicinformation read software-version-string  3 0xFFFF --timeout 5
+>>> basicinformation read hardware-version 3 0xFFFF --timeout 5
+
+>>> descriptor read parts-list 3 0xFFFF
+>>> descriptor read device-type-list 3 0xFFFF
+>>> descriptor read server-list 3 0xFFFF
+
 >>> pairing unpair 3
-```
-
-```bash
-# default 20202021
-$ export MATTER_PINCODE=20231206
-# default 3840
-$ export MATTER_DISCRIMINATOR=3849
-
-$ export MATTER_NODEID=1
-$ export MATTER_EPID=1
-
-# Commissioning
-$ chip-tool pairing onnetwork $MATTER_NODEID $MATTER_PINCODE
-$ chip-tool pairing onnetwork 1 20231206
-
-# onoff-toggle
-$ chip-tool onoff toggle $MATTER_NODEID $MATTER_EPID
-
-$ chip-tool move-to-level 100 0
-
-# Unpairing
-$ chip-tool pairing unpair $MATTER_NODEID
 ```
 
 # Footnote
@@ -2318,6 +3029,12 @@ $ chip-tool pairing unpair $MATTER_NODEID
 # Appendix
 
 # I. Study
+
+## I.1. [Working with the chip-tool-web](https://github.com/nxp-imx/meta-nxp-connectivity/blob/master/docs/guides/nxp_chip_tool_web_guide.md)
+
+> The 'chip-tool-web' is a web-based graphical user interface (GUI) for the Matter controller, designed specifically for i.MX SoC customers. It provides an intuitive interface for commissioning Matter devices, sending Matter messages and performing other Matter-specific actions.
+>
+> With the chip-tool-web, you can easily configure, manage and monitor Matter devices without the need to use complex command lines.
 
 # II. Debug
 
