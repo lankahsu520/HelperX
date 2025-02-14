@@ -1109,6 +1109,97 @@ int audio_set_source(struct audio *au, const char *mod, const char *device)
 }
 ```
 
+# 5. modules
+
+> baresip 使用 plugin 的方式相當的淋漓盡致，這部分還有待學習。
+
+## 5.1. stdio.so
+
+> 從 STDIN_FILENO 等待按鍵按下；當按鍵觸發後的流程，大致如下。另外常用傳送命令的 cons.so (Console input driver) 和 ctrl_dbus.so (DBus control interface)
+
+> 這邊要注意 stdio 和 cons 有處理 KEYCODE_REL
+
+```mermaid
+flowchart LR
+	subgraph cmd[cmd.c]
+		cmd_process
+		cmd_process_long
+	end
+
+	subgraph ui[ui.c]
+		ui_input_key
+		ui_input_long_command
+	end
+	ui_input_key --> cmd_process
+	ui_input_long_command --> cmd_process_long
+
+	subgraph stdio[stdio.c]
+		ui_fd_handler
+		report_key
+		stdio-timeout[timeout]
+		
+		ui_fd_handler-->report_key
+		ui_fd_handler ..-> |250ms, KEYCODE_REL|stdio-timeout --> report_key
+	end
+	STDIN_FILENO ..-> ui_fd_handler
+	report_key --> ui_input_key
+
+	subgraph cons[cons.c]
+		udp_recv
+		cons-timeout[timeout]
+	end
+	udp_recv --> ui_input_key
+	cons-timeout --> ui_input_key
+
+	subgraph ctrl_dbus[ctrl_dbus.c]
+		command_handler
+	end
+	command_handler --> cmd_process
+	command_handler --> cmd_process_long
+```
+
+# 6. Others
+
+## 6.1. parse usage
+
+#### A. src/[main.c](https://github.com/baresip/baresip/blob/main/src/main.c)
+
+> 參數的進入點
+>
+> |      | Help             | Variables                        |
+> | ---- | ---------------- | -------------------------------- |
+> | -f   | Config path      | conf_path_set(optarg);           |
+> | -s   | Enable SIP trace | sip_trace = true;<br>sip->traceh |
+> | -v   | Verbose debug    | log_enable_debug(true);          |
+
+```bash
+static void usage(void)
+{
+	(void)re_fprintf(stderr,
+			 "Usage: baresip [options]\n"
+			 "options:\n"
+			 "\t-4               Force IPv4 only\n"
+#if HAVE_INET6
+			 "\t-6               Force IPv6 only\n"
+#endif
+			 "\t-a <software>    Specify SIP User-Agent string\n"
+			 "\t-d               Daemon\n"
+			 "\t-e <commands>    Execute commands (repeat)\n"
+			 "\t-f <path>        Config path\n"
+			 "\t-m <module>      Pre-load modules (repeat)\n"
+			 "\t-p <path>        Audio files\n"
+			 "\t-h -?            Help\n"
+			 "\t-s               Enable SIP trace\n"
+			 "\t-t <sec>         Quit after <sec> seconds\n"
+			 "\t-n <net_if>      Specify network interface\n"
+			 "\t-u <parameters>  Extra UA parameters\n"
+			 "\t-v               Verbose debug\n"
+			 );
+}
+```
+
+## 6.2. header
+
 # Appendix
 
 # I. Study
