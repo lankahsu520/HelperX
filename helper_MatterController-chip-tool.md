@@ -495,6 +495,8 @@ Commands for device discovery.
 
 > Commands for manipulating group keys and memberships for chip-tool itself.
 
+> 這邊需與 cluster - groups 有連動；曾經照著 [README.md](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)，結果失敗。
+
 ```bash
 >>> groupsettings
 Usage:
@@ -513,6 +515,34 @@ Commands for manipulating group keys and memberships for chip-tool itself.
   | * unbind-keyset                                                                     |
   | * add-keysets                                                                       |
   | * remove-keyset                                                                     |
+  +-------------------------------------------------------------------------------------+
+
+
+>>> groupsettings add-group TestName 0x4141
+>>> groupsettings add-keysets 0xAAAA 0 0x000000000021dfe0 hex:d0d1d2d3d4d5d6d7d8d9dadbdcdddedf
+>>> groupsettings bind-keyset 0x4141 0xAAAA
+
+>>> groupsettings show-keysets
+  +-------------------------------------------------------------------------------------+
+  | Available KeySets :                                                                 |
+  +-------------------------------------------------------------------------------------+
+  | KeySet Id   |   Key Policy                                                          |
+  | 0xaaaa          Trust First                                                         |
+  | 0x0             Trust First                                                         |
+  | 0x1a3           Trust First                                                         |
+  | 0x1a2           Cache and Sync                                                      |
+  | 0x1a1           Cache and Sync                                                      |
+  +-------------------------------------------------------------------------------------+
+
+>>> groupsettings show-groups
+  +-------------------------------------------------------------------------------------+
+  | Available Groups :                                                                  |
+  +-------------------------------------------------------------------------------------+
+  | Group Id   |  KeySet Id     |   Group Name                                          |
+  | 0x101           0x1a1            Group #1                                           |
+  | 0x102           0x1a2            Group #2                                           |
+  | 0x103           0x1a3            Group #3                                           |
+  | 0x4141          0xaaaa           TestName                                           |
   +-------------------------------------------------------------------------------------+
 ```
 
@@ -1687,7 +1717,151 @@ level-control                            window-covering-server
 localization-configuration-server
 ```
 
-## 4.1. [✚] onoff - 0x00000006 (6)
+## 4.1. [✚] identify - 0x00000003 (3)
+
+> <font color="red">主要用來讓設備進入 **識別模式 (Identify Mode)**，這通常會觸發某些視覺或聲音的回應</font>
+>
+> github: [identify-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/identify-server)
+>
+> github: [identify-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/identify-server/identify-server.cpp)
+
+```bash
+>>> identify
+Usage:
+   identify command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * identify                                                                          |
+  | * trigger-effect                                                                    |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * write                                                                             |
+  | * force-write                                                                       |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * subscribe-event-by-id                                                             |
+  +-------------------------------------------------------------------------------------+
+```
+
+#### identify identify
+
+```bash
+# 開啟識別模式 10秒
+# identify identify IdentifyTime destination-id endpoint-id-ignored-for-group-commands
+>>> identify identify 10 1 1
+```
+
+#### identify read
+
+> **identify-type** : 
+>
+> **0x00**：視覺（例如 LED 閃爍）
+>
+> **0x01**：音效（例如蜂鳴聲）
+>
+> **0x02**：兩者皆有
+>
+> **0xFF**：設備製造商自訂行為
+
+```bash
+>>> identify read
+Usage:
+   identify read attribute-name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Attributes:                                                                         |
+  +-------------------------------------------------------------------------------------+
+  | * identify-time                                                                     |
+  | * identify-type                                                                     |
+  | * generated-command-list                                                            |
+  | * accepted-command-list                                                             |
+  | * attribute-list                                                                    |
+  | * feature-map                                                                       |
+  | * cluster-revision                                                                  |
+  +-------------------------------------------------------------------------------------+
+
+# identify read identify-time destination-id endpoint-ids
+>>> identify read identify-time 1 1
+[1738635436.293] [285518:285520] [TOO] Endpoint: 1 Cluster: 0x0000_0003 Attribute 0x0000_0000 DataVersion: 1247459452
+[1738635436.293] [285518:285520] [TOO]   IdentifyTime: 3
+
+>>> identify read identify-type 1 1
+[1738635510.740] [285518:285520] [TOO] Endpoint: 1 Cluster: 0x0000_0003 Attribute 0x0000_0001 DataVersion: 1247459452
+[1738635510.740] [285518:285520] [TOO]   IdentifyType: 0
+```
+
+## 4.1. [✚] groups - 0x00000004 (4)
+
+> <font color="red">主要用來讓設備進入 **識別模式 (Identify Mode)**，這通常會觸發某些視覺或聲音的回應</font>
+>
+> github: [groups-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/groups-server)
+>
+> github: [groups-server.cpp](https://github.com/project-chip/connectedhomeip/blob/master/src/app/clusters/groups-server/groups-server.cpp)
+
+```bash
+>>> groups
+Usage:
+   groups command_name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Commands:                                                                           |
+  +-------------------------------------------------------------------------------------+
+  | * command-by-id                                                                     |
+  | * add-group                                                                         |
+  | * view-group                                                                        |
+  | * get-group-membership                                                              |
+  | * remove-group                                                                      |
+  | * remove-all-groups                                                                 |
+  | * add-group-if-identifying                                                          |
+  | * read-by-id                                                                        |
+  | * read                                                                              |
+  | * write-by-id                                                                       |
+  | * force-write                                                                       |
+  | * subscribe-by-id                                                                   |
+  | * subscribe                                                                         |
+  | * read-event-by-id                                                                  |
+  | * subscribe-event-by-id                                                             |
+  +-------------------------------------------------------------------------------------+
+```
+
+#### groups add-group
+
+```bash
+# groups add-group GroupID GroupName destination-id endpoint-id-ignored-for-group-commands
+# add nodeid: 1 into group: 0x4141
+>>> groups add-group 0x4141 Light 1 1
+[1738660302.008] [290091:290093] [TOO] Endpoint: 1 Cluster: 0x0000_0004 Command 0x0000_0000
+[1738660302.008] [290091:290093] [TOO]   AddGroupResponse: {
+[1738660302.008] [290091:290093] [TOO]     status: 0
+[1738660302.008] [290091:290093] [TOO]     groupID: 16705
+[1738660302.008] [290091:290093] [TOO]    }
+
+>>> groups view-group 0x4141 1 1
+[1738660214.020] [290091:290093] [TOO] Endpoint: 1 Cluster: 0x0000_0004 Command 0x0000_0001
+[1738660214.020] [290091:290093] [TOO]   ViewGroupResponse: {
+[1738660214.020] [290091:290093] [TOO]     status: 0
+[1738660214.020] [290091:290093] [TOO]     groupID: 16705
+[1738660214.020] [290091:290093] [TOO]     groupName: Light
+[1738660214.020] [290091:290093] [TOO]    }
+
+>>> groups get-group-membership '[]' 1 1
+[1738660244.697] [290091:290093] [TOO] Endpoint: 1 Cluster: 0x0000_0004 Command 0x0000_0002
+[1738660244.697] [290091:290093] [TOO]   GetGroupMembershipResponse: {
+[1738660244.697] [290091:290093] [TOO]     capacity: null
+[1738660244.697] [290091:290093] [TOO]     groupList: 1 entries
+[1738660244.697] [290091:290093] [TOO]       [1]: 16705
+[1738660244.697] [290091:290093] [TOO]    }
+
+>>> groups remove-group 0x4141 1 1
+>>> groups remove-all-groups 1 
+```
+
+## 4.2. [✚] onoff - 0x00000006 (6)
 
 > <font color="red">開 / 關 (On / Off) 功能</font>
 >
@@ -1729,6 +1903,8 @@ Usage:
 >>> onoff toggle 1 1
 [1736823175.178] [750639:750673] [TOO] Endpoint: 1 Cluster: 0x0000_0006 Attribute 0x0000_0000 DataVersion: 343485665
 [1736823175.178] [750639:750673] [TOO]   OnOff: FALSE
+
+onoff toggle 0xffffffffffff4141 1
 
 # 將 on-off 設定 on
 >>> onoff on 1 1
@@ -1814,7 +1990,7 @@ Usage:
 [1736822503.043] [750639:750673] [DMG] Subscription established with SubscriptionID = 0xe84f4b2c MinInterval = 2s MaxInterval = 3600s Peer = 01:0000000000000001
 ```
 
-## 4.2. [✚] levelcontrol - 0x00000008 (8)
+## 4.3. [✚] levelcontrol - 0x00000008 (8)
 
 > <font color="red">調光器 (Dimmer) 功能</font>
 >
@@ -1949,7 +2125,7 @@ Usage:
 [1736823008.862] [750639:750673] [DMG] Subscription established with SubscriptionID = 0x17532287 MinInterval = 2s MaxInterval = 3600s Peer = 01:0000000000000001
 ```
 
-## 4.3. [✚] descriptor - 0x0000001D (29)
+## 4.4. [✚] descriptor - 0x0000001D (29)
 
 > <font color="red"> 描述功能</font>
 >
@@ -2088,6 +2264,7 @@ Usage:
   | * cluster-revision                                                                  |
   +-------------------------------------------------------------------------------------+
 
+descriptor subscribe attribute-list 2 3600 1 0xFFFF
 
 # 可以註冊監聽的 server-list
 >>> descriptor subscribe server-list 2 3600 1 0xFFFF
@@ -2122,7 +2299,7 @@ Usage:
 [1736823289.885] [750639:750673] [TOO]     [7]: 768 (ColorControl)
 ```
 
-## 4.4. [✚] accesscontrol - 0x0000001F (31)
+## 4.5. [✚] accesscontrol - 0x0000001F (31)
 
 > <font color="red">???</font>
 >
@@ -2186,7 +2363,7 @@ Usage:
 
 ```
 
-## 4.5. [✚] basicinformation - 0x00000028 (40)
+## 4.6. [✚] basicinformation - 0x00000028 (40)
 
 > <font color="red"> 基本資訊</font>
 >
@@ -2300,7 +2477,7 @@ Usage:
 
 ```
 
-## 4.6. [✚] otasoftwareupdaterequestor - 0x0000002A (42)
+## 4.7. [✚] otasoftwareupdaterequestor - 0x0000002A (42)
 
 > <font color="red">???</font>
 >
@@ -2332,7 +2509,7 @@ Usage:
   +-------------------------------------------------------------------------------------+
 ```
 
-## 4.7. [✚] generalcommissioning - 0x00000030 (48)
+## 4.8. [✚] generalcommissioning - 0x00000030 (48)
 
 > <font color="red">???</font>
 >
@@ -2365,7 +2542,7 @@ Usage:
   +-------------------------------------------------------------------------------------+
 ```
 
-## 4.8. [✚] networkcommissioning - 0x00000031 (49)
+## 4.9. [✚] networkcommissioning - 0x00000031 (49)
 
 > <font color="red">???</font>
 >
@@ -2434,7 +2611,7 @@ Usage:
 >>> networkcommissioning read last-network-id 1 0xFFFF
 ```
 
-## 4.9. [✚] diagnosticlogs - 0x00000032 (50)
+## 4.10. [✚] diagnosticlogs - 0x00000032 (50)
 
 > <font color="red">???</font>
 >
@@ -2463,7 +2640,7 @@ Usage:
   +-------------------------------------------------------------------------------------+
 ```
 
-## 4.10. [✚] generaldiagnostics - 0x00000033 (51)
+## 4.11. [✚] generaldiagnostics - 0x00000033 (51)
 
 > <font color="red">???</font>
 >
@@ -2496,7 +2673,7 @@ Usage:
   +-------------------------------------------------------------------------------------+
 ```
 
-## 4.11. [✚] softwarediagnostics - 0x00000034 (52)
+## 4.12. [✚] softwarediagnostics - 0x00000034 (52)
 
 > <font color="red">???</font>
 >
@@ -2527,7 +2704,7 @@ Usage:
   +-------------------------------------------------------------------------------------+
 ```
 
-## 4.12. [✚] threadnetworkdiagnostics - 0x00000035 (53)
+## 4.13. [✚] threadnetworkdiagnostics - 0x00000035 (53)
 
 > <font color="red">???</font>
 >
@@ -2558,7 +2735,7 @@ Usage:
   +-------------------------------------------------------------------------------------+
 ```
 
-## 4.13. [✚] wifinetworkdiagnostics - 0x00000036 (54)
+## 4.14. [✚] wifinetworkdiagnostics - 0x00000036 (54)
 
 > <font color="red">???</font>
 >
@@ -2589,7 +2766,7 @@ Usage:
   +-------------------------------------------------------------------------------------+
 ```
 
-## 4.14. [✚] ethernetnetworkdiagnostics - 0x00000037 (55)
+## 4.15. [✚] ethernetnetworkdiagnostics - 0x00000037 (55)
 
 > <font color="red">???</font>
 >
@@ -2618,7 +2795,7 @@ UUsage:
   +-------------------------------------------------------------------------------------+
 ```
 
-## 4.15. [✚] switch - 0x0000003B (59)
+## 4.16. [✚] switch - 0x0000003B (59)
 
 > <font color="red">???</font>
 >
@@ -2648,7 +2825,37 @@ Usage:
   +-------------------------------------------------------------------------------------+
 ```
 
-## 4.16. [✚] administratorcommissioning - 0x0000003C (60)
+```bash
+>>> switch read
+Usage:
+   switch read attribute-name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Attributes:                                                                         |
+  +-------------------------------------------------------------------------------------+
+  | * number-of-positions                                                               |
+  | * current-position                                                                  |
+  | * multi-press-max                                                                   |
+  | * generated-command-list                                                            |
+  | * accepted-command-list                                                             |
+  | * attribute-list                                                                    |
+  | * feature-map                                                                       |
+  | * cluster-revision                                                                  |
+  +-------------------------------------------------------------------------------------+
+
+>>> switch read current-position 1 0xFFFF
+[1738640964.026] [287260:287262] [TOO] Endpoint: 0 Cluster: 0x0000_003B Attribute 0x0000_0001 DataVersion: 332229081
+[1738640964.026] [287260:287262] [TOO]   CurrentPosition: 0
+
+>>> switch read number-of-positions 1 0xFFFF
+[1738640972.425] [287260:287262] [TOO] Endpoint: 0 Cluster: 0x0000_003B Attribute 0x0000_0000 DataVersion: 332229081
+[1738640972.425] [287260:287262] [TOO]   NumberOfPositions: 2
+
+```
+
+
+
+## 4.17. [✚] administratorcommissioning - 0x0000003C (60)
 
 > <font color="red">???</font>
 >
@@ -2679,6 +2886,12 @@ Usage:
   +-------------------------------------------------------------------------------------+
 ```
 
+```bash
+>>> administratorcommissioning open-basic-commissioning-window 30 1 0
+>>> administratorcommissioning revoke-commissioning 1 0
+
+```
+
 #### administratorcommissioning read
 
 ```bash
@@ -2699,15 +2912,23 @@ Usage:
   | * cluster-revision                                                                  |
   +-------------------------------------------------------------------------------------+
 
->>> administratorcommissioning read window-status  1 0xFFFF --timeout 5
+>>> administratorcommissioning read window-status 1 0xFFFF --timeout 5
+[1738664046.413] [290651:290653] [TOO] Endpoint: 0 Cluster: 0x0000_003C Attribute 0x0000_0000 DataVersion: 241013050
+[1738664046.413] [290651:290653] [TOO]   WindowStatus: 1
+
 >>> administratorcommissioning read admin-fabric-index 1 0xFFFF --timeout 5
+[1738664060.289] [290651:290653] [TOO] Endpoint: 0 Cluster: 0x0000_003C Attribute 0x0000_0001 DataVersion: 241013050
+[1738664060.289] [290651:290653] [TOO]   AdminFabricIndex: 10
+
 >>> administratorcommissioning read admin-vendor-id 1 0xFFFF --timeout 5
+[1738664072.190] [290651:290653] [TOO] Endpoint: 0 Cluster: 0x0000_003C Attribute 0x0000_0002 DataVersion: 241013050
+[1738664072.190] [290651:290653] [TOO]   AdminVendorId: 65521
 
 ```
 
-## 4.17. [✚] operationalcredentials - 0x0000003E (62)
+## 4.18. [✚] operationalcredentials - 0x0000003E (62)
 
-> <font color="red">???</font>
+> <font color="red">負責管理設備憑證與身份驗證的核心</font>
 >
 > github: [perational-credentials-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/operational-credentials-server)
 >
@@ -2739,6 +2960,12 @@ Usage:
   | * read-event-by-id                                                                  |
   | * subscribe-event-by-id                                                             |
   +-------------------------------------------------------------------------------------+
+```
+
+#### operationalcredentials update-fabric-label
+
+```bash
+>>> operationalcredentials update-fabric-label "Lanka520" 1 0
 ```
 
 #### operationalcredentials remove-fabric
@@ -2830,16 +3057,16 @@ Usage:
 >>> operationalcredentials read nocs 1 0xFFFF --timeout 5
 
 >>> operationalcredentials read fabrics 1 0xFFFF --timeout 5
-[1737612321.226] [11185:11187] [TOO] Endpoint: 0 Cluster: 0x0000_003E Attribute 0x0000_0001 DataVersion: 3867288700
-[1737612321.226] [11185:11187] [TOO]   Fabrics: 1 entries
-[1737612321.226] [11185:11187] [TOO]     [1]: {
-[1737612321.226] [11185:11187] [TOO]       RootPublicKey: 04C851E78733CF46917B71736145F914CA592A279001CA029BA40B54C60DE59985375CC395D41F8CA327FDCB935950F9D4D30071D36AED3FE0C828E5569539EE31
-[1737612321.226] [11185:11187] [TOO]       VendorID: 65521
-[1737612321.226] [11185:11187] [TOO]       FabricID: 1
-[1737612321.226] [11185:11187] [TOO]       NodeID: 1
-[1737612321.226] [11185:11187] [TOO]       Label:
-[1737612321.226] [11185:11187] [TOO]       FabricIndex: 5
-[1737612321.226] [11185:11187] [TOO]      }
+[1738662950.181] [290326:290328] [TOO] Endpoint: 0 Cluster: 0x0000_003E Attribute 0x0000_0001 DataVersion: 2086185143
+[1738662950.181] [290326:290328] [TOO]   Fabrics: 1 entries
+[1738662950.181] [290326:290328] [TOO]     [1]: {
+[1738662950.181] [290326:290328] [TOO]       RootPublicKey: 04A1644EEA5DC04E0467E117E29BF8C98E7B805D0F7337C2E32ED2C91E3E17702768F2491FA214D736DA71E040F96681016648FA1E6564F2186D7F10B9664E77ED
+[1738662950.181] [290326:290328] [TOO]       VendorID: 65521
+[1738662950.181] [290326:290328] [TOO]       FabricID: 1
+[1738662950.181] [290326:290328] [TOO]       NodeID: 1
+[1738662950.181] [290326:290328] [TOO]       Label: "Lanka520"
+[1738662950.181] [290326:290328] [TOO]       FabricIndex: 10
+[1738662950.181] [290326:290328] [TOO]      }
 
 >>> operationalcredentials read supported-fabrics 1 0xFFFF --timeout 5
 [1737612448.346] [11185:11187] [TOO] Endpoint: 0 Cluster: 0x0000_003E Attribute 0x0000_0002 DataVersion: 3867288700
@@ -2860,9 +3087,9 @@ Usage:
 
 ```
 
-## 4.18. [✚] groupkeymanagement - 0x0000003F (63)
+## 4.19. [✚] groupkeymanagement - 0x0000003F (63)
 
-> <font color="red">???</font>
+> <font color="red">管理群組通訊金鑰</font>
 >
 > github: [group-key-mgmt-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/group-key-mgmt-server)
 >
@@ -2891,11 +3118,86 @@ Usage:
   | * read-event-by-id                                                                  |
   | * subscribe-event-by-id                                                             |
   +-------------------------------------------------------------------------------------+
+
+
+>>> groupkeymanagement key-set-write '{"groupKeySetID":42,"groupKeySecurityPolicy":0,"epochKey0":"d0d1d2d3d4d5d6d7d8d9dadbdcdddedf","epochStartTime0":2220000,"epochKey1":"d1d1d2d3d4d5d6d7d8d9dadbdcdddedf","epochStartTime1":2220001,"epochKey2":"d2d1d2d3d4d5d6d7d8d9dadbdcdddedf","epochStartTime2":2220002}' 1 0
+
+>>> groupkeymanagement write group-key-map '[{"groupId": 16705, "groupKeySetID": 42}]' 1 0
+
 ```
 
-## 4.19. [✚] fixedlabel - 0x00000040 (64)
+#### groupkeymanagement key-set-read
 
-> <font color="red">???</font>
+```bash
+>>> groupkeymanagement key-set-read 42 1 0
+[1738653496.306] [288965:288967] [TOO] Endpoint: 0 Cluster: 0x0000_003F Command 0x0000_0002
+[1738653496.306] [288965:288967] [TOO]   KeySetReadResponse: {
+[1738653496.306] [288965:288967] [TOO]     groupKeySet: {
+[1738653496.306] [288965:288967] [TOO]       GroupKeySetID: 42
+[1738653496.306] [288965:288967] [TOO]       GroupKeySecurityPolicy: 0
+[1738653496.306] [288965:288967] [TOO]       EpochKey0: null
+[1738653496.306] [288965:288967] [TOO]       EpochStartTime0: 2220000
+[1738653496.306] [288965:288967] [TOO]       EpochKey1: null
+[1738653496.306] [288965:288967] [TOO]       EpochStartTime1: 2220001
+[1738653496.306] [288965:288967] [TOO]       EpochKey2: null
+[1738653496.306] [288965:288967] [TOO]       EpochStartTime2: 2220002
+[1738653496.306] [288965:288967] [TOO]      }
+[1738653496.306] [288965:288967] [TOO]    }
+```
+
+#### groupkeymanagement key-set-read-all-indices
+
+> 讀取所有金鑰 ID
+
+```bash
+>>> groupkeymanagement key-set-read-all-indices 1 0
+[1738653449.461] [288965:288967] [TOO] Endpoint: 0 Cluster: 0x0000_003F Command 0x0000_0005
+[1738653449.461] [288965:288967] [TOO]   KeySetReadAllIndicesResponse: {
+[1738653449.461] [288965:288967] [TOO]     groupKeySetIDs: 2 entries
+[1738653449.461] [288965:288967] [TOO]       [1]: 42
+[1738653449.461] [288965:288967] [TOO]       [2]: 0
+[1738653449.461] [288965:288967] [TOO]    }
+```
+
+#### groupkeymanagement read
+
+```bash
+>>> groupkeymanagement read
+Usage:
+   groupkeymanagement read attribute-name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Attributes:                                                                         |
+  +-------------------------------------------------------------------------------------+
+  | * group-key-map                                                                     |
+  | * group-table                                                                       |
+  | * max-groups-per-fabric                                                             |
+  | * max-group-keys-per-fabric                                                         |
+  | * generated-command-list                                                            |
+  | * accepted-command-list                                                             |
+  | * attribute-list                                                                    |
+  | * feature-map                                                                       |
+  | * cluster-revision                                                                  |
+  +-------------------------------------------------------------------------------------+
+
+
+>>> groupkeymanagement read group-key-map 1 0
+[1738653798.683] [288965:288967] [TOO] Endpoint: 0 Cluster: 0x0000_003F Attribute 0x0000_0000 DataVersion: 3000945036
+[1738653798.683] [288965:288967] [TOO]   GroupKeyMap: 1 entries
+[1738653798.683] [288965:288967] [TOO]     [1]: {
+[1738653798.683] [288965:288967] [TOO]       GroupId: 16705
+[1738653798.683] [288965:288967] [TOO]       GroupKeySetID: 42
+[1738653798.683] [288965:288967] [TOO]       FabricIndex: 10
+[1738653798.683] [288965:288967] [TOO]      }
+
+>>> groupkeymanagement read group-table 1 0
+[1738653893.441] [288965:288967] [TOO] Endpoint: 0 Cluster: 0x0000_003F Attribute 0x0000_0001 DataVersion: 3000945036
+[1738653893.441] [288965:288967] [TOO]   GroupTable: 0 entries
+```
+
+## 4.20. [✚] fixedlabel - 0x00000040 (64)
+
+> <font color="red">設備製造商設定的固定標籤</font>；有點類似設備的輔助說明。
 >
 > github: [fixed-label-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/fixed-label-server)
 >
@@ -2921,9 +3223,63 @@ Usage:
   +-------------------------------------------------------------------------------------+
 ```
 
-## 4.20. [✚] userlabel - 0x00000041 (65)
+#### fixedlabel read
 
-> <font color="red">???</font>
+```bash
+>>> fixedlabel read
+Usage:
+   fixedlabel read attribute-name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Attributes:                                                                         |
+  +-------------------------------------------------------------------------------------+
+  | * label-list                                                                        |
+  | * generated-command-list                                                            |
+  | * accepted-command-list                                                             |
+  | * attribute-list                                                                    |
+  | * feature-map                                                                       |
+  | * cluster-revision                                                                  |
+  +-------------------------------------------------------------------------------------+
+
+
+>>> fixedlabel read label-list 1 0xFFFF
+[1738636903.187] [285518:285520] [TOO] Endpoint: 0 Cluster: 0x0000_0040 Attribute 0x0000_0000 DataVersion: 2399987661
+[1738636903.187] [285518:285520] [TOO]   LabelList: 4 entries
+[1738636903.187] [285518:285520] [TOO]     [1]: {
+[1738636903.187] [285518:285520] [TOO]       Label: room
+[1738636903.187] [285518:285520] [TOO]       Value: bedroom 2
+[1738636903.187] [285518:285520] [TOO]      }
+[1738636903.187] [285518:285520] [TOO]     [2]: {
+[1738636903.187] [285518:285520] [TOO]       Label: orientation
+[1738636903.187] [285518:285520] [TOO]       Value: North
+[1738636903.187] [285518:285520] [TOO]      }
+[1738636903.187] [285518:285520] [TOO]     [3]: {
+[1738636903.187] [285518:285520] [TOO]       Label: floor
+[1738636903.187] [285518:285520] [TOO]       Value: 2
+[1738636903.187] [285518:285520] [TOO]      }
+[1738636903.187] [285518:285520] [TOO]     [4]: {
+[1738636903.187] [285518:285520] [TOO]       Label: direction
+[1738636903.187] [285518:285520] [TOO]       Value: up
+[1738636903.187] [285518:285520] [TOO]      }
+
+>>> fixedlabel read label-list 3 0xFFFF
+[1738637150.191] [285518:285520] [TOO] Endpoint: 1 Cluster: 0x0000_0040 Attribute 0x0000_0000 DataVersion: 1036820757
+[1738637150.191] [285518:285520] [TOO]   LabelList: 1 entries
+[1738637150.191] [285518:285520] [TOO]     [1]: {
+[1738637150.191] [285518:285520] [TOO]       Label: Position
+[1738637150.191] [285518:285520] [TOO]       Value: 1
+[1738637150.191] [285518:285520] [TOO]      }
+[1738637150.191] [285518:285520] [TOO] Endpoint: 2 Cluster: 0x0000_0040 Attribute 0x0000_0000 DataVersion: 3759026460
+[1738637150.191] [285518:285520] [TOO]   LabelList: 1 entries
+[1738637150.191] [285518:285520] [TOO]     [1]: {
+[1738637150.191] [285518:285520] [TOO]       Label: Position
+[1738637150.191] [285518:285520] [TOO]       Value: 2
+[1738637150.191] [285518:285520] [TOO]      }
+```
+
+## 4.21. [✚] userlabel - 0x00000041 (65)
+
+> <font color="red">使用者可自訂的標籤</font>
 >
 > github: [user-label-server](https://github.com/project-chip/connectedhomeip/tree/master/src/app/clusters/user-label-server)
 >
@@ -2948,6 +3304,58 @@ Usage:
   | * read-event-by-id                                                                  |
   | * subscribe-event-by-id                                                             |
   +-------------------------------------------------------------------------------------+
+```
+
+#### userlabel read
+
+```bash
+>>> userlabel read
+Usage:
+   userlabel read attribute-name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Attributes:                                                                         |
+  +-------------------------------------------------------------------------------------+
+  | * label-list                                                                        |
+  | * generated-command-list                                                            |
+  | * accepted-command-list                                                             |
+  | * attribute-list                                                                    |
+  | * feature-map                                                                       |
+  | * cluster-revision                                                                  |
+  +-------------------------------------------------------------------------------------+
+
+# userlabel read label-list destination-id endpoint-ids
+>>> userlabel read label-list 1 0xFFFF
+[1738638961.122] [286869:286871] [TOO] Endpoint: 0 Cluster: 0x0000_0041 Attribute 0x0000_0000 DataVersion: 150724016
+[1738638961.122] [286869:286871] [TOO]   LabelList: 2 entries
+[1738638961.122] [286869:286871] [TOO]     [1]: {
+[1738638961.122] [286869:286871] [TOO]       Label: room
+[1738638961.122] [286869:286871] [TOO]       Value: bedroom 1
+[1738638961.122] [286869:286871] [TOO]      }
+[1738638961.122] [286869:286871] [TOO]     [2]: {
+[1738638961.122] [286869:286871] [TOO]       Label: orientation
+[1738638961.122] [286869:286871] [TOO]       Value: east
+[1738638961.122] [286869:286871] [TOO]      }
+```
+
+#### userlabel write
+
+```bash
+>>> userlabel write
+Usage:
+   userlabel write attribute-name [param1 param2 ...]
+
+  +-------------------------------------------------------------------------------------+
+  | Attributes:                                                                         |
+  +-------------------------------------------------------------------------------------+
+  | * label-list                                                                        |
+  +-------------------------------------------------------------------------------------+
+
+# userlabel write label-list attribute-values destination-id endpoint-id-ignored-for-group-commands
+>>> userlabel write label-list '[{"label":"room","value":"bedroom 1"},{"label":"orientation","value":"east"}]' 1 0
+>>> userlabel write label-list '[{"label":"room","value":"bedroom 1"}]' 1 0
+# to clear
+>>> userlabel write label-list '[]' 1 0
 ```
 
 # 5. Examples
