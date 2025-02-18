@@ -95,7 +95,7 @@ sequenceDiagram
 
 	PhoneA->>PhoneB: INVITE
 	PhoneB->>PhoneA: Trying
-	PhoneB->>PhoneA: SIP/2.0 180 Ringing
+	PhoneB->>PhoneA: SIP/2.0 180 Ringing/Answering
 	PhoneB->>PhoneA: SIP/2.0 200 OK
 	PhoneA->>PhoneB: ACK
 	PhoneA-->PhoneB: RTP
