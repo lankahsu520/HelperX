@@ -359,6 +359,8 @@ $ git clone --recurse-submodules http://trac-vbx/gitroot/xbox xbox-456
 # to get the special branch - test
 $ git clone -b test http://trac-vbx/gitroot/xbox xbox-test
 
+# to get the special branch - v3.6.1 and submodule
+git clone -b v3.6.1 --recursive https://github.com/Mbed-TLS/mbedtls.git mbedtls-3.6.1
 ```
 
 ## 2.2. Record changes to the repository
