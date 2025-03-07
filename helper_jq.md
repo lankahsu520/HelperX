@@ -58,6 +58,8 @@ JKEY_ALBUMTITLE=AlbumTitle
 
 # 3. General Commands
 
+## 3.1. Quick Start
+
 #### - Print formatted JSON
 
 ```bash
@@ -100,26 +102,51 @@ $ jq '.["ScannedCount"]' ./AWS/Music.json
 6
 $ jq '.ConsumedCapacity' ./AWS/Music.json
 null
-
 ```
 
-#### - Pass System Environment Variable(s)
+#### - Null Field(s)
+
+```bash
+$ jq '.NotFound' ./AWS/Music.json
+null
+
+$ jq -c '.Items[].NotFound' ./AWS/Music.json
+null
+null
+null
+null
+null
+null
+```
+
+## 3.2. functions
+
+#### - [del(path_expression)](https://devdocs.io/jq/index#del)
+
+> The builtin function `del` removes a key and its corresponding value from an object.
+
+```bash
+$ echo '{"z":26,"b":2,"c":3,"k":11,"d":4,"e":5,"x":24}' | jq -cS '. | del(.b,.c)'
+{"d":4,"e":5,"k":11,"x":24,"z":26}
+```
+
+# 4. options
+
+## 4.1. Pass System Environment Variable(s)
 
 >```
 > --arg name value:
 >
->           This  option  passes a value to the jq program as a predefined variable. If you run jq
->           with --arg foo bar, then $foo is available in the program and  has  the  value  "bar".
->           Note that value will be treated as a string, so --arg foo 123 will bind $foo to "123".
+>     This option passes a value to the jq program as a predefined variable. If you run jq with --arg foo bar, then $foo is available in the program and has the value "bar". Note that value will be treated as a string, so  --arg foo 123 will bind $foo to "123".
+>     
+>     Named arguments are also available to the jq program as $ARGS.named.
 >```
 >
 >```
 >--argjson name JSON-text:
 >
->           This option passes a JSON-encoded value to the jq program as a predefined variable. If
->           you run jq with --argjson foo 123, then $foo is available in the program and  has  the
->           value 123.
->```
+>     This option passes a JSON-encoded value to the jq program as a predefined variable. If you run jq with --argjson foo 123, then $foo is available in the program and has the value 123.
+>     ```
 
 ```bash
 $ jq --arg X $JKEY_COUNT '.[$X]' ./AWS/Music.json
@@ -143,15 +170,15 @@ $ jq --arg X $JKEY_CONSUMEDCAPACITY '.[$X]' ./AWS/Music.json
 null
 
 $ jq --arg X $JKEY_ITEMS --arg Y $JKEY_ALBUMTITLE'.[$X].[].[$Y]' ./AWS/Music.json
-
 ```
 
-#### - Compact Output  [ --compact-output / -c ]
+## 4.2. Compact Output  [ --compact-output / -c ]
 
+>```
 >--compact-output / -c:
 >
->      By default, jq pretty-prints JSON output.  Using  this  option  will  result  in  more
->      compact output by instead putting each JSON object on a single line.
+>By default, jq pretty-prints JSON output. Using this option will result in more compact output by instead putting each JSON object on a single line.
+>```
 
 ```bash
 # compact output
@@ -160,31 +187,13 @@ $ jq -c '.Items' ./AWS/Music.json
 
 ```
 
-#### - Null Field(s)
-
-```bash
-$ jq '.NotFound' ./AWS/Music.json
-null
-
-$ jq -c '.Items[].NotFound' ./AWS/Music.json
-null
-null
-null
-null
-null
-null
-
-```
-
-#### - Print raw strings [ --raw-output / -r ]
+## 4.3. Print raw strings [ --raw-output / -r ]
 
 >```
 >--raw-output / -r:
 >
->           With this option, if the filter´s result is a string then it will be written  directly
->           to  standard output rather than being formatted as a JSON string with quotes. This can
->           be useful for making jq filters talk to non-JSON-based systems.
->```
+>     With this option, if the filter´s result is a string then it will be written directly to standard output rather than being formatted as a JSON string with  quotes.  This  can  be  useful  for  making  jq  filters  talk  to non-JSON-based systems.
+>     ```
 
 ```bash
 $ jq -c '.Items[0].AlbumTitle.S' ./AWS/Music.json
@@ -192,14 +201,14 @@ $ jq -c '.Items[0].AlbumTitle.S' ./AWS/Music.json
 
 $ jq -cr '.Items[0].AlbumTitle.S' ./AWS/Music.json
 Somewhat Famous
-
 ```
 
-#### - In sorted order [ --sort-keys / -S ]
+## 4.4. In sorted order [ --sort-keys / -S ]
 
 > ```
 > --sort-keys / -S:
->            Output the fields of each object with the keys in sorted order.
+> 
+> Output the fields of each object with the keys in sorted order.
 > ```
 
 ```bash
@@ -211,22 +220,25 @@ $ echo $JSON_ABC | jq -cS .
 
 ```
 
-#### - Delete Field(s) [ del ]
+## 4.5 Print as  a large array [ --slurp/-s ]
 
-> ```
-> del(path_expression)
->        The builtin function del removes a key and its corresponding value from an object.
-> ```
+>```
+>--slurp/-s:
+>
+>Instead of running the filter for each JSON object in the input, read the entire input stream into a large array and run the filter just once.
+>```
 
 ```bash
-$ echo '{"z":26,"b":2,"c":3,"k":11,"d":4,"e":5,"x":24}' | jq -cS '. | del(.b,.c)'
-{"d":4,"e":5,"k":11,"x":24,"z":26}
+$ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json | jq -cs '.'
+["Somewhat Famous","Somewhat Famous","Album123","Lanka520","Songs About Life","Another Album Title"]
 
+$ jq -c '[.Items[].AlbumTitle.S]' ./AWS/Music.json
+["Somewhat Famous","Somewhat Famous","Album123","Lanka520","Songs About Life","Another Album Title"]
 ```
 
-# 4. Handle Array
+# 5. Handle Array
 
-## 4.1. Item(s)
+## 5.1. Item(s)
 
 #### - A object of Items[?]
 
@@ -276,28 +288,22 @@ $ jq -c --arg X $JKEY_ITEMS --arg Y $JKEY_ALBUMTITLE '.[$X][2] | .[$Y].S' ./AWS/
 $ jq -c '.Items[2]."AlbumTitle"."S"' ./AWS/Music.json
 "Album123"
 $ jq -c --arg X $JKEY_ITEMS --arg Y $JKEY_ALBUMTITLE '.[$X][2] | .[$Y].S' ./AWS/Music.json
-
 ```
 
-#### - Print as  a large array [ --slurp/-s ]
-
->```
->--slurp/-s:
->
->           Instead of running the filter for each JSON object in the input, read the entire input
->           stream into a large array and run the filter just once.
->```
+#### - Pickup n~m (1:3=1,2; 0:1=1)
 
 ```bash
-$ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json | jq -cs '.'
-["Somewhat Famous","Somewhat Famous","Album123","Lanka520","Songs About Life","Another Album Title"]
+$ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json | jq -cs '.[1:3]'
+["Somewhat Famous","Album123"]
 
-$ jq -c '[.Items[].AlbumTitle.S]' ./AWS/Music.json
-["Somewhat Famous","Somewhat Famous","Album123","Lanka520","Songs About Life","Another Album Title"]
+$ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json  | jq -cs '.[0:1]'
+["Somewhat Famous"]
 
+# last one [-1:]
+$ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json | jq -cs '.[-1:]'
 ```
 
-## 4.2. functions
+## 5.2. functions
 
 #### - [add](https://devdocs.io/jq/index#add)
 
@@ -324,19 +330,6 @@ $ jq -c '[.[] | select(.localIce.candidateType=="srflx") | .duration] | add' ./A
 
 $ jq -c '[.[] | select(.localIce.candidateType=="relay" or .localIce.candidateType=="relay" ) | .duration ]' ./AWS/kvsStreamingSession.json
 [6]
-```
-
-#### - Pickup n~m (1:3=1,2; 0:1=1)
-
-```bash
-$ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json | jq -cs '.[1:3]'
-["Somewhat Famous","Album123"]
-
-$ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json  | jq -cs '.[0:1]'
-["Somewhat Famous"]
-
-# last one [-1:]
-$ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json | jq -cs '.[-1:]'
 ```
 
 #### - [select(boolean_expression)](https://devdocs.io/jq/index#select)
