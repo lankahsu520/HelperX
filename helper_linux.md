@@ -1896,11 +1896,20 @@ date +"%Z %z"
 #### timedatectl - Control the system time and date
 
 ```bash
-timedatectl
+$ timedatectl
+               Local time: 四 2025-02-27 16:15:52 CST
+           Universal time: 四 2025-02-27 08:15:52 UTC
+                 RTC time: 四 2025-02-27 08:15:52
+                Time zone: Asia/Taipei (CST, +0800)
+System clock synchronized: yes
+              NTP service: active
+          RTC in local TZ: no
 
-timedatectl list-timezones
+# 列出時區
+$ timedatectl list-timezones
 
-sudo timedatectl set-timezone Asia/Taipei
+# 設定時區 Asia/Taipei
+$ sudo timedatectl set-timezone Asia/Taipei
 ```
 
 # 10. Service Handler
@@ -2980,8 +2989,19 @@ unalias la
 #### locale - get locale-specific information
 
 ```bash
-sudo vi /etc/default/locale
+$ sudo vi /etc/default/locale
+LANG="en_US.UTF-8"
+LC_NUMERIC="lzh_TW"
+LC_TIME="lzh_TW"
+LC_MONETARY="lzh_TW"
+LC_PAPER="lzh_TW"
+LC_NAME="lzh_TW"
+LC_ADDRESS="lzh_TW"
+LC_TELEPHONE="lzh_TW"
+LC_MEASUREMENT="lzh_TW"
+LC_IDENTIFICATION="lzh_TW"
 
+$ sudo update-locale LC_TIME=\"en_US.UTF-8\"
 ```
 
 #### man - an interface to the system reference manuals
