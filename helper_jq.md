@@ -307,7 +307,7 @@ $ jq -c '[.Items[].AlbumTitle.S]' ./AWS/Music.json
 
 ```bash
 # 當 localIce.candidateType=="srflx" 時，列出 duration
-$ jq -c '.[] | select(.localIce.candidateType=="srflx" ) | .duration' kvsStreamingSession.json
+$ jq -c '.[] | select(.localIce.candidateType=="srflx" ) | .duration' ./AWS/kvsStreamingSession.json
 21
 11
 3
@@ -315,14 +315,14 @@ $ jq -c '.[] | select(.localIce.candidateType=="srflx" ) | .duration' kvsStreami
 7
 
 # 當 localIce.candidateType=="srflx" 時，將 duration 放入一陣列
-$ jq -c '[.[] | select(.localIce.candidateType=="srflx") | .duration]' kvsStreamingSession.json
+$ jq -c '[.[] | select(.localIce.candidateType=="srflx") | .duration]' ./AWS/kvsStreamingSession.json
 [21,11,3,16,7]
 
 # 當 localIce.candidateType=="srflx" 時，將 duration 放入一陣列，並將陣列的值加總
-$ jq -c '[.[] | select(.localIce.candidateType=="srflx") | .duration] | add' kvsStreamingSession.json
+$ jq -c '[.[] | select(.localIce.candidateType=="srflx") | .duration] | add' ./AWS/kvsStreamingSession.json
 58
 
-$ jq -c '[.[] | select(.localIce.candidateType=="relay" or .localIce.candidateType=="relay" ) | .duration ]' kvsStreamingSession.json
+$ jq -c '[.[] | select(.localIce.candidateType=="relay" or .localIce.candidateType=="relay" ) | .duration ]' ./AWS/kvsStreamingSession.json
 [6]
 ```
 
