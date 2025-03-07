@@ -1,0 +1,122 @@
+[{
+		"duration": 21,
+		"end_t": 1741251747,
+		"localIce": {
+			"candidateType": "srflx",
+			"ip": "8.8.8.8",
+			"port": 39470,
+			"priority": 1694498815,
+			"protocol": "udp",
+			"relayProtocol": "N/A",
+			"url": "stun.kinesisvideo.us-east-1.amazonaws.com"
+		},
+		"remoteIce": {
+			"candidateType": "relay",
+			"ip": "3.86.237.49",
+			"port": 59145,
+			"priority": 9215,
+			"protocol": "udp"
+		},
+		"start_t": 1741251726
+	}, {
+		"duration": 6,
+		"end_t": 1741251916,
+		"localIce": {
+			"candidateType": "relay",
+			"ip": "54.227.164.30",
+			"port": 56555,
+			"priority": 16777215,
+			"protocol": "udp",
+			"relayProtocol": "udp",
+			"url": "54-227-164-30.t-7a2c78fb.kinesisvideo.us-east-1.amazonaws.com"
+		},
+		"remoteIce": {
+			"candidateType": "relay",
+			"ip": "54.227.164.30",
+			"port": 49299,
+			"priority": 8447,
+			"protocol": "udp"
+		},
+		"start_t": 1741251910
+	}, {
+		"duration": 11,
+		"end_t": 1741252107,
+		"localIce": {
+			"candidateType": "srflx",
+			"ip": "8.8.8.8",
+			"port": 38586,
+			"priority": 1694498815,
+			"protocol": "udp",
+			"relayProtocol": "N/A",
+			"url": "stun.kinesisvideo.us-east-1.amazonaws.com"
+		},
+		"remoteIce": {
+			"candidateType": "relay",
+			"ip": "44.212.36.164",
+			"port": 57780,
+			"priority": 9215,
+			"protocol": "udp"
+		},
+		"start_t": 1741252096
+	}, {
+		"duration": 3,
+		"end_t": 1741252318,
+		"localIce": {
+			"candidateType": "srflx",
+			"ip": "8.8.8.8",
+			"port": 53527,
+			"priority": 1694498815,
+			"protocol": "udp",
+			"relayProtocol": "N/A",
+			"url": "stun.kinesisvideo.us-east-1.amazonaws.com"
+		},
+		"remoteIce": {
+			"candidateType": "relay",
+			"ip": "44.212.36.164",
+			"port": 56111,
+			"priority": 9215,
+			"protocol": "udp"
+		},
+		"start_t": 1741252315
+	}, {
+		"duration": 16,
+		"end_t": 1741252409,
+		"localIce": {
+			"candidateType": "srflx",
+			"ip": "8.8.8.8",
+			"port": 35465,
+			"priority": 1694498815,
+			"protocol": "udp",
+			"relayProtocol": "N/A",
+			"url": "stun.kinesisvideo.us-east-1.amazonaws.com"
+		},
+		"remoteIce": {
+			"candidateType": "relay",
+			"ip": "100.26.31.91",
+			"port": 61178,
+			"priority": 9215,
+			"protocol": "udp"
+		},
+		"start_t": 1741252393
+	}, {
+		"duration": 7,
+		"end_t": 1741252533,
+		"localIce": {
+			"candidateType": "srflx",
+			"ip": "8.8.8.8",
+			"port": 58988,
+			"priority": 1694498815,
+			"protocol": "udp",
+			"relayProtocol": "N/A",
+			"url": "stun.kinesisvideo.us-east-1.amazonaws.com"
+		},
+		"remoteIce": {
+			"candidateType": "relay",
+			"ip": "54.227.164.30",
+			"port": 53017,
+			"priority": 9215,
+			"protocol": "udp"
+		},
+		"start_t": 1741252526
+	}
+]

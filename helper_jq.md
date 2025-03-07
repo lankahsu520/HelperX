@@ -226,14 +226,16 @@ $ echo '{"z":26,"b":2,"c":3,"k":11,"d":4,"e":5,"x":24}' | jq -cS '. | del(.b,.c)
 
 # 4. Handle Array
 
+## 4.1. Item(s)
+
 #### - A object of Items[?]
 
 ```bash
 $ jq -c '.Items[1]' ./AWS/Music.json
 {"AlbumTitle":{"S":"Somewhat Famous"},"Awards":{"S":"2"},"Artist":{"S":"No One You Know"},"SongTitle":{"S":"Howdy"}}
 
+$ JKEY_ITEMS=Items
 $ jq -c --arg X $JKEY_ITEMS '.[$X][1]' ./AWS/Music.json
-
 ```
 
 #### - List AlbumTitle(s) of Items[?]
@@ -247,8 +249,9 @@ $ jq -c '.Items[].AlbumTitle' ./AWS/Music.json
 {"S":"Songs About Life"}
 {"S":"Another Album Title"}
 
+$ JKEY_ITEMS=Items
+$ JKEY_ALBUMTITLE=AlbumTitle
 $ jq -c --arg X $JKEY_ITEMS --arg Y $JKEY_ALBUMTITLE '.[$X][] | .[$Y]' ./AWS/Music.json
-
 ```
 ```bash
 $ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json
@@ -260,13 +263,14 @@ $ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json
 "Another Album Title"
 
 $ jq -c --arg X $JKEY_ITEMS --arg Y $JKEY_ALBUMTITLE '.[$X][] | .[$Y].S' ./AWS/Music.json
-
 ```
 
 ```bash
 # just retrieve one
 $ jq -c '.Items[2].AlbumTitle' ./AWS/Music.json
 {"S":"Album123"}
+
+$ JKEY_ALBUMTITLE=AlbumTitle
 $ jq -c --arg X $JKEY_ITEMS --arg Y $JKEY_ALBUMTITLE '.[$X][2] | .[$Y].S' ./AWS/Music.json
 
 $ jq -c '.Items[2]."AlbumTitle"."S"' ./AWS/Music.json
@@ -293,21 +297,33 @@ $ jq -c '[.Items[].AlbumTitle.S]' ./AWS/Music.json
 
 ```
 
-#### - Remove any duplicate [ unique, unique_by(path_exp) ]
+## 4.2. functions
 
->```
->unique, unique_by(path_exp)
->       The unique function takes as input an array and produces an array of the same elements, in
->       sorted order, with duplicates removed.
->```
+#### - [add](https://devdocs.io/jq/index#add)
+
+> The filter `add` takes as input an array, and produces as output the elements of the array added together. This might mean summed, concatenated or merged depending on the types of the elements of the input array - the rules are the same as those for the `+` operator (described above).
+>
+> If the input is an empty array, `add` returns `null`.
 
 ```bash
-$ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json | jq -cs 'unique_by(.)'
-["Album123","Another Album Title","Lanka520","Somewhat Famous","Songs About Life"]
+# 當 localIce.candidateType=="srflx" 時，列出 duration
+$ jq -c '.[] | select(.localIce.candidateType=="srflx" ) | .duration' kvsStreamingSession.json
+21
+11
+3
+16
+7
 
-$ jq -c '[.Items[].AlbumTitle.S] | unique_by(.)' ./AWS/Music.json
-["Album123","Another Album Title","Lanka520","Somewhat Famous","Songs About Life"]
+# 當 localIce.candidateType=="srflx" 時，將 duration 放入一陣列
+$ jq -c '[.[] | select(.localIce.candidateType=="srflx") | .duration]' kvsStreamingSession.json
+[21,11,3,16,7]
 
+# 當 localIce.candidateType=="srflx" 時，將 duration 放入一陣列，並將陣列的值加總
+$ jq -c '[.[] | select(.localIce.candidateType=="srflx") | .duration] | add' kvsStreamingSession.json
+58
+
+$ jq -c '[.[] | select(.localIce.candidateType=="relay" or .localIce.candidateType=="relay" ) | .duration ]' kvsStreamingSession.json
+[6]
 ```
 
 #### - Pickup n~m (1:3=1,2; 0:1=1)
@@ -321,18 +337,13 @@ $ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json  | jq -cs '.[0:1]'
 
 # last one [-1:]
 $ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json | jq -cs '.[-1:]'
-
 ```
 
-#### - Pickup the special value [ select ]
+#### - [select(boolean_expression)](https://devdocs.io/jq/index#select)
 
->```
->select(boolean_expression)
->       The function select(foo) produces its input unchanged if foo returns true for that  input,
->       and produces no output otherwise.
->```
+>The function `select(f)` produces its input unchanged if `f` returns true for that input, and produces no output otherwise.
 >
->注意：所列印的層級在 select 之前決定，下面的範例是從 Items 開始
+>     注意：所列印的層級在 select 之前決定，下面的範例是從 Items 開始
 
 ```bash
 $ jq -c '.Items[] | select(.AlbumTitle.S=="Somewhat Famous")' ./AWS/Music.json
@@ -341,7 +352,19 @@ $ jq -c '.Items[] | select(.AlbumTitle.S=="Somewhat Famous")' ./AWS/Music.json
 
 $ jq -c '[.Items[] | select(.AlbumTitle.S=="Somewhat Famous")]' ./AWS/Music.json
 [{"AlbumTitle":{"S":"Somewhat Famous"},"Awards":{"S":"1"},"Artist":{"S":"No One You Know"},"SongTitle":{"S":"Call Me Today"}},{"AlbumTitle":{"S":"Somewhat Famous"},"Awards":{"S":"2"},"Artist":{"S":"No One You Know"},"SongTitle":{"S":"Howdy"}}]
+```
+#### - [unique, unique_by(path_exp)](https://devdocs.io/jq/index#unique-unique_by)
 
+>The `unique` function takes as input an array and produces an array of the same elements, in sorted order, with duplicates removed.
+>
+>The `unique_by(path_exp)` function will keep only one element for each value obtained by applying the argument. Think of it as making an array by taking one element out of every group produced by `group`.
+
+```bash
+$ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json | jq -cs 'unique_by(.)'
+["Album123","Another Album Title","Lanka520","Somewhat Famous","Songs About Life"]
+
+$ jq -c '[.Items[].AlbumTitle.S] | unique_by(.)' ./AWS/Music.json
+["Album123","Another Album Title","Lanka520","Somewhat Famous","Songs About Life"]
 ```
 
 # Appendix
