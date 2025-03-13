@@ -140,19 +140,23 @@
 
 > use mosquitto.
 
-### 1.1.18. [helper_ONVIF.md](https://github.com/lankahsu520/HelperX/blob/master/helper_ONVIF.md) - ONVIF helper.
+### 1.1.18. [helper_network.md](https://github.com/lankahsu520/HelperX/blob/master/helper_network.md) - Network helper.
 
-### 1.1.19. [helper_OpenSSL.md](https://github.com/lankahsu520/HelperX/blob/master/helper_OpenSSL.md) - OpenSSL helper.
+> 筆記 only。
 
-### 1.1.20. [helper_RaspberryPiOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_RaspberryPiOS.md) - Raspberry Pi OS helper.
+### 1.1.19. [helper_ONVIF.md](https://github.com/lankahsu520/HelperX/blob/master/helper_ONVIF.md) - ONVIF helper.
 
-### 1.1.21. [helper_SQLite.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SQLite.md) - SQLite helper.
+### 1.1.20. [helper_OpenSSL.md](https://github.com/lankahsu520/HelperX/blob/master/helper_OpenSSL.md) - OpenSSL helper.
 
-### 1.1.22. [helper_SIPandAsterisk.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SIPandAsterisk.md) - SIP and Asterisk helper.
+### 1.1.21. [helper_RaspberryPiOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_RaspberryPiOS.md) - Raspberry Pi OS helper.
+
+### 1.1.22. [helper_SQLite.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SQLite.md) - SQLite helper.
+
+### 1.1.23. [helper_SIPandAsterisk.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SIPandAsterisk.md) - SIP and Asterisk helper.
 
 > 如果你選擇 FreePBX 或其它 UI 進行安裝設定前，不妨看看這裏的指引。
 
-### 1.1.23. [helper_SVNvsGit.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SVNvsGit.md) - SVN vs. Git helper.
+### 1.1.24. [helper_SVNvsGit.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SVNvsGit.md) - SVN vs. Git helper.
 
 > SVN、Git 都是很好的版本控管工具，當然市面上不止這兩種。只要選擇方便性即可。
 >
@@ -172,15 +176,15 @@
 >
 >沒有良好的習慣，又沒有能力解決衝突。真的只能找網路編輯，這也是一個“work around”。
 
-### 1.1.24. [helper_vi.md](https://github.com/lankahsu520/HelperX/blob/master/helper_vi.md) - vi/vim helper.
+### 1.1.25. [helper_vi.md](https://github.com/lankahsu520/HelperX/blob/master/helper_vi.md) - vi/vim helper.
 
-### 1.1.25. [helper_VirtualBox-x86_64-Ubuntu20.04onWin10](https://github.com/lankahsu520/HelperX/blob/master/helper_VirtualBox-x86_64-Ubuntu20.04onWin10.md) - VirtualBox helper.
+### 1.1.26. [helper_VirtualBox-x86_64-Ubuntu20.04onWin10](https://github.com/lankahsu520/HelperX/blob/master/helper_VirtualBox-x86_64-Ubuntu20.04onWin10.md) - VirtualBox helper.
 
 > Host: win10
 >
 > Client: x86_64, Ubuntu20.04
 
-### 1.1.26. [helper_WebRTC](https://github.com/lankahsu520/HelperX/blob/master/helper_WebRTC.md) - WebRTC helper.
+### 1.1.27. [helper_WebRTC](https://github.com/lankahsu520/HelperX/blob/master/helper_WebRTC.md) - WebRTC helper.
 
 > WebRTC 使用的技術太多，我也只是略懂略懂。
 >
