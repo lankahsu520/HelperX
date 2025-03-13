@@ -56,9 +56,7 @@ JKEY_ITEMS=Items
 JKEY_ALBUMTITLE=AlbumTitle
 ```
 
-# 3. General Commands
-
-## 3.1. Quick Start
+# 3. Quick Start
 
 #### - Print formatted JSON
 
@@ -102,6 +100,8 @@ $ jq '.["ScannedCount"]' ./AWS/Music.json
 6
 $ jq '.ConsumedCapacity' ./AWS/Music.json
 null
+
+$ jq '.lanka520' ./AWS/kvsStreamingSession.json
 ```
 
 #### - Null Field(s)
@@ -117,17 +117,6 @@ null
 null
 null
 null
-```
-
-## 3.2. functions
-
-#### - [del(path_expression)](https://devdocs.io/jq/index#del)
-
-> The builtin function `del` removes a key and its corresponding value from an object.
-
-```bash
-$ echo '{"z":26,"b":2,"c":3,"k":11,"d":4,"e":5,"x":24}' | jq -cS '. | del(.b,.c)'
-{"d":4,"e":5,"k":11,"x":24,"z":26}
 ```
 
 # 4. options
@@ -238,8 +227,6 @@ $ jq -c '[.Items[].AlbumTitle.S]' ./AWS/Music.json
 
 # 5. Handle Array
 
-## 5.1. Item(s)
-
 #### - A object of Items[?]
 
 ```bash
@@ -303,17 +290,27 @@ $ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json  | jq -cs '.[0:1]'
 $ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json | jq -cs '.[-1:]'
 ```
 
-## 5.2. functions
+# 6. functions
 
-#### - [add](https://devdocs.io/jq/index#add)
+## 6.1. [add](https://devdocs.io/jq/index#add)
 
 > The filter `add` takes as input an array, and produces as output the elements of the array added together. This might mean summed, concatenated or merged depending on the types of the elements of the input array - the rules are the same as those for the `+` operator (described above).
 >
 > If the input is an empty array, `add` returns `null`.
 
+#### A. example
+
 ```bash
+$ jq -c 'to_entries | .[0].key' ./AWS/kvsStreamingSession.json
+"lanka520"
+
+# 取key=lanka520，value=
+$ jq -c '.["lanka520"]' ./AWS/kvsStreamingSession.json
+# 取key[0]，value=
+$ jq -c 'to_entries | .[0].value' ./AWS/kvsStreamingSession.json
+
 # 當 localIce.candidateType=="srflx" 時，列出 duration
-$ jq -c '.[] | select(.localIce.candidateType=="srflx" ) | .duration' ./AWS/kvsStreamingSession.json
+$ jq -c 'to_entries | .[0].value | .[] | select(.localIce.candidateType=="srflx") | .duration' ./AWS/kvsStreamingSession.json
 21
 11
 3
@@ -321,22 +318,122 @@ $ jq -c '.[] | select(.localIce.candidateType=="srflx" ) | .duration' ./AWS/kvsS
 7
 
 # 當 localIce.candidateType=="srflx" 時，將 duration 放入一陣列
-$ jq -c '[.[] | select(.localIce.candidateType=="srflx") | .duration]' ./AWS/kvsStreamingSession.json
+$ jq -c '[to_entries | .[0].value | .[] | select(.localIce.candidateType=="srflx") | .duration]' ./AWS/kvsStreamingSession.json
 [21,11,3,16,7]
 
 # 當 localIce.candidateType=="srflx" 時，將 duration 放入一陣列，並將陣列的值加總
-$ jq -c '[.[] | select(.localIce.candidateType=="srflx") | .duration] | add' ./AWS/kvsStreamingSession.json
+$ jq -c '[to_entries | .[0].value | .[] | select(.localIce.candidateType=="srflx") | .duration] | add' ./AWS/kvsStreamingSession.json
 58
 
-$ jq -c '[.[] | select(.localIce.candidateType=="relay" or .localIce.candidateType=="relay" ) | .duration ]' ./AWS/kvsStreamingSession.json
-[6]
+$ jq -c '[to_entries | .[0].value | .[] | select(.localIce.candidateType=="relay" and .remoteIce.candidateType=="relay" ) | .duration ] | add' ./AWS/kvsStreamingSession.json
+6
 ```
 
-#### - [select(boolean_expression)](https://devdocs.io/jq/index#select)
+#### B. example
+
+> 合併陣列內的所有物件，將它們組合成一個單一物件
+
+```bash
+$ cat input.json
+[{
+    "Lanka": [{
+        "name": "Mathematics",
+        "score": 100
+      }, {
+        "name": "English",
+        "score": 60
+      }
+    ]
+  }, {
+    "Mary": [{
+        "name": "Mathematics",
+        "score": 100
+      }, {
+        "name": "English",
+        "score": 100
+      }
+    ]
+  }
+]
+
+# 合併陣列內的所有物件，將它們組合成一個單一物件
+$ jq -c 'add' input.json
+{"Lanka":[{"name":"Mathematics","score":100},{"name":"English","score":60}],"Mary":[{"name":"Mathematics","score":100},{"name":"English","score":100}]}
+```
+
+## 6.2. [del(path_expression)](https://devdocs.io/jq/index#del)
+
+> The builtin function `del` removes a key and its corresponding value from an object.
+
+```bash
+# 刪除 "b" 和 "c"
+$ echo '{"z":26,"b":2,"c":3,"k":11,"d":4,"e":5,"x":24}' | jq -cS '. | del(.b,.c)'
+{"d":4,"e":5,"k":11,"x":24,"z":26}
+```
+
+## 6.3. [map(f), map_values(f)](https://devdocs.io/jq/index#map-map_values)
+
+> For any filter `f`, `map(f)` and `map_values(f)` apply `f` to each of the values in the input array or object, that is, to the values of `.[]`.
+>
+> In the absence of errors, `map(f)` always outputs an array whereas `map_values(f)` outputs an array if given an array, or an object if given an object.
+>
+> When the input to `map_values(f)` is an object, the output object has the same keys as the input object except for those keys whose values when piped to `f` produce no values at all.
+>
+> The key difference between `map(f)` and `map_values(f)` is that the former simply forms an array from all the values of `($x|f)` for each value, $x, in the input array or object, but `map_values(f)` only uses `first($x|f)`.
+>
+> Specifically, for object inputs, `map_value(f)` constructs the output object by examining in turn the value of `first(.[$k]|f)` for each key, $k, of the input. If this expression produces no values, then the corresponding key will be dropped; otherwise, the output object will have that value at the key, $k.
+
+> 這個有點複雜，
+
+#### A. example
+
+```bash
+$ cat input.json
+{
+	"Lanka": [{
+			"name": "Mathematics",
+			"score": 100
+		}, {
+			"name": "Mathematics",
+			"score": 90
+		}, {
+			"name": "English",
+			"score": 60
+		}
+	],
+	"Mary": [{
+			"name": "Mathematics",
+			"score": 100
+		}, {
+			"name": "Mathematics",
+			"score": 100
+		}, {
+			"name": "English",
+			"score": 100
+		}
+	],
+	"Tom": []
+}
+
+# 提取 score
+$ jq -c 'map_values(map(.score))' input.json
+{"Lanka":[100,90,60],"Mary":[100,100,100],"Tom":[]}
+
+# 加總 score
+$ jq -c 'map_values([map(.score) | add])' input.json
+{"Lanka":[250],"Mary":[300],"Tom":[null]}
+
+$ jq -c 'map_values([map(.score) | add // 0])' input.json
+{"Lanka":[250],"Mary":[300],"Tom":[0]}
+```
+
+## 6.4. [select(boolean_expression)](https://devdocs.io/jq/index#select)
 
 >The function `select(f)` produces its input unchanged if `f` returns true for that input, and produces no output otherwise.
 >
->     注意：所列印的層級在 select 之前決定，下面的範例是從 Items 開始
+>注意：所列印的層級在 select 之前決定，下面的範例是從 Items 開始
+
+#### A. example
 
 ```bash
 $ jq -c '.Items[] | select(.AlbumTitle.S=="Somewhat Famous")' ./AWS/Music.json
@@ -346,11 +443,64 @@ $ jq -c '.Items[] | select(.AlbumTitle.S=="Somewhat Famous")' ./AWS/Music.json
 $ jq -c '[.Items[] | select(.AlbumTitle.S=="Somewhat Famous")]' ./AWS/Music.json
 [{"AlbumTitle":{"S":"Somewhat Famous"},"Awards":{"S":"1"},"Artist":{"S":"No One You Know"},"SongTitle":{"S":"Call Me Today"}},{"AlbumTitle":{"S":"Somewhat Famous"},"Awards":{"S":"2"},"Artist":{"S":"No One You Know"},"SongTitle":{"S":"Howdy"}}]
 ```
-#### - [unique, unique_by(path_exp)](https://devdocs.io/jq/index#unique-unique_by)
+
+## 6.5. [to_entries, from_entries, with_entries(f)]()
+
+> These functions convert between an object and an array of key-value pairs. If `to_entries` is passed an object, then for each `k: v` entry in the input, the output array includes `{"key": k, "value": v}`.
+>
+> `from_entries` does the opposite conversion, and `with_entries(f)` is a shorthand for `to_entries | map(f) | from_entries`, useful for doing some operation to all keys and values of an object. `from_entries` accepts `"key"`, `"Key"`, `"name"`, `"Name"`, `"value"`, and `"Value"` as keys.
+
+### 6.5.1. to_entries
+
+#### A. example
+
+> to_entries
+
+```bash
+# {"lanka520":[{}]} -> [{"lanka520":[{}]}]
+$ jq -c 'to_entries' ./AWS/kvsStreamingSession.json
+
+# [{"lanka520":[{}]}] -> .[0].key
+$ jq -c 'to_entries | .[0].key' ./AWS/kvsStreamingSession.json
+"lanka520"
+
+# 取key=lanka520，value=
+$ jq -c '.["lanka520"]' ./AWS/kvsStreamingSession.json
+# 取key[0]，value=
+$ jq -c 'to_entries | .[0].value' ./AWS/kvsStreamingSession.json
+```
+
+### 6.5.2. with_entries
+
+#### A. example
+
+> with_entries
+
+```bash
+# 所有 Mathematics 的分數
+$ jq -c 'with_entries({key: .key, value: [.value[] | select(.name == "Mathematics") | .score]})' input.json
+{"Lanka":[100,90],"Mary":[100,100],"Tom":[]}
+
+# 針對 Mathematics 進行加總
+$ jq -c 'with_entries({key: .key, value: [.value[] | select(.name == "Mathematics") | .score] | add | [.]})' input.json
+{"Lanka":[190],"Mary":[200],"Tom":[null]}
+
+# 針對 Mathematics 進行加總，null -> 0
+$ jq -c 'with_entries({key: .key, value: [( [ .value[] | select(.name == "Mathematics") | .score ] | add // 0 ) ]})' input.json
+{"Lanka":[190],"Mary":[200],"Tom":[0]}
+
+# 針對 Mathematics 算出平均
+$ jq -c 'with_entries({key: .key, value: [( [ .value[] | select(.name == "Mathematics") | .score ] | add ) / ( [ .value[] | select(.name == "Mathematics") ] | length ) ]})' input.json
+{"Lanka":[95],"Mary":[100]}
+```
+
+## 6.6. [unique, unique_by(path_exp)](https://devdocs.io/jq/index#unique-unique_by)
 
 >The `unique` function takes as input an array and produces an array of the same elements, in sorted order, with duplicates removed.
 >
 >The `unique_by(path_exp)` function will keep only one element for each value obtained by applying the argument. Think of it as making an array by taking one element out of every group produced by `group`.
+
+#### A. example
 
 ```bash
 $ jq -c '.Items[].AlbumTitle.S' ./AWS/Music.json | jq -cs 'unique_by(.)'
@@ -367,6 +517,254 @@ $ jq -c '[.Items[].AlbumTitle.S] | unique_by(.)' ./AWS/Music.json
 ## I.1. [jq 實戰教學](https://myapollo.com.tw/blog/jq-by-example/)
 
 # II. Debug
+
+## II.1. ./AWS/[Music.json](https://github.com/lankahsu520/HelperX/blob/master/AWS/Music.json)
+
+```bash
+$ cat ./AWS/Music.json
+{
+	"Items": [{
+			"AlbumTitle": {
+				"S": "Somewhat Famous"
+			},
+			"Awards": {
+				"S": "1"
+			},
+			"Artist": {
+				"S": "No One You Know"
+			},
+			"SongTitle": {
+				"S": "Call Me Today"
+			}
+		}, {
+			"AlbumTitle": {
+				"S": "Somewhat Famous"
+			},
+			"Awards": {
+				"S": "2"
+			},
+			"Artist": {
+				"S": "No One You Know"
+			},
+			"SongTitle": {
+				"S": "Howdy"
+			}
+		}, {
+			"AlbumTitle": {
+				"S": "Album123"
+			},
+			"Awards": {
+				"S": "1"
+			},
+			"Sponsor": {
+				"L": [{
+						"S": "dog"
+					}, {
+						"S": "mouse"
+					}, {
+						"S": "tiger"
+					}
+				]
+			},
+			"Artist": {
+				"S": "Lanka"
+			},
+			"SongTitle": {
+				"S": "Lanka"
+			}
+		}, {
+			"AlbumTitle": {
+				"S": "Lanka520"
+			},
+			"Awards": {
+				"S": "1"
+			},
+			"Sponsor": {
+				"L": [{
+						"S": "dog"
+					}, {
+						"S": "cat"
+					}, {
+						"S": "mouse"
+					}, {
+						"S": "stoat"
+					}, {
+						"S": "snake"
+					}
+				]
+			},
+			"Artist": {
+				"S": "Lanka"
+			},
+			"SongTitle": {
+				"S": "Lanka520520"
+			}
+		}, {
+			"AlbumTitle": {
+				"S": "Songs About Life"
+			},
+			"Awards": {
+				"S": "10"
+			},
+			"Artist": {
+				"S": "Acme Band"
+			},
+			"SongTitle": {
+				"S": "Happy Day"
+			}
+		}, {
+			"AlbumTitle": {
+				"S": "Another Album Title"
+			},
+			"Awards": {
+				"S": "8"
+			},
+			"Artist": {
+				"S": "Acme Band"
+			},
+			"SongTitle": {
+				"S": "PartiQL Rocks"
+			}
+		}
+	],
+	"Count": 6,
+	"ScannedCount": 6,
+	"ConsumedCapacity": null
+}
+
+```
+
+## II.2. ./AWS/[kvsStreamingSession.json](https://github.com/lankahsu520/HelperX/blob/master/AWS/kvsStreamingSession.json)
+
+```bash
+$ cat ./AWS/kvsStreamingSession.json
+{
+	"lanka520": [{
+			"duration": 21,
+			"end_t": 1741251747,
+			"localIce": {
+				"candidateType": "srflx",
+				"ip": "8.8.8.8",
+				"port": 39470,
+				"priority": 1694498815,
+				"protocol": "udp",
+				"relayProtocol": "N/A",
+				"url": "stun.kinesisvideo.us-east-1.amazonaws.com"
+			},
+			"remoteIce": {
+				"candidateType": "relay",
+				"ip": "3.86.237.49",
+				"port": 59145,
+				"priority": 9215,
+				"protocol": "udp"
+			},
+			"start_t": 1741251726
+		}, {
+			"duration": 6,
+			"end_t": 1741251916,
+			"localIce": {
+				"candidateType": "relay",
+				"ip": "54.227.164.30",
+				"port": 56555,
+				"priority": 16777215,
+				"protocol": "udp",
+				"relayProtocol": "udp",
+				"url": "54-227-164-30.t-7a2c78fb.kinesisvideo.us-east-1.amazonaws.com"
+			},
+			"remoteIce": {
+				"candidateType": "relay",
+				"ip": "54.227.164.30",
+				"port": 49299,
+				"priority": 8447,
+				"protocol": "udp"
+			},
+			"start_t": 1741251910
+		}, {
+			"duration": 11,
+			"end_t": 1741252107,
+			"localIce": {
+				"candidateType": "srflx",
+				"ip": "8.8.8.8",
+				"port": 38586,
+				"priority": 1694498815,
+				"protocol": "udp",
+				"relayProtocol": "N/A",
+				"url": "stun.kinesisvideo.us-east-1.amazonaws.com"
+			},
+			"remoteIce": {
+				"candidateType": "relay",
+				"ip": "44.212.36.164",
+				"port": 57780,
+				"priority": 9215,
+				"protocol": "udp"
+			},
+			"start_t": 1741252096
+		}, {
+			"duration": 3,
+			"end_t": 1741252318,
+			"localIce": {
+				"candidateType": "srflx",
+				"ip": "8.8.8.8",
+				"port": 53527,
+				"priority": 1694498815,
+				"protocol": "udp",
+				"relayProtocol": "N/A",
+				"url": "stun.kinesisvideo.us-east-1.amazonaws.com"
+			},
+			"remoteIce": {
+				"candidateType": "relay",
+				"ip": "44.212.36.164",
+				"port": 56111,
+				"priority": 9215,
+				"protocol": "udp"
+			},
+			"start_t": 1741252315
+		}, {
+			"duration": 16,
+			"end_t": 1741252409,
+			"localIce": {
+				"candidateType": "srflx",
+				"ip": "8.8.8.8",
+				"port": 35465,
+				"priority": 1694498815,
+				"protocol": "udp",
+				"relayProtocol": "N/A",
+				"url": "stun.kinesisvideo.us-east-1.amazonaws.com"
+			},
+			"remoteIce": {
+				"candidateType": "relay",
+				"ip": "100.26.31.91",
+				"port": 61178,
+				"priority": 9215,
+				"protocol": "udp"
+			},
+			"start_t": 1741252393
+		}, {
+			"duration": 7,
+			"end_t": 1741252533,
+			"localIce": {
+				"candidateType": "srflx",
+				"ip": "8.8.8.8",
+				"port": 58988,
+				"priority": 1694498815,
+				"protocol": "udp",
+				"relayProtocol": "N/A",
+				"url": "stun.kinesisvideo.us-east-1.amazonaws.com"
+			},
+			"remoteIce": {
+				"candidateType": "relay",
+				"ip": "54.227.164.30",
+				"port": 53017,
+				"priority": 9215,
+				"protocol": "udp"
+			},
+			"start_t": 1741252526
+		}
+	]
+}
+```
+
+
 
 # III. Glossary
 
