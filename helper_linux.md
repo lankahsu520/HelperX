@@ -2986,6 +2986,16 @@ alias l="ls -CF"
 unalias la
 ```
 
+#### command - execute a simple command
+
+```bash
+$ command -v ls
+alias ls='ls --color=auto'
+
+$ command -V ls
+ls is aliased to `ls --color=auto'
+```
+
 #### locale - get locale-specific information
 
 ```bash
@@ -3010,12 +3020,35 @@ $ sudo update-locale LC_TIME=\"en_US.UTF-8\"
 man ls
 ```
 
+#### parallel - build and execute shell command lines from standard input in parallel
+
+> 平行處理
+
+```bash
+$ sudo apt install -y parallel
+$ seq 0 100 | parallel -j 10 '. ~/.bash_aliases; echo "==> {}"'
+```
+
+#### seq - print a sequence of numbers
+
+```bash
+$ seq 1 3
+1
+2
+3
+$ seq 1 2 10
+1
+3
+5
+7
+9
+```
+
 #### set - set or unset options and positional parameters
 
 ```bash
 set -e：在命令返回非零退出狀態碼時自動退出 shell。這意味著，如果命令返回一個錯誤，腳本將會立即停止運行，而不會繼續執行下去。
 set -o pipefail：在使用管道連接多個命令時，如果其中任何一個命令失敗，則整個管道返回失敗。預設情況下，管道只返回最後一個命令的退出狀態碼。使用 set -o pipefail 可以使管道的退出狀態碼反映所有命令的退出狀態。
-
 ```
 
 #### unset - unset values and attributes of variables and functions
@@ -3028,6 +3061,13 @@ helloworld_fn ()
 {
 }
 unset -f helloworld_fn
+```
+
+#### type - write a description of command type
+
+```bash
+$ type ls
+ls is aliased to `ls --color=auto'
 ```
 
 #### xargs - build and execute command lines from standard input
