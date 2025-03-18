@@ -42,6 +42,8 @@ alias ls-type="ls  | xargs -n 1 file"
 $ ls -al LICENSE
 -rwxrwxr-x 1 lanka lanka 1538  七   8 10:30 LICENSE
 
+# display folder names
+$ ls -lA ~/ | awk '/^d/ {print $9}'
 ```
 
 #### mkdir - make directories
