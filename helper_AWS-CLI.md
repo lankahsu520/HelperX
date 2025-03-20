@@ -19,14 +19,16 @@
 
 # 1. aws cli v2
 
-## 1.1. Install
+## 1.1. Run on Local PC
+
+### 1.1.1. Install
 
 ```bash
 $ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 $ unzip awscliv2.zip
 $ sudo ./aws/install
 ```
-## 1.2. Environment Variables
+### 1.1.2. Access Key
 
 ```bash
 $ export AWS_ACCESS_KEY_ID=<access_key>
@@ -40,20 +42,25 @@ AWS Secret Access Key [None]:
 Default region name [None]:ap-northeast-1
 Default output format [None]:json
 ```
-#### A. AWS_SHARED_CREDENTIALS_FILE - ~/.aws/credentials
+#### A. ~/.aws/credentials
 
 ```bash
+$ export AWS_SHARED_CREDENTIALS_FILE="$HOME/.aws/credentials"
 $ echo $AWS_SHARED_CREDENTIALS_FILE
 
 $ cat ~/.aws/credentials
 [default]
 aws_access_key_id = 
 aws_secret_access_key =
+
+$ aws configure get aws_access_key_id
+$ aws configure get aws_secret_access_key
 ```
 
-#### B. AWS_CONFIG_FILE - ~/.aws/config
+#### B. ~/.aws/config
 
 ```bash
+$ export AWS_CONFIG_FILE="$HOME/.aws/config"
 $ echo $AWS_CONFIG_FILE
 
 $ cat ~/.aws/config
@@ -62,12 +69,14 @@ region = ap-northeast-1
 output = json
 cli_binary_format=raw-in-base64-out
 cli_pager =
+
+# The following example sets the default to disable the use of a pager.
+# 避免進到 Pager 閱讀
+$ aws configure set cli_pager ""
+
+$ aws configure set region eu-west-1
+$ aws configure set output json
 ```
-
-###### **cli_pager**
-
-> The following example sets the default to disable the use of a pager.
->
 
 #### C. Others
 
@@ -81,43 +90,353 @@ AWS_CONTAINER_CREDENTIALS_RELATIVE_URI
 AWS_EC2_METADATA_DISABLED
 ```
 
+## 1.2. Run on EC2 (ubuntu release)
+
+### 1.2.1. AWS EC2
+
+> 這邊有幾個方式可以知道目前的環境是否在 ec2
+
+#### A. metadata
+
 ```bash
-# please set your .bash_aliases
-function eval-it()
+$ curl -s http://169.254.169.254/latest/meta-data
+ami-id
+ami-launch-index
+ami-manifest-path
+block-device-mapping/
+events/
+hostname
+iam/
+identity-credentials/
+instance-action
+instance-id
+instance-life-cycle
+instance-type
+ipv6
+local-hostname
+local-ipv4
+mac
+managed-ssh-keys/
+metrics/
+network/
+placement/
+profile
+public-hostname
+public-ipv4
+public-keys/
+reservation-id
+security-groups
+services/
+system
+```
+
+#### B. DMI BIOS
+
+```bash
+$ sudo dmidecode -s system-manufacturer
+Amazon EC2
+```
+
+#### C. UUID
+
+> ec2 開頭
+>
+> ec2xxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
+```bash
+$ sudo cat /sys/devices/virtual/dmi/id/product_uuid
+ec2ab84b-4a2d-4d35-b947-f2dfef5eb50d
+```
+
+# 2. [IAM (AWS Identity and Access Management)](https://docs.aws.amazon.com/zh_tw/IAM/latest/UserGuide/introduction.html)
+
+> AWS Identity and Access Management (IAM) 是一種 Web 服務，可協助您安全地控制對 資源的 AWS 存取。透過 IAM，您可以管理許可，以控制使用者可以存取哪些 AWS 資源。您可以使用 IAM 來控制能通過身分驗證 (登入) 和授權使用資源的 (具有許可) 的人員。IAM 提供控制 AWS 帳戶身分驗證和授權所需的基礎設施。
+
+> 很複雜，建議有專人來管理。IAM 沒有設定好，後面的功能都無法使用。
+
+## 2.1. Users / Roles
+
+#### A. Users
+
+```bash
+$ aws sts get-caller-identity
 {
-	DO_COMMAND="$*"
-	[ ! -z "$ECHO_COMMAND" ] && echo "[${DO_COMMAND}]"
-	eval ${DO_COMMAND}
+    "UserId": "AID123456789012345678",
+    "Account": "123456789012",
+    "Arn": "arn:aws:iam::123456789012:user/Lanka"
+}
+
+$ AWS_STS_ARN=`aws sts get-caller-identity --query "Arn" --output text`
+
+$ AWS_IDENTITY_TYPE=`echo $AWS_STS_ARN | awk -F':' '{print $6}' | awk -F'/' '{print $1}'`
+$ echo $AWS_IDENTITY_TYPE
+user
+
+$ AWS_USER_NAME=`echo $AWS_STS_ARN | awk -F'/' '{print $2}'`
+$ echo $AWS_USER_NAME
+Lanka
+
+$ aws iam get-user
+{
+    "User": {
+        "Path": "/",
+        "UserName": "Lanka",
+        "UserId": "AID123456789012345678",
+        "Arn": "arn:aws:iam::123456789012:user/Lanka",
+        "CreateDate": "2019-10-31T03:50:05Z",
+        "PasswordLastUsed": "2025-03-11T06:32:04Z",
+        "Tags": [
+            {
+                "Key": "AKIA4123456789012345",
+                "Value": "build20-vbx"
+            },
+            {
+                "Key": "AKIA4123456789000000",
+                "Value": "KVS WebRTC Viewer"
+            }
+        ]
+    }
+}
+
+$ AWS_DEFAULT_REGION=`aws configure get region`
+$ echo $AWS_DEFAULT_REGION
+us-west-1
+```
+
+#### B. Roles
+
+```bash
+$ curl -s http://169.254.169.254/latest/meta-data/iam/security-credentials
+Lanka-ec2-role
+
+$ aws sts get-caller-identity
+{
+    "UserId": "AID123456789012345678",
+    "Account": "123456789012",
+    "Arn": "arn:aws:sts::123456789012:assumed-role/Lanka-ec2-role/i-123456789012aabbc"
+}
+
+$ AWS_STS_ARN=`aws sts get-caller-identity --query "Arn" --output text`
+
+$ AWS_IDENTITY_TYPE=`echo $AWS_STS_ARN | awk -F':' '{print $6}' | awk -F'/' '{print $1}'`
+$ echo $AWS_IDENTITY_TYPE
+assumed-role
+
+$ AWS_ROLE_NAME=`echo $AWS_STS_ARN | awk -F'/' '{print $2}'`
+$ echo $AWS_ROLE_NAME
+Lanka-ec2-role
+# or
+$ AWS_ROLE_NAME=`curl -s http://169.254.169.254/latest/meta-data/iam/security-credentials`
+$ echo $AWS_ROLE_NAME
+Lanka-ec2-role
+
+$ aws iam get-role --role-name $AWS_ROLE_NAME
+{
+    "Role": {
+        "Path": "/",
+        "RoleName": "Lanka-ec2-role",
+        "RoleId": "ARO123456789012345678",
+        "Arn": "arn:aws:iam::123456789012:role/Lanka-ec2-role",
+        "CreateDate": "2022-05-06T03:10:38Z",
+        "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Principal": {
+                        "Service": "ec2.amazonaws.com"
+                    },
+                    "Action": "sts:AssumeRole"
+                }
+            ]
+        },
+        "MaxSessionDuration": 3600,
+        "RoleLastUsed": {
+            "LastUsedDate": "2025-03-13T08:12:44Z",
+            "Region": "ap-northeast-1"
+        }
+    }
+}
+
+$ AWS_ROLE_ARN=`aws iam get-role --role-name $AWS_ROLE_NAME --query 'Role.Arn' --output text`
+$ echo "AWS_ROLE_ARN=$AWS_ROLE_ARN"
+
+$ AWS_INSTANCE_ID=`curl -s http://169.254.169.254/latest/meta-data/instance-id`
+$ echo "AWS_INSTANCE_ID=$AWS_INSTANCE_ID"
+
+$ AWS_DEFAULT_REGION=`aws configure list | awk '/region/ {print $2}'`
+$ echo $AWS_DEFAULT_REGION
+```
+
+## 2.2. Access Key
+
+```bash
+echo "AWS_STS_ARN=$AWS_STS_ARN"
+echo "AWS_IDENTITY_TYPE=$AWS_IDENTITY_TYPE"
+echo "AWS_USER_NAME=$AWS_USER_NAME"
+echo "AWS_ROLE_NAME=$AWS_ROLE_NAME"
+echo "AWS_ROLE_ARN=$AWS_ROLE_ARN"
+echo "AWS_INSTANCE_ID=$AWS_INSTANCE_ID"
+
+echo "AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION"
+
+echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"
+echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
+echo
+echo "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN"
+echo "AWS_SESSION_LASTUPDATED=$AWS_SESSION_LASTUPDATED"
+echo "AWS_SESSION_EXPIRATION=$AWS_SESSION_EXPIRATION"
+echo
+date +"%Y-%m-%d %T"
+```
+
+#### A. Users
+
+```bash
+AWS_USER_NAME=`aws sts get-caller-identity --query "Arn" --output text | awk -F'/' '{print $2}'`
+echo "AWS_USER_NAME=$AWS_USER_NAME"
+
+AWS_ACCESS_KEY_ID=`aws configure get aws_access_key_id`
+AWS_SECRET_ACCESS_KEY=`aws configure get aws_secret_access_key`
+```
+
+#### B. Roles
+
+```bash
+$ curl -s http://169.254.169.254/latest/meta-data/iam/security-credentials/Lanka-ec2-role
+{
+  "Code" : "Success",
+  "LastUpdated" : "2025-03-14T06:33:02Z",
+  "Type" : "AWS-HMAC",
+  "AccessKeyId" : "AKIA4123456789012345",
+  "SecretAccessKey" : "abws8Hq2KiQ2AyJmhl0tm8OowIyCNOJqFgNIfBQ6",
+  "Token" : "IQoJb3JpZ2luX2VjEJv//////////wEaCWV1LXdlc3QtMSJGMEQCIEHNABUE+YXbkLes8ljkX+eQjk//////////8BEAMaDDg3NzQwOTE1Mjg2NiIMTFDRHdPHmEAOghWGKpAF3hBSOFFIhRYFJ/0iCQvC/1vrw9luDVFV2+FZhcDqzjGA82qmSa5wIMfCnEE2082b61UF3vXWscCA51WHPYnckIHrJq6ZdgiSZGxoLbGJltRaIYdgDCwJ7yZaJSwyHcOHoeQUQQleJ15c6b9r7+QIYHsBdtzRS7seJRIDUgXZ2iw6ani0dT/pM6Rxb8CBI1xF9xTmoL4MMD+qCOmiNvSVB0xRPDZfPMeq9gCK+USvwTzlFTkK1s0GLwfhABRlzeKzKaIZgQ94ElHyaaPdqyLRHw8IHg1/NRua/+ZT1geBMMu80bhFW6x84PtFjSB7+35rdw5oc+kFSeZ7x+P7vOhglqylQOfmHfHx1s7qVF2ZLN9zFAoAqazaCykdY+l+54YDRtKbri0u3iIEq6QWa25cBL/SjlGbqefV0WgI0em69gWlwPE5UW4f41n0ystpEaDihe8bZtA78LzwDw8LoZkwaJGnAgahjPwvyhIFaWCazU4+e8x4hBx0L8qiWKAmsmNOv64kTXavczlilqR4cQPeYL5XQu+bLV3HNCX3tX55skaAIqKnTwvzRk29Q1ixNWYzel8TUU92Qu3/RQrXyB0Z59XUo7v94X/nnkQamGVSfzeDmGUqFY6w9ykYU7",
+  "Expiration" : "2025-03-14T12:58:46Z"
 }
 ```
 
-## 1.3. aws Usage
-
 ```bash
-$ aws --version
-aws-cli/2.4.13 Python/3.8.8 Linux/5.15.0-52-generic exe/x86_64.ubuntu.20 prompt/off
+AWS_ROLE_NAME=`curl -s http://169.254.169.254/latest/meta-data/iam/security-credentials`
+echo "AWS_ROLE_NAME=$AWS_ROLE_NAME"
 
-$ aws
+# MaxSessionDuration = 43200
+aws iam update-role --role-name $AWS_ROLE_NAME --max-session-duration 43200
 
-usage: aws [options] <command> <subcommand> [<subcommand> ...] [parameters]
-To see help text, you can run:
+AWS_CREDENTIALS=`curl -s http://169.254.169.254/latest/meta-data/iam/security-credentials/$AWS_ROLE_NAME`
 
-  aws help
-  aws <command> help
-  aws <command> <subcommand> help
+#echo "AWS_CREDENTIALS=$AWS_CREDENTIALS"
 
-aws: error: the following arguments are required: command
+AWS_ACCESS_KEY_ID=$(echo $AWS_CREDENTIALS | jq -r '.AccessKeyId')
+AWS_SECRET_ACCESS_KEY=$(echo $AWS_CREDENTIALS | jq -r '.SecretAccessKey')
+AWS_SESSION_TOKEN=$(echo $AWS_CREDENTIALS | jq -r '.Token')
 
-$ aws help
-$ aws <command> help
-$ aws <command> <subcommand> help
-
-$ aws sts get-caller-identity
+AWS_SESSION_LASTUPDATED=$(echo $AWS_CREDENTIALS | jq -r '.LastUpdated')
+AWS_SESSION_EXPIRATION=$(echo $AWS_CREDENTIALS | jq -r '.Expiration')
 ```
 
-# 2. AWS Services
+## 2.3. Policies
 
-## 2.1. [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html)
+```bash
+aws iam list-policies
+```
+
+#### A. Users
+
+```bash
+aws iam list-attached-user-policies --user-name $AWS_USER_NAME
+```
+
+#### B. Roles
+
+```bash
+aws iam list-attached-role-policies --role-name $AWS_ROLE_NAME
+```
+
+## 2.4. Instance profiles
+
+> 這邊想像成是把 roles 放入 Instance profile 裏
+
+```mermaid
+flowchart LR
+	subgraph Amazon
+		EC2
+		Services
+		subgraph Iam
+			Instance{{Instance profiles}}
+			Role
+			Instance <--> Role
+		end
+		EC2 <--> Instance <--> Services
+	end
+
+	classDef yellow fill:#FFFFCC
+	classDef pink fill:#FFCCCC
+	classDef blue fill:#0000FF
+	classDef lightblue fill:#ADD8E6
+
+	class Services pink
+	class EC2 pink
+	class Iam pink
+```
+
+### 2.4.1. instance-profile
+
+```bash
+# 新增 instance-profile
+$ aws iam create-instance-profile \
+ --instance-profile-name KVSWebRTCInstanceProfile
+
+# 列出 instance-profile
+$ aws iam list-instance-profiles \
+ --query 'InstanceProfiles[*].InstanceProfileName' \
+ --output table
+
+# 刪除 instance-profile
+$ aws iam delete-instance-profile \
+ --instance-profile-name KVSWebRTCInstanceProfile
+```
+
+### 2.4.2. instance-profile and role
+
+```bash
+# 將 Lanka-ec2-role 加入 KVSWebRTCInstanceProfile
+$ aws iam add-role-to-instance-profile \
+ --instance-profile-name KVSWebRTCInstanceProfile \
+ --role-name Lanka-ec2-role
+
+# 查看 KVSWebRTCInstanceProfile 下的 roles
+$ aws iam get-instance-profile \
+ --instance-profile-name KVSWebRTCInstanceProfile \
+ --query 'InstanceProfile.Roles[*].RoleName' --output table
+
+# 查看 Lanka-ec2-role 加入了 instance-profile
+$ aws iam list-instance-profiles-for-role \
+ --role-name Lanka-ec2-role \
+ --query 'InstanceProfiles[*].InstanceProfileName' --output table
+
+# 將 Lanka-ec2-role 從 KVSWebRTCInstanceProfile 移出
+$ aws iam remove-role-from-instance-profile \
+ --instance-profile-name KVSWebRTCInstanceProfile \
+ --role-name Lanka-ec2-role
+```
+
+### 2.4.3. instance-profile and ec2
+
+```bash
+# 查看個別的 ec2 與綁定的 instance-profile
+$ aws ec2 describe-instances \
+ --query 'Reservations[*].Instances[*].[InstanceId, IamInstanceProfile.Arn]' \
+ --output table
+
+# 查看 i-0123456789abcdef0 與綁定的 instance-profile
+$ aws ec2 describe-instances \
+ --instance-ids i-0123456789abcdef0 \
+ --query 'Reservations[*].Instances[*].IamInstanceProfile.Arn' --output text
+```
+
+# 3. AWS Services
+
+## 3.1. [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html)
 
 ```mermaid
 flowchart TD
@@ -141,9 +460,9 @@ flowchart TD
 	class awsCliDynamodb pink
 ```
 
-### 2.1.1. [DynamoDB Dashboard](https://eu-west-1.console.aws.amazon.com/dynamodbv2/home?region=eu-west-1#service)
+### 3.1.1. [DynamoDB Dashboard](https://eu-west-1.console.aws.amazon.com/dynamodbv2/home?region=eu-west-1#service)
 
-### 2.1.2. [aws dynamodb xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-dynamodb.html)
+### 3.1.2. [aws dynamodb xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-dynamodb.html)
 
 #### [create-table](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/dynamodb/create-table.html)
 
@@ -346,7 +665,7 @@ $ aws dynamodb scan --table-name Music
 }
 ```
 
-## 2.2. [EC2 (Amazon Elastic Compute Cloud)](https://docs.aws.amazon.com/zh_tw/AWSEC2/latest/UserGuide/concepts.html)
+## 3.2. [EC2 (Amazon Elastic Compute Cloud)](https://docs.aws.amazon.com/zh_tw/AWSEC2/latest/UserGuide/concepts.html)
 
 ```mermaid
 flowchart TD
@@ -373,13 +692,13 @@ flowchart TD
 	class sshClient pink
 ```
 
-### 2.2.1. [EC2 Dashboard](https://eu-west-1.console.aws.amazon.com/ec2/home?region=eu-west-1)
+### 3.2.1. [EC2 Dashboard](https://eu-west-1.console.aws.amazon.com/ec2/home?region=eu-west-1)
 
-### 2.2.2. [aws ec2 xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-ec2.html)
+### 3.2.2. [aws ec2 xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-ec2.html)
 
 >因為本身就是虛擬運算，設定起來也較複雜，不建議使用 AWS CLI；請多加使用 Dashboard。
 
-### 2.2.3. ec2metadata xxx
+### 3.2.3. ec2metadata xxx
 
 ```bash
 # please use ssh to link with ec2
@@ -400,7 +719,7 @@ $ curl http://169.254.169.254/latest/meta-data/public-hostname
 ec2-199-199-199-199.eu-west-1.compute.amazonaws.com
 ```
 
-## 2.3. [S3 (Amazon Simple Storage Service)](https://docs.aws.amazon.com/zh_tw/AmazonS3/latest/userguide/Welcome.html)
+## 3.3. [S3 (Amazon Simple Storage Service)](https://docs.aws.amazon.com/zh_tw/AmazonS3/latest/userguide/Welcome.html)
 
 ```mermaid
 flowchart TD
@@ -424,9 +743,9 @@ flowchart TD
 	class awsCliS3 pink
 ```
 
-### 2.3.1. [S3 Dashboard](https://s3.console.aws.amazon.com/s3/buckets?region=eu-west-1)
+### 3.3.1. [S3 Dashboard](https://s3.console.aws.amazon.com/s3/buckets?region=eu-west-1)
 
-### 2.3.2. [aws s3 xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-s3.html)
+### 3.3.2. [aws s3 xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-s3.html)
 
 #### [cp](https://docs.aws.amazon.com/cli/latest/reference/s3/cp.html)
 
@@ -491,7 +810,7 @@ $ aws s3 rm s3://utilx9/demo_000.c
 $ aws s3 sync s3://helperx s3://helperx_Bak
 ```
 
-### 2.3.3. [aws s3api](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3api/index.html)
+### 3.3.3. [aws s3api](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3api/index.html)
 
 #### [get-bucket-notification-configuration](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3api/get-bucket-notification-configuration.html)
 
@@ -558,15 +877,15 @@ $ aws s3api put-bucket-notification-configuration \
 
 
 
-## 2.4. [S3 Glacier](https://docs.aws.amazon.com/zh_tw/amazonglacier/latest/dev/introduction.html)
+## 3.4. [S3 Glacier](https://docs.aws.amazon.com/zh_tw/amazonglacier/latest/dev/introduction.html)
 
 > 因為不適用正常檔案存取方式，先不花時間研究。
 
-### 2.4.1. [S3 Glacier](https://eu-west-1.console.aws.amazon.com/sns/v3/home?region=eu-west-1#/dashboard)
+### 3.4.1. [S3 Glacier](https://eu-west-1.console.aws.amazon.com/sns/v3/home?region=eu-west-1#/dashboard)
 
-### 2.4.2. [aws glacier xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-glacier.html)
+### 3.4.2. [aws glacier xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-glacier.html)
 
-## 2.5. [SNS (Amazon Simple Notification Service)](https://docs.aws.amazon.com/zh_tw/sns/latest/dg/welcome.html)
+## 3.5. [SNS (Amazon Simple Notification Service)](https://docs.aws.amazon.com/zh_tw/sns/latest/dg/welcome.html)
 
 > publish a message to AmazonSNS, then send ([protocol](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sns/subscribe.html)) to subscriber(s)
 
@@ -583,9 +902,9 @@ flowchart LR
 	Mary <-.-> | email / arn:aws:sns:us-west-1:123456789012:lankahsu520| AmazonSNS
 ```
 
-### 2.5.1. [SNS Dashboard](https://eu-west-1.console.aws.amazon.com/sns/v3/home?region=eu-west-1#/dashboard)
+### 3.5.1. [SNS Dashboard](https://eu-west-1.console.aws.amazon.com/sns/v3/home?region=eu-west-1#/dashboard)
 
-### 2.5.2. [aws sns xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-s3.html)
+### 3.5.2. [aws sns xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-s3.html)
 
 #### [create-topic](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sns/create-topic.html)
 
@@ -677,9 +996,9 @@ $ aws sns list-subscriptions
 }
 ```
 
-## 2.6. [KVS (Kinesis Video Streams)](https://docs.aws.amazon.com/zh_tw/kinesisvideostreams/latest/dg/what-is-kinesis-video.html)
+## 3.6. [KVS (Kinesis Video Streams)](https://docs.aws.amazon.com/zh_tw/kinesisvideostreams/latest/dg/what-is-kinesis-video.html)
 
-### 2.6.0. export
+### 3.6.0. export
 
 ```bash
 export AWS_KVS_STREAM_NAME=HelloLanka520
@@ -711,9 +1030,9 @@ echo "AWS_KVS_STREAM_ENDTIMESTAMP=${AWS_KVS_STREAM_ENDTIMESTAMP}"
 echo "AWS_KVS_STREAM_ENDPOINT=${AWS_KVS_STREAM_ENDPOINT}"
 ```
 
-### 2.6.1. [KVS Dashboard](https://us-east-1.console.aws.amazon.com/dashboard)
+### 3.6.1. [KVS Dashboard](https://us-east-1.console.aws.amazon.com/dashboard)
 
-### 2.6.2. aws [kinesisvideo](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesisvideo/index.html) xxx
+### 3.6.2. aws [kinesisvideo](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesisvideo/index.html) xxx
 
 #### [describe-stream](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesisvideo/describe-stream.html)
 
@@ -801,7 +1120,7 @@ export AWS_KVS_STREAM_ENDPOINT_IMAGES=`aws kinesisvideo get-data-endpoint --stre
 export AWS_KVS_STREAM_ENDPOINT_IMAGES_ARG="--endpoint-url ${AWS_KVS_STREAM_ENDPOINT_IMAGES}"
 ```
 
-### 2.6.3. aws [kinesis-video-archived-media](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesis-video-archived-media/index.html) xxx
+### 3.6.3. aws [kinesis-video-archived-media](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesis-video-archived-media/index.html) xxx
 
 #### [get-clip](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesis-video-archived-media/get-clip.html)
 
@@ -870,7 +1189,7 @@ $ DO_COMMAND="aws kinesis-video-archived-media \
 $ eval-it $DO_COMMAND
 ```
 
-### 2.6.4. aws [kinesis-video-media](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesis-video-media/index.html) xxx
+### 3.6.4. aws [kinesis-video-media](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesis-video-media/index.html) xxx
 
 #### [get-media](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesis-video-media/get-media.html)
 
@@ -916,24 +1235,77 @@ $ eval-it $DO_COMMAND
 
 # IV. Tool Usage
 
-## IV.1. bash
+## IV.1. aws Usage
 
-#### A. .bash_aliases
+```bash
+$ aws --version
+aws-cli/2.4.13 Python/3.8.8 Linux/5.15.0-52-generic exe/x86_64.ubuntu.20 prompt/off
+
+$ aws
+
+usage: aws [options] <command> <subcommand> [<subcommand> ...] [parameters]
+To see help text, you can run:
+
+  aws help
+  aws <command> help
+  aws <command> <subcommand> help
+
+aws: error: the following arguments are required: command
+
+$ aws help
+$ aws <command> help
+$ aws <command> <subcommand> help
+
+$ aws sts get-caller-identity
+```
+
+## IV.2. bash
 
 ```bash
 #******************************************************************************
-#** aws cli **
+#** 20. Shell Scripts **
 #******************************************************************************
-function aws-export()
+function eval-it()
 {
-	echo "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}"
-	echo "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
-	echo "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+	DO_COMMAND="$*"
+	[ ! -z "${ECHO_COMMAND}" ] && echo "[${DO_COMMAND}]"
+	eval "${DO_COMMAND}"
+}
 
+function eval-do()
+{
+	eval-it "${DO_COMMAND}"
+}
+
+
+#******************************************************************************
+#** aws cli (iam) **
+#******************************************************************************
+function aws-iam-environment-key()
+{
+	echo "AWS_STS_ARN=$AWS_STS_ARN"
+	echo "AWS_IDENTITY_TYPE=$AWS_IDENTITY_TYPE"
+	echo "AWS_USER_NAME=$AWS_USER_NAME"
+	echo "AWS_ROLE_NAME=$AWS_ROLE_NAME"
+	echo "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}"
+
+	echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"
+	echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
 	echo
+	echo "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN"
+	echo "AWS_SESSION_LASTUPDATED=$AWS_SESSION_LASTUPDATED"
+	echo "AWS_SESSION_EXPIRATION=$AWS_SESSION_EXPIRATION"
+	echo
+	date +"%Y-%m-%d %T"
+}
+
+function aws-iam-environment-file()
+{
+	echo
+	echo "--------------------------------------------------"
 	[ ! -v AWS_SHARED_CREDENTIALS_FILE ] && export AWS_SHARED_CREDENTIALS_FILE="$HOME/.aws/credentials"
 	echo "AWS_SHARED_CREDENTIALS_FILE=${AWS_SHARED_CREDENTIALS_FILE}"
-	if [ ! -z "${AWS_SHARED_CREDENTIALS_FILE}" ]; then
+	if [ ! -z "${AWS_SHARED_CREDENTIALS_FILE}" ] && [ -f "${AWS_SHARED_CREDENTIALS_FILE}" ]; then
 		DO_COMMAND="(cat ${AWS_SHARED_CREDENTIALS_FILE})"
 		eval-it "$DO_COMMAND"
 	else
@@ -941,9 +1313,10 @@ function aws-export()
 	fi
 
 	echo
+	echo "--------------------------------------------------"
 	[ ! -v AWS_CONFIG_FILE ] && export AWS_CONFIG_FILE="$HOME/.aws/config"
 	echo "AWS_CONFIG_FILE=${AWS_CONFIG_FILE}"
-	if [ ! -z "${AWS_CONFIG_FILE}" ]; then
+	if [ ! -z "${AWS_CONFIG_FILE}" ] && [ -f "${AWS_CONFIG_FILE}" ]; then
 		DO_COMMAND="(cat ${AWS_CONFIG_FILE})"
 		eval-it "$DO_COMMAND"
 	else
@@ -953,22 +1326,80 @@ function aws-export()
 	echo
 }
 
-```
+function aws-iam-environment-all()
+{
+	aws-iam-environment-key
+	aws-iam-environment-file
+}
 
-```bash
+function aws-iam-export-unset()
+{
+	unset AWS_STS_ARN
+	unset AWS_IDENTITY_TYPE
+	unset AWS_USER_NAME
+	unset AWS_ROLE_NAME
+
+	unset AWS_ACCESS_KEY_ID
+	unset AWS_SECRET_ACCESS_KEY
+	unset AWS_DEFAULT_REGION
+
+	unset AWS_SESSION_TOKEN
+	unset AWS_SESSION_LASTUPDATED
+	unset AWS_SESSION_EXPIRATION
+
+	aws-iam-environment-key
+}
+
+function aws-iam-export-set()
+{
+	aws-iam-export-unset
+
+	export AWS_STS_ARN=`aws sts get-caller-identity --query "Arn" --output text`
+	export AWS_IDENTITY_TYPE=`echo $AWS_STS_ARN | awk -F':' '{print $6}' | awk -F'/' '{print $1}'`
+
+	if [ "${AWS_IDENTITY_TYPE}" = "user" ]; then
+		export AWS_USER_NAME=`echo $AWS_STS_ARN | awk -F'/' '{print $2}'`
+		#echo "AWS_USER_NAME=$AWS_USER_NAME"
+
+		export AWS_DEFAULT_REGION=`aws configure get region`
+
+		export AWS_ACCESS_KEY_ID=`aws configure get aws_access_key_id`
+		export AWS_SECRET_ACCESS_KEY=`aws configure get aws_secret_access_key`
+	else
+		#AWS_ROLE_NAME=`curl -s http://169.254.169.254/latest/meta-data/iam/security-credentials`
+		export AWS_ROLE_NAME=`echo $AWS_STS_ARN | awk -F'/' '{print $2}'`
+		#echo "AWS_ROLE_NAME=$AWS_ROLE_NAME"
+
+		export AWS_DEFAULT_REGION=`aws configure list | awk '/region/ {print $2}'`
+
+		export AWS_CREDENTIALS=`curl -s http://169.254.169.254/latest/meta-data/iam/security-credentials/$AWS_ROLE_NAME`
+		#echo "AWS_CREDENTIALS=$AWS_CREDENTIALS"
+
+		export AWS_ACCESS_KEY_ID=$(echo $AWS_CREDENTIALS | jq -r '.AccessKeyId')
+		export AWS_SECRET_ACCESS_KEY=$(echo $AWS_CREDENTIALS | jq -r '.SecretAccessKey')
+
+		export AWS_SESSION_TOKEN=$(echo $AWS_CREDENTIALS | jq -r '.Token')
+		export AWS_SESSION_LASTUPDATED=$(echo $AWS_CREDENTIALS | jq -r '.LastUpdated')
+		export AWS_SESSION_EXPIRATION=$(echo $AWS_CREDENTIALS | jq -r '.Expiration')
+	fi
+
+	aws-iam-environment-key
+}
+
+
 #******************************************************************************
 #** aws cli (S3) **
 #******************************************************************************
 export S3_BUCKET_NAME=lambdax9
 
-function aws-s3-path()
+function aws-s3-environment()
 {
 	echo "S3_BUCKET_NAME=${S3_BUCKET_NAME}"
 }
 
 function aws-s3-ls()
 {
-	aws-s3-path
+	aws-s3-environment
 	DO_COMMAND="(aws s3 ls s3://${S3_BUCKET_NAME})"
 	eval-it "$DO_COMMAND"
 }
@@ -999,10 +1430,10 @@ function aws-s3-rb()
 	fi
 }
 
-#alias aws-s3-pull="aws-s3-path; aws s3 cp s3://${S3_BUCKET_NAME}/$1 ./"
+#alias aws-s3-pull="aws-s3-environment; aws s3 cp s3://${S3_BUCKET_NAME}/$1 ./"
 function aws-s3-pull()
 {
-	aws-s3-path
+	aws-s3-environment
 
 	HINT="Usage: ${FUNCNAME[0]} <file>"
 	FILE1="$1"
@@ -1019,7 +1450,7 @@ function aws-s3-pull()
 #alias aws-s3-push="aws s3 cp ${1} s3://${S3_BUCKET_NAME}"
 function aws-s3-push()
 {
-	aws-s3-path
+	aws-s3-environment
 
 	HINT="Usage: ${FUNCNAME[0]} <file>"
 	FILE1="$1"
@@ -1039,6 +1470,8 @@ function aws-s3-pull-bash_aliases()
 	eval-it "$DO_COMMAND"
 }
 
+alias aws-s3-pull-bash_aliases-reset="aws-s3-pull-bash_aliases; . ~/.bash_aliases"
+
 function aws-s3-push-bash_aliases()
 {
 	aws-s3-push ~/.bash_aliases
@@ -1047,7 +1480,7 @@ function aws-s3-push-bash_aliases()
 #alias aws-s3-rm="aws s3 rm s3://${S3_BUCKET_NAME}/$1"
 function aws-s3-rm()
 {
-	aws-s3-path
+	aws-s3-environment
 
 	HINT="Usage: ${FUNCNAME[0]} <file>"
 	FILE1="$1"
@@ -1059,6 +1492,50 @@ function aws-s3-rm()
 	else
 		echo $HINT
 	fi
+}
+
+
+#******************************************************************************
+#** aws cli (kvs) **
+#******************************************************************************
+function aws-kvs-environment()
+{
+	echo
+	echo "--------------------------------------------------"
+	aws-iam-environment-key
+
+	echo "-- KVS Video streams -----------------------------"
+	echo "AWS_KVS_STREAM_NAME=${AWS_KVS_STREAM_NAME}"
+	echo "AWS_KVS_STREAM_CLIP_FRAME_SEL_ARG=${AWS_KVS_STREAM_CLIP_FRAME_SEL_ARG}"
+	echo "AWS_KVS_STREAM_ENDPOINT_ARG=${AWS_KVS_STREAM_ENDPOINT_ARG}"
+
+	echo "-- Signaling channels ----------------------------"
+	echo "LOG_LEVEL_VERBOSE=1"
+	echo "LOG_LEVEL_DEBUG=2"
+	echo "LOG_LEVEL_INFO=3"
+	echo "LOG_LEVEL_WARN=4"
+	echo "LOG_LEVEL_ERROR=5"
+	echo "LOG_LEVEL_FATAL=6"
+	echo "LOG_LEVEL_SILENT=7"
+	echo "LOG_LEVEL_PROFILE=8"
+
+	echo
+	echo "AWS_KVS_LOG_LEVEL=${AWS_KVS_LOG_LEVEL}"
+	echo "AWS_KVS_LOG_CONFIGURATION=${AWS_KVS_LOG_CONFIGURATION}"
+
+	echo "DEBUG_LOG_SDP=${DEBUG_LOG_SDP}"
+
+	echo "AWS_ENABLE_FILE_LOGGING=${AWS_ENABLE_FILE_LOGGING}"
+
+	echo "AWS_KVS_CHANNEL_NAME=${AWS_KVS_CHANNEL_NAME}"
+
+	echo "-- Others ----------------------------------------"
+
+	echo "GST_PLUGIN_PATH=${GST_PLUGIN_PATH}"
+	echo "LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
+
+	echo "--------------------------------------------------"
+	echo
 }
 
 ```
