@@ -30,11 +30,18 @@ $ sudo ./aws/install
 ```
 ### 1.1.2. Access Key
 
+> 主要是設定使用的 Access Key，你可以想像是 GitHub personal access token
+
+#### A. Environment
+
 ```bash
+$ export AWS_DEFAULT_REGION=us-west-2
+
 $ export AWS_ACCESS_KEY_ID=<access_key>
 $ export AWS_SECRET_ACCESS_KEY=<secret_key>
-$ export AWS_DEFAULT_REGION=us-west-2
 ```
+#### B. configure
+
 ```bash
 $ aws configure
 AWS Access Key ID [None]: 
@@ -42,11 +49,10 @@ AWS Secret Access Key [None]:
 Default region name [None]:ap-northeast-1
 Default output format [None]:json
 ```
-#### A. ~/.aws/credentials
+##### B.1. ~/.aws/credentials
 
 ```bash
 $ export AWS_SHARED_CREDENTIALS_FILE="$HOME/.aws/credentials"
-$ echo $AWS_SHARED_CREDENTIALS_FILE
 
 $ cat ~/.aws/credentials
 [default]
@@ -57,11 +63,10 @@ $ aws configure get aws_access_key_id
 $ aws configure get aws_secret_access_key
 ```
 
-#### B. ~/.aws/config
+##### B.2. ~/.aws/config
 
 ```bash
 $ export AWS_CONFIG_FILE="$HOME/.aws/config"
-$ echo $AWS_CONFIG_FILE
 
 $ cat ~/.aws/config
 [default]
@@ -91,6 +96,8 @@ AWS_EC2_METADATA_DISABLED
 ```
 
 ## 1.2. Run on EC2 (ubuntu release)
+
+> 因為 EC2 本身就是 AWS 裏的 service，相關的設定在建立時就已經包含在裏面，省去一些功夫。
 
 ### 1.2.1. AWS EC2
 
@@ -205,6 +212,8 @@ us-west-1
 
 #### B. Roles
 
+> 因為 AWS 的 services 很多，建議在命名時附上 service name，方便管理。
+
 ```bash
 $ curl -s http://169.254.169.254/latest/meta-data/iam/security-credentials
 Lanka-ec2-role
@@ -260,9 +269,6 @@ $ aws iam get-role --role-name $AWS_ROLE_NAME
 
 $ AWS_ROLE_ARN=`aws iam get-role --role-name $AWS_ROLE_NAME --query 'Role.Arn' --output text`
 $ echo "AWS_ROLE_ARN=$AWS_ROLE_ARN"
-
-$ AWS_INSTANCE_ID=`curl -s http://169.254.169.254/latest/meta-data/instance-id`
-$ echo "AWS_INSTANCE_ID=$AWS_INSTANCE_ID"
 
 $ AWS_DEFAULT_REGION=`aws configure list | awk '/region/ {print $2}'`
 $ echo $AWS_DEFAULT_REGION
@@ -323,7 +329,6 @@ echo "AWS_ROLE_NAME=$AWS_ROLE_NAME"
 aws iam update-role --role-name $AWS_ROLE_NAME --max-session-duration 43200
 
 AWS_CREDENTIALS=`curl -s http://169.254.169.254/latest/meta-data/iam/security-credentials/$AWS_ROLE_NAME`
-
 #echo "AWS_CREDENTIALS=$AWS_CREDENTIALS"
 
 AWS_ACCESS_KEY_ID=$(echo $AWS_CREDENTIALS | jq -r '.AccessKeyId')
@@ -336,6 +341,32 @@ AWS_SESSION_EXPIRATION=$(echo $AWS_CREDENTIALS | jq -r '.Expiration')
 
 ## 2.3. Policies
 
+> [ChatGPT] attached-role-policies 和 role-policies 的差別
+>
+> 在 AWS 中，`attached-role-policies` 和 `role-policies` 都涉及到 IAM **Role** 與其 **Policy** 的關聯，但它們有不同的用途和行為。這裡是它們的區別：
+>
+> ### 1. **Attached Role Policies (`list-attached-role-policies`)**
+>
+> 這些是 **管理型政策**（Managed Policies）附加到角色（IAM Role）上的。管理型政策可以由 AWS 預先定義，或者由使用者創建，並且可以附加到多個 IAM 角色、使用者或群組。
+>
+> #### **特點：**
+>
+> - **管理型政策**（Managed Policies）：這些政策是由 AWS 管理或由使用者創建的可重複使用的政策。它們是獨立的 AWS 資源，並且可以多次附加到不同的角色、使用者或群組。
+> - 這些政策可以在 AWS 管理控制台或透過 AWS CLI 進行修改。
+> - 一個角色可以附加多個 **管理型政策**，而且多個角色可以共用同一個政策。
+>
+> ### 2. **Role Policies (`list-role-policies`)**
+>
+> 這些是 **內聯政策**（Inline Policies），是直接嵌入到 **角色** 中的，與角色密切相關，並且不能被其他角色共用。內聯政策是與角色本身捆綁的，不能單獨重用或附加到其他角色。
+>
+> #### **特點：**
+>
+> - **內聯政策**：這些是角色的內部政策，完全嵌入於角色的配置中。它們無法重複使用或附加到其他角色，並且通常由使用者根據角色的具體需求創建。
+> - 每個角色可以有多個內聯政策。
+> - 如果角色被刪除，這些內聯政策也會被刪除。
+
+### 2.3.1. list
+
 ```bash
 aws iam list-policies
 ```
@@ -344,12 +375,14 @@ aws iam list-policies
 
 ```bash
 aws iam list-attached-user-policies --user-name $AWS_USER_NAME
+aws iam list-user-policies --user-name $AWS_USER_NAME
 ```
 
 #### B. Roles
 
 ```bash
 aws iam list-attached-role-policies --role-name $AWS_ROLE_NAME
+aws iam list-role-policies --role-name $AWS_ROLE_NAME
 ```
 
 ## 2.4. Instance profiles
@@ -423,6 +456,9 @@ $ aws iam remove-role-from-instance-profile \
 ### 2.4.3. instance-profile and ec2
 
 ```bash
+$ AWS_EC2_INSTANCE_ID=`curl -s http://169.254.169.254/latest/meta-data/instance-id`
+$ echo "AWS_EC2_INSTANCE_ID=$AWS_EC2_INSTANCE_ID"
+
 # 查看個別的 ec2 與綁定的 instance-profile
 $ aws ec2 describe-instances \
  --query 'Reservations[*].Instances[*].[InstanceId, IamInstanceProfile.Arn]' \
@@ -430,13 +466,459 @@ $ aws ec2 describe-instances \
 
 # 查看 i-0123456789abcdef0 與綁定的 instance-profile
 $ aws ec2 describe-instances \
- --instance-ids i-0123456789abcdef0 \
+ --instance-ids $AWS_EC2_INSTANCE_ID \
  --query 'Reservations[*].Instances[*].IamInstanceProfile.Arn' --output text
 ```
 
-# 3. AWS Services
+# 3. [AWS IoT](https://docs.aws.amazon.com/zh_tw/iot/latest/developerguide/connect-to-iot.html)
 
-## 3.1. [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html)
+## 3.1. [Registry](https://docs.aws.amazon.com/iot/latest/developerguide/thing-registry.html)
+
+> 前面 IAM 是管理“人”的權限，這邊就是“設備”的權限。權限設定沒有完成，所有的操作都會失敗。
+>
+
+> 請參考 [generate-iot-credential.sh](https://github.com/awslabs/amazon-kinesis-video-streams-webrtc-sdk-c/blob/master/scripts/generate-iot-credential.sh)。範例是以 Amazon Kinesis Video Streams 的連線要求為主。
+>
+> 手續很多，如果是用 AWS 的 Dashboard 可能會有遺漏，而且不適合交接。
+
+```mermaid
+flowchart TB
+	subgraph IoT[AWS IoT]
+		subgraph Things
+			thingName["$thingName='kvs520-${kvsRegion}_thing'"]
+		end
+		subgraph ThingTypes[Thing types]
+			thingTypeName["$thingTypeName='kvs520-${kvsRegion}_thing_type'"]
+		end
+		subgraph Rolealiases["Role aliases"]
+			iotRoleAlias["$iotRoleAlias"]
+		end
+		subgraph Policies["Policies"]
+			iotPolicyName["$iotPolicyName"]
+		end	
+		subgraph Certificates["Certificates"]
+			subgraph certificateId["certificateId"]
+				iotCert["$iotCert='kvs520-${kvsRegion}_certifcate.pem'"]
+				iotPublicKey["$iotPublicKey='kvs520-${kvsRegion}_public.key'"]
+				iotPrivateKey["$iotPrivateKey='kvs520-${kvsRegion}_private.key'"]
+			end
+		end
+
+		iotPolicyName <--> iotRoleAlias
+		certificateId <--> thingName
+		certificateId <--> iotPolicyName
+	end
+
+	subgraph IAM
+		subgraph iotRoleName["$iotRoleName"]
+			subgraph InlinePolicies["Inline Policies"]
+				iotRolePolicyName["$iotRolePolicyName='kvs520-${kvsRegion}_policy'"]
+			end
+		end
+	end
+
+	thingName <--> thingTypeName
+	iotRoleName .-> iotRoleAlias
+
+	classDef yellow fill:#FFFFCC
+	classDef pink fill:#FFCCCC
+	classDef blue fill:#0000FF
+	classDef lightblue fill:#ADD8E6
+
+	class DynamoDB pink
+	class awsCliDynamodb pink
+```
+
+### 3.1.1. environment
+
+#### A. set
+
+
+```bash
+# kvsRegion 只是用於命名，要確定環境 AWS cli 使用的 Region 為主
+#kvsRegion="eu-west-1"
+kvsRegion=`aws configure list | awk '/region/ {print $2}'`
+# or
+[ -z $kvsRegion ] && kvsRegion=`aws configure get region`
+
+prefixName="kvs520"
+thingName="${prefixName}-${kvsRegion}_thing"
+thingTypeName="${prefixName}-${kvsRegion}_thing_type"
+
+iotPolicyName="${prefixName}-${kvsRegion}_iot_policy"
+iotRolePolicyName="${prefixName}-${kvsRegion}_policy"
+iotRoleName="${prefixName}-${kvsRegion}_role"
+iotRoleAlias="${prefixName}-${kvsRegion}_role_alias"
+iotRoleSessionDuration=43200
+iotRoleAliasSessionDuration=43200
+
+iotCert="${prefixName}-${kvsRegion}_certifcate.pem"
+iotPublicKey="${prefixName}-${kvsRegion}_public.key"
+iotPrivateKey="${prefixName}-${kvsRegion}_private.key"
+iotCaCert="${prefixName}-${kvsRegion}_cacert.pem"
+```
+
+#### B. print
+
+```bash
+echo "thingName=$thingName"
+echo "thingTypeName=$thingTypeName"
+
+echo "iotPolicyName=$iotPolicyName"
+echo "iotRolePolicyName=$iotRolePolicyName"
+echo "iotRoleName=$iotRoleName"
+echo "iotRoleAlias=$iotRoleAlias"
+echo "iotRoleSessionDuration=$iotRoleSessionDuration"
+echo "iotRoleAliasSessionDuration=$iotRoleAliasSessionDuration"
+
+echo "iotCert=$iotCert"
+echo "iotPublicKey=$iotPublicKey"
+echo "iotPrivateKey=$iotPrivateKey"
+echo "iotCaCert=$iotCaCert"
+```
+
+| **Thing types**                                              | Things                     | IAM Role<br>IoT Role                                | Inline Policies                                              | IoT Policies                    |
+| ------------------------------------------------------------ | -------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------- |
+| kvs520-${kvsRegion}_thing_type                              | kvs520-${kvsRegion}_thing | kvs520-${kvsRegion}_role_alias | kvs520-${kvsRegion}_policy                                  | kvs520-${kvsRegion}_iot_policy |
+|  |  | kvs520-${kvsRegion}_role |  |  |
+
+### 3.1.2. thing type & thing
+
+```bash
+thingTypeName="${prefixName}-${kvsRegion}_thing_type"
+
+thingName="${prefixName}-${kvsRegion}_thing"
+```
+
+#### A. create
+
+```bash
+# Step 1: Create an IoT Thing Type and an IoT Thing
+# The following example command creates a thing type $thingTypeName
+$ aws --profile default  iot create-thing-type --thing-type-name $thingTypeName > iot-thing-type.json
+$ cat iot-thing-type.json
+
+# And this example command creates the $thingName thing of the $thingTypeName thing type:
+$ aws --profile default  iot create-thing --thing-name $thingName --thing-type-name $thingTypeName > iot-thing.json
+$ cat iot-thing.json
+```
+
+#### B. delete
+
+```bash
+# 先列出與此 Thing Type 相關聯的 Things
+$ aws iot list-things --thing-type-name $thingTypeName
+# 先列出與此 Thing Type 相關聯的 Things，只秀出 thingName
+$ aws iot list-things --thing-type-name $thingTypeName --query 'things[*].thingName' --output text
+
+# 先刪除指定 thing
+$ aws iot delete-thing --thing-name $thingName
+# 棄用指定 thing type
+$ aws iot deprecate-thing-type --thing-type-name $thingTypeName
+# 獲取指定 thing type 的資訊
+$ aws iot describe-thing-type --thing-type-name $thingTypeName
+# 先等待 5mins
+$ echo "Please wait for 5 minutes after deprecation ..."; sleep 300
+# 再刪除指定 thing type
+$ aws iot delete-thing-type --thing-type-name $thingTypeName
+```
+
+#### C. get
+
+```bash
+# 獲取指定 thing type 的資訊
+$ aws iot describe-thing-type --thing-type-name $thingTypeName
+# 獲取指定 thing 的資訊
+$ aws iot describe-thing --thing-name $thingName
+```
+
+#### D. list
+
+```bash
+# 列出 all thing-types
+$ aws iot list-thing-types
+
+# 列出 all things
+$ aws iot list-things
+
+# 先列出與此 Thing Type 相關聯的 Things，只秀出 thingName
+$ aws iot list-things --thing-type-name $thingTypeName --query 'things[*].thingName' --output text
+```
+
+### 3.1.3. Role & Role Alias & Inline Policies & AWS IoT policy
+
+> 該設備還是要綁定 Role
+
+```bash
+iotPolicyName="${prefixName}-${kvsRegion}_iot_policy"
+iotRolePolicyName="${prefixName}-${kvsRegion}_policy"
+iotRoleName="${prefixName}-${kvsRegion}_role"
+iotRoleAlias="${prefixName}-${kvsRegion}_role_alias"
+iotRoleSessionDuration=43200
+iotRoleAliasSessionDuration=43200
+```
+
+#### A. create
+
+##### A.1. create an IAM Role
+
+```bash
+# Step 2: Create an IAM Role to be Assumed by IoT
+# You can use the following trust policy JSON for the iam-policy-document.json:
+$ cat > iam-policy-document.json <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "credentials.iot.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+
+# Create an IAM role.
+$ aws --profile default  iam create-role --role-name $iotRoleName --assume-role-policy-document 'file://iam-policy-document.json' --max-session-duration $iotRoleSessionDuration > iam-role.json
+$ cat iam-role.json
+```
+
+##### A.2. create the IAM policy
+
+```bash
+# You can use the following IAM policy JSON for the iam-permission-document.json:
+$ cat  > iam-permission-document.json  <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+      "Effect": "Allow",
+      "Action": [
+        "kinesisvideo:DescribeSignalingChannel",
+        "kinesisvideo:CreateSignalingChannel",
+        "kinesisvideo:DeleteSignalingChannel",
+        "kinesisvideo:GetSignalingChannelEndpoint",
+        "kinesisvideo:GetIceServerConfig",
+        "kinesisvideo:ConnectAsMaster",
+        "kinesisvideo:ConnectAsViewer",
+        "kinesisvideo:DescribeStream",
+        "kinesisvideo:CreateStream",
+        "kinesisvideo:GetDataEndpoint",
+        "kinesisvideo:PutMedia"
+      ],
+      "Resource": [
+        "arn:aws:kinesisvideo:*:*:channel/*/*",
+        "arn:aws:kinesisvideo:*:*:stream/*/*"
+      ]
+    }
+  ]
+}
+EOF
+$ cat iam-permission-document.json
+
+# Next, you must attach a permissions policy to the IAM role you created above. 
+$ aws --profile default iam put-role-policy --role-name $iotRoleName --policy-name $iotRolePolicyName --policy-document 'file://iam-permission-document.json'
+```
+
+##### A.3. create a Role Alias
+
+```bash
+# Next, create a Role Alias for your IAM Role
+$ aws --profile default  iot create-role-alias --role-alias $iotRoleAlias --role-arn $(jq --raw-output '.Role.Arn' iam-role.json) --credential-duration-seconds $iotRoleAliasSessionDuration > iot-role-alias.json
+```
+
+##### A.4. create the AWS IoT policy
+
+```bash
+# You can use the following command to create the iot-policy-document.json document JSON:
+$ cat > iot-policy-document.json <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+      "Effect": "Allow",
+      "Action": ["iot:Connect"],
+      "Resource": "$(jq --raw-output '.roleAliasArn' iot-role-alias.json)"
+    }, {
+      "Effect": "Allow",
+      "Action": ["iot:AssumeRoleWithCertificate"],
+      "Resource": "$(jq --raw-output '.roleAliasArn' iot-role-alias.json)"
+    }
+  ]
+}
+EOF
+
+# Now you can create the policy that will enable IoT to assume role with the certificate (once it is attached) using the role alias.
+$ aws --profile default iot create-policy --policy-name $iotPolicyName --policy-document 'file://iot-policy-document.json'
+```
+
+#### B. delete
+
+```bash
+$ aws iot list-role-aliases
+# 刪除指定 iot role alias
+$ aws iot delete-role-alias --role-alias $iotRoleAlias
+
+# 先列出與此 role 相關聯的 role policy，只秀出 PolicyNames
+$ aws iam list-role-policies --role-name $iotRoleName --query 'PolicyNames[]' --output text
+
+# 先刪除指定 role policy
+$ aws iam delete-role-policy --role-name $iotRoleName --policy-name $iotRolePolicyName
+# 再刪除指定 role
+$ aws iam delete-role --role-name $iotRoleName
+```
+
+#### C. get
+
+```bash
+# 獲取指定 role alias 的資訊
+$ aws iot describe-role-alias --role-alias $iotRoleAlias
+
+# 獲取指定 role 的資訊
+$ aws iam get-role --role-name $iotRoleName
+# 獲取指定 role policy 的資訊
+$ aws iam get-role-policy --role-name $iotRoleName --policy-name $iotRolePolicyName
+
+# 獲取指定 iot policy 的資訊
+$ aws iot get-policy --policy-name $iotPolicyName
+# 獲取指定 iot policy 的部分資訊 - policyDocument
+$ aws iot get-policy --policy-name $iotPolicyName --query 'policyDocument' --output text
+# 獲取指定 iot policy 的部分資訊 - policyDocument.Statement[].Resource
+$ aws iot get-policy --policy-name $iotPolicyName --query 'policyDocument' --output text | jq '.Statement[].Resource'
+```
+
+#### D. list
+
+```bash
+# 列出 all list-role-aliases
+$ aws iot list-role-aliases --query 'roleAliases[]' --output json | jq -r '.[]' 
+$ aws iot list-role-aliases --query 'roleAliases[]' --output json | jq -r '.[]' | xargs -I {} aws iot describe-role-alias --role-alias {}
+
+# 列出 all iam llist-attached-role-policies
+$ aws iam list-attached-role-policies --role-name $iotRoleName --query 'AttachedPolicies[].PolicyName' --output text
+# 列出 all iam list-role-policies
+$ aws iam list-role-policies --role-name $iotRoleName --query 'PolicyNames[]' --output text
+
+# 列出 all iot list-policies
+$ aws iot list-policies
+# 只列出 policyName
+$ aws iot list-policies --query 'policies[].policyName' --output json | jq -r '.[]'
+```
+
+### 3.1.4. X.509 Certificate
+
+```bash
+iotCert="${prefixName}-${kvsRegion}_certifcate.pem"
+iotPublicKey="${prefixName}-${kvsRegion}_public.key"
+iotPrivateKey="${prefixName}-${kvsRegion}_private.key"
+iotCaCert="${prefixName}-${kvsRegion}_cacert.pem"
+```
+
+#### A. create
+
+```bash
+# Step 3: Create and Configure the X.509 Certificate
+# Create the certificate to which you must attach the policy for IoT that you created above.
+$ aws --profile default  iot create-keys-and-certificate --set-as-active --certificate-pem-outfile $iotCert --public-key-outfile $iotPublicKey --private-key-outfile $iotPrivateKey > certificate
+
+# Attach the policy for IoT (KvsCameraIoTPolicy created above) to this certificate.
+$ aws --profile default  iot attach-policy --policy-name $iotPolicyName --target $(jq --raw-output '.certificateArn' certificate)
+
+# Attach your IoT thing (kvs_example_camera_stream) to the certificate you just created:
+$ aws --profile default  iot attach-thing-principal --thing-name $thingName --principal $(jq --raw-output '.certificateArn' certificate)
+
+# In order to authorize requests through the IoT credentials provider, you need the IoT credentials endpoint which is unique to your AWS account ID. You can use the following command to get the IoT credentials endpoint.
+$ aws --profile default  iot describe-endpoint --endpoint-type iot:CredentialProvider --output text > iot-credential-provider.txt
+
+# In addition to the X.509 cerficiate created above, you must also have a CA certificate to establish trust with the back-end service through TLS. You can get the CA certificate using the following command:
+$ curl --silent 'https://www.amazontrust.com/repository/SFSRootCAG2.pem' --output $iotCaCert
+```
+
+#### B. delete
+
+```bash
+# 解除 thing 與 certificate 的綁定
+$ aws iot detach-thing-principal --thing-name $thingName --principal $(jq --raw-output '.certificateArn' certificate)
+
+# 解除 policy 與 certificate 的綁定
+$ aws iot detach-policy --policy-name $iotPolicyName --target $(jq --raw-output '.certificateArn' certificate)
+
+# 刪除 certificate
+$ aws iot delete-certificate --certificate-id $(jq --raw-output '.certificateId' certificate)
+```
+
+#### C. get
+
+```bash
+$ aws iot describe-certificate --certificate-id $(jq --raw-output '.certificateId' certificate)
+```
+
+#### D. list
+
+```bash
+# 列出 all list-certificates
+$ aws iot list-certificates
+# 獲取指定 iot certificates 的部分資訊 - certificateId
+$ aws iot list-certificates --query 'certificates[]' --output json | jq -r '.[].certificateId'
+# 獲取指定 iot certificates 的部分資訊 - certificateId，並且直接查詢相關資訊
+$ aws iot list-certificates --query 'certificates[]' --output json | jq -r '.[].certificateId' | xargs -I {} aws iot describe-certificate --certificate-id {}
+
+# 列出 certificate 下的 policies
+$ aws iot list-attached-policies --target $(jq --raw-output '.certificateArn' certificate)
+# 列出 certificate 下的 things
+$ aws iot list-principal-things --principal $(jq --raw-output '.certificateArn' certificate)
+
+# 列出 policy 下的 certificate
+$ aws iot list-policy-principals --policy-name $iotPolicyName
+# 列出 thing 下的 certificate
+$ aws iot list-thing-principals --thing-name $thingName
+```
+
+### 3.1.5. Test
+
+```bash
+$ ll ./
+total 60
+drwxrwxr-x 2 root   root 4096 Mar 26 03:48 ./
+drwxrwxrwx 7 root   root 4096 Mar 26 03:44 ../
+-rw-rw-r-- 1 lanka lanka 3728 Mar 26 03:00 certificate
+-rw-rw-r-- 1 lanka lanka  617 Mar 25 03:29 iam-permission-document.json
+-rw-rw-r-- 1 lanka lanka  198 Mar 25 03:16 iam-policy-document.json
+-rw-rw-r-- 1 lanka lanka  630 Mar 25 03:17 iam-role.json
+-rw-rw-r-- 1 lanka lanka   55 Mar 26 03:01 iot-credential-provider.txt
+-rw-rw-r-- 1 lanka lanka  390 Mar 25 04:47 iot-policy-document.json
+-rw-rw-r-- 1 lanka lanka  149 Mar 25 04:05 iot-role-alias.json
+-rw-rw-r-- 1 lanka lanka  212 Mar 25 02:38 iot-thing-type.json
+-rw-rw-r-- 1 lanka lanka  186 Mar 25 02:45 iot-thing.json
+-rw-rw-r-- 1 lanka lanka 1424 Mar 26 03:13 kvs520-eu-west-1_cacert.pem
+-rw------- 1 lanka lanka 1220 Mar 26 03:00 kvs520-eu-west-1_certifcate.pem
+-rw------- 1 lanka lanka 1679 Mar 26 03:00 kvs520-eu-west-1_private.key
+-rw------- 1 lanka lanka  451 Mar 26 03:00 kvs520-eu-west-1_public.key
+```
+
+```bash
+export AWS_IOT_CORE_CERT_PATH="/work/IoT/awsKey"
+
+export AWS_IOT_CORE_CA_CERT=$(pwd)"/"$iotCaCert
+
+export AWS_IOT_CORE_CREDENTIAL_ENDPOINT=$(cat iot-credential-provider.txt)
+export AWS_IOT_CORE_CERT="${AWS_IOT_CORE_CERT_PATH}/${iotCert}"
+export AWS_IOT_CORE_PRIVATE_KEY="${AWS_IOT_CORE_CERT_PATH}/${iotPrivateKey}"
+
+export AWS_IOT_CORE_ROLE_ALIAS=$iotRoleAlias
+export AWS_IOT_CORE_THING_NAME=$thingName
+```
+
+```bash
+curl \
+ --cert $AWS_IOT_CORE_CERT \
+ --key $AWS_IOT_CORE_PRIVATE_KEY \
+ --cacert $AWS_IOT_CORE_CA_CERT \
+ https://$AWS_IOT_CORE_CREDENTIAL_ENDPOINT/role-aliases/$AWS_IOT_CORE_ROLE_ALIAS/credentials
+```
+
+# 4. AWS Services
+
+## 4.1. [DynamoDB](https://docs.aws.amazon.com/zh_tw/amazondynamodb/latest/developerguide/GettingStartedDynamoDB.html)
 
 ```mermaid
 flowchart TD
@@ -460,9 +942,9 @@ flowchart TD
 	class awsCliDynamodb pink
 ```
 
-### 3.1.1. [DynamoDB Dashboard](https://eu-west-1.console.aws.amazon.com/dynamodbv2/home?region=eu-west-1#service)
+### 4.1.1. [DynamoDB Dashboard](https://eu-west-1.console.aws.amazon.com/dynamodbv2/home?region=eu-west-1#service)
 
-### 3.1.2. [aws dynamodb xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-dynamodb.html)
+### 4.1.2. [aws dynamodb xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-dynamodb.html)
 
 #### [create-table](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/dynamodb/create-table.html)
 
@@ -665,7 +1147,7 @@ $ aws dynamodb scan --table-name Music
 }
 ```
 
-## 3.2. [EC2 (Amazon Elastic Compute Cloud)](https://docs.aws.amazon.com/zh_tw/AWSEC2/latest/UserGuide/concepts.html)
+## 4.2. [EC2 (Amazon Elastic Compute Cloud)](https://docs.aws.amazon.com/zh_tw/AWSEC2/latest/UserGuide/concepts.html)
 
 ```mermaid
 flowchart TD
@@ -692,17 +1174,20 @@ flowchart TD
 	class sshClient pink
 ```
 
-### 3.2.1. [EC2 Dashboard](https://eu-west-1.console.aws.amazon.com/ec2/home?region=eu-west-1)
+### 4.2.1. [EC2 Dashboard](https://eu-west-1.console.aws.amazon.com/ec2/home?region=eu-west-1)
 
-### 3.2.2. [aws ec2 xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-ec2.html)
+### 4.2.2. [aws ec2 xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-ec2.html)
 
 >因為本身就是虛擬運算，設定起來也較複雜，不建議使用 AWS CLI；請多加使用 Dashboard。
 
-### 3.2.3. ec2metadata xxx
+### 4.2.3. ec2metadata xxx
 
 ```bash
 # please use ssh to link with ec2
 $ ec2metadata --instance-id
+i-01234567890abcdef
+#or
+$ curl -s http://169.254.169.254/latest/meta-data/instance-id
 i-01234567890abcdef
 
 $ ec2metadata --instance-type
@@ -713,13 +1198,12 @@ $ ec2metadata --public-ipv4
 
 $ ec2metadata --public-hostname
 ec2-199-199-199-199.eu-west-1.compute.amazonaws.com
-
-or
+#or
 $ curl http://169.254.169.254/latest/meta-data/public-hostname
 ec2-199-199-199-199.eu-west-1.compute.amazonaws.com
 ```
 
-## 3.3. [S3 (Amazon Simple Storage Service)](https://docs.aws.amazon.com/zh_tw/AmazonS3/latest/userguide/Welcome.html)
+## 4.3. [S3 (Amazon Simple Storage Service)](https://docs.aws.amazon.com/zh_tw/AmazonS3/latest/userguide/Welcome.html)
 
 ```mermaid
 flowchart TD
@@ -743,9 +1227,9 @@ flowchart TD
 	class awsCliS3 pink
 ```
 
-### 3.3.1. [S3 Dashboard](https://s3.console.aws.amazon.com/s3/buckets?region=eu-west-1)
+### 4.3.1. [S3 Dashboard](https://s3.console.aws.amazon.com/s3/buckets?region=eu-west-1)
 
-### 3.3.2. [aws s3 xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-s3.html)
+### 4.3.2. [aws s3 xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-s3.html)
 
 #### [cp](https://docs.aws.amazon.com/cli/latest/reference/s3/cp.html)
 
@@ -810,7 +1294,7 @@ $ aws s3 rm s3://utilx9/demo_000.c
 $ aws s3 sync s3://helperx s3://helperx_Bak
 ```
 
-### 3.3.3. [aws s3api](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3api/index.html)
+### 4.3.3. [aws s3api](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3api/index.html)
 
 #### [get-bucket-notification-configuration](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3api/get-bucket-notification-configuration.html)
 
@@ -822,7 +1306,6 @@ $ aws s3api get-bucket-notification-configuration \
 
 $ aws s3api get-bucket-notification-configuration \
 	--bucket lambdax9 --output json
-
 ```
 
 - s3_notification.yml
@@ -877,15 +1360,15 @@ $ aws s3api put-bucket-notification-configuration \
 
 
 
-## 3.4. [S3 Glacier](https://docs.aws.amazon.com/zh_tw/amazonglacier/latest/dev/introduction.html)
+## 4.4. [S3 Glacier](https://docs.aws.amazon.com/zh_tw/amazonglacier/latest/dev/introduction.html)
 
 > 因為不適用正常檔案存取方式，先不花時間研究。
 
-### 3.4.1. [S3 Glacier](https://eu-west-1.console.aws.amazon.com/sns/v3/home?region=eu-west-1#/dashboard)
+### 4.4.1. [S3 Glacier](https://eu-west-1.console.aws.amazon.com/sns/v3/home?region=eu-west-1#/dashboard)
 
-### 3.4.2. [aws glacier xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-glacier.html)
+### 4.4.2. [aws glacier xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-glacier.html)
 
-## 3.5. [SNS (Amazon Simple Notification Service)](https://docs.aws.amazon.com/zh_tw/sns/latest/dg/welcome.html)
+## 4.5. [SNS (Amazon Simple Notification Service)](https://docs.aws.amazon.com/zh_tw/sns/latest/dg/welcome.html)
 
 > publish a message to AmazonSNS, then send ([protocol](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sns/subscribe.html)) to subscriber(s)
 
@@ -902,9 +1385,9 @@ flowchart LR
 	Mary <-.-> | email / arn:aws:sns:us-west-1:123456789012:lankahsu520| AmazonSNS
 ```
 
-### 3.5.1. [SNS Dashboard](https://eu-west-1.console.aws.amazon.com/sns/v3/home?region=eu-west-1#/dashboard)
+### 4.5.1. [SNS Dashboard](https://eu-west-1.console.aws.amazon.com/sns/v3/home?region=eu-west-1#/dashboard)
 
-### 3.5.2. [aws sns xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-s3.html)
+### 4.5.2. [aws sns xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-s3.html)
 
 #### [create-topic](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sns/create-topic.html)
 
@@ -996,9 +1479,9 @@ $ aws sns list-subscriptions
 }
 ```
 
-## 3.6. [KVS (Kinesis Video Streams)](https://docs.aws.amazon.com/zh_tw/kinesisvideostreams/latest/dg/what-is-kinesis-video.html)
+## 4.6. [KVS (Kinesis Video Streams)](https://docs.aws.amazon.com/zh_tw/kinesisvideostreams/latest/dg/what-is-kinesis-video.html)
 
-### 3.6.0. export
+### 4.6.0. export
 
 ```bash
 export AWS_KVS_STREAM_NAME=HelloLanka520
@@ -1030,9 +1513,9 @@ echo "AWS_KVS_STREAM_ENDTIMESTAMP=${AWS_KVS_STREAM_ENDTIMESTAMP}"
 echo "AWS_KVS_STREAM_ENDPOINT=${AWS_KVS_STREAM_ENDPOINT}"
 ```
 
-### 3.6.1. [KVS Dashboard](https://us-east-1.console.aws.amazon.com/dashboard)
+### 4.6.1. [KVS Dashboard](https://us-east-1.console.aws.amazon.com/dashboard)
 
-### 3.6.2. aws [kinesisvideo](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesisvideo/index.html) xxx
+### 4.6.2. aws [kinesisvideo](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesisvideo/index.html) xxx
 
 #### [describe-stream](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesisvideo/describe-stream.html)
 
@@ -1120,7 +1603,7 @@ export AWS_KVS_STREAM_ENDPOINT_IMAGES=`aws kinesisvideo get-data-endpoint --stre
 export AWS_KVS_STREAM_ENDPOINT_IMAGES_ARG="--endpoint-url ${AWS_KVS_STREAM_ENDPOINT_IMAGES}"
 ```
 
-### 3.6.3. aws [kinesis-video-archived-media](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesis-video-archived-media/index.html) xxx
+### 4.6.3. aws [kinesis-video-archived-media](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesis-video-archived-media/index.html) xxx
 
 #### [get-clip](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesis-video-archived-media/get-clip.html)
 
@@ -1189,7 +1672,7 @@ $ DO_COMMAND="aws kinesis-video-archived-media \
 $ eval-it $DO_COMMAND
 ```
 
-### 3.6.4. aws [kinesis-video-media](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesis-video-media/index.html) xxx
+### 4.6.4. aws [kinesis-video-media](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesis-video-media/index.html) xxx
 
 #### [get-media](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/kinesis-video-media/get-media.html)
 
@@ -1257,287 +1740,6 @@ $ aws <command> help
 $ aws <command> <subcommand> help
 
 $ aws sts get-caller-identity
-```
-
-## IV.2. bash
-
-```bash
-#******************************************************************************
-#** 20. Shell Scripts **
-#******************************************************************************
-function eval-it()
-{
-	DO_COMMAND="$*"
-	[ ! -z "${ECHO_COMMAND}" ] && echo "[${DO_COMMAND}]"
-	eval "${DO_COMMAND}"
-}
-
-function eval-do()
-{
-	eval-it "${DO_COMMAND}"
-}
-
-
-#******************************************************************************
-#** aws cli (iam) **
-#******************************************************************************
-function aws-iam-environment-key()
-{
-	echo "AWS_STS_ARN=$AWS_STS_ARN"
-	echo "AWS_IDENTITY_TYPE=$AWS_IDENTITY_TYPE"
-	echo "AWS_USER_NAME=$AWS_USER_NAME"
-	echo "AWS_ROLE_NAME=$AWS_ROLE_NAME"
-	echo "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}"
-
-	echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID"
-	echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY"
-	echo
-	echo "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN"
-	echo "AWS_SESSION_LASTUPDATED=$AWS_SESSION_LASTUPDATED"
-	echo "AWS_SESSION_EXPIRATION=$AWS_SESSION_EXPIRATION"
-	echo
-	date +"%Y-%m-%d %T"
-}
-
-function aws-iam-environment-file()
-{
-	echo
-	echo "--------------------------------------------------"
-	[ ! -v AWS_SHARED_CREDENTIALS_FILE ] && export AWS_SHARED_CREDENTIALS_FILE="$HOME/.aws/credentials"
-	echo "AWS_SHARED_CREDENTIALS_FILE=${AWS_SHARED_CREDENTIALS_FILE}"
-	if [ ! -z "${AWS_SHARED_CREDENTIALS_FILE}" ] && [ -f "${AWS_SHARED_CREDENTIALS_FILE}" ]; then
-		DO_COMMAND="(cat ${AWS_SHARED_CREDENTIALS_FILE})"
-		eval-it "$DO_COMMAND"
-	else
-		echo "Can't find AWS_SHARED_CREDENTIALS_FILE !!! ($HOME/.aws/credentials)"
-	fi
-
-	echo
-	echo "--------------------------------------------------"
-	[ ! -v AWS_CONFIG_FILE ] && export AWS_CONFIG_FILE="$HOME/.aws/config"
-	echo "AWS_CONFIG_FILE=${AWS_CONFIG_FILE}"
-	if [ ! -z "${AWS_CONFIG_FILE}" ] && [ -f "${AWS_CONFIG_FILE}" ]; then
-		DO_COMMAND="(cat ${AWS_CONFIG_FILE})"
-		eval-it "$DO_COMMAND"
-	else
-		echo "Can't find AWS_CONFIG_FILE !!! ($HOME/.aws/config)"
-	fi
-
-	echo
-}
-
-function aws-iam-environment-all()
-{
-	aws-iam-environment-key
-	aws-iam-environment-file
-}
-
-function aws-iam-export-unset()
-{
-	unset AWS_STS_ARN
-	unset AWS_IDENTITY_TYPE
-	unset AWS_USER_NAME
-	unset AWS_ROLE_NAME
-
-	unset AWS_ACCESS_KEY_ID
-	unset AWS_SECRET_ACCESS_KEY
-	unset AWS_DEFAULT_REGION
-
-	unset AWS_SESSION_TOKEN
-	unset AWS_SESSION_LASTUPDATED
-	unset AWS_SESSION_EXPIRATION
-
-	aws-iam-environment-key
-}
-
-function aws-iam-export-set()
-{
-	aws-iam-export-unset
-
-	export AWS_STS_ARN=`aws sts get-caller-identity --query "Arn" --output text`
-	export AWS_IDENTITY_TYPE=`echo $AWS_STS_ARN | awk -F':' '{print $6}' | awk -F'/' '{print $1}'`
-
-	if [ "${AWS_IDENTITY_TYPE}" = "user" ]; then
-		export AWS_USER_NAME=`echo $AWS_STS_ARN | awk -F'/' '{print $2}'`
-		#echo "AWS_USER_NAME=$AWS_USER_NAME"
-
-		export AWS_DEFAULT_REGION=`aws configure get region`
-
-		export AWS_ACCESS_KEY_ID=`aws configure get aws_access_key_id`
-		export AWS_SECRET_ACCESS_KEY=`aws configure get aws_secret_access_key`
-	else
-		#AWS_ROLE_NAME=`curl -s http://169.254.169.254/latest/meta-data/iam/security-credentials`
-		export AWS_ROLE_NAME=`echo $AWS_STS_ARN | awk -F'/' '{print $2}'`
-		#echo "AWS_ROLE_NAME=$AWS_ROLE_NAME"
-
-		export AWS_DEFAULT_REGION=`aws configure list | awk '/region/ {print $2}'`
-
-		export AWS_CREDENTIALS=`curl -s http://169.254.169.254/latest/meta-data/iam/security-credentials/$AWS_ROLE_NAME`
-		#echo "AWS_CREDENTIALS=$AWS_CREDENTIALS"
-
-		export AWS_ACCESS_KEY_ID=$(echo $AWS_CREDENTIALS | jq -r '.AccessKeyId')
-		export AWS_SECRET_ACCESS_KEY=$(echo $AWS_CREDENTIALS | jq -r '.SecretAccessKey')
-
-		export AWS_SESSION_TOKEN=$(echo $AWS_CREDENTIALS | jq -r '.Token')
-		export AWS_SESSION_LASTUPDATED=$(echo $AWS_CREDENTIALS | jq -r '.LastUpdated')
-		export AWS_SESSION_EXPIRATION=$(echo $AWS_CREDENTIALS | jq -r '.Expiration')
-	fi
-
-	aws-iam-environment-key
-}
-
-
-#******************************************************************************
-#** aws cli (S3) **
-#******************************************************************************
-export S3_BUCKET_NAME=lambdax9
-
-function aws-s3-environment()
-{
-	echo "S3_BUCKET_NAME=${S3_BUCKET_NAME}"
-}
-
-function aws-s3-ls()
-{
-	aws-s3-environment
-	DO_COMMAND="(aws s3 ls s3://${S3_BUCKET_NAME})"
-	eval-it "$DO_COMMAND"
-}
-
-function aws-s3-mb()
-{
-	HINT="Usage: ${FUNCNAME[0]} <bucket>"
-	BUCKET1="$1"
-
-	if [ ! -z "${BUCKET1}" ]; then
-		DO_COMMAND="(aws s3 mb s3://${BUCKET1})"
-		eval-it "$DO_COMMAND"
-	else
-		echo $HINT
-	fi
-}
-
-function aws-s3-rb()
-{
-	HINT="Usage: ${FUNCNAME[0]} <bucket>"
-	BUCKET1="$1"
-
-	if [ ! -z "${BUCKET1}" ]; then
-		DO_COMMAND="(aws s3 rb s3://${BUCKET1})"
-		eval-it "$DO_COMMAND"
-	else
-		echo $HINT
-	fi
-}
-
-#alias aws-s3-pull="aws-s3-environment; aws s3 cp s3://${S3_BUCKET_NAME}/$1 ./"
-function aws-s3-pull()
-{
-	aws-s3-environment
-
-	HINT="Usage: ${FUNCNAME[0]} <file>"
-	FILE1="$1"
-
-	if [ ! -z "${FILE1}" ]; then
-		DO_COMMAND="(aws s3 cp s3://${S3_BUCKET_NAME}/${FILE1} ./)"
-		eval-it "$DO_COMMAND"
-		#echo "aws s3 cp s3://${S3_BUCKET_NAME}/${FILE1} ./"
-	else
-		echo $HINT
-	fi
-}
-
-#alias aws-s3-push="aws s3 cp ${1} s3://${S3_BUCKET_NAME}"
-function aws-s3-push()
-{
-	aws-s3-environment
-
-	HINT="Usage: ${FUNCNAME[0]} <file>"
-	FILE1="$1"
-
-	if [ ! -z "${FILE1}" ]; then
-		DO_COMMAND="(aws s3 cp ${FILE1} s3://${S3_BUCKET_NAME}/)"
-		eval-it "$DO_COMMAND"
-		#echo "aws s3 cp s3://${S3_BUCKET_NAME}/${FILE1}"
-	else
-		echo $HINT
-	fi
-}
-
-function aws-s3-pull-bash_aliases()
-{
-	DO_COMMAND="(cd /tmp; aws-s3-pull .bash_aliases; chmod 775 .bash_aliases; cp .bash_aliases ~/)"
-	eval-it "$DO_COMMAND"
-}
-
-alias aws-s3-pull-bash_aliases-reset="aws-s3-pull-bash_aliases; . ~/.bash_aliases"
-
-function aws-s3-push-bash_aliases()
-{
-	aws-s3-push ~/.bash_aliases
-}
-
-#alias aws-s3-rm="aws s3 rm s3://${S3_BUCKET_NAME}/$1"
-function aws-s3-rm()
-{
-	aws-s3-environment
-
-	HINT="Usage: ${FUNCNAME[0]} <file>"
-	FILE1="$1"
-
-	if [ ! -z "${FILE1}" ]; then
-		DO_COMMAND="(aws s3 rm s3://${S3_BUCKET_NAME}/${FILE1})"
-		eval-it "$DO_COMMAND"
-		#echo "aws s3 rm s3://${S3_BUCKET_NAME}/${FILE1}"
-	else
-		echo $HINT
-	fi
-}
-
-
-#******************************************************************************
-#** aws cli (kvs) **
-#******************************************************************************
-function aws-kvs-environment()
-{
-	echo
-	echo "--------------------------------------------------"
-	aws-iam-environment-key
-
-	echo "-- KVS Video streams -----------------------------"
-	echo "AWS_KVS_STREAM_NAME=${AWS_KVS_STREAM_NAME}"
-	echo "AWS_KVS_STREAM_CLIP_FRAME_SEL_ARG=${AWS_KVS_STREAM_CLIP_FRAME_SEL_ARG}"
-	echo "AWS_KVS_STREAM_ENDPOINT_ARG=${AWS_KVS_STREAM_ENDPOINT_ARG}"
-
-	echo "-- Signaling channels ----------------------------"
-	echo "LOG_LEVEL_VERBOSE=1"
-	echo "LOG_LEVEL_DEBUG=2"
-	echo "LOG_LEVEL_INFO=3"
-	echo "LOG_LEVEL_WARN=4"
-	echo "LOG_LEVEL_ERROR=5"
-	echo "LOG_LEVEL_FATAL=6"
-	echo "LOG_LEVEL_SILENT=7"
-	echo "LOG_LEVEL_PROFILE=8"
-
-	echo
-	echo "AWS_KVS_LOG_LEVEL=${AWS_KVS_LOG_LEVEL}"
-	echo "AWS_KVS_LOG_CONFIGURATION=${AWS_KVS_LOG_CONFIGURATION}"
-
-	echo "DEBUG_LOG_SDP=${DEBUG_LOG_SDP}"
-
-	echo "AWS_ENABLE_FILE_LOGGING=${AWS_ENABLE_FILE_LOGGING}"
-
-	echo "AWS_KVS_CHANNEL_NAME=${AWS_KVS_CHANNEL_NAME}"
-
-	echo "-- Others ----------------------------------------"
-
-	echo "GST_PLUGIN_PATH=${GST_PLUGIN_PATH}"
-	echo "LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
-
-	echo "--------------------------------------------------"
-	echo
-}
-
 ```
 
 # Author
