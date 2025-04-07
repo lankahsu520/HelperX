@@ -24,7 +24,9 @@
 >
 >此篇不討論如何撰寫 Python 的程式，而是當使用或變動系統的 Python 時，可能發生的問題。
 
-> 我們是要用 Python，而不是解決 Python 的問題。但問題不解決，怎麼用。而此篇就是最好的處方！
+> 我們是要用 Python，而不是解決 Python 的問題。但問題不解決，怎麼用。而此篇剛好提供小小的建議。
+>
+> <font color="red">Python 版本過新，降低版本到 Python=x.x</font>。一句很簡單的解法，但是問題真的被解決了嗎？
 
 > [維基百科] [Python](https://zh.wikipedia.org/zh-tw/Python)
 >
@@ -55,9 +57,10 @@ $ sudo apt install -y python3-dev
 
 $ sudo apt install python3-venv
 
+$ sudo apt install -y python3-virtualenv
+
 # install pip3
 $ sudo apt install -y python3-pip
-
 ```
 
 ## 2.2. Check python
@@ -71,7 +74,6 @@ pip 20.0.2 from /usr/lib/python3/dist-packages/pip (python 3.8)
 
 $ virtualenv --version
 virtualenv 20.24.7 from /home/lanka/.local/lib/python3.8/site-packages/virtualenv/__init__.py
-
 ```
 
 ```bash
@@ -126,6 +128,7 @@ $ sudo add-apt-repository ppa:deadsnakes/ppa
 
 ```bash
 $ sudo apt install -y python3.10-full
+$ sudo apt install -y python3.10-*
 ```
 
 ### 3.2.2. Use update-alternatives
@@ -205,8 +208,6 @@ $ curl -sS https://bootstrap.pypa.io/get-pip.py | python${PJ_PYTHON_VER}
 ```bash
 # upgrade pip3
 $ pip install --upgrade pip
-# or
-$ python3 -m pip install --upgrade pip
 ```
 
 ## 3.3. Check Python again
@@ -460,11 +461,29 @@ $ pip list
 >
 > [PyPi]  [Ninja](http://www.ninja-build.org/) is a small build system with a focus on speed.
 
+## 5.4. Fixed Version
+
+#### A. for Ubuntu 20.04
+
+> 不要試著升級，目前版本也不要超過 Python 3.10.16
+
+```bash
+pip install --upgrade pyproject-toml==0.0.12
+
+pip install --upgrade pygobject==3.50
+
+pip install --upgrade wheel==0.36.2
+
+pip install --upgrade setuptools==58.5.3
+```
+
 # Appendix
 
 # I. Study
 
 # II. Debug
+
+> 以下的解決方式不見得有效，試看看吧
 
 ## II.1. g-ir-scanner ... distutils.errors.DistutilsExecError: command '-I/work/codebase/xbox/xbox_123/install/ubuntu/include' failed with exit status 1 
 
@@ -640,6 +659,12 @@ $ sudo apt list --installed | grep 'python3.12' | cut -d'/' -f1 | xargs -o sudo 
 ```bash
 sudo mv /usr/lib/python${PJ_PYTHON_VER}/EXTERNALLY-MANAGED /usr/lib/python${PJ_PYTHON_VER}/EXTERNALLY-MANAGED.old
 ```
+
+## II.13. WARNING: Error parsing dependencies of dblatex: Invalid version: '0.3.11py3'
+
+> 安裝新版 dblatex_0.3.12py3-2_all.deb
+>
+> https://packages.debian.org/bookworm/dblatex
 
 # III. Glossary
 
