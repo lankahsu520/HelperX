@@ -588,6 +588,14 @@ gst-launch-1.0 rtspsrc \
 
 ![amazon_kvsv02](./images/amazon_kvsv02.png)
 
+### 2.4.2. [Video playback track requirements](https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/video-playback-requirements.html)
+
+```mermaid
+flowchart LR
+	kvssink --> video
+	kvssink --> audio
+```
+
 ## 2.5. Application
 
 ## 2.5.1. Image Extraction to S3
