@@ -497,6 +497,26 @@ gst-launch-1.0 -e -v \
  ! mux.
 ```
 
+## 4.4. multifilesrc (mp3) -> udpsink(A-Law, PCMA)
+
+```bash
+gst-launch-1.0 multifilesrc \
+ location="/work/BeethovenFurElise.mp3" loop=true \
+ ! decodebin \
+ ! audioconvert \
+ ! audioresample \
+ ! alawenc \
+ ! rtppcmapay \
+ ! udpsink host=127.0.0.1 port=51000
+
+gst-launch-1.0 -v udpsrc port=51000 \
+  ! 'application/x-rtp,media=audio,payload=8,clock-rate=8000,encoding-name=PCMA'  \
+  ! rtppcmadepay \
+  ! alawdec \
+  ! audioconvert \
+  ! autoaudiosink sync=false
+```
+
 # 5. appsrc
 
 ## 5.1. appsrc (i420) -> udpsink (Multicast) ⇢ udpsrc -> autovideosink
@@ -585,7 +605,7 @@ gst-launch-1.0 souphttpsrc is-live=true \
 
 # 8. v4l2src
 
-## 8.0. v4l-utils
+## 8.1. v4l-utils
 
 ```bash
 $ sudo apt-get --yes install v4l-utils
@@ -662,7 +682,7 @@ Camera Controls
 
 ```
 
-## 8.1. v4l2src -> autovideosink/ximagesink
+## 8.2. v4l2src -> autovideosink/ximagesink
 
 ```mermaid
 flowchart LR
@@ -710,7 +730,7 @@ gst-launch-1.0 -v v4l2src device=/dev/video0 \
  ! autovideosink
 ```
 
-## 8.1. v4l2src -> udpsink/multiudpsink
+## 8.3. v4l2src -> udpsink/multiudpsink
 
 #### A. v4l2src -> udpsink
 
@@ -750,6 +770,40 @@ gst-launch-1.0 v4l2src device=/dev/video0 \
  ! rtph264pay \
  ! multiudpsink clients=192.168.0.2:50000,192.168.0.3:50000,192.168.0.4:50000
 ```
+## 8.3. v4l2src -> udpsink/multiudpsink ⇢ udpsrc
+```mermaid
+flowchart LR
+	v4l2src[v4l2src]
+	udpsink[udpsink]
+
+	v4l2src --> udpsink
+  udpsrc --> autovideosink
+
+  udpsink ..-> udpsrc
+```
+
+
+```bash
+$ gst-launch-1.0 -v udpsrc \
+ port=50000 \
+ caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H264, payload=(int)96' \
+ ! rtph264depay \
+ ! decodebin \
+ ! videoconvert \
+ ! autovideosink
+
+# 如果沒有 repeat_sequence_header=1。你就必須先啟動上面的接收指令
+$ gst-launch-1.0 -e v4l2src device=$CAMERA_DEVICE \
+ ! videoconvert \
+ ! video/x-raw,width=640,height=480,framerate=30/1,format=I420 \
+ ! clockoverlay time-format=\"%D %H:%M:%S\" \
+ ! x264enc \
+ ! 'video/x-h264,stream-format=byte-stream,level=(string)4,profile=baseline' \
+ ! queue \
+ ! rtph264pay \
+ ! udpsink host=127.0.0.1 port=50000
+```
+
 # 9. alsasrc/autoaudiosrc
 
 ## 9.0. arecord
@@ -839,7 +893,26 @@ $ gst-launch-1.0 autoaudiosrc \
 
 # 10. rtspsrc
 
-## 10.1. rtspsrc -> autovideosink
+## 10.1. Display file metadata and stream information
+
+```bash
+$ gst-discoverer-1.0 rtsp://admin:admin@192.168.50.21:554
+Analyzing rtsp://admin:admin@192.168.50.21:554
+Done discovering rtsp://admin:admin@192.168.50.21:554
+
+Topology:
+  unknown: application/x-rtp
+    video: H.264 (High Profile)
+
+Properties:
+  Duration: 99:99:99.999999999
+  Seekable: no
+  Live: yes
+  Tags:
+      video codec: H.264 (High Profile)
+```
+
+## 10.2. rtspsrc -> autovideosink
 
 ```mermaid
 flowchart LR
@@ -857,6 +930,13 @@ gst-launch-1.0 -v rtspsrc \
  ! rtph264depay \
  ! avdec_h264 \
  ! autovideosink
+
+gst-launch-1.0 -v rtspsrc \
+ location=rtsp://192.168.50.21:554 user-id=admin user-pw=admin protocols=4 \
+ ! rtph264depay \
+ ! video/x-h264,stream-format=avc,alignment=au \
+ ! avdec_h264 \
+ ! autovideosink
 ```
 
 #### B. decodebin
@@ -864,6 +944,11 @@ gst-launch-1.0 -v rtspsrc \
 ```bash
 gst-launch-1.0 -v rtspsrc \
  location=rtsp://192.168.50.21:554 user-id=admin user-pw=admin protocols=4 \
+ ! decodebin \
+ ! autovideosink
+
+gst-launch-1.0 -v rtspsrc \
+ location=rtsp://admin:admin@192.168.50.21:554 protocols=4 \
  ! decodebin \
  ! autovideosink
 ```
@@ -882,7 +967,7 @@ gst-launch-1.0 -v rtspsrc \
  ! autovideosink
 ```
 
-## 10.2. rtspsrc -> autovideosink and autoaudiosink
+## 10.3. rtspsrc -> autovideosink and autoaudiosink
 
 ```mermaid
 flowchart LR
@@ -919,7 +1004,7 @@ gst-launch-1.0 -v rtspsrc \
  ! autovideosink
 ```
 
-## 10.3. rtspsrc -> udpsink (Multicast) ⇢ udpsrc -> autovideosink
+## 10.4. rtspsrc -> udpsink (Multicast) ⇢ udpsrc -> autovideosink
 
 ```mermaid
 flowchart LR
@@ -954,7 +1039,7 @@ gst-launch-1.0 -v udpsrc \
  ! autovideosink
 ```
 
-## 10.4. rtspsrc -> udpsink  ⇢ udpsrc -> autovideosink
+## 10.5. rtspsrc -> udpsink  ⇢ udpsrc -> autovideosink
 
 ```mermaid
 flowchart LR
@@ -1006,7 +1091,7 @@ gst-launch-1.0 -v udpsrc \
  ! autovideosink
 ```
 
-## 10.5. rtspsrc -> kvssink
+## 10.6. rtspsrc -> kvssink
 
 ```mermaid
 flowchart LR
@@ -1055,9 +1140,44 @@ gst-launch-1.0 -v rtspsrc \
  ! kvssink stream-name="HelloLankaRTSP" storage-size=512
 ```
 
-# 11. udpsrc
+# 11. uridecodebin
 
-## 11.1. filesrc (audio) -> udpsink  ⇢ udpsrc -> ???sink
+> 使用 uridecodebin 時，比 rtspsrc 簡單化了很多
+
+```mermaid
+flowchart LR
+	uri[uri]
+	uridecodebin[uridecodebin]
+	autovideosink[autovideosink]
+
+	uri ..-> uridecodebin
+	uridecodebin --> autovideosink
+```
+
+
+## 11.1. uridecodebin -> autovideosink
+
+```bash
+gst-launch-1.0 -v uridecodebin \
+ uri='rtsp://admin:admin@192.168.50.21:554' \
+ ! autovideosink
+```
+
+## 11.2. uridecodebin -> autovideosink and autoaudiosink
+
+```bash
+#export RTSP_SRC="rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4"
+export RTSP_SRC="rtsp://rtspstream:49d94336abfe907ef96dc4a26c651461@zephyr.rtsp.stream/movie"
+
+gst-launch-1.0 rtspsrc \
+ location=${RTSP_SRC} protocols=tcp name=src \
+ src. ! queue ! autovideosink \
+ src. ! queue ! autoaudiosink
+```
+
+# 12. udpsrc
+
+## 12.1. filesrc (audio) -> udpsink  ⇢ udpsrc -> ???sink
 
 ```mermaid
 flowchart LR
@@ -1070,7 +1190,7 @@ flowchart LR
 ```
 > [rtpopuspay](https://gstreamer.freedesktop.org/documentation/rtp/rtpopuspay.html?gi-language=c)
 
-### 11.1.1. filesrc (audio) -> udpsink
+### 12.1.1. filesrc (audio) -> udpsink
 ```
 export UDP_SINK="udpsink host=127.0.0.1 port=51000"
 export UDP_SINK="udpsink host=192.168.56.1 port=51000"
@@ -1110,7 +1230,7 @@ gst-launch-1.0 filesrc \
  ! $UDP_SINK
 ```
 
-## 11.2. udpsrc (audio) -> ???sink
+## 12.2. udpsrc (audio) -> ???sink
 
 #### A. udpsrc (opus) -> autoaudiosink (pcm, S16LE)
 ```bash
@@ -1153,7 +1273,7 @@ gst-launch-1.0 -e udpsrc \
  ! audio/x-raw,format=S16LE,channels=2,rate=44100 \
  ! filesink location="0001le.pcm"
 ```
-## 11.3. Video/Audio -> udpsink ⇢ udpsrc -> autoaudiosink
+## 12.3. Video/Audio -> udpsink ⇢ udpsrc -> autoaudiosink
 ```mermaid
 flowchart LR
 	udpsink[udpsink]
@@ -1196,7 +1316,7 @@ gst-launch-1.0 -v udpsrc port=50000 \
  ! opusdec \
  ! autoaudiosink
 ```
-# 12. [Raspberry Pi] [libcamerasrc](https://libcamera.org/index.html)
+# 13. [Raspberry Pi] [libcamerasrc](https://libcamera.org/index.html)
 
 > https://git.libcamera.org/libcamera/libcamera.git
 
@@ -1209,7 +1329,7 @@ $ ninja -C build_xxx
 $ ninja -C build_xxx install
 ```
 
-## 12.1. libcamerasrc -> |x264enc,???| filesink
+## 13.1. libcamerasrc -> |x264enc,???| filesink
 
 > 使用 x264 庫進行 H.264 軟件編碼。x264 是一種流行的開源 H.264 編碼器，提供了豐富的編碼參數和質量控制選項。
 
@@ -1338,9 +1458,11 @@ $ gst-launch-1.0 -v filesrc \
  ! autovideosink
 ```
 
-# 13. [gst-rtsp-server](https://github.com/GStreamer/gst-rtsp-server)
+# 14. [gst-rtsp-server](https://github.com/GStreamer/gst-rtsp-server)
 
 > RTSP server based on GStreamer (>= 1.19). This module has been merged into the main GStreamer repo for further development.
+
+## 14.1. Build
 
 ```bash
 $ git clone https://github.com/GStreamer/gst-rtsp-server.git
@@ -1349,43 +1471,29 @@ $ mkdir build_xxx
 $ meson setup build_xxx
 $ ninja -C build_xxx
 $ ninja -C build_xxx install
-```
 
-## 13.1. audiotestsrc and videotestsrc -> rtspsink
-```mermaid
-flowchart LR
-	audiotestsrc[audiotestsrc]
-	videotestsrc[videotestsrc]
-	rtspsink[rtspsink]
-
-	videotestsrc --> rtspsink
-	audiotestsrc -->rtspsink
-```
-
-```bash
 $ cd build_xxx/examples
+# audio (A-Law, PCMA) + video (H.264, Constrained Baseline Profile) -> rtspsink
 $ ./test-video
-stream ready at rtsp://127.0.0.1:8554/test
 
-# audio + video -> rtspsink
+# video (H.264, Constrained Baseline Profile) -> rtspsink
+$ ./test-launch "( \
+ videotestsrc \
+ ! x264enc \
+ ! rtph264pay name=pay0 pt=96 \
+ )"
+
+# audio (Mu-Law) + video (H.264, Constrained Baseline Profile) -> rtspsink
 $ ./test-launch "( \
  audiotestsrc \
  ! audioconvert \
  ! audioresample \
- ! opusenc \
- ! rtpopuspay name=pay1 pt=97 \
+ ! mulawenc \
+ ! rtppcmupay name=pay1 pt=0 \
  videotestsrc \
  ! x264enc \
  ! rtph264pay name=pay0 pt=96 \
  )"
-
-# video -> rtspsink
-$ ./test-launch "( \
- videotestsrc \
- ! x264enc \
- ! rtph264pay name=pay0 pt=96 \
- )"
-stream ready at rtsp://127.0.0.1:8554/test
 ```
 
 ```bash
@@ -1398,9 +1506,126 @@ $ gst-launch-1.0 rtspsrc \
  location=rtsp://127.0.0.1:8554/test \
  ! decodebin \
  ! videoconvert ! autovideosink
+
+$ gst-launch-1.0 -v rtspsrc \
+ location=rtsp://127.0.0.1:8554/test \
+ ! rtph265depay \
+ ! h265parse \
+ ! fakesink
+
+$ gst-discoverer-1.0 'rtsp://127.0.0.1:8554/test'
 ```
 
-## 13.2. v4l2src -> |x264enc| ???sink
+## 14.2. rtspsink ⇢ rtspsrc
+
+```mermaid
+flowchart LR
+	audiotestsrc[audiotestsrc]
+	videotestsrc[videotestsrc]
+	rtspsink[rtspsink]
+	rtspsrc[rtspsrc]
+	autovideosink[autovideosink]
+	autoaudiosink[autoaudiosink]
+
+	videotestsrc --> rtspsink
+	audiotestsrc -->rtspsink
+
+	rtspsrc --> autovideosink
+	rtspsrc --> autoaudiosink
+
+	rtspsink ..-> rtspsrc
+```
+
+### 14.2.1. audio + video (H.264)
+
+#### A. audio (A-Law, PCMA) + video (H.264, Constrained Baseline Profile) -> rtspsink
+
+```bash
+DO_COMMAND_ARG_PCMA_H264=" \
+ multifilesrc location=/work/BeethovenFurElise.mp3 loop=true \
+ ! queue \
+ ! decodebin \
+ ! audioconvert \
+ ! audioresample \
+ ! alawenc \
+ ! rtppcmapay name=pay1 pt=8 \
+ videotestsrc \
+ ! video/x-raw,width=640,height=480,framerate=30/1,format=I420 \
+ ! clockoverlay time-format=\"%D %H:%M:%S\" \
+ ! x264enc \
+ ! rtph264pay name=pay0 pt=96 \
+ "
+
+./test-launch "$DO_COMMAND_ARG_PCMA_H264"
+```
+
+#### B. audio (Mu-Law, PCMU) + video (H.264, Constrained Baseline Profile) -> rtspsink
+
+```bash
+DO_COMMAND_ARG_PCMU_H264=" \
+ multifilesrc location=/work/BeethovenFurElise.mp3 loop=true \
+ ! queue \
+ ! decodebin \
+ ! audioconvert \
+ ! audioresample \
+ ! mulawenc \
+ ! rtppcmupay name=pay1 pt=0 \
+ videotestsrc \
+ ! video/x-raw,width=640,height=480,framerate=30/1,format=I420 \
+ ! clockoverlay time-format=\"%D %H:%M:%S\" \
+ ! x264enc \
+ ! rtph264pay name=pay0 pt=96 \
+ "
+
+./test-launch "$DO_COMMAND_ARG_PCMU_H264"
+```
+
+#### C. audio (Opus) + video (H.264, Constrained Baseline Profile) -> rtspsink
+
+```bash
+DO_COMMAND_ARG_OPUS_H264=" \
+ multifilesrc location=/work/BeethovenFurElise.mp3 loop=true \
+ ! queue \
+ ! decodebin \
+ ! audioconvert \
+ ! audioresample \
+ ! opusenc \
+ ! rtpopuspay name=pay1 pt=97 \
+ videotestsrc \
+ ! video/x-raw,width=640,height=480,framerate=30/1,format=I420 \
+ ! clockoverlay time-format=\"%D %H:%M:%S\" \
+ ! x264enc \
+ ! rtph264pay name=pay0 pt=96 \
+ "
+
+./test-launch "$DO_COMMAND_ARG_OPUS_H264"
+```
+
+### 14.2.2. audio + video (H.265)
+
+#### D.  audio (A-Law, PCMA) + video (H.265) -> rtspsink
+
+```bash
+DO_COMMAND_ARG_PCMA_H265=" \
+ multifilesrc location=/work/BeethovenFurElise.mp3 loop=true \
+ ! queue \
+ ! decodebin \
+ ! audioconvert \
+ ! audioresample \
+ ! alawenc \
+ ! rtppcmapay name=pay1 pt=8 \
+ videotestsrc \
+ ! video/x-raw,width=640,height=480,framerate=30/1,format=I420 \
+ ! clockoverlay time-format=\"%D %H:%M:%S\" \
+ ! x265enc tune=zerolatency \
+ ! h265parse config-interval=-1 \
+ ! rtph265pay name=pay0 pt=96 \
+ "
+
+./test-launch "$DO_COMMAND_ARG_PCMA_H265"
+```
+
+## 14.3. v4l2src -> |x264enc| ???sink
 
 #### A. v4l2src -> rtspsink
 
@@ -1448,7 +1673,7 @@ $ gst-launch-1.0 -e v4l2src device=$CAMERA_DEVICE \
  ! udpsink host=127.0.0.1 port=50000
 ```
 
-## 13.3. [Raspberry Pi] libcamerasrc -> |???| ???sink
+## 14.4. [Raspberry Pi] libcamerasrc -> |???| ???sink
 
 #### A. libcamerasrc -> |x264enc| rtspsink
 
@@ -1530,7 +1755,7 @@ $ gst-launch-1.0 -e libcamerasrc \
  ! udpsink host=127.0.0.1 port=50000
 ```
 
-## 13.4. alsasrc/autoaudiosrc and v4l2src -> |x264enc,opusenc| rtspsink
+## 14.5. alsasrc/autoaudiosrc and v4l2src -> |x264enc,opusenc| rtspsink
 
 ```mermaid
 flowchart LR
@@ -1602,7 +1827,7 @@ $ ./test-launch --gst-debug=1 "( \
  )"
 ```
 
-## 13.5.  filesrc/multifilesrc and v4l2src -> |x264enc,opusenc| rtspsink
+## 14.6.  filesrc/multifilesrc and v4l2src -> |x264enc,opusenc| rtspsink
 
 ```mermaid
 flowchart LR
@@ -1663,6 +1888,30 @@ $ ./test-launch --gst-debug=1 "( \
 
 # I. Study
 
+## I.1. gstreamer
+
+### I.1.1. [Core Library](https://gstreamer.freedesktop.org/documentation/gstreamer/gi-index.html?gi-language=c#core-library)
+
+### 1.1.2. [API reference](https://gstreamer.freedesktop.org/documentation/libs.html?gi-language=c)
+
+### 1.1.3. [Plugins](https://gstreamer.freedesktop.org/documentation/plugins_doc.html?gi-language=c)
+
+#### [h264parse](https://gstreamer.freedesktop.org/documentation/videoparsersbad/h264parse.html#h264parse)
+
+#### [rtph264depay](https://gstreamer.freedesktop.org/documentation/rtp/rtph264depay.html#rtph264depay)
+
+#### [rtph265pay](https://gstreamer.freedesktop.org/documentation/rtp/rtph265pay.html#rtph265pay)
+
+#### [rtpopusdepay](https://gstreamer.freedesktop.org/documentation/rtp/rtpopusdepay.html#rtpopusdepay)
+
+#### [rtspsrc](https://gstreamer.freedesktop.org/documentation/rtsp/rtspsrc.html#rtspsrc)
+
+#### [videoconvert](https://gstreamer.freedesktop.org/documentation/videoconvertscale/videoconvert.html#videoconvert)
+
+#### [x264enc](https://gstreamer.freedesktop.org/documentation/x264/index.html#x264enc)
+
+#### [x265enc](https://gstreamer.freedesktop.org/documentation/x265/index.html?gi-language=c#x265enc-page)
+
 # II. Debug
 
 ## II.1. sudo: add-apt-repository: command not found
@@ -1677,6 +1926,13 @@ sudo apt install software-properties-common
 > matroskamux 不支援變動的 Caps，例如 width 和 height 有變更。
 >
 > 建議可改用 mp4mux。
+
+## II.3.  no element "x265enc"
+
+```bash
+sudo apt install gstreamer1.0-libav gstreamer1.0-plugins-bad
+
+```
 
 # III. Glossary
 
