@@ -3170,7 +3170,75 @@ $ echo $NOW_t
 20231229092235
 ```
 
-# 21. pkg-config
+# 21. Shared object
+
+## 21.1. Object dependencies
+
+#### file - determine file type
+
+```bash
+$ file ./libssl.so
+./libssl.so: symbolic link to libssl.so.1.1
+
+$ file /bin/curl
+/bin/curl: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=96cc5c71a0343e9de8f3574c90dee265ccae1201, for GNU/Linux 3.2.0, stripped
+```
+
+#### ldd - print shared object dependencies
+
+```bash
+$ ldd ./libssl.so
+./libssl.so: /lib/x86_64-linux-gnu/libcrypto.so.1.1: version `OPENSSL_1_1_1k' not found (required by ./libssl.so)
+        linux-vdso.so.1 (0x00007fb5abc33000)
+        libcrypto.so.1.1 => /lib/x86_64-linux-gnu/libcrypto.so.1.1 (0x00007fb5ab8a2000)
+        libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007fb5ab87f000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fb5ab68d000)
+        libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007fb5ab687000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007fb5abc35000)
+```
+
+#### nm - list symbols from object files
+
+```bash
+$ nm ./libssl.so
+0000000000030720 t add_ca_name
+000000000004ab30 t add_custom_ext_intern
+000000000004acc0 t add_old_custom_ext.constprop.0
+00000000000759e0 r application_traffic.23486
+                 U ASN1_ANY_it@@OPENSSL_1_1_0
+                 U ASN1_item_d2i@@OPENSSL_1_1_0
+                 U ASN1_item_free@@OPENSSL_1_1_0
+                 U ASN1_item_i2d@@OPENSSL_1_1_0
+...
+```
+
+#### objdump - display information from object files
+
+```bash
+$ objdump -x ./libssl.so
+
+$ objdump -T ./libssl.so
+
+$ objdump -p ./libssl.so
+```
+
+#### readelf - display information about ELF files
+
+```bash
+$ readelf -d ./libssl.so
+
+Dynamic section at offset 0x8cd40 contains 33 entries:
+  Tag        Type                         Name/Value
+ 0x0000000000000001 (NEEDED)             Shared library: [libcrypto.so.1.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+ 0x000000000000000e (SONAME)             Library soname: [libssl.so.1.1]
+ 0x0000000000000010 (SYMBOLIC)           0x0
+ 0x000000000000001d (RUNPATH)            Library runpath: [/work/rootfs/lib]
+...
+```
+
+## 21.2. pkg-config
 
 ```bash
 $ pkg-config --version
