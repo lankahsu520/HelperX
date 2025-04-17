@@ -924,6 +924,12 @@ ip -o -4 addr list enp0s3 | awk '{print $4}' | cut -d/ -f1
 
 ```bash
 ps -aux | grep helloworld | grep -v grep
+
+# replace ABC with 123
+grep -rl 'ABC' . | xargs sed -i 's/ABC/123/g'
+
+# replace ABC with 123
+grep -rl 'ABC' . | xargs sed -i.bak 's/ABC/123/g'
 ```
 
 ```bash
