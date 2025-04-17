@@ -1375,8 +1375,8 @@ $ aws s3api put-bucket-notification-configuration \
 ```mermaid
 flowchart LR
 	awsCli[aws sns publish]
-	Lanka["lankahsu@gmail.com"]
-	Mary["mary@gmail.com"]
+	Lanka["lankahsu\@gmail.com"]
+	Mary["mary\@gmail.com"]
 
 	AmazonSNS[AmazonSNS]
 
