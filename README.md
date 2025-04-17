@@ -50,77 +50,51 @@
 
 ## 1.1. Startup
 
-### 1.1.1. [helper_ArtificialIntelligence.md](https://github.com/lankahsu520/HelperX/blob/master/helper_ArtificialIntelligence.md) - ArtificialIntelligence helper.
+### 1.1.1. helper_AI
+
+#### A. [helper_ArtificialIntelligence.md](https://github.com/lankahsu520/HelperX/blob/master/helper_ArtificialIntelligence.md) - ArtificialIntelligence helper.
 
 > 我完全不懂 AI (Artificial Intelligence)，基本上你沒辦法從我這邊學到什麼，說是蹭 AI 也行。
 >
 > 只是把生活中的發想記錄下來。
 
-### 1.1.2. [helper_BackupvsRAID.md](https://github.com/lankahsu520/HelperX/blob/master/helper_BackupvsRAID.md) - Backup vs. RAID helper.
+#### B. [helper_AI-MCP.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AI-MCP.md) - Model Context Protocol helper.
+
+> 簡單的一句話，「只是方便 AI 嫁接 MCP Server 去“取用”資料」。
+>
+> 說實話，看了一說明，它們都是用一些“不利理解”的名詞去解譯名詞。建議直接去操作 MCP Server 後，反推回來是怎麼回事。
+
+### 1.1.2. helper_Development
+
+#### A. [helper_BackupvsRAID.md](https://github.com/lankahsu520/HelperX/blob/master/helper_BackupvsRAID.md) - Backup vs. RAID helper.
 
 > 人們應該是追求資料的健全保存後，再取得效能上的平衡。
 >
 > 而一般人細究 RAID 是沒有意義，要認知自身的需求，評估選擇有利的應用。
 
-### 1.1.3. [helper_BLE.md](https://github.com/lankahsu520/HelperX/blob/master/helper_BLE.md) - BLE helper.
-
-> BLE 的水很深，這邊只有概要，並且用不同的觀點去分析。
->
-> 如果你是要實作的話，文件是幫不了你的！請直接找Opensource，而這裏有[BlueZX](https://github.com/lankahsu520/BlueZX) 或許能幫助到你。
-
-### 1.1.4. [helper_Confluence.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Confluence.md) - Confluence helper.
+#### B. [helper_Confluence.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Confluence.md) - Confluence helper.
 
 >就是文件管理系統，相較於使用 Google Drive，一樣有共同編輯的功能，但是少了檔案的概念。
 
-### 1.1.4. [helper_Docker.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Docker.md) - docker helper.
-
-> docker is useful ? Please make sure that you aren't a low-level programmer or embedded engineer.
-
-### 1.1.5. [helper_DevelopmentandManage.md](https://github.com/lankahsu520/HelperX/blob/master/helper_DevelopmentandManage.md) - Development and Manage helper
+#### C. [helper_DevelopmentandManage.md](https://github.com/lankahsu520/HelperX/blob/master/helper_DevelopmentandManage.md) - Development and Manage helper
 
 >不管是敏捷式 (Agile) 開發、瀑布式 (Waterfall) 開發等，最主要是執行力，排除問題的能力！
 
-### 1.1.6. [helper_Email.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Email.md) - Email helper.
-
-> 我的第一份工作就是寫一套電子報系統，當時的網路速度說有多慢就有多慢（記得不是很清楚，ADSL好像還沒有開始呢），當要發送電子報時，還要選擇冷門時段，不然整個銀行系統都要停擺了。
-
-### 1.1.7. [helper_GitHub.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitHub.md) - GitHub helper.
-
-> 善用免費 git 空間。
-
-### 1.1.8. [helper_GitLabandCICD.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitLabandCICD.md) - GitLab helper.
-
-> CI/CD is useful ? Please make sure that you aren't a low-level programmer, system integration developer or embedded engineer.
->
-> 當學習 AWS Lambda、Cloud Formation 後，感覺部署這件事很重要。當產品線到了最後上線或販賣時，就不應該允許專案的成員都能修改後部署，也不建議在不同電腦上進行操作。
->
-> 這時 CI/CD 就是一個很不錯的方法。
-
-### 1.1.9. [helper_GStreamer.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GStreamer.md) - GStreamer helper.
-
-### 1.1.10. [helper_IoT.md](https://github.com/lankahsu520/HelperX/blob/master/helper_IoT.md) - IoT helper.
-
->IoT 的概念很簡單，不要被一些 “協定” 約束你的想像。也不要被主管 or 業務員的話語所迷惑。只要清楚基本概念既可。
-
-### 1.1.10a. [helper_IoT-Xiaomi.md](https://github.com/lankahsu520/HelperX/blob/master/helper_IoT-Xiaomi.md) - IoT Xiaomi helper.
-
->用 Xiaomi 建構[智慧居家](https://www.mi.com/tw/product-list/smart-device/?cat_id=2546)。
-
-### 1.1.11. [helper_jq.md](https://github.com/lankahsu520/HelperX/blob/master/helper_jq.md) - jq helper.
-
->JSON 是目前常用的資料格式，jq 提供於簡單的命令列下查詢、編輯，抓取所需之資訊，導入另一個程式使用。
-
-### 1.1.12. [helper_linux.md](https://github.com/lankahsu520/HelperX/blob/master/helper_linux.md) - linux helper.
-
->某人說「我是雲端工程師，從來沒有學過什麼 linux，為什麼還要去學？」或許他的話沒有錯，出社會後，你能在工作上得心應心，其實就可以了。
-
-### 1.1.13. [helper_macOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_macOS.md) - macOS helper.
-
-### 1.1.14. [helper_MarkDown.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MarkDown.md) - Markdown helper.
+#### D. [helper_MarkDown.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MarkDown.md) - Markdown helper.
 
 > 身為一個人，建議善用 Markdown 記錄相關筆記，少用 doc。
 
-### 1.1.15. [helper_Matter.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Matter.md) - Matter helper.
+### 1.1.3. helper_IoT
+
+#### A. [helper_IoT.md](https://github.com/lankahsu520/HelperX/blob/master/helper_IoT.md) - IoT helper.
+
+>IoT 的概念很簡單，不要被一些 “協定” 約束你的想像。也不要被主管 or 業務員的話語所迷惑。只要清楚基本概念既可。
+
+#### B. [helper_IoT-Xiaomi.md](https://github.com/lankahsu520/HelperX/blob/master/helper_IoT-Xiaomi.md) - IoT Xiaomi helper.
+
+>用 Xiaomi 建構[智慧居家](https://www.mi.com/tw/product-list/smart-device/?cat_id=2546)。
+
+#### C. [helper_Matter.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Matter.md) - Matter helper.
 
 > Matter（以前稱為 Project CHIP，Connected Home over IP）是一種物聯網（IoT）通信協議和平台，致力於促進智能家居設備之間的互操作性和互聯性。
 >
@@ -128,35 +102,69 @@
 >
 > 至於艱深的文件， 只會省略過去。就好像你要使用 OpenSSL 進行加密，知道編譯時怎麼連結，知道如何使用就好，有必要去細究裏面是如何加密嗎。
 
-### 1.1.16. [helper_MatterController-chip-tool.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MatterController-chip-tool.md) - Matter Controller helper.
+#### D. [helper_MatterController-chip-tool.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MatterController-chip-tool.md) - Matter Controller helper.
 
 > 因為角色特別吃重，特別將 Matter Controller 從 helper_Matter.md 獨立出來。
 
-### 1.1.16a. [helper_MultimediaMuxandDemux.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MultimediaMuxandDemux.md) - Multimedia Mux and Demux helper
+### 1.1.4. helper_OS
 
->除了用手機看 YouTube 外，有些基本常識還是補足一下。
+#### A. [helper_GStreamer.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GStreamer.md) - GStreamer helper.
 
-### 1.1.17. [helper_MQTT.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MQTT.md) - MQTT helper.
+#### B. [helper_jq.md](https://github.com/lankahsu520/HelperX/blob/master/helper_jq.md) - jq helper.
+
+>JSON 是目前常用的資料格式，jq 提供於簡單的命令列下查詢、編輯，抓取所需之資訊，導入另一個程式使用。
+
+#### C. [helper_linux.md](https://github.com/lankahsu520/HelperX/blob/master/helper_linux.md) - linux helper.
+
+>某人說「我是雲端工程師，從來沒有學過什麼 linux，為什麼還要去學？」或許他的話沒有錯，出社會後，你能在工作上得心應心，其實就可以了。
+
+#### D. [helper_macOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_macOS.md) - macOS helper.
+
+#### E. [helper_RaspberryPiOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_RaspberryPiOS.md) - Raspberry Pi OS helper.
+
+#### F. [helper_vi.md](https://github.com/lankahsu520/HelperX/blob/master/helper_vi.md) - vi/vim helper.
+
+### 1.1.5. helper_network
+
+#### A. [helper_Email.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Email.md) - Email helper.
+
+> 我的第一份工作就是寫一套電子報系統，當時的網路速度說有多慢就有多慢（記得不是很清楚，ADSL好像還沒有開始呢），當要發送電子報時，還要選擇冷門時段，不然整個銀行系統都要停擺了。
+
+#### B. [helper_MQTT.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MQTT.md) - MQTT helper.
 
 > use mosquitto.
 
-### 1.1.18. [helper_network.md](https://github.com/lankahsu520/HelperX/blob/master/helper_network.md) - Network helper.
+#### C. [helper_network.md](https://github.com/lankahsu520/HelperX/blob/master/helper_network.md) - Network helper.
 
 > 筆記 only。
 
-### 1.1.19. [helper_ONVIF.md](https://github.com/lankahsu520/HelperX/blob/master/helper_ONVIF.md) - ONVIF helper.
+#### D. [helper_ONVIF.md](https://github.com/lankahsu520/HelperX/blob/master/helper_ONVIF.md) - ONVIF helper.
 
-### 1.1.20. [helper_OpenSSL.md](https://github.com/lankahsu520/HelperX/blob/master/helper_OpenSSL.md) - OpenSSL helper.
-
-### 1.1.21. [helper_RaspberryPiOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_RaspberryPiOS.md) - Raspberry Pi OS helper.
-
-### 1.1.22. [helper_SQLite.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SQLite.md) - SQLite helper.
-
-### 1.1.23. [helper_SIPandAsterisk.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SIPandAsterisk.md) - SIP and Asterisk helper.
+#### E. [helper_SIPandAsterisk.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SIPandAsterisk.md) - SIP and Asterisk helper.
 
 > 如果你選擇 FreePBX 或其它 UI 進行安裝設定前，不妨看看這裏的指引。
 
-### 1.1.24. [helper_SVNvsGit.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SVNvsGit.md) - SVN vs. Git helper.
+#### F. [helper_WebRTC](https://github.com/lankahsu520/HelperX/blob/master/helper_WebRTC.md) - WebRTC helper.
+
+> WebRTC 使用的技術太多，我也只是略懂略懂。
+>
+> 當然裏面有些網路概念，希望能從中學習一二。
+
+### 1.1.6. helper_Version Control Systems
+
+#### A. [helper_GitHub.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitHub.md) - GitHub helper.
+
+> 善用免費 git 空間。
+
+#### B. [helper_GitLabandCICD.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitLabandCICD.md) - GitLab helper.
+
+> CI/CD is useful ? Please make sure that you aren't a low-level programmer, system integration developer or embedded engineer.
+>
+> 當學習 AWS Lambda、Cloud Formation 後，感覺部署這件事很重要。當產品線到了最後上線或販賣時，就不應該允許專案的成員都能修改後部署，也不建議在不同電腦上進行操作。
+>
+> 這時 CI/CD 就是一個很不錯的方法。
+
+#### C. [helper_SVNvsGit.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SVNvsGit.md) - SVN vs. Git helper.
 
 > SVN、Git 都是很好的版本控管工具，當然市面上不止這兩種。只要選擇方便性即可。
 >
@@ -176,19 +184,33 @@
 >
 >沒有良好的習慣，又沒有能力解決衝突。真的只能找網路編輯，這也是一個“work around”。
 
-### 1.1.25. [helper_vi.md](https://github.com/lankahsu520/HelperX/blob/master/helper_vi.md) - vi/vim helper.
+### 1.1.7. helper_Virtual Machine
 
-### 1.1.26. [helper_VirtualBox-x86_64-Ubuntu20.04onWin10](https://github.com/lankahsu520/HelperX/blob/master/helper_VirtualBox-x86_64-Ubuntu20.04onWin10.md) - VirtualBox helper.
+#### A. [helper_Docker.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Docker.md) - docker helper.
+
+> docker is useful ? Please make sure that you aren't a low-level programmer or embedded engineer.
+
+#### B. [helper_VirtualBox-x86_64-Ubuntu20.04onWin10](https://github.com/lankahsu520/HelperX/blob/master/helper_VirtualBox-x86_64-Ubuntu20.04onWin10.md) - VirtualBox helper.
 
 > Host: win10
 >
 > Client: x86_64, Ubuntu20.04
 
-### 1.1.27. [helper_WebRTC](https://github.com/lankahsu520/HelperX/blob/master/helper_WebRTC.md) - WebRTC helper.
+### 1.1.8. helper_Others
 
-> WebRTC 使用的技術太多，我也只是略懂略懂。
+#### A. [helper_BLE.md](https://github.com/lankahsu520/HelperX/blob/master/helper_BLE.md) - BLE helper.
+
+> BLE 的水很深，這邊只有概要，並且用不同的觀點去分析。
 >
-> 當然裏面有些網路概念，希望能從中學習一二。
+> 如果你是要實作的話，文件是幫不了你的！請直接找Opensource，而這裏有[BlueZX](https://github.com/lankahsu520/BlueZX) 或許能幫助到你。
+
+#### B. [helper_MultimediaMuxandDemux.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MultimediaMuxandDemux.md) - Multimedia Mux and Demux helper
+
+>除了用手機看 YouTube 外，有些基本常識還是補足一下。
+
+#### C. [helper_OpenSSL.md](https://github.com/lankahsu520/HelperX/blob/master/helper_OpenSSL.md) - OpenSSL helper.
+
+#### D. [helper_SQLite.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SQLite.md) - SQLite helper.
 
 ## 1.2. Repository
 
