@@ -58,7 +58,7 @@
 >
 > 只是把生活中的發想記錄下來。
 
-#### B. [helper_AI-MCP.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AI-MCP.md) - Model Context Protocol helper.
+#### B. [helper_MCP.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MCP.md) - Model Context Protocol helper.
 
 > 簡單的一句話，「只是方便 AI 嫁接 MCP Server 去“取用”資料」。
 >
