@@ -65,7 +65,12 @@ flowchart LR
 > 因為要實現P2P (peer-to-peer) 的連線機制，其中使用了3 種定址（穿牆）的方式。分別為 NAT, STUN and TURN。而它們的先後順序為 NAT, STUN, TURN。
 
 > 其中有個專有名詞 ICE（網絡技術框架）。如果你跟網路小白說 ICE 技術或名稱，99% 的人會連名稱都不知道在說什麼。但如果你說是 routing  的技術，並且有穿牆的能力，應該大部分的人會清楚你在說什麼，細究內容又是一囘事。有時用 Network Path 來進行解釋可能會比較好理解。
+
+> 可檢查 `candidateType` 是否為：
 >
+> - `"host"`：本地 IP（LAN）
+> - `"srflx"`：server-reflexive（STUN 掃出來的 public IP）
+> - `"relay"`：使用 TURN server，通常會隱藏本地 IP
 
 ## 3.1. NAT
 
