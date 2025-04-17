@@ -91,13 +91,17 @@ flowchart LR
 
 ```
 
-## 2.2. API (Application Programming Interface) vs. AI
+## 2.2. API (Application Programming Interface)
 
 >搞清楚 API 的功用
 >
 >[API (Application Programming Interface) vs. AI](https://github.com/lankahsu520/HelperX/blob/master/helper_ArtificialIntelligence.md#41-api-application-programming-interface-vs-ai)
 
-> 如下圖 lanka 提供了較多服務，而號稱雲端工程師完全不符合客戶-波蜜的需求。
+> 如下圖 *lanka* 提供了較多服務，而 *號稱雲端工程師* 完全不符合客戶-波蜜的需求。
+
+> 假設命令如，{"cmd":"去抓長輩圖"}、{"cmd":"去存十億美金"}、{"cmd":"取十億美金"}
+>
+> 當命令送達 *lanka* 或 *號稱雲端工程師* 時，在命令語法檢查是正確的，只是 *號稱雲端工程師* 一點都沒有相對應的功能。
 
 ```mermaid
 flowchart LR
