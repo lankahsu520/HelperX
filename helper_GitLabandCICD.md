@@ -618,6 +618,8 @@ registry.gitlab.com/lankahsu/dockerx:1.0.0
 
 # 5. CI/CD vs. Simple Shell Scripts
 
+> 這邊說明，有用到 CI/CD 和 Simple Shell Scripts (這個可以定時也可以用人力) 的差別。
+
 ## 5.1. CI/CD
 
 ### 5.1.1. Developer
@@ -734,6 +736,7 @@ flowchart LR
 - 在一定規模的公司裏，常有 Releaser的角色，把關最後發佈的工作，所以啊~應該很難將release 的工作列入CI/CD中。
 - 最後就是觸發時機，難道每次 commit 後就進行嗎？如果只是加個註解呢？
 - 有考慮到版本控管（如 git、svn）是多人同時上線，誰要當最後的觸發者？
+- 當 CI/CD 發生編譯失敗，大多沒辦法直接在錯誤的環境下，進行修改後再編譯（或許有能力提取 artifacts or container，但是所花精力）。
 
 # Appendix
 
