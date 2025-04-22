@@ -236,6 +236,11 @@ $ export DOCKER_TAG="22.04v1"
 $ docker build -t="$DOCKER_REPOSITORY:$DOCKER_TAG" .
 
 # Put Dockerfile in the same folder
+$ ll
+total 12
+drwxr-xr-x  2 lanka lanka 4096 Feb 18 08:44 ./
+drwxrwxr-x 16 lanka lanka 4096 Apr 21 11:03 ../
+-rwxr--r--  1 lanka lanka  522 Feb 18 08:44 Dockerfile*
 $ docker build -t="ubuntu:22.04v1" ./
 $ docker build -t="ubuntu:20.04v1" ./
 
@@ -248,6 +253,8 @@ $ docker run -ti $DOCKER_REPOSITORY:$DOCKER_TAG /bin/bash
 $ docker run -ti ubuntu:22.04v1 /bin/bash
 $ docker run -ti d41a1bf4ee25 /bin/bash
 
+# HOST port: 9982
+# Container port: 9981
 $ docker run -p 9982:9981 -ti d41a1bf4ee25
 ```
 
@@ -498,6 +505,18 @@ $ docker attach 15948ab15718
 ## I.4. [Docker 筆記 Part 2 ｜指令操作](https://visonli.medium.com/docker-入門-筆記-part-2-91e4dfa2b365)
 
 # II. Debug
+
+## II.1. tzdata hangs during Docker image build
+
+```bash
+$ vi Dockerfile
+# add
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && \
+    apt-get install -y tzdata && \
+    ln -fs /usr/share/zoneinfo/Asia/Taipei /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata
+```
 
 # III. Glossary
 
