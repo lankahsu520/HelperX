@@ -385,7 +385,13 @@
 >一般都是用 Console 設定即可。
 >
 
-### 4.1.5. helper_AmazonDynamoDB.md - Amazon DynamoDB helper.
+### 4.1.5. [helper_AmazonECS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonECS.md) - Amazon ECS helper.
+
+>拜讀 Developer Guide 和網路文章後，還是完全沒有進展，這篇或許可以讓你有成就感。
+>
+>此篇只是讓大家起個頭，了解運作後，再針對個人需求進行發展。
+
+### 4.1.6. helper_AmazonDynamoDB.md - Amazon DynamoDB helper.
 
 >A fast and flexible NoSQL database service for any scale
 >
