@@ -1,32 +1,35 @@
-# docker build -t="ubuntu:22.04v1" .
-# ubuntu 22.04
 FROM ubuntu:20.04
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update
 RUN apt-get install \
-            cmake \
-            pkg-config \
-            meson \
-            ninja-build \
-            gio-2.0 \
-            git \
-            lsb-release \
+            supervisor \
+            apache2 \
+            rsyslog \
+            dbus
             -y
-
-# dash -> bash
-RUN cd /bin && rm sh; ln -s bash sh
-
-# mkdir /work; cd /work
-WORKDIR /work
-# cp -avr * /work
-#ADD . /work
-
-#CMD ls -al
-
-# open port:9981
-EXPOSE 9981
 
 RUN apt-get clean
 RUN apt-get autoclean
 RUN apt-get autoremove --purge
 
+# dash -> bash
+RUN cd /bin && rm sh; ln -s bash sh
+
+WORKDIR /work
+
+# dbus
+RUN mkdir -p /run/dbus \
+    && dbus-uuidgen > /etc/machine-id
+COPY umt.conf /etc/dbus-1/system.d
+
+# apache2
+# CMD ["apachectl", "-D", "FOREGROUND"]
+EXPOSE 80
+
+# supervisord
+RUN mkdir -p /var/log/supervisor
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+CMD ["/usr/bin/supervisord", "-n"]

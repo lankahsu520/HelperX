@@ -88,17 +88,28 @@ flowchart LR
 | 擴展 | 無上限                       | 可擴展，限於使用中的 EC2 能力。使用者要先預估執行數量，例如每台 EC2可執行 1000 個tasks。 |
 | 管理 | 不見得簡單。                 | 不見得容易。                                                 |
 | 部署 | 要會 aws 的 magic language。 | 會 linux 的，就會。                                          |
+| 除錯 | 不容易。                     | 會 linux 的，就會。                                          |
 
 # 3. Docker Image
 
-## 3.1. Create a Docker Image with Dockerfile
+## 3.1. [Amazon ECR Public Gallery](https://gallery.ecr.aws)
+
+#### A. [amazonlinux](https://gallery.ecr.aws/amazonlinux/amazonlinux)
+
+> public.ecr.aws/amazonlinux/amazonlinux:latest
+
+#### B. [ubuntu](https://gallery.ecr.aws/ubuntu/ubuntu)
+
+> public.ecr.aws/ubuntu/ubuntu:20.04
+
+## 3.2. Create a Docker Image with Dockerfile
 
 ```bash
 FROM public.ecr.aws/amazonlinux/amazonlinux:latest
 
 # Update installed packages and install Apache
 RUN yum update -y && \
- yum install -y httpd
+ yum install -y httpd iputils
 
 # Write hello world message
 RUN echo 'Hello World!' > /var/www/html/index.html
@@ -115,7 +126,9 @@ CMD /root/run_apache.sh
 ```
 
 ```bash
-$ docker build -t hello-world .
+$ export DOCKER_IMAGE_NAME=hello-world
+
+$ docker build -t $DOCKER_IMAGE_NAME .
 $ docker images --filter reference=hello-world
 REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
 hello-world   latest    64d4dc0afe03   2 minutes ago   301MB
@@ -126,34 +139,34 @@ $ docker run -t -i -p 8888:80 hello-world
 # open browser http://localhost:8888
 ```
 
-## 3.2. Create a repository
+## 3.3. Create a repository
 
 ```bash
 $ export AWS_DEFAULT_REGION=eu-west-1
 $ export AWS_DEFAULT_REGION=us-west-1
 $ export AWS_REPOSITORY_NAME=hello-repository
 $ export AWS_REPOSITORY_JSON=$AWS_REPOSITORY_NAME.json
-$ export AWS_REPOSITORY_TAG=hello-world
+$ export DOCKER_IMAGE_NAME=hello-world
 
 $ aws ecr create-repository --repository-name $AWS_REPOSITORY_NAME --region $AWS_DEFAULT_REGION > $AWS_REPOSITORY_JSON
 $ export AWS_REPOSITORY_URI=$(cat $AWS_REPOSITORY_JSON  | jq -r '.repository.repositoryUri')
 $ echo $AWS_REPOSITORY_URI
-123456789012.dkr.ecr.us-west-1.amazonaws.com/hello-repository
+123456789012.dkr.ecr.eu-west-1.amazonaws.com/hello-repository
 
 $ aws ecr describe-repositories --query 'repositories[]. [repositoryName, repositoryUri]' --output table
 ---------------------------------------------------------------------------------------
 |                                DescribeRepositories                                 |
 +------------------+------------------------------------------------------------------+
-|  hello-repository|  123456789012.dkr.ecr.us-west-1.amazonaws.com/hello-repository   |
+|  hello-repository|  123456789012.dkr.ecr.eu-west-1.amazonaws.com/hello-repository   |
 +------------------+------------------------------------------------------------------+
 ```
 
 <img src="./images/amazon_ecs91.png" alt="amazon_ecs91" style="zoom:50%;" />
 
-## 3.3. Tag the Docker Image
+## 3.4. Tag the Docker Image
 
 ```bash
-$ docker tag hello-world $AWS_REPOSITORY_URI
+$ docker tag $DOCKER_IMAGE_NAME $AWS_REPOSITORY_URI
 $ docker images
 REPOSITORY                                                      TAG       IMAGE ID       CREATED          SIZE
 123456789012.dkr.ecr.eu-west-1.amazonaws.com/hello-repository   latest    24e33260f209   44 minutes ago   301MB
@@ -161,7 +174,7 @@ hello-world                                                     latest    24e332
 public.ecr.aws/amazonlinux/amazonlinux                          latest    e049bd4be1b1   10 days ago      154MB
 ```
 
-## 3.4. Push the Docker Image to Amazon ECR
+## 3.5. Push the Docker Image to Amazon ECR
 
 ```bash
 $ aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_REPOSITORY_URI
@@ -194,7 +207,7 @@ $ aws ecr describe-images --repository-name $AWS_REPOSITORY_NAME
 
 <img src="./images/amazon_ecs92.png" alt="amazon_ecs92" style="zoom:50%;" />
 
-## 3.5.  Delete the Docker Image from Amazon ECR
+## 3.6.  Delete the Docker Image from Amazon ECR
 
 ```bash
 $ aws ecr delete-repository --repository-name $AWS_REPOSITORY_NAME --region $AWS_DEFAULT_REGION --force
@@ -234,14 +247,73 @@ flowchart TB
 
 ```
 
-### 4.2.1. [Clusters](https://eu-west-1.console.aws.amazon.com/ecs/v2/clusters?region=eu-west-1)
+### 4.2.1. ECS Execution Role
+
+#### A. AWS CLI
+
+##### A.1. create-role
+
+```bash
+$ export AWS_ECS_ROLE=ecsTaskExecutionRole
+
+$ aws iam create-role \
+  --role-name $AWS_ECS_ROLE \
+  --assume-role-policy-document file://<(cat <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+)
+
+# 附加 AWS 預設的執行權限
+$ aws iam attach-role-policy \
+  --role-name $AWS_ECS_ROLE \
+  --policy-arn arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+
+# 查詢 Role ARN
+$ export AWS_ECS_ROLE_ARN=`aws iam get-role --role-name $AWS_ECS_ROLE --query 'Role.Arn' --output text`
+$ echo $AWS_ECS_ROLE_ARN
+arn:aws:iam::123456789012:role/ecsTaskExecutionRole
+```
+
+##### A.2. delete-role
+
+```bash
+# 移除附加的 Policies
+$ aws iam list-attached-role-policies --role-name $AWS_ECS_ROLE
+$ aws iam detach-role-policy --role-name $AWS_ECS_ROLE --policy-arn arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+
+# 刪除 inline policy
+$ aws iam list-role-policies --role-name $AWS_ECS_ROLE
+$ aws iam delete-role-policy --role-name $AWS_ECS_ROLE --policy-name YourInlinePolicyName
+
+# 刪除 Role
+$ aws iam delete-role --role-name $AWS_ECS_ROLE
+```
+
+#### B. AWS Web Console
+
+> 建議先用 AWS CLI
+
+### 4.2.2. [Clusters](https://eu-west-1.console.aws.amazon.com/ecs/v2/clusters?region=eu-west-1)
 
 #### A. AWS CLI
 
 ##### A.1. create-cluster
 
 ```bash
-$ aws ecs create-cluster --cluster-name hello-cluster
+$ export AWS_ECS_CLUSTER=hello-cluster
+
+$ aws ecs create-cluster --cluster-name $AWS_ECS_CLUSTER
 {
     "cluster": {
         "clusterArn": "arn:aws:ecs:eu-west-1:123456789012:cluster/hello-cluster",
@@ -268,7 +340,7 @@ $ aws ecs create-cluster --cluster-name hello-cluster
 ##### A.2. delete-cluster
 
 ```bash
-$ aws ecs delete-cluster --cluster hello-cluster
+$ aws ecs delete-cluster --cluster $AWS_ECS_CLUSTER
 ```
 
 #### B. AWS Web Console
@@ -291,60 +363,6 @@ $ aws ecs delete-cluster --cluster hello-cluster
 
 <img src="./images/amazon_ecs04.png" alt="amazon_ecs04" style="zoom:50%;" />
 
-### 4.2.2. ECS Execution Role
-
-#### A. AWS CLI
-
-##### A.1. create-role
-
-```bash
-$ aws iam create-role \
-  --role-name ecsTaskExecutionRole \
-  --assume-role-policy-document file://<(cat <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "ecs-tasks.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
-)
-
-# 附加 AWS 預設的執行權限
-$ aws iam attach-role-policy \
-  --role-name ecsTaskExecutionRole \
-  --policy-arn arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
-
-# 查詢 Role ARN
-$ aws iam get-role --role-name ecsTaskExecutionRole --query 'Role.Arn' --output text
-arn:aws:iam::123456789012:role/ecsTaskExecutionRole
-```
-
-##### A.2. delete-role
-
-```bash
-# 移除附加的 Policies
-$ aws iam list-attached-role-policies --role-name ecsTaskExecutionRole
-$ aws iam detach-role-policy --role-name ecsTaskExecutionRole --policy-arn arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
-
-# 刪除 inline policy
-$ aws iam list-role-policies --role-name ecsTaskExecutionRole
-$ aws iam delete-role-policy --role-name ecsTaskExecutionRole --policy-name YourInlinePolicyName
-
-# 刪除 Role
-$ aws iam delete-role --role-name ecsTaskExecutionRole
-```
-
-#### B. AWS Web Console
-
-> 建議先用 AWS CLI
-
 ### 4.2.3. [Task definitions](https://eu-west-1.console.aws.amazon.com/ecs/v2/task-definitions?region=eu-west-1)
 
 #### A. AWS CLI
@@ -352,36 +370,45 @@ $ aws iam delete-role --role-name ecsTaskExecutionRole
 > **CPU**: 256 units (0.25 vCPU)
 >
 > **Memory**: 512 MiB (0.5 GB)
+>
+> [任務 CPU 和記憶體](https://docs.aws.amazon.com/zh_tw/AmazonECS/latest/developerguide/fargate-tasks-services.html#fargate-tasks-size)。
 
 ##### A.1. register-task-definition
 
+> [Example Amazon ECS task definition: Route logs to CloudWatch](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specify-log-config.html)
+
 ```bash
 $ export AWS_TASK_DEFINITION_JSON=hello-task-definition.json
-$ vi $AWS_TASK_DEFINITION_JSON
+$ export AWS_TASK_DEFINITION_ARN_TXT=hello-task-definition-arn.txt
+$ export AWS_TASK_DEFINITION_FAMILY=sample-fargate-v2
+
+# family: sample-fargate-v2
+$ cat > "$AWS_TASK_DEFINITION_JSON" <<EOF
 {
-    "family": "sample-fargate-v2", 
+    "family": "$AWS_TASK_DEFINITION_FAMILY",
     "networkMode": "awsvpc",
-    "executionRoleArn": "arn:aws:iam::123456789012:role/ecsTaskExecutionRole",
+    "executionRoleArn": "$AWS_ECS_ROLE_ARN",
     "containerDefinitions": [
         {
-            "name": "fargate-app", 
-            "image": "123456789012.dkr.ecr.eu-west-1.amazonaws.com/hello-repository:latest", 
+            "name": "fargate-app",
+            "image": "$AWS_REPOSITORY_URI:latest",
             "portMappings": [
                 {
-                    "containerPort": 80, 
-                    "hostPort": 80, 
+                    "containerPort": 80,
+                    "hostPort": 80,
                     "protocol": "tcp"
                 }
-            ], 
+            ],
             "essential": true
         }
-    ], 
+    ],
     "requiresCompatibilities": [
         "FARGATE"
-    ], 
-    "cpu": "256", 
+    ],
+    "cpu": "256",
     "memory": "512"
 }
+EOF
 
 $ aws ecs register-task-definition --cli-input-json file://$AWS_TASK_DEFINITION_JSON
 ```
@@ -389,29 +416,28 @@ $ aws ecs register-task-definition --cli-input-json file://$AWS_TASK_DEFINITION_
 ##### A.2. list-task-definitions
 
 ```bash
-$ aws ecs list-task-definitions --family-prefix sample-fargate-v2
+$ aws ecs list-task-definitions --family-prefix $AWS_TASK_DEFINITION_FAMILY
 {
     "taskDefinitionArns": [
-        "arn:aws:ecs:eu-west-1:123456789012:task-definition/sample-fargate-v2:1",
-        "arn:aws:ecs:eu-west-1:123456789012:task-definition/sample-fargate-v2:2"
+        "arn:aws:ecs:eu-west-1:123456789012:task-definition/sample-fargate-v2:3"
     ]
 }
 
-$ aws ecs list-task-definitions --family-prefix sample-fargate
-{
-    "taskDefinitionArns": [
-        "arn:aws:ecs:eu-west-1:123456789012:task-definition/sample-fargate:4"
-    ]
-}
+$ aws ecs list-task-definitions --family-prefix $AWS_TASK_DEFINITION_FAMILY --query 'taskDefinitionArns' --output text > $AWS_TASK_DEFINITION_ARN_TXT
+
+$ cat $AWS_TASK_DEFINITION_ARN_TXT
+arn:aws:ecs:eu-west-1:123456789012:task-definition/sample-fargate-v2:3
+
+$ export AWS_TASK_DEFINITION_ARN=`cat $AWS_TASK_DEFINITION_ARN_TXT`
+$ echo $AWS_TASK_DEFINITION_ARN
+arn:aws:ecs:eu-west-1:123456789012:task-definition/sample-fargate-v2:3
 ```
 
 ##### A.3. deregister-task-definition
 
 ```bash
-$ aws ecs deregister-task-definition --task-definition arn:aws:ecs:eu-west-1:123456789012:task-definition/sample-fargate-v2:1
-$ aws ecs deregister-task-definition --task-definition arn:aws:ecs:eu-west-1:123456789012:task-definition/sample-fargate-v2:2
+$ aws ecs deregister-task-definition --task-definition $AWS_TASK_DEFINITION_ARN
 
-$ aws ecs deregister-task-definition --task-definition arn:aws:ecs:eu-west-1:123456789012:task-definition/sample-fargate:4
 ```
 
 #### B. AWS Web Console
@@ -426,33 +452,33 @@ $ aws ecs deregister-task-definition --task-definition arn:aws:ecs:eu-west-1:123
 
 ```json
 {
-    "family": "sample-fargate", 
-    "networkMode": "awsvpc", 
+    "family": "sample-fargate",
+    "networkMode": "awsvpc",
     "containerDefinitions": [
         {
-            "name": "fargate-app", 
-            "image": "public.ecr.aws/docker/library/httpd:latest", 
+            "name": "fargate-app",
+            "image": "public.ecr.aws/docker/library/httpd:latest",
             "portMappings": [
                 {
-                    "containerPort": 80, 
-                    "hostPort": 80, 
+                    "containerPort": 80,
+                    "hostPort": 80,
                     "protocol": "tcp"
                 }
-            ], 
-            "essential": true, 
+            ],
+            "essential": true,
             "entryPoint": [
                 "sh",
 		"-c"
-            ], 
+            ],
             "command": [
                 "/bin/sh -c \"echo '<html> <head> <title>Amazon ECS Sample App</title> <style>body {margin-top: 40px; background-color: #333;} </style> </head><body> <div style=color:white;text-align:center> <h1>Amazon ECS Sample App</h1> <h2>Congratulations!</h2> <p>Your application is now running on a container in Amazon ECS.</p> </div></body></html>' >  /usr/local/apache2/htdocs/index.html && httpd-foreground\""
             ]
         }
-    ], 
+    ],
     "requiresCompatibilities": [
         "FARGATE"
-    ], 
-    "cpu": "256", 
+    ],
+    "cpu": "256",
     "memory": "512"
 }
 ```
@@ -470,13 +496,18 @@ $ aws ecs deregister-task-definition --task-definition arn:aws:ecs:eu-west-1:123
 ##### A.1. create-service
 
 ```bash
-$ export AWS_SERVICE_JSON=hello-service.json
-$ export AWS_SERVICE_RESPONSE_JSON=hello-service-response.json
-$ vi $AWS_SERVICE_JSON
+$ export AWS_VPC_SUBNET=subnet-f525c9be
+$ export AWS_VPC_SECURITY_GROUP=sg-03ae822762b0fe90f
+
+$ export AWS_ECS_SERVICE_NAME=hello-service
+$ export AWS_ECS_SERVICE_JSON=$AWS_ECS_SERVICE_NAME.json
+$ export AWS_ECS_SERVICE_RESPONSE_JSON=$AWS_ECS_SERVICE_NAME-response.json
+
+$ cat > "$AWS_ECS_SERVICE_JSON" <<EOF
 {
-    "cluster": "hello-cluster",
-    "serviceName": "hello-service",
-    "taskDefinition": "arn:aws:ecs:eu-west-1:123456789012:task-definition/sample-fargate-v2:2",
+    "cluster": "$AWS_ECS_CLUSTER",
+    "serviceName": "$AWS_ECS_SERVICE_NAME",
+    "taskDefinition": "$AWS_TASK_DEFINITION_ARN",
     "loadBalancers": [
     ],
     "desiredCount": 1,
@@ -485,18 +516,19 @@ $ vi $AWS_SERVICE_JSON
     "networkConfiguration": {
         "awsvpcConfiguration": {
             "subnets": [
-                "subnet-f525c9be"
+                "$AWS_VPC_SUBNET"
             ],
             "securityGroups": [
-                "sg-03ae822762b0fe90f"
+                "$AWS_VPC_SECURITY_GROUP"
             ],
             "assignPublicIp": "ENABLED"
         }
     }
 }
+EOF
 
 # 建立 Service
-$ aws ecs create-service --cli-input-json file://$AWS_SERVICE_JSON > $AWS_SERVICE_RESPONSE_JSON
+$ aws ecs create-service --cli-input-json file://$AWS_ECS_SERVICE_JSON > $AWS_ECS_SERVICE_RESPONSE_JSON
 ```
 
 ##### A.2. describe-services
@@ -526,10 +558,10 @@ $ aws ecs describe-services \
 
 ```bash
 # 調整 Service 的 Desired Count；因此會停止所有的 tasks
-$ aws ecs update-service --cluster hello-cluster --service hello-service --desired-count 0
+$ aws ecs update-service --cluster $AWS_ECS_CLUSTER --service $AWS_ECS_SERVICE_NAME --desired-count 0
 
 # 強制刪除
-$ aws ecs delete-service --cluster hello-cluster --service hello-service --force
+$ aws ecs delete-service --cluster $AWS_ECS_CLUSTER --service $AWS_ECS_SERVICE_NAME --force
 ```
 
 #### B. AWS Web Console
@@ -580,8 +612,8 @@ $ aws ecs delete-service --cluster hello-cluster --service hello-service --force
 
 ```bash
 $ aws ecs describe-services \
-  --cluster hello-cluster \
-  --services hello-service \
+  --cluster $AWS_ECS_CLUSTER \
+  --services $AWS_ECS_SERVICE_NAME \
   --query "services[0].{Status:status, TaskDefinition:taskDefinition, DesiredCount:desiredCount, RunningCount:runningCount}" \
   --output table
 ----------------------------------------------------------------------------------------------
@@ -594,19 +626,19 @@ $ aws ecs describe-services \
 +----------------+---------------------------------------------------------------------------+
 
 # 列出 tasks
-$ aws ecs list-tasks --cluster hello-cluster --service-name hello-service --output text
+$ aws ecs list-tasks --cluster $AWS_ECS_CLUSTER --service-name $AWS_ECS_SERVICE_NAME --output text
 TASKARNS        arn:aws:ecs:eu-west-1:123456789012:task/hello-cluster/12eea332beef474e8d49065c4feac657
 
 # 列出 tasks
-$ aws ecs list-tasks --cluster hello-cluster --output text
+$ aws ecs list-tasks --cluster $AWS_ECS_CLUSTER --output text
 TASKARNS        arn:aws:ecs:eu-west-1:123456789012:task/hello-cluster/12eea332beef474e8d49065c4feac657
 
-$ aws ecs list-tasks --cluster hello-cluster --desired-status RUNNING
-$ aws ecs list-tasks --cluster hello-cluster --desired-status STOPPED
+$ aws ecs list-tasks --cluster $AWS_ECS_CLUSTER --desired-status RUNNING
+$ aws ecs list-tasks --cluster $AWS_ECS_CLUSTER --desired-status STOPPED
 
 # 查看該 task 的內容
 $ aws ecs describe-tasks \
-  --cluster hello-cluster \
+  --cluster $AWS_ECS_CLUSTER \
   --tasks 12eea332beef474e8d49065c4feac657 \
   --query 'tasks[*].[taskArn, lastStatus, desiredStatus, containerInstanceArn, startedAt]' \
   --output table
@@ -618,10 +650,10 @@ $ aws ecs describe-tasks \
 
 ```bash
 # 調整 Service 的 Desired Count；因此會停止所有的 tasks
-$ aws ecs update-service --cluster hello-cluster --service hello-service --desired-count 0
+$ aws ecs update-service --cluster $AWS_ECS_CLUSTER --service $AWS_ECS_SERVICE_NAME --desired-count 0
 
 # 停止特定的 task
-$ aws ecs stop-task --cluster hello-cluster --task arn:aws:ecs:eu-west-1:123456789012:task/hello-cluster/12eea332beef474e8d49065c4feac657
+$ aws ecs stop-task --cluster $AWS_ECS_CLUSTER --task arn:aws:ecs:eu-west-1:123456789012:task/hello-cluster/12eea332beef474e8d49065c4feac657
 ```
 
 #### B. AWS Web Console
@@ -651,6 +683,14 @@ $ aws ecs stop-task --cluster hello-cluster --task arn:aws:ecs:eu-west-1:1234567
 # III. Glossary
 
 # IV. Tool Usage
+
+#### A. [aws-ecs-hello.sh](https://github.com/lankahsu520/HelperX/blob/master/AWS/ECS/aws-ecs-hello.sh)
+
+> 將 4.2. Farget，打包成一個 shell script
+
+#### B. [aws-ecs-bye.sh](https://github.com/lankahsu520/HelperX/blob/master/AWS/ECS/aws-ecs-bye.sh)
+
+> 清除 4.2. Farget 所建立的
 
 
 # Author

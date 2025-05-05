@@ -418,6 +418,18 @@ $ docker inspect 2ea0d23f30cf
 $ docker commit 2ea0d23f30cf ubuntu:22.04v2
 ```
 
+#### B. docker attach
+
+> Attach local standard input, output, and error streams to a running container
+
+```bash
+$ docker ps -a
+CONTAINER ID   IMAGE              COMMAND       CREATED          STATUS         PORTS              NAMES
+89356a72e018   ecr-ubuntu:20.04   "/bin/bash"   19 minutes ago   Up 6 minutes   80/tcp, 9981/tcp   nostalgic_dirac
+
+$ docker attach 89356a72e018
+```
+
 # 5. Docker Container Files Handler
 
 ## 5.1. Copy files/folders
@@ -491,6 +503,77 @@ $ docker attach 15948ab15718
 ![](https://oer.gitlab.io/oer-on-oer-infrastructure/figures/OS/containers.png)
 
 > image from oer.gitlab.io
+
+# 8. services
+
+> Docker 其實很多限制，因為 container 預設只跑一個主程序，如果有多個 services，建議使用 supervisord
+
+## 8.1. Not support
+
+#### A. systemd
+
+## 8.2. supervisord
+
+#### A. Dockerfile
+
+```dockerfile
+FROM ubuntu:20.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update
+RUN apt-get install \
+            supervisor \
+            apache2 \
+            rsyslog \
+            dbus
+            -y
+
+RUN apt-get clean
+RUN apt-get autoclean
+RUN apt-get autoremove --purge
+
+# dash -> bash
+RUN cd /bin && rm sh; ln -s bash sh
+
+WORKDIR /work
+
+# dbus
+RUN mkdir -p /run/dbus \
+    && dbus-uuidgen > /etc/machine-id
+COPY umt.conf /etc/dbus-1/system.d
+
+# apache2
+# CMD ["apachectl", "-D", "FOREGROUND"]
+EXPOSE 80
+
+# supervisord
+RUN mkdir -p /var/log/supervisor
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+CMD ["/usr/bin/supervisord", "-n"]
+```
+
+#### B. supervisord.conf
+
+```conf
+[supervisord]
+nodaemon=true
+logfile=/var/log/supervisord.log
+
+[program:apache2]
+command=/usr/sbin/apache2ctl -D FOREGROUND
+autorestart=true
+
+[program:rsyslog]
+command=/usr/sbin/rsyslogd -n
+autorestart=true
+
+[program:dbus]
+command=/usr/bin/dbus-daemon --system --nofork --nopidfile
+autorestart=true
+
+```
 
 # Appendix
 
@@ -668,6 +751,13 @@ RUN apt-get install \
 						lsb-release \
 						-y
 
+RUN apt-get clean
+RUN apt-get autoclean
+RUN apt-get autoremove --purge
+
+# dash -> bash
+RUN cd /bin && rm sh; ln -s bash sh
+
 # mkdir /work; cd /work
 WORKDIR /work
 # cp -avr * /work
@@ -677,11 +767,6 @@ ADD . /work
 
 # open port:9981
 EXPOSE 9981
-
-RUN apt-get clean
-RUN apt-get autoclean
-RUN apt-get autoremove --purge
-
 ```
 
 # Author
