@@ -83,12 +83,14 @@ flowchart LR
 
 > 另外，知道 「電腦」的人比較多，還是知道 Docker 的人多？
 
-|      | ECS                          | EC2                                                          |
-| ---- | ---------------------------- | ------------------------------------------------------------ |
-| 擴展 | 無上限                       | 可擴展，限於使用中的 EC2 能力。使用者要先預估執行數量，例如每台 EC2可執行 1000 個tasks。 |
-| 管理 | 不見得簡單。                 | 不見得容易。                                                 |
-| 部署 | 要會 aws 的 magic language。 | 會 linux 的，就會。                                          |
-| 除錯 | 不容易。                     | 會 linux 的，就會。                                          |
+|        | ECS                          | EC2                                                          |
+| ------ | ---------------------------- | ------------------------------------------------------------ |
+| 擴展   | 無上限                       | 可擴展，限於使用中的 EC2 能力。使用者要先預估執行數量，例如每台 EC2可執行 1000 個tasks。 |
+| 管理   | 不見得簡單。                 | 不見得容易。                                                 |
+| 部署   | 要會 aws 的 magic language。 | 會 linux 的，就會。                                          |
+| 除錯   | 不容易。                     | 會 linux 的，就會。                                          |
+| 帶參數 | 困難                         | 會 linux 的，就會。                                          |
+| 功能   | 功能單一化                   | 可執行不同功能的服務                                         |
 
 # 3. Docker Image
 
@@ -103,6 +105,22 @@ flowchart LR
 > public.ecr.aws/ubuntu/ubuntu:20.04
 
 ## 3.2. Create a Docker Image with Dockerfile
+
+```bash
+$ export DOCKER_IMAGE_NAME=hello-world
+
+$ docker build -t $DOCKER_IMAGE_NAME .
+$ docker images --filter reference=hello-world
+REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
+hello-world   latest    64d4dc0afe03   2 minutes ago   301MB
+
+
+$ docker run -t -i -p 8888:80 hello-world
+
+# open browser http://localhost:8888
+```
+
+#### A. Dockerfile
 
 ```bash
 FROM public.ecr.aws/amazonlinux/amazonlinux:latest
@@ -125,25 +143,15 @@ EXPOSE 80
 CMD /root/run_apache.sh
 ```
 
-```bash
-$ export DOCKER_IMAGE_NAME=hello-world
+#### B. Dockerfile with supervisord
 
-$ docker build -t $DOCKER_IMAGE_NAME .
-$ docker images --filter reference=hello-world
-REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
-hello-world   latest    64d4dc0afe03   2 minutes ago   301MB
-
-
-$ docker run -t -i -p 8888:80 hello-world
-
-# open browser http://localhost:8888
-```
+> 請參考 [helper_Docker.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Docker.md)  [8.2. supervisord](https://github.com/lankahsu520/HelperX/blob/master/helper_Docker.md#82-supervisord)
 
 ## 3.3. Create a repository
 
 ```bash
 $ export AWS_DEFAULT_REGION=eu-west-1
-$ export AWS_DEFAULT_REGION=us-west-1
+#$ export AWS_DEFAULT_REGION=us-west-1
 $ export AWS_REPOSITORY_NAME=hello-repository
 $ export AWS_REPOSITORY_JSON=$AWS_REPOSITORY_NAME.json
 $ export DOCKER_IMAGE_NAME=hello-world
@@ -382,6 +390,18 @@ $ export AWS_TASK_DEFINITION_JSON=hello-task-definition.json
 $ export AWS_TASK_DEFINITION_ARN_TXT=hello-task-definition-arn.txt
 $ export AWS_TASK_DEFINITION_FAMILY=sample-fargate-v2
 
+$ export AWS_TASK_DEFINITION_HOST_PORT=80
+$ export AWS_TASK_DEFINITION_CONTAINER_NAME=fargate-app
+$ export AWS_TASK_DEFINITION_CONTAINER_PORT=80
+$ export AWS_TASK_DEFINITION_PROTOCOL=tcp
+
+$ export AWS_TASK_DEFINITION_CPU=256
+$ export AWS_TASK_DEFINITION_MEMORY=512
+
+$ export AWS_LOG_DRIVER=awslogs
+$ export AWS_LOG_GROUP=awslogs-wordpress
+$ export AWS_LOG_PREFIX=awslogs-example
+
 # family: sample-fargate-v2
 $ cat > "$AWS_TASK_DEFINITION_JSON" <<EOF
 {
@@ -390,23 +410,32 @@ $ cat > "$AWS_TASK_DEFINITION_JSON" <<EOF
     "executionRoleArn": "$AWS_ECS_ROLE_ARN",
     "containerDefinitions": [
         {
-            "name": "fargate-app",
-            "image": "$AWS_REPOSITORY_URI:latest",
+            "name": "$AWS_TASK_DEFINITION_CONTAINER_NAME",
+            "image": "$AWS_REPOSITORY_URI:$AWS_REPOSITORY_TAG",
             "portMappings": [
                 {
-                    "containerPort": 80,
-                    "hostPort": 80,
-                    "protocol": "tcp"
+                    "containerPort": $AWS_TASK_DEFINITION_CONTAINER_PORT,
+                    "hostPort": $AWS_TASK_DEFINITION_HOST_PORT,
+                    "protocol": "$AWS_TASK_DEFINITION_PROTOCOL"
                 }
             ],
-            "essential": true
+            "essential": true,
+            "logConfiguration": {
+                "logDriver": "$AWS_LOG_DRIVER",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "$AWS_LOG_GROUP",
+                    "awslogs-region": "$AWS_DEFAULT_REGION",
+                    "awslogs-stream-prefix": "$AWS_LOG_PREFIX"
+                }
+            }
         }
     ],
     "requiresCompatibilities": [
         "FARGATE"
     ],
-    "cpu": "256",
-    "memory": "512"
+    "cpu": "$AWS_TASK_DEFINITION_CPU",
+    "memory": "$AWS_TASK_DEFINITION_MEMORY"
 }
 EOF
 
