@@ -89,7 +89,7 @@ flowchart LR
 | 管理   | 不見得簡單。                 | 不見得容易。                                                 |
 | 部署   | 要會 aws 的 magic language。 | 會 linux 的，就會。                                          |
 | 除錯   | 不容易。                     | 會 linux 的，就會。                                          |
-| 帶參數 | 困難                         | 會 linux 的，就會。                                          |
+| 帶參數 | 困難。                       | 會 linux 的，就會。                                          |
 | 功能   | 功能單一化                   | 可執行不同功能的服務                                         |
 
 # 3. Docker Image
