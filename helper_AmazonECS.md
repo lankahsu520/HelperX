@@ -32,6 +32,10 @@
 
 # 2. ECS vs EC2
 
+> 此處的 EC2 並不是 AWS EC2 launch type。
+>
+> 而是使用者直接去租用 EC2，用 SSH連結進去後，安裝相關的程式或是服務。
+
 ## 2.1. Cost
 
 > 成本很重要！
@@ -87,7 +91,7 @@ flowchart LR
 | ------ | ---------------------------- | ------------------------------------------------------------ |
 | 擴展   | 無上限                       | 可擴展，限於使用中的 EC2 能力。使用者要先預估執行數量，例如每台 EC2可執行 1000 個tasks。 |
 | 管理   | 不見得簡單。                 | 不見得容易。                                                 |
-| 部署   | 要會 aws 的 magic language。 | 會 linux 的，就會。                                          |
+| 部署   | 要會 AWS 的 magic language。 | 會 linux 的，就會。                                          |
 | 除錯   | 不容易。                     | 會 linux 的，就會。                                          |
 | 帶參數 | 困難。                       | 會 linux 的，就會。                                          |
 | 功能   | 功能單一化                   | 可執行不同功能的服務                                         |
@@ -107,9 +111,9 @@ flowchart LR
 ## 3.2. Create a Docker Image with Dockerfile
 
 ```bash
-$ export DOCKER_IMAGE_NAME=hello-world
+$ export AWS_DOCKER_IMAGE_NAME=hello-world
 
-$ docker build -t $DOCKER_IMAGE_NAME .
+$ docker build -t $AWS_DOCKER_IMAGE_NAME .
 $ docker images --filter reference=hello-world
 REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
 hello-world   latest    64d4dc0afe03   2 minutes ago   301MB
@@ -150,11 +154,13 @@ CMD /root/run_apache.sh
 ## 3.3. Create a repository
 
 ```bash
+$ export AWS_ACCOUNT_ID=`aws sts get-caller-identity --query Account --output text`
+
 $ export AWS_DEFAULT_REGION=eu-west-1
 #$ export AWS_DEFAULT_REGION=us-west-1
 $ export AWS_REPOSITORY_NAME=hello-repository
 $ export AWS_REPOSITORY_JSON=$AWS_REPOSITORY_NAME.json
-$ export DOCKER_IMAGE_NAME=hello-world
+$ export AWS_DOCKER_IMAGE_NAME=hello-world
 
 $ aws ecr create-repository --repository-name $AWS_REPOSITORY_NAME --region $AWS_DEFAULT_REGION > $AWS_REPOSITORY_JSON
 $ export AWS_REPOSITORY_URI=$(cat $AWS_REPOSITORY_JSON  | jq -r '.repository.repositoryUri')
@@ -174,7 +180,7 @@ $ aws ecr describe-repositories --query 'repositories[]. [repositoryName, reposi
 ## 3.4. Tag the Docker Image
 
 ```bash
-$ docker tag $DOCKER_IMAGE_NAME $AWS_REPOSITORY_URI
+$ docker tag $AWS_DOCKER_IMAGE_NAME $AWS_REPOSITORY_URI
 $ docker images
 REPOSITORY                                                      TAG       IMAGE ID       CREATED          SIZE
 123456789012.dkr.ecr.eu-west-1.amazonaws.com/hello-repository   latest    24e33260f209   44 minutes ago   301MB
@@ -221,11 +227,37 @@ $ aws ecr describe-images --repository-name $AWS_REPOSITORY_NAME
 $ aws ecr delete-repository --repository-name $AWS_REPOSITORY_NAME --region $AWS_DEFAULT_REGION --force
 ```
 
-# 4. ECS launch type
+# 4. Deploy Methods
 
-## 4.1. EC2
+> AWS ECS 部署有很多方式，選擇自己喜歡的方式。
+>
+> 這邊語重心長的提醒各位，「開發者應該是著重於 docker 裏要處理的特定功能，而不是去花時間解決 AWS  部署問題」
 
-## 4.2. Farget
+#### AWS CLI
+
+> 此篇採用 AWS CLI + Web Console。因為 AWS CLI 安裝方便，而 Web Console 方便驗證。
+
+#### AWS Web Console
+
+> 圖形化介面。
+
+#### [AWS CDK](https://docs.aws.amazon.com/zh_tw/AmazonECS/latest/developerguide/tutorial-ecs-web-server-cdk.html)
+
+> 沒用過。需再學 AWS 的 magic language。
+
+#### [AWS CloudFormation](https://docs.aws.amazon.com/zh_tw/AmazonECS/latest/developerguide/creating-resources-with-cloudformation.html)
+
+> 常常困在 json 的格式裏，回報的訊息不利 debug。
+
+#### [AWS Copilot](https://docs.aws.amazon.com/zh_tw/AmazonECS/latest/developerguide/AWS_Copilot.html)
+
+> 看到安裝繁瑣，還要 PGP 等，看了就累。
+
+# 5. ECS launch type
+
+## 5.1. EC2
+
+## 5.2. Farget
 
 ```mermaid
 flowchart TB
@@ -255,7 +287,7 @@ flowchart TB
 
 ```
 
-### 4.2.1. ECS Execution Role
+### 5.2.1. ECS Execution Role
 
 #### A. AWS CLI
 
@@ -312,7 +344,7 @@ $ aws iam delete-role --role-name $AWS_ECS_ROLE
 
 > 建議先用 AWS CLI
 
-### 4.2.2. [Clusters](https://eu-west-1.console.aws.amazon.com/ecs/v2/clusters?region=eu-west-1)
+### 5.2.2. [Clusters](https://eu-west-1.console.aws.amazon.com/ecs/v2/clusters?region=eu-west-1)
 
 #### A. AWS CLI
 
@@ -371,7 +403,7 @@ $ aws ecs delete-cluster --cluster $AWS_ECS_CLUSTER
 
 <img src="./images/amazon_ecs04.png" alt="amazon_ecs04" style="zoom:50%;" />
 
-### 4.2.3. [Task definitions](https://eu-west-1.console.aws.amazon.com/ecs/v2/task-definitions?region=eu-west-1)
+### 5.2.3. [Task definitions](https://eu-west-1.console.aws.amazon.com/ecs/v2/task-definitions?region=eu-west-1)
 
 #### A. AWS CLI
 
@@ -408,6 +440,7 @@ $ cat > "$AWS_TASK_DEFINITION_JSON" <<EOF
     "family": "$AWS_TASK_DEFINITION_FAMILY",
     "networkMode": "awsvpc",
     "executionRoleArn": "$AWS_ECS_ROLE_ARN",
+    "taskRoleArn": "$AWS_ECS_ROLE_ARN",
     "containerDefinitions": [
         {
             "name": "$AWS_TASK_DEFINITION_CONTAINER_NAME",
@@ -518,7 +551,7 @@ $ aws ecs deregister-task-definition --task-definition $AWS_TASK_DEFINITION_ARN
 
 <img src="./images/amazon_ecs13.png" alt="amazon_ecs13" style="zoom:50%;" />
 
-### 4.2.3. Services
+### 5.2.3. Services
 
 #### A. AWS CLI
 
@@ -531,6 +564,7 @@ $ export AWS_VPC_SECURITY_GROUP=sg-03ae822762b0fe90f
 $ export AWS_ECS_SERVICE_NAME=hello-service
 $ export AWS_ECS_SERVICE_JSON=$AWS_ECS_SERVICE_NAME.json
 $ export AWS_ECS_SERVICE_RESPONSE_JSON=$AWS_ECS_SERVICE_NAME-response.json
+#$ export AWS_ECS_SERVICE_EXECUTE_COMMAND_ARG=--enable-execute-command
 
 $ cat > "$AWS_ECS_SERVICE_JSON" <<EOF
 {
@@ -552,23 +586,28 @@ $ cat > "$AWS_ECS_SERVICE_JSON" <<EOF
             ],
             "assignPublicIp": "ENABLED"
         }
-    }
+    },
+    "enableExecuteCommand": $AWS_ECS_SERVICE_EXECUTE_COMMAND
 }
 EOF
 
-# 建立 Service
+# 建立 Service，使用私有子網路的範例。需要 enable-execute-command 選項才能使用 Amazon ECS Exec。
 $ aws ecs create-service --cli-input-json file://$AWS_ECS_SERVICE_JSON > $AWS_ECS_SERVICE_RESPONSE_JSON
 ```
 
 ##### A.2. describe-services
 
 ```bash
-$ aws ecs list-services --cluster hello-cluster --query "serviceArns[]" --output text
+$ aws ecs list-services --cluster $AWS_ECS_CLUSTER --query "serviceArns[]" --output text
 arn:aws:ecs:eu-west-1:123456789012:service/hello-cluster/hello-service
 
 $ aws ecs describe-services \
-  --cluster hello-cluster \
-  --services hello-service \
+  --cluster $AWS_ECS_CLUSTER \
+  --services $AWS_ECS_SERVICE_NAME
+
+$ aws ecs describe-services \
+  --cluster $AWS_ECS_CLUSTER \
+  --services $AWS_ECS_SERVICE_NAME \
   --query "services[0].{Status:status, TaskDefinition:taskDefinition, DesiredCount:desiredCount, RunningCount:runningCount}" \
   --output table
 ----------------------------------------------------------------------------------------------
@@ -633,7 +672,7 @@ $ aws ecs delete-service --cluster $AWS_ECS_CLUSTER --service $AWS_ECS_SERVICE_N
 
 <img src="./images/amazon_ecs24.png" alt="amazon_ecs24" style="zoom:50%;" />
 
-### 4.2.4. Tasks
+### 5.2.4. Tasks
 
 #### A. AWS CLI
 
@@ -658,9 +697,9 @@ $ aws ecs describe-services \
 $ aws ecs list-tasks --cluster $AWS_ECS_CLUSTER --service-name $AWS_ECS_SERVICE_NAME --output text
 TASKARNS        arn:aws:ecs:eu-west-1:123456789012:task/hello-cluster/12eea332beef474e8d49065c4feac657
 
-# 列出 tasks
-$ aws ecs list-tasks --cluster $AWS_ECS_CLUSTER --output text
-TASKARNS        arn:aws:ecs:eu-west-1:123456789012:task/hello-cluster/12eea332beef474e8d49065c4feac657
+# 如果只有 1 task
+$ export AWS_TASK_ID=`aws ecs list-tasks --cluster $AWS_ECS_CLUSTER --service-name $AWS_ECS_SERVICE_NAME --query "taskArns[]" --output text`
+$ echo $AWS_TASK_ID
 
 $ aws ecs list-tasks --cluster $AWS_ECS_CLUSTER --desired-status RUNNING
 $ aws ecs list-tasks --cluster $AWS_ECS_CLUSTER --desired-status STOPPED
@@ -671,11 +710,18 @@ $ aws ecs describe-tasks \
   --tasks 12eea332beef474e8d49065c4feac657 \
   --query 'tasks[*].[taskArn, lastStatus, desiredStatus, containerInstanceArn, startedAt]' \
   --output table
+
+# 取得 eni-
+$ aws ecs describe-tasks --cluster $AWS_ECS_CLUSTER --tasks $AWS_TASK_ID
+
+# 使用 eni- , 取得 Public IP
+$ aws ec2 describe-network-interfaces --network-interface-id eni-0ec1a928f7cb2021a
+
 ```
 
 ##### A.2. stop-task
 
-> 只有 stop，沒有 lete
+> 只有 stop
 
 ```bash
 # 調整 Service 的 Desired Count；因此會停止所有的 tasks
@@ -683,6 +729,38 @@ $ aws ecs update-service --cluster $AWS_ECS_CLUSTER --service $AWS_ECS_SERVICE_N
 
 # 停止特定的 task
 $ aws ecs stop-task --cluster $AWS_ECS_CLUSTER --task arn:aws:ecs:eu-west-1:123456789012:task/hello-cluster/12eea332beef474e8d49065c4feac657
+```
+
+##### A.3. execute-command
+
+> 請參考 [使用私有子網路部署的測試任務](https://docs.aws.amazon.com/zh_tw/AmazonECS/latest/developerguide/ECS_AWSCLI_Fargate.html)
+
+```bash
+$ curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb"
+
+# install
+$ sudo dpkg -i session-manager-plugin.deb
+
+# remove
+$ sudo dpkg -r session-manager-plugin
+```
+
+```bash
+$ cd /work/codebase/Docker
+$ git clone https://github.com/aws-containers/amazon-ecs-exec-checker.git
+
+$ export AWS_TASK_ID=`aws ecs list-tasks --cluster $AWS_ECS_CLUSTER --service-name $AWS_ECS_SERVICE_NAME --query "taskArns[]" --output text`
+$ echo $AWS_TASK_ID
+
+$ /work/codebase/Docker/amazon-ecs-exec-checker/check-ecs-exec.sh $AWS_ECS_CLUSTER $AWS_TASK_ID
+```
+
+```bash
+$ aws ecs execute-command --cluster $AWS_ECS_CLUSTER \
+  --task $AWS_TASK_ID \
+  --container $AWS_TASK_DEFINITION_CONTAINER_NAME \
+  --interactive \
+  --command "/bin/sh"
 ```
 
 #### B. AWS Web Console
@@ -695,7 +773,7 @@ $ aws ecs stop-task --cluster $AWS_ECS_CLUSTER --task arn:aws:ecs:eu-west-1:1234
 
 <img src="./images/amazon_ecs32.png" alt="amazon_ecs32" style="zoom:50%;" />
 
-### 4.2.5. Show time
+### 5.2.5. Show time
 
 > http://34.244.233.173
 
@@ -716,6 +794,20 @@ $ aws ecs stop-task --cluster $AWS_ECS_CLUSTER --task arn:aws:ecs:eu-west-1:1234
 #### A. [aws-ecs-hello.sh](https://github.com/lankahsu520/HelperX/blob/master/AWS/ECS/aws-ecs-hello.sh)
 
 > 將 4.2. Farget，打包成一個 shell script
+
+```bash
+$ ./aws-ecs-hello.sh
+aws-ecs-hello.sh {create|execute|query}
+
+# 上傳 docker image, 建立 role、cluster、task definitionserbivice
+$ ./aws-ecs-hello.sh create
+
+# docker attach 該 task (Container)
+$ ./aws-ecs-hello.sh execute
+
+# 查詢 cluster / service
+$ ./aws-ecs-hello.sh query
+```
 
 #### B. [aws-ecs-bye.sh](https://github.com/lankahsu520/HelperX/blob/master/AWS/ECS/aws-ecs-bye.sh)
 
