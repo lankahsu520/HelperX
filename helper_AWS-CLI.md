@@ -1180,7 +1180,338 @@ flowchart TD
 
 >因為本身就是虛擬運算，設定起來也較複雜，不建議使用 AWS CLI；請多加使用 Dashboard。
 
-### 4.2.3. ec2metadata xxx
+> 不過很多網路設定，都會跟 EC2 有關
+
+#### [describe-instances](https://docs.aws.amazon.com/cli/latest/reference/opsworks/describe-instances.html#describe-instances)
+
+```bash
+$ aws ec2 describe-instances \
+  --instance-ids i-0905ac3fa79fa5ebe
+
+# 指定 ec2 使用的 network interface
+$ aws ec2 describe-instances \
+  --instance-ids i-0905ac3fa79fa5ebe \
+  --query 'Reservations[].Instances[].NetworkInterfaces[].NetworkInterfaceId' \
+  --output text
+eni-0b331693c0d3f45b5
+
+# subnet 對應到了的 ec2
+$ aws ec2 describe-instances \
+  --filters Name=subnet-id,Values=subnet-018a98c18b970bc4e \
+  --query "Reservations[*].Instances[*].InstanceId" \
+  --output text
+```
+
+#### [describe-network-interfaces](https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-network-interfaces.html#describe-network-interfaces)
+
+```bash
+# 指定 ENI
+$ aws ec2 describe-network-interfaces \
+  --network-interface-ids eni-0b331693c0d3f45b5 \
+  --query 'NetworkInterfaces[0].{Status:Status,Description:Description,Attachment:Attachment,InterfaceType:InterfaceType}' \
+  --output table
+-----------------------------------------------------------
+|                DescribeNetworkInterfaces                |
++-------------------------------+-------------------------+
+|  Description                  |                         |
+|  InterfaceType                |  interface              |
+|  Status                       |  in-use                 |
++-------------------------------+-------------------------+
+||                      Attachment                       ||
+|+----------------------+--------------------------------+|
+||  AttachTime          |  2022-07-19T07:35:23.000Z      ||
+||  AttachmentId        |  eni-attach-00a12f02d546bb8aa  ||
+||  DeleteOnTermination |  True                          ||
+||  DeviceIndex         |  0                             ||
+||  InstanceId          |  i-0905ac3fa79fa5ebe           ||
+||  InstanceOwnerId     |  877409152866                  ||
+||  NetworkCardIndex    |  0                             ||
+||  Status              |  attached                      ||
+|+----------------------+--------------------------------+|
+
+# 查詢所有 ENI 的附加狀態（是否被使用）
+$ aws ec2 describe-network-interfaces \
+  --query 'NetworkInterfaces[*].[NetworkInterfaceId,Status,Attachment.InstanceId,InterfaceType,Description]' \
+  --output table
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|                                                                     DescribeNetworkInterfaces                                                                     |
++-----------------------+---------+----------------------+---------------+------------------------------------------------------------------------------------------+
+|  eni-0a6ad7d07f711a16a|  in-use |  None                |  vpc_endpoint |  VPC Endpoint Interface vpce-051abc889b9c03379                                           |
+|  eni-0fe9f3b6b5a510266|  in-use |  None                |  vpc_endpoint |  VPC Endpoint Interface vpce-0c953350a887b1197                                           |
+|  eni-0cd8f84534fb9dfcd|  in-use |  None                |  vpc_endpoint |  VPC Endpoint Interface vpce-0c953350a887b1197                                           |
+|  eni-04ba7d3e1cb69a8c0|  in-use |  i-0a61e9517c8041851 |  interface    |                                                                                          |
+|  eni-0d558fe35a456f33d|  in-use |  None                |  vpc_endpoint |  VPC Endpoint Interface vpce-051abc889b9c03379                                           |
+|  eni-09eb295d19fd5e57a|  in-use |  i-0b7f0287a8977e0af |  interface    |                                                                                          |
+|  eni-0f91336faa455c78b|  in-use |  i-0d62fb97faf9387a2 |  interface    |                                                                                          |
+|  eni-092f32a30f843b891|  in-use |  i-0bdc73732b20ac872 |  interface    |                                                                                          |
+|  eni-0d1d995094680bfad|  in-use |  None                |  vpc_endpoint |  VPC Endpoint Interface vpce-0c953350a887b1197                                           |
+|  eni-0181bc8b25217b4e2|  in-use |  i-0312bb0b4ccd68394 |  interface    |                                                                                          |
+|  eni-079d9c96bd3b2d734|  in-use |  i-07f1af295d4a8844f |  interface    |                                                                                          |
+|  eni-0c9191225a149d15c|  in-use |  None                |  vpc_endpoint |  VPC Endpoint Interface vpce-051abc889b9c03379                                           |
+|  eni-0b331693c0d3f45b5|  in-use |  i-0905ac3fa79fa5ebe |  interface    |                                                                                          |
+|  eni-0238d4b61176e8ec3|  in-use |  None                |  nat_gateway  |  Interface for NAT Gateway nat-0da0c0581baef8e14                                         |
++-----------------------+---------+----------------------+---------------+------------------------------------------------------------------------------------------+
+ 
+# 篩選出未被使用（空閒）的 ENI
+$ aws ec2 describe-network-interfaces \
+  --query 'NetworkInterfaces[?Status==`available`].[NetworkInterfaceId,AvailabilityZone,SubnetId]' \
+  --output table
+
+# 列出所有 Network Interfaces 並篩選與 EC2 關聯者
+$ aws ec2 describe-network-interfaces \
+  --query 'NetworkInterfaces[?Attachment.InstanceId!=null].[NetworkInterfaceId,Attachment.InstanceId]' \
+  --output table
+--------------------------------------------------
+|            DescribeNetworkInterfaces           |
++------------------------+-----------------------+
+|  eni-04ba7d3e1cb69a8c0 |  i-0a61e9517c8041851  |
+|  eni-079d9c96bd3b2d734 |  i-07f1af295d4a8844f  |
+|  eni-092f32a30f843b891 |  i-0bdc73732b20ac872  |
+|  eni-0f91336faa455c78b |  i-0d62fb97faf9387a2  |
+|  eni-0181bc8b25217b4e2 |  i-0312bb0b4ccd68394  |
+|  eni-0b331693c0d3f45b5 |  i-0905ac3fa79fa5ebe  |
+|  eni-09eb295d19fd5e57a |  i-0b7f0287a8977e0af  |
++------------------------+-----------------------+
+
+# subnet-018a98c18b970bc4e 對應到的 Network Interfaces
+$ aws ec2 describe-network-interfaces \
+  --filters Name=subnet-id,Values=subnet-018a98c18b970bc4e \
+  --query "NetworkInterfaces[*].NetworkInterfaceId" \
+  --output text
+eni-0c88e9ac6afae4a73   eni-0277e36f0c6415fd8
+```
+
+#### [detach-network-interface](https://docs.aws.amazon.com/cli/latest/reference/ec2/detach-network-interface.html#detach-network-interface)
+
+```bash
+$ aws ec2 detach-network-interface \
+  --attachment-id eni-0b331693c0d3f45b5 \
+  --force
+```
+
+### 4.2.3. Virtual private cloud
+
+#### [create-subnet](https://docs.aws.amazon.com/cli/latest/reference/ec2/create-subnet.html#create-subnet)
+
+> creates a subnet in the specified VPC with the specified IPv4 CIDR block.
+
+```bash
+$ export AWS_VPC_ID=vpc-03c6677d
+$ export AWS_VPC_AVAILABILITY_ZONE=eu-west-1c
+$ export AWS_VPC_AVAILABILITY_ZONE=eu-west-1c
+$ export AWS_VPC_SUBNET_NAME=PrivateSubnetEU
+
+$ aws ec2 create-subnet \
+  --vpc-id $AWS_VPC_ID \
+  --cidr-block 10.0.2.0/24 \
+  --availability-zone $AWS_VPC_AVAILABILITY_ZONE \
+  --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=$AWS_VPC_SUBNET_NAME}]'
+```
+
+#### [describe-addresses](https://docs.aws.amazon.com/cli/latest/reference/snowball/describe-addresses.html#describe-addresses)
+
+```bash
+# 查所有 Elastic IP
+$ aws ec2 describe-addresses --output table
+
+# 篩選未使用（未關聯）的 EIP
+$ aws ec2 describe-addresses \
+  --query "Addresses[?AssociationId==null].PublicIp" \
+  --output text
+```
+
+
+
+#### [describe-availability-zones](https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-availability-zones.html#describe-availability-zones)
+
+> displays details for the Availability Zones that are available to you.
+
+```bash
+$ aws ec2 describe-availability-zones --output table
+$ aws ec2 describe-availability-zones \
+  --query 'AvailabilityZones[*].ZoneName' \
+  --output table
+---------------------------
+|DescribeAvailabilityZones|
++-------------------------+
+|  eu-west-1a             |
+|  eu-west-1b             |
+|  eu-west-1c             |
++-------------------------+
+```
+
+#### [describe-nat-gateways](https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-nat-gateways.html#describe-nat-gateways)
+
+```bash
+# 查看關聯 Elastic IP 和 NAT Gateway
+$ aws ec2 describe-nat-gateways \
+  --query "NatGateways[*].NatGatewayAddresses[*].PublicIp" \
+  --output text
+```
+
+#### [describe-route-tables](https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-route-tables.html#describe-route-tables)
+
+```bash
+$ aws ec2 describe-route-tables \
+  --query "RouteTables[*].{RouteTableId:RouteTableId, VpcId:VpcId, Name:Tags[?Key=='Name']|[0].Value}" \
+  --output table
+------------------------------------------
+|           DescribeRouteTables          |
++------+----------------+----------------+
+| Name | RouteTableId   |     VpcId      |
++------+----------------+----------------+
+|  None|  rtb-6d65f951  |  vpc-03c6677d  |
++------+----------------+----------------+
+
+$ aws ec2 describe-route-tables \
+  --filters Name=association.subnet-id,Values=subnet-018a98c18b970bc4e \
+  --query "RouteTables[*].{RouteTableId:RouteTableId}" \
+  --output table
+---------------------------
+|   DescribeRouteTables   |
++-------------------------+
+|      RouteTableId       |
++-------------------------+
+|  rtb-0406bdfcff54db84d  |
++-------------------------+
+```
+
+#### [describe-subnets](https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-subnets.html#describe-subnets)
+
+```bash
+$ aws ec2 describe-subnets \
+  --query "Subnets[*].{SubnetId:SubnetId, VpcId:VpcId, Cidr:CidrBlock, AZ:AvailabilityZone, Name:Tags[?Key=='Name']|[0].Value}" \
+  --output table
+-----------------------------------------------------------------------------
+|                              DescribeSubnets                              |
++------------+-----------------+-------+-------------------+----------------+
+|     AZ     |      Cidr       | Name  |     SubnetId      |     VpcId      |
++------------+-----------------+-------+-------------------+----------------+
+|  eu-west-1b|  172.31.0.0/20  |  None |  subnet-d64994b2  |  vpc-03c6677d  |
+|  eu-west-1c|  172.31.16.0/20 |  None |  subnet-f785c9be  |  vpc-03c6677d  |
+|  eu-west-1a|  172.31.32.0/20 |  None |  subnet-4694af1c  |  vpc-03c6677d  |
++------------+-----------------+-------+-------------------+----------------+
+
+$ aws ec2 describe-subnets \
+  --subnet-ids subnet-f785c9be \
+  --query 'Subnets[*].{SubnetId:SubnetId,AZ:AvailabilityZone}' \
+  --output table
+-----------------------------------
+|         DescribeSubnets         |
++-------------+-------------------+
+|     AZ      |     SubnetId      |
++-------------+-------------------+
+|  eu-west-1c |  subnet-f785c9be  |
++-------------+-------------------+
+
+$ aws ec2 describe-subnets \
+  --query 'Subnets[*].{SubnetId:SubnetId,AZ:AvailabilityZone}' \
+  --output table
+-----------------------------------
+|         DescribeSubnets         |
++-------------+-------------------+
+|     AZ      |     SubnetId      |
++-------------+-------------------+
+|  eu-west-1b |  subnet-d64994b2  |
+|  eu-west-1c |  subnet-f785c9be  |
+|  eu-west-1a |  subnet-4694af1c  |
++-------------+-------------------+
+```
+
+#### [describe-vpcs](https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-vpcs.html#describe-vpcs)
+
+> retrieves details about your VPCs
+
+```bash
+$ aws ec2 describe-vpcs
+
+# 只顯示每個 VPC 的 ID
+$ aws ec2 describe-vpcs --query "Vpcs[*].VpcId" --output text
+vpc-03c6677d
+
+$ aws ec2 describe-vpcs --output table
+```
+
+### 4.2.4. Amazon Machine Images (AMIs)
+
+#### [delete-snapshot](https://docs.aws.amazon.com/cli/latest/reference/redshift-serverless/delete-snapshot.html#delete-snapshot)
+
+> 刪除 Snapshot
+
+```bash
+$ aws ec2 delete-snapshot --snapshot-id snap-097d583faae36d438
+```
+
+#### [deregister-image](https://docs.aws.amazon.com/cli/latest/reference/ec2/deregister-image.html#deregister-image)
+
+> 取消註冊（刪除）AMI
+
+```bash
+$ aws ec2 deregister-image --image-id ami-003cd095fdcc37f52
+```
+
+#### [describe-images](https://docs.aws.amazon.com/cli/latest/reference/ecr/describe-images.html#describe-images)
+
+> 列出所有的 AMI
+
+```bash
+# 列出所有的 AMI
+$ aws ec2 describe-images --owners self --query 'Images[*].{ID:ImageId,Name:Name}' --output table
+------------------------------------------------------------------------------------------------------------
+|                                              DescribeImages                                              |
++-----------------------+----------------------------------------------------------------------------------+
+|          ID           |                                      Name                                        |
++-----------------------+----------------------------------------------------------------------------------+
+|  ami-003cd095fdcc37f52|  AWSSupport-CopyEC2Instance Source for i-0905ac3fa79fa5ebe_2025-05-09_03.27.41   |
++-----------------------+----------------------------------------------------------------------------------+
+
+# 查找與 AMI 相關聯的 Snapshots
+$ aws ec2 describe-images \
+  --image-ids ami-003cd095fdcc37f52 \
+  --query 'Images[0].BlockDeviceMappings[*].Ebs.SnapshotId'
+null
+```
+
+#### [describe-snapshots](https://docs.aws.amazon.com/cli/latest/reference/memorydb/describe-snapshots.html#describe-snapshots)
+
+> 列出所有的 Snapshot
+
+```bash
+$ aws ec2 describe-snapshots --owner-ids self --output table
+--------------------------------------------------------------------------------------------------------
+|                                           DescribeSnapshots                                          |
++------------------------------------------------------------------------------------------------------+
+||                                              Snapshots                                             ||
+|+--------------------------+-------------------------------------------------------------------------+|
+||  CompletionTime          |  2025-05-09T03:46:59.311000+00:00                                       ||
+||  Description             |  Created by CreateImage(i-0905ac3fa79fa5ebe) for ami-003cd095fdcc37f52  ||
+||  Encrypted               |  False                                                                  ||
+||  FullSnapshotSizeInBytes |  21474836480                                                            ||
+||  OwnerId                 |  877409152866                                                           ||
+||  Progress                |  100%                                                                   ||
+||  SnapshotId              |  snap-097d583faae36d438                                                 ||
+||  StartTime               |  2025-05-09T03:27:41.734000+00:00                                       ||
+||  State                   |  completed                                                              ||
+||  StorageTier             |  standard                                                               ||
+||  TransferType            |  standard                                                               ||
+||  VolumeId                |  vol-0029e17c2d26c90ec                                                  ||
+||  VolumeSize              |  20                                                                     ||
+|+--------------------------+-------------------------------------------------------------------------+|
+
+$ aws ec2 describe-snapshots \
+  --owner-ids self \
+  --query "Snapshots[*].{ID:SnapshotId,Size:VolumeSize,Time:StartTime}" \
+  --output table
+------------------------------------------------------------------------
+|                           DescribeSnapshots                          |
++-------------------------+-------+------------------------------------+
+|           ID            | Size  |               Time                 |
++-------------------------+-------+------------------------------------+
+|  snap-097d583faae36d438 |  20   |  2025-05-09T03:27:41.734000+00:00  |
++-------------------------+-------+------------------------------------+
+```
+
+### 4.2.5. ec2metadata xxx
 
 ```bash
 # please use ssh to link with ec2
@@ -1247,7 +1578,7 @@ $ aws s3 demo_000.c cp s3://utilx9/demo/demo_000.c
 
 #### [ls](https://docs.aws.amazon.com/cli/latest/reference/s3/ls.html)
 
->copies a single file to a specified bucket and key
+>lists all of the bucket owned by the user
 
 ```bash
 $ aws s3 ls
@@ -1700,6 +2031,14 @@ $ eval-it $DO_COMMAND
     "ContentType": "video/webm"
 }
 ```
+
+## 4.7. [VPC (Amazon Virtual Private Cloud)](https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html)
+
+### 4.1.1. [VPC dashboard](https://eu-west-1.console.aws.amazon.com/vpcconsole/home?region=eu-west-1#Home:)
+
+### 4.1.2. [aws ec2 xxx](https://docs.aws.amazon.com/zh_tw/cli/latest/userguide/cli-services-ec2.html)
+
+> 請參考 EC2
 
 # Appendix
 
