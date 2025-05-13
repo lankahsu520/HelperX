@@ -295,10 +295,11 @@ flowchart TB
 
 ```bash
 $ export AWS_ECS_ROLE=ecsTaskExecutionRole
+$ export AWS_ECS_ROLE_JSON=$AWS_ECS_ROLE.json
+$ export AWS_ECS_ROLE_POLICY_JSON=$AWS_ECS_ROLE_POLICY.json
 
-$ aws iam create-role \
-  --role-name $AWS_ECS_ROLE \
-  --assume-role-policy-document file://<(cat <<EOF
+# Create IAM role
+$	cat > "$AWS_ECS_ROLE_JSON" <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -312,12 +313,38 @@ $ aws iam create-role \
   ]
 }
 EOF
-)
 
-# 附加 AWS 預設的執行權限
+$ aws iam create-role \
+  --role-name $AWS_ECS_ROLE \
+  --assume-role-policy-document file://$AWS_ECS_ROLE_JSON
+
+# attach-role-policy - AmazonECSTaskExecutionRolePolicy
 $ aws iam attach-role-policy \
   --role-name $AWS_ECS_ROLE \
   --policy-arn arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+
+# put-role-policy - ecsCreateECSexec
+$ cat > "$AWS_ECS_ROLE_POLICY_JSON" <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "ssmmessages:*",
+        "ssm:UpdateInstanceInformation"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+
+$ aws iam put-role-policy \
+  --role-name $AWS_ECS_ROLE \
+  --policy-name ecsCreateECSexec \
+  --policy-document file://$AWS_ECS_ROLE_POLICY_JSON
 
 # 查詢 Role ARN
 $ export AWS_ECS_ROLE_ARN=`aws iam get-role --role-name $AWS_ECS_ROLE --query 'Role.Arn' --output text`
@@ -564,7 +591,9 @@ $ export AWS_VPC_SECURITY_GROUP=sg-03ae822762b0fe90f
 $ export AWS_ECS_SERVICE_NAME=hello-service
 $ export AWS_ECS_SERVICE_JSON=$AWS_ECS_SERVICE_NAME.json
 $ export AWS_ECS_SERVICE_RESPONSE_JSON=$AWS_ECS_SERVICE_NAME-response.json
-#$ export AWS_ECS_SERVICE_EXECUTE_COMMAND_ARG=--enable-execute-command
+$ export AWS_ECS_SERVICE_EXECUTE_COMMAND=true
+$ export AWS_ECS_SERVICE_PUBLIC_IP=ENABLED
+#$ export AWS_ECS_SERVICE_PUBLIC_IP=DISABLED
 
 $ cat > "$AWS_ECS_SERVICE_JSON" <<EOF
 {
@@ -778,6 +807,30 @@ $ aws ecs execute-command --cluster $AWS_ECS_CLUSTER \
 > http://34.244.233.173
 
 <img src="./images/amazon_ecs41.png" alt="amazon_ecs41" style="zoom:50%;" />
+
+# 6. [Networking](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/networking-outbound.html)
+
+## 6.1. Public subnet and internet gateway
+
+> 這邊的設定比較簡單
+
+![](https://docs.aws.amazon.com/images/AmazonECS/latest/developerguide/images/public-network.png)
+
+> 這邊的設定比較簡單，只要有 public subnet 就可以了
+
+## 6.2. Private subnet and NAT gateway
+
+![](https://docs.aws.amazon.com/images/AmazonECS/latest/developerguide/images/private-network.png)
+
+> 請參考 [helper_AmazonEC2.md](https://github.com/lankahsu520/HelperX/blob/master/helper_AmazonEC2.md) 進行相關的設定。 
+
+```bash
+# 設定成 private subnet
+export AWS_VPC_SUBNET_ID=subnet-018a98c18b970bc4e
+
+# 關閉 assignPublicIp
+export AWS_ECS_SERVICE_PUBLIC_IP=DISABLED
+```
 
 # Appendix
 

@@ -16,9 +16,12 @@ export AWS_DOCKER_IMAGE_NAME=hello-world
 export AWS_ECS_CLUSTER=hello-cluster
 export AWS_ECS_ROLE=ecsTaskExecutionRole
 export AWS_ECS_ROLE_ARN=
+export AWS_ECS_ROLE_JSON=$AWS_ECS_ROLE.json
+export AWS_ECS_ROLE_POLICY_JSON=$AWS_ECS_ROLE_POLICY.json
 
 export AWS_TASK_DEFINITION_JSON=hello-task-definition.json
 export AWS_TASK_DEFINITION_ARN_TXT=hello-task-definition-arn.txt
+export AWS_TASK_DEFINITION_ARN=
 export AWS_TASK_DEFINITION_FAMILY=sample-fargate-v2
 
 export AWS_TASK_DEFINITION_HOST_PORT=80
@@ -29,15 +32,19 @@ export AWS_TASK_DEFINITION_PROTOCOL=tcp
 export AWS_TASK_DEFINITION_CPU=256
 export AWS_TASK_DEFINITION_MEMORY=512
 
-export AWS_VPC_SUBNET=subnet-f525c9be
+# use public subnet
+#export AWS_VPC_SUBNET_ID=subnet-f525c9be
+# use private subnet
+export AWS_VPC_SUBNET_ID=subnet-018a98c18b970bc4e
 export AWS_VPC_SECURITY_GROUP=sg-0479b628c3f87df12
-
 
 export AWS_ECS_SERVICE_NAME=hello-service
 export AWS_ECS_SERVICE_JSON=$AWS_ECS_SERVICE_NAME.json
 export AWS_ECS_SERVICE_RESPONSE_JSON=$AWS_ECS_SERVICE_NAME-response.json
 #export AWS_ECS_SERVICE_EXECUTE_COMMAND=false
 export AWS_ECS_SERVICE_EXECUTE_COMMAND=true
+#export AWS_ECS_SERVICE_PUBLIC_IP=ENABLED
+export AWS_ECS_SERVICE_PUBLIC_IP=DISABLED
 
 export AWS_LOG_DRIVER=awslogs
 export AWS_LOG_GROUP=awslogs-wordpress
@@ -52,7 +59,6 @@ die_fn()
 	echo "$@"
 	exit 1
 }
-
 
 #*******************************************************************************
 #** Amazon Elastic Container Registry **
@@ -81,10 +87,7 @@ ECR_create_fn()
 #*******************************************************************************
 IAM_create_fn()
 {
-	# Create IAM role
-	aws iam create-role \
-  --role-name $AWS_ECS_ROLE \
-  --assume-role-policy-document file://<(cat <<EOF
+	cat > "$AWS_ECS_ROLE_JSON" <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -98,7 +101,11 @@ IAM_create_fn()
   ]
 }
 EOF
-)
+
+	# Create IAM role
+	aws iam create-role \
+  --role-name $AWS_ECS_ROLE \
+  --assume-role-policy-document file://$AWS_ECS_ROLE_JSON
 
 	# attach-role-policy - AmazonECSTaskExecutionRolePolicy
 	aws iam attach-role-policy \
@@ -106,10 +113,7 @@ EOF
   --policy-arn arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
 
 	# put-role-policy - ecsCreateECSexec
-	aws iam put-role-policy \
-  --role-name $AWS_ECS_ROLE \
-  --policy-name ecsCreateECSexec \
-  --policy-document file://<(cat <<EOF
+	cat > "$AWS_ECS_ROLE_POLICY_JSON" <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -125,8 +129,11 @@ EOF
   ]
 }
 EOF
-)
 
+	aws iam put-role-policy \
+  --role-name $AWS_ECS_ROLE \
+  --policy-name ecsCreateECSexec \
+  --policy-document file://$AWS_ECS_ROLE_POLICY_JSON
 }
 
 IAM_ROLE_ARN_fn()
@@ -210,12 +217,12 @@ ECS_SERVICE_create_fn()
   "networkConfiguration": {
       "awsvpcConfiguration": {
           "subnets": [
-              "$AWS_VPC_SUBNET"
+              "$AWS_VPC_SUBNET_ID"
           ],
           "securityGroups": [
               "$AWS_VPC_SECURITY_GROUP"
           ],
-          "assignPublicIp": "ENABLED"
+          "assignPublicIp": "$AWS_ECS_SERVICE_PUBLIC_IP"
       }
   },
   "enableExecuteCommand": $AWS_ECS_SERVICE_EXECUTE_COMMAND
@@ -296,7 +303,7 @@ showusage_fn()
 main_fn()
 {
 	case $ACTION in
-		creeate)
+		create)
 			create_fn
 		;;
 		execute)
