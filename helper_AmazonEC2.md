@@ -242,10 +242,9 @@ $ aws ec2-instance-connect ssh \
 
 ## 4.2. Data Transfer
 
-> 針對網路使用進行試算，美金計價。
+> 針對網路使用進行試算，美金計價。因為資料傳輸都是對外才收錢，所以著重在 Internet 上。
 >
-> 因為大部分都是對外才收錢，所以著重在 Internet 上。
->
+> 各位可以至 [cost-IPv4andNAT-GW.xlsx](https://github.com/lankahsu520/HelperX/blob/master/AWS/cost-IPv4andNAT-GW.xlsx) 進行變更。
 
 > [AWS Public IPv4 收費機制與費用優化策略](https://aws.amazon.com/tw/events/taiwan/techblogs/aws-public-ipv4-address-charge/): Public IPv4
 >
