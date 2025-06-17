@@ -81,6 +81,47 @@ flowchart LR
 >
 > 但是使用固定 IP 的情狀下，就得跟 ISP 申請 + 更動終端使用者的 Router。
 
+# 4. Service Discovery
+
+> 此章節利用 ChatGPT 進行整理
+
+## 4.1. Protocol
+
+> 以下是常用的協定，用於瀏覽和解析在區域網中註冊的任何系統或服務。大家不要再自己刻了。
+
+> `224.0.0.X` 和 `FF02::/16` 都屬於「**本地鏈路多播**（Link-local Multicast）」，不會被路由器轉發。
+
+> Wireshark 解析，filrer
+>
+> ip.dst == 239.255.255.250 or ip.dst == 224.0.0.251 or ip.dst == 224.0.0.252
+>
+> ipv6.dst == ff02::c or ipv6.dst == ff02::fb or ipv6.dst == ff02::1:3
+
+| 協定名稱                                           | 傳輸層 | Multicast/Broadcast IP     | 通訊埠 | 用途／常見設備                    |
+| -------------------------------------------------- | ------ | -------------------------- | ------ | --------------------------------- |
+| **SSDP**<br>Simple Service Discovery               | UDP    | 239.255.255.250, FF02::C   | 1900   | UPnP（智慧電視、NAS、路由器）     |
+| **WS-Discovery**<br>Web Services Dynamic Discovery | UDP    | 239.255.255.250, FF02::C   | 3702   | Windows 裝置、影印機、IP CAM、IoT |
+|                                                    |        |                            |        |                                   |
+| **mDNS**<br>Multicast DNS                          | UDP    | 224.0.0.251, FF02::FB      | 5353   | Bonjour（Apple 裝置、Linux 系統） |
+| **Avahi (Linux mDNS)**<br>Linux 的 mDNS 實作       | UDP    | 224.0.0.251, FF02::FB      | 5353   | Linux、Raspberry Pi、IoT          |
+|                                                    |        |                            |        |                                   |
+| **LLMNR**<br>Link-Local Multicast Name Res.        | UDP    | 224.0.0.252, FF02::1:3     | 5355   | Windows 裝置名稱解析              |
+| **NetBIOS**<br>NetBIOS Name Service                | UDP    | 224.0.0.1                  | 137    | Windows SMB 檔案分享發現          |
+|                                                    |        |                            |        |                                   |
+| **DHCP Discover**<br>DHCP 發現封包                 | UDP    | 255.255.255.255            | 67,68  | 設備開機找 DHCP server            |
+| **NBNS**<br>NetBIOS Name Service                   | UDP    | 255.255.255.255, 224.0.0.1 | 137    | 舊式 Windows 名稱廣播             |
+
+## 4.2. Use Case
+
+| 應用情境             | 協定                           |
+| -------------------- | ------------------------------ |
+| Apple 裝置發現       | mDNS（Bonjour）                |
+| Windows 網芳         | NetBIOS, LLMNR, WS-Discovery   |
+| Linux IoT / Zeroconf | Avahi, mDNS                    |
+| Printer 發現         | WS-Discovery, mDNS, SNMP       |
+| 家用路由器廣播       | SSDP + mDNS                    |
+| 工控設備（PLC, HMI） | WS-Discovery, PROFINET, OPC UA |
+
 # Footnote
 
 [^1]:
