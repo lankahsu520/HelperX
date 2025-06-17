@@ -127,6 +127,9 @@ rsync -av --progress --delete --exclude lost+found --exclude recycle /work/* /wo
 
 ```bash
 scp -vr /work/* lanka@192.168.0.99:/work
+
+# use keypair
+scp -i KeyPair.pem ubuntu@192.168.0.99:/work/snap-debug-info.sh ./
 ```
 
 ```bash
@@ -557,9 +560,19 @@ ps -aux
 ps -aux | grep helloworld | grep -v grep
 
 ps aux --sort -%cpu
+```
 
-ps -p `pidof curl` -o pid,%mem,%cpu,vsz,cmd
-ps -p 495220 -o pid,%mem,%cpu,vsz,cmd
+> `rss`：實際佔用的記憶體（KB）
+>
+> `vsz`：虛擬記憶體使用量（KB）
+
+```bash
+$ ps -p `pidof curl` -o pid,comm,%mem,rss,vsz
+$ PS_PID=3138594
+$ ps -p $PS_PID -o pid,comm,%mem,rss,vsz; cat /proc/$PS_PID/status | grep VmSwap
+    PID COMMAND         %MEM   RSS    VSZ
+3138594 baresip          0.8 34136 864944
+VmSwap:      956 kB
 ```
 
 ```bash
@@ -1653,6 +1666,18 @@ $ ip link show
 $ ip link show enp0s3
 ```
 
+#### nc - arbitrary TCP and UDP connections and listens
+
+> client and server
+
+```bash
+# server
+$ nc -l -p 12345
+
+# client
+$ nc 127.0.0.1 12345
+```
+
 #### nslookup - query Internet name servers interactively
 
 ```bash
@@ -1676,6 +1701,13 @@ route del default gw 192.168.0.1 dev ra0
 
 route add -net 192.168.0.0 netmask 255.255.255.0 ra0
 route del -net 192.168.0.0 netmask 255.255.255.0 ra0
+```
+
+#### socat - Multipurpose relay (SOcket CAT)
+
+```bash
+# a TCP server, echo mode
+$ socat TCP-LISTEN:12345,fork EXEC:/bin/cat
 ```
 
 #### umount - unmount file systems
