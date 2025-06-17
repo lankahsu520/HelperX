@@ -30,9 +30,9 @@ export AWS_TASK_DEFINITION_CPU=256
 export AWS_TASK_DEFINITION_MEMORY=512
 
 # use public subnet
-#export AWS_VPC_SUBNET_ID=subnet-f525c9be
+export AWS_VPC_SUBNET_ID=subnet-f525c9be
 # use private subnet
-export AWS_VPC_SUBNET_ID=subnet-018a98c18b970bc4e
+#export AWS_VPC_SUBNET_ID=subnet-018a98c18b970bc4e
 export AWS_VPC_SECURITY_GROUP=sg-0479b628c3f87df12
 
 export AWS_ECS_SERVICE_NAME=hello-service
@@ -42,6 +42,7 @@ export AWS_ECS_SERVICE_RESPONSE_JSON=$AWS_ECS_SERVICE_NAME-response.json
 export AWS_ECS_SERVICE_EXECUTE_COMMAND=true
 #export AWS_ECS_SERVICE_PUBLIC_IP=ENABLED
 export AWS_ECS_SERVICE_PUBLIC_IP=DISABLED
+export AWS_ECS_SERVICE_DESIRED_COUNT=1
 
 export AWS_LOG_DRIVER=awslogs
 export AWS_LOG_GROUP=awslogs-wordpress

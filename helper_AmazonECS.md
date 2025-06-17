@@ -110,18 +110,17 @@ flowchart LR
 
 ## 3.2. Create a Docker Image with Dockerfile
 
+### 3.2.1. Create a Docker image
+
 ```bash
 $ export AWS_DOCKER_IMAGE_NAME=hello-world
 
 $ docker build -t $AWS_DOCKER_IMAGE_NAME .
-$ docker images --filter reference=hello-world
+
+# check
+$ docker images --filter reference=$AWS_DOCKER_IMAGE_NAME
 REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
 hello-world   latest    64d4dc0afe03   2 minutes ago   301MB
-
-
-$ docker run -t -i -p 8888:80 hello-world
-
-# open browser http://localhost:8888
 ```
 
 #### A. Dockerfile
@@ -150,6 +149,25 @@ CMD /root/run_apache.sh
 #### B. Dockerfile with supervisord
 
 > 請參考 [helper_Docker.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Docker.md)  [8.2. supervisord](https://github.com/lankahsu520/HelperX/blob/master/helper_Docker.md#82-supervisord)
+
+### 3.2.2. Testing
+
+```mermaid
+flowchart TB
+	subgraph Host[Host - Ubuntu]
+		subgraph Container[Container - hello-world]
+
+		end
+		browser <--> Container
+	end
+```
+
+```bash
+# run
+$ docker run -t -i -p 8888:80 $AWS_DOCKER_IMAGE_NAME
+
+# open browser http://localhost:8888
+```
 
 ## 3.3. Create a repository
 
@@ -585,7 +603,7 @@ $ aws ecs deregister-task-definition --task-definition $AWS_TASK_DEFINITION_ARN
 ##### A.1. create-service
 
 ```bash
-$ export AWS_VPC_SUBNET=subnet-f525c9be
+$ export AWS_VPC_SUBNET_ID=subnet-f525c9be
 $ export AWS_VPC_SECURITY_GROUP=sg-03ae822762b0fe90f
 
 $ export AWS_ECS_SERVICE_NAME=hello-service
@@ -594,6 +612,7 @@ $ export AWS_ECS_SERVICE_RESPONSE_JSON=$AWS_ECS_SERVICE_NAME-response.json
 $ export AWS_ECS_SERVICE_EXECUTE_COMMAND=true
 $ export AWS_ECS_SERVICE_PUBLIC_IP=ENABLED
 #$ export AWS_ECS_SERVICE_PUBLIC_IP=DISABLED
+$ export AWS_ECS_SERVICE_DESIRED_COUNT=1
 
 $ cat > "$AWS_ECS_SERVICE_JSON" <<EOF
 {
@@ -602,13 +621,13 @@ $ cat > "$AWS_ECS_SERVICE_JSON" <<EOF
     "taskDefinition": "$AWS_TASK_DEFINITION_ARN",
     "loadBalancers": [
     ],
-    "desiredCount": 1,
+    "desiredCount": $AWS_ECS_SERVICE_DESIRED_COUNT,
     "launchType": "FARGATE",
     "platformVersion": "LATEST",
     "networkConfiguration": {
         "awsvpcConfiguration": {
             "subnets": [
-                "$AWS_VPC_SUBNET"
+                "$AWS_VPC_SUBNET_ID"
             ],
             "securityGroups": [
                 "$AWS_VPC_SECURITY_GROUP"
