@@ -568,6 +568,7 @@ context=default
 disallow=all
 ; Media Codec s to allow (default: "")
 allow=ulaw
+allow=h264
 ; DTMF mode (default: "rfc4733")
 dtmf_mode=inband
 ; Force use of return port (default: "yes")
@@ -607,6 +608,7 @@ transport=transport-tcp
 context=default
 disallow=all
 allow=ulaw
+allow=h264
 
 [3002_auth]
 type=auth
@@ -627,6 +629,7 @@ transport=transport-tcp
 context=default
 disallow=all
 allow=ulaw
+allow=h264
 
 [3009_auth]
 type=auth
@@ -646,6 +649,7 @@ transport=transport-tcp
 context=default
 disallow=all
 allow=ulaw
+allow=h264
 
 [SIP1]
 ; Maps a host directly to an endpoint
@@ -677,7 +681,8 @@ writeprotect=no
 clearglobalvars=no
 
 [default]
-exten => _30XX,1,Dial(PJSIP/${EXTEN},12,tT)
+;exten => _30XX,1,Dial(PJSIP/${EXTEN},12,tT)
+exten => _30XX,1,Dial(${PJSIP_DIAL_CONTACTS(${EXTEN})},12,tT) ; dial all contacts
 exten => _30XX,n,Answer()
 exten => _30XX,n,SayDigits(${EXTEN})
 exten => _30XX,n,Playback(invalid)
@@ -735,7 +740,7 @@ flowchart LR
 | --------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | extensions.conf | [default]<br/>exten => _10XX,1,Dial(SIP/${EXTEN},60,tT)<br/>exten => _30XX,1,Dial(SIP/${EXTEN}@192.168.50.52) | C.1.                                                         |
 | sip.conf        | A.1.                                                         | No chanage                                                   |
-| pjsip.conf      | No chanage                                                   | [SIP1]<br/>type=endpoint<br/>aors=SIP1<br/>transport=transport-tcp<br/>context=default<br/>disallow=all<br/>allow=ulaw<br/><br/>[SIP1]<br/>; Maps a host directly to an endpoint<br/>type=identify<br/>endpoint=SIP1<br/>match=192.168.50.9<br/>;match=192.168.50.206, 192.168.50.55 |
+| pjsip.conf      | No chanage                                                   | [SIP1]<br/>type=endpoint<br/>aors=SIP1<br/>transport=transport-tcp<br/>context=default<br/>disallow=all<br/>allow=ulaw<br/>allow=h264<br><br/>[SIP1]<br/>; Maps a host directly to an endpoint<br/>type=identify<br/>endpoint=SIP1<br/>match=192.168.50.9<br/>;match=192.168.50.206, 192.168.50.55 |
 
 ##### D.2. Dial ${EXTEN}@${DEST_IP} with Set(DEST_IP=192.168.50.52)
 
@@ -834,6 +839,7 @@ context=default
 disallow=all
 ; Media Codec s to allow (default: "")
 allow=ulaw
+allow=h264
 ; DTMF mode (default: "rfc4733")
 dtmf_mode=inband
 ; Force use of return port (default: "yes")
@@ -873,6 +879,7 @@ transport=transport-udp
 context=default
 disallow=all
 allow=ulaw
+allow=h264
 
 [1002_auth]
 type=auth
@@ -893,6 +900,7 @@ transport=transport-udp
 context=default
 disallow=all
 allow=ulaw
+allow=h264
 
 [1009_auth]
 type=auth
@@ -913,6 +921,7 @@ transport=transport-udp
 context=default
 disallow=all
 allow=ulaw
+allow=h264
 
 [SIP3]
 ; Maps a host directly to an endpoint
@@ -969,6 +978,7 @@ context=default
 disallow=all
 ; Media Codec s to allow (default: "")
 allow=ulaw
+allow=h264
 ; DTMF mode (default: "rfc4733")
 dtmf_mode=inband
 ; Force use of return port (default: "yes")
@@ -1008,6 +1018,7 @@ transport=transport-udp
 context=default
 disallow=all
 allow=ulaw
+allow=h264
 
 [3002_auth]
 type=auth
@@ -1028,6 +1039,7 @@ transport=transport-udp
 context=default
 disallow=all
 allow=ulaw
+allow=h264
 
 [3009_auth]
 type=auth
@@ -1082,7 +1094,8 @@ writeprotect=no
 clearglobalvars=no
 
 [default]
-exten => _10XX,1,Dial(PJSIP/${EXTEN},12,tT)
+;exten => _10XX,1,Dial(PJSIP/${EXTEN},12,tT)
+exten => _10XX,1,Dial(${PJSIP_DIAL_CONTACTS(${EXTEN})},12,tT) ; dial all contacts
 exten => _10XX,n,Answer()
 exten => _10XX,n,SayDigits(${EXTEN})
 exten => _10XX,n,Playback(invalid)
@@ -1107,7 +1120,8 @@ writeprotect=no
 clearglobalvars=no
 
 [default]
-exten => _30XX,1,Dial(PJSIP/${EXTEN},12,tT)
+;exten => _30XX,1,Dial(PJSIP/${EXTEN},12,tT)
+exten => _30XX,1,Dial(${PJSIP_DIAL_CONTACTS(${EXTEN})},12,tT) ; dial all contacts
 exten => _30XX,n,Answer()
 exten => _30XX,n,SayDigits(${EXTEN})
 exten => _30XX,n,Playback(invalid)
@@ -1178,6 +1192,11 @@ pjsip show contacts
 pjsip show channels
 
 database deltree registrar/contact
+
+
+pjsip show aor 1001
+
+pjsip delete contact
 ```
 
 ## ~~2.3. [FreeSWITCH-1.10.6-Release-x64.msi](https://files.freeswitch.org/windows/installer/x64/FreeSWITCH-1.10.6-Release-x64.msi)~~
