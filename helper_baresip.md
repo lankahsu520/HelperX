@@ -21,7 +21,9 @@
 
 > Baresip is a portable and modular SIP User-Agent with audio and video support. 
 
-> 體會過 baresip 後，覺得在編譯和修改非常容易上手。縱觀其它 sip client(s)，不只編譯困難，引用的 open source 過多過舊，甚至已沒有維護，更重要的就是連怎麼執行都不交待，
+> 體會過 baresip 後，覺得在編譯和修改非常容易上手。縱觀其它 sip client(s)，不只編譯困難，引用的 open source 過多過舊，甚至已沒有維護，更重要的就是連怎麼執行都不交待。當然 baresip 在文件交待上也是欠缺，但是程式的布局比較好理解。不過要注意的，Baresip 引用了 [baresip](https://github.com/baresip)/**[re](https://github.com/baresip/re)** 和 [baresip](https://github.com/baresip)/**[rem](https://github.com/baresip/rem)**，有時要 trace code 進到這 2個 libs 或是還要進行修改。
+>
+> 另外 baresip 用 plugin 的方式載功能，這個讓人很想學習。
 
 ```mermaid
 flowchart LR
@@ -35,69 +37,75 @@ flowchart LR
 	linphone <--> SServers
 ```
 
-# 2. STATE 
-## 2.1. CALL_STATE_INCOMING
+# 2. SIP Sequence
+
+## 2.1. REGISTER
 ```mermaid
-flowchart LR
-	ua_init --> sip_alloc --> sip_listen --> sipsess_listen --> sipevent_listen
-		sip_alloc ..-> exit_handler
-		sip_listen ..-> request_handler
-		sipsess_listen ..-> sipsess_conn_handler
-		sipevent_listen ..-> sub_handler
+sequenceDiagram
+	participant phone
+	participant server
+	participant baresip
+
+	phone->>server: Register
+	server->>phone: OK
+	baresip->>server: Register
+	server->>baresip: OK
 ```
-```mermaid
-flowchart TD
-	sipsess_conn_handler --> |1|ua_call_alloc --> call_alloc --> call_streams_alloc
-		call_streams_alloc --> |1-2|video_alloc --> stream_alloc
-			stream_alloc ..-> stream_recv_handler
-			stream_alloc --> stream_sock_alloc --> rtp_listen ..-> rtp_handler
-		call_streams_alloc --> |1-1|audio_alloc --> stream_alloc
-	sipsess_conn_handler --> |2|call_accept --> |2-1|sdp_decode
-		call_accept --> |2-2|sipsess_accept
-			sipsess_accept ..-> auth_handler
-			sipsess_accept ..-> sipsess_offer_handler
-			sipsess_accept ..-> sipsess_answer_handler
-			sipsess_accept ..-> sipsess_estab_handler
-			sipsess_accept ..-> sipsess_info_handler
-			sipsess_accept ..-> sipsess_refer_handler
-			sipsess_accept ..-> sipsess_close_handler
-		call_accept --> |2-3|set_state[set_state/CALL_STATE_INCOMING]
-		call_accept --> |2-4, CALL_EVENT_INCOMING|call_event_handler
-	sipsess_desc_handler ..-o call_streams_alloc
-```
+## 2.2. INCOMING
 
 ```mermaid
-flowchart LR
-	rtp_handler --o handle_rtp --> |rtph|stream_recv_handler
-		stream_recv_handler --> video_stream_decode
-		stream_recv_handler --> aurx_stream_decode
-	rtp_handler --> |jbtype == JBUF_FIXED|stream_decode -->handle_rtp
-	audio_decode --o stream_decode
-```
+sequenceDiagram
+	participant phone
+	participant server
+	participant baresip
 
-## 2.2. CALL_STATE_ESTABLISHED
+	phone->>server: INVITE
+	server->>phone: Trying
+	server->>baresip: INVITE
 
-```mermaid
-flowchart LR
-	answer_call --> ua_answer --> call_answer --> update_media
-		update_media --> |1|stream_update
-		update_media --> |2|update_audio 
-			update_audio --> |2-1|audio_decoder_set --> audio_start --> start_player --> auplay_alloc
-			update_audio --> |2-2|audio_encoder_set --> audio_start
-		update_media --> |3| video_update
-			video_update --> |3-1|video_encoder_set
-			video_update --> |3-2|video_decoder_set
+	baresip->>server: Ringing
+	server->>phone: Ringing
+
+	baresip->>server: Answering
+	server->>baresip: ACK
+
+	server->>phone: OK
+	phone->>server: ACK
 
 ```
 
-```mermaid
-flowchart LR
+## 2.3. BYE
 
-sipsess_estab_handler --> call_stream_start
-	call_stream_start --> |1|start_audio
-		start_audio --> |1-1|audio_decoder_set
-		start_audio --> |1-2|audio_start
-	call_stream_start --> |2|video_update
+```mermaid
+sequenceDiagram
+	participant phone
+	participant server
+	participant baresip
+
+	baresip->>server: BYE
+	server->>baresip: OK
+	server->>phone: BYE
+	phone->>server: OK
+```
+
+## 2.4. OUTGOING
+
+```mermaid
+sequenceDiagram
+	participant phone
+	participant server
+	participant baresip
+
+	baresip->>server: INVITE
+	server->>baresip: Trying
+	server->>phone: INVITE
+	phone->>server: Trying
+	phone->>server: Ringing
+	server->>baresip: Ringing
+	phone->>server: OK
+	server->>phone: ACK
+	server->>baresip: OK
+	baresip->>server: ACK
 ```
 
 # 3. video
@@ -1109,69 +1117,105 @@ int audio_set_source(struct audio *au, const char *mod, const char *device)
 }
 ```
 
-# 5. modules
+# 5. Trace code
 
-> baresip 使用 plugin 的方式相當的淋漓盡致，這部分還有待學習。
+## 5.1. STATE
 
-## 5.1. stdio.so
+> github: [baresip](https://github.com/baresip/baresip/tree/main)/[include](https://github.com/baresip/baresip/tree/main/include)/[baresip.h](https://github.com/baresip/baresip/blob/main/include/baresip.h)
 
-> 從 STDIN_FILENO 等待按鍵按下；當按鍵觸發後的流程，大致如下。另外常用傳送命令的 cons.so (Console input driver) 和 ctrl_dbus.so (DBus control interface)
+```c
+/** Call States */
+enum call_state {
+	CALL_STATE_IDLE = 0,
+	CALL_STATE_INCOMING,
+	CALL_STATE_OUTGOING,
+	CALL_STATE_RINGING,
+	CALL_STATE_EARLY,
+	CALL_STATE_ESTABLISHED,
+	CALL_STATE_TERMINATED,
+	CALL_STATE_TRANSFER,
+	CALL_STATE_UNKNOWN
+};
+```
 
-> 這邊要注意 stdio 和 cons 有處理 KEYCODE_REL
+### 5.1.1. CALL_STATE_INCOMING
 
 ```mermaid
 flowchart LR
-	subgraph cmd[cmd.c]
-		cmd_process
-		cmd_process_long
-	end
-
-	subgraph ui[ui.c]
-		ui_input_key
-		ui_input_long_command
-	end
-	ui_input_key --> cmd_process
-	ui_input_long_command --> cmd_process_long
-
-	subgraph stdio[stdio.c]
-		ui_fd_handler
-		report_key
-		stdio-timeout[timeout]
-		
-		ui_fd_handler-->report_key
-		ui_fd_handler ..-> |250ms, KEYCODE_REL|stdio-timeout --> report_key
-	end
-	STDIN_FILENO ..-> ui_fd_handler
-	report_key --> ui_input_key
-
-	subgraph cons[cons.c]
-		udp_recv
-		cons-timeout[timeout]
-	end
-	udp_recv --> ui_input_key
-	cons-timeout --> ui_input_key
-
-	subgraph ctrl_dbus[ctrl_dbus.c]
-		command_handler
-	end
-	command_handler --> cmd_process
-	command_handler --> cmd_process_long
+	ua_init --> sip_alloc --> sip_listen --> sipsess_listen --> sipevent_listen
+		sip_alloc ..-> exit_handler
+		sip_listen ..-> request_handler
+		sipsess_listen ..-> sipsess_conn_handler
+		sipevent_listen ..-> sub_handler
 ```
 
-# 6. Others
+```mermaid
+flowchart TD
+	sipsess_conn_handler --> |1|ua_call_alloc --> call_alloc --> call_streams_alloc
+		call_streams_alloc --> |1-2|video_alloc --> stream_alloc
+			stream_alloc ..-> stream_recv_handler
+			stream_alloc --> stream_sock_alloc --> rtp_listen ..-> rtp_handler
+		call_streams_alloc --> |1-1|audio_alloc --> stream_alloc
+	sipsess_conn_handler --> |2|call_accept --> |2-1|sdp_decode
+		call_accept --> |2-2|sipsess_accept
+			sipsess_accept ..-> auth_handler
+			sipsess_accept ..-> sipsess_offer_handler
+			sipsess_accept ..-> sipsess_answer_handler
+			sipsess_accept ..-> sipsess_estab_handler
+			sipsess_accept ..-> sipsess_info_handler
+			sipsess_accept ..-> sipsess_refer_handler
+			sipsess_accept ..-> sipsess_close_handler
+		call_accept --> |2-3|set_state[set_state/CALL_STATE_INCOMING]
+		call_accept --> |2-4, CALL_EVENT_INCOMING|call_event_handler
+	sipsess_desc_handler ..-o call_streams_alloc
+```
 
-## 6.1. parse usage
+```mermaid
+flowchart LR
+	rtp_handler --o handle_rtp --> |rtph|stream_recv_handler
+		stream_recv_handler --> video_stream_decode
+		stream_recv_handler --> aurx_stream_decode
+	rtp_handler --> |jbtype == JBUF_FIXED|stream_decode -->handle_rtp
+	audio_decode --o stream_decode
+```
 
-> src/[main.c](https://github.com/baresip/baresip/blob/main/src/main.c)
-> 參數的進入點
->
-> |      | Help             | Variables                        |
-> | ---- | ---------------- | -------------------------------- |
-> | -f   | Config path      | conf_path_set(optarg);           |
-> | -s   | Enable SIP trace | sip_trace = true;<br>sip->traceh |
-> | -v   | Verbose debug    | log_enable_debug(true);          |
+### 5.1.2. CALL_STATE_ESTABLISHED
+
+```mermaid
+flowchart LR
+	answer_call --> ua_answer --> call_answer --> update_media
+		update_media --> |1|stream_update
+		update_media --> |2|update_audio 
+			update_audio --> |2-1|audio_decoder_set --> audio_start --> start_player --> auplay_alloc
+			update_audio --> |2-2|audio_encoder_set --> audio_start
+		update_media --> |3| video_update
+			video_update --> |3-1|video_encoder_set
+			video_update --> |3-2|video_decoder_set
+
+```
+
+```mermaid
+flowchart LR
+
+sipsess_estab_handler --> call_stream_start
+	call_stream_start --> |1|start_audio
+		start_audio --> |1-1|audio_decoder_set
+		start_audio --> |1-2|audio_start
+	call_stream_start --> |2|video_update
+```
+
+## 5.2. main (usage)
+
+> github: [baresip](https://github.com/baresip/baresip/tree/main)/[src](https://github.com/baresip/baresip/tree/main/src)/[main.c](https://github.com/baresip/baresip/blob/main/src/main.c)
+
+|      | Help             | Variables                        |
+| ---- | ---------------- | -------------------------------- |
+| -f   | Config path      | conf_path_set(optarg);           |
+| -s   | Enable SIP trace | sip_trace = true;<br>sip->traceh |
+| -v   | Verbose debug    | log_enable_debug(true);          |
 
 ```bash
+// baresip/src/main.c
 static void usage(void)
 {
 	(void)re_fprintf(stderr,
@@ -1197,11 +1241,51 @@ static void usage(void)
 }
 ```
 
-## 6.2. mb Memory buffer
+## 5.3. struct XXX
+
+### 5.3.1. Linked List (struct list)
+
+> github: [re](https://github.com/baresip/re/tree/main)/[src](https://github.com/baresip/re/tree/main/src)/[list](https://github.com/baresip/re/tree/main/src/list)/[list.c](https://github.com/baresip/re/blob/main/src/list/list.c)
+>
+> github: [re](https://github.com/baresip/re/tree/main)/[include](https://github.com/baresip/re/tree/main/include)/[re_list.h](https://github.com/baresip/re/blob/main/include/re_list.h)
+
+```c
+// re/include/re_list.h
+/** Defines a linked list */
+struct list {
+	struct le *head;  /**< First list element */
+	struct le *tail;  /**< Last list element  */
+	size_t cnt;       /**< Number of elements */
+};
+```
+
+### 5.3.2. Interface to memory buffers (struct mbuf)
 
 > github: [re](https://github.com/baresip/re/tree/main)/[include](https://github.com/baresip/re/tree/main/include)/[re_mbuf.h](https://github.com/baresip/re/blob/main/include/re_mbuf.h)
 
-### 6.2.1. Get the buffer from the current position
+```c
+// re/include/re_mbuf.h
+/**
+ * Defines a memory buffer.
+ *
+ * This is a dynamic and linear buffer for storing raw bytes.
+ * It is designed for network protocols, and supports automatic
+ * resizing of the buffer.
+ *
+ * - Writing to the buffer
+ * - Reading from the buffer
+ * - Automatic growing of buffer size
+ * - Print function for formatting printing
+ */
+struct mbuf {
+	uint8_t *buf;   /**< Buffer memory      */
+	size_t size;    /**< Size of buffer     */
+	size_t pos;     /**< Position in buffer */
+	size_t end;     /**< End of buffer      */
+};
+```
+
+#### A. Get the buffer from the current position
 
 ```c
 /**
@@ -1219,9 +1303,112 @@ static inline uint8_t *mbuf_buf(const struct mbuf *mb)
 char *buf = mbuf_buf(msg->mb);
 ```
 
-## 6.3. SIP headers
+### 5.3.3. SIP Call Control object (struct call)
 
-### 6.3.1. custom SIP headers (Send)
+> github: [baresip](https://github.com/baresip/baresip/tree/main)/[src](https://github.com/baresip/baresip/tree/main/src)/[call.c](https://github.com/baresip/baresip/blob/main/src/call.c)
+
+> call->peer_uri: sip:1007@192.168.50.9
+
+```c
+/** SIP Call Control object */
+struct call {
+	MAGIC_DECL                /**< Magic number for debugging           */
+	struct le le;             /**< Linked list element                  */
+	const struct config *cfg; /**< Global configuration                 */
+	struct ua *ua;            /**< SIP User-agent                       */
+	struct account *acc;      /**< Account (ref.)                       */
+	struct sipsess *sess;     /**< SIP Session                          */
+	struct sdp_session *sdp;  /**< SDP Session                          */
+	struct sipsub *sub;       /**< Call transfer REFER subscription     */
+	struct sipnot *not;       /**< REFER/NOTIFY client                  */
+	struct call *xcall;       /**< Cross ref Transfer call              */
+	struct list streaml;      /**< List of mediastreams (struct stream) */
+	struct audio *audio;      /**< Audio stream                         */
+	struct video *video;      /**< Video stream                         */
+	enum call_state state;    /**< Call state                           */
+	int32_t adelay;           /**< Auto answer delay in ms              */
+	char *aluri;              /**< Alert-Info URI                       */
+	char *local_uri;          /**< Local SIP uri                        */
+	char *local_name;         /**< Local display name                   */
+	char *peer_uri;           /**< Peer SIP Address                     */
+	char *peer_name;          /**< Peer display name                    */
+	struct sa msg_src;        /**< Peer message source address          */
+	char *diverter_uri;       /**< Diverter SIP Address                 */
+	char *id;                 /**< Cached session call-id               */
+	char *replaces;           /**< Replaces parameter                   */
+	uint16_t supported;       /**< Supported header tags                */
+	struct tmr tmr_inv;       /**< Timer for incoming calls             */
+	struct tmr tmr_dtmf;      /**< Timer for incoming DTMF events       */
+	struct tmr tmr_answ;      /**< Timer for delayed answer             */
+	struct tmr tmr_reinv;     /**< Timer for outgoing re-INVITES        */
+	time_t time_start;        /**< Time when call started               */
+	time_t time_conn;         /**< Time when call initiated             */
+	time_t time_stop;         /**< Time when call stopped               */
+	bool outgoing;            /**< True if outgoing, false if incoming  */
+	bool answered;            /**< True if call has been answered       */
+	bool got_offer;           /**< Got SDP Offer from Peer              */
+	bool on_hold;             /**< True if call is on hold (local)      */
+	bool ans_queued;          /**< True if an (auto) answer is queued   */
+	struct mnat_sess *mnats;  /**< Media NAT session                    */
+	bool mnat_wait;           /**< Waiting for MNAT to establish        */
+	struct menc_sess *mencs;  /**< Media encryption session state       */
+	int af;                   /**< Preferred Address Family             */
+	uint16_t scode;           /**< Termination status code              */
+	call_event_h *eh;         /**< Event handler                        */
+	call_dtmf_h *dtmfh;       /**< DTMF handler                         */
+	void *arg;                /**< Handler argument                     */
+
+	struct config_avt config_avt;    /**< AVT config                    */
+	struct config_call config_call;  /**< Call config                   */
+
+	uint32_t rtp_timeout_ms;  /**< RTP Timeout in [ms]                  */
+	uint32_t linenum;         /**< Line number from 1 to N              */
+	struct list custom_hdrs;  /**< List of custom headers if any        */
+
+	enum sdp_dir estadir;      /**< Established audio direction         */
+	enum sdp_dir estvdir;      /**< Established video direction         */
+	bool use_video;
+	bool use_rtp;
+	char *user_data;           /**< User data related to the call       */
+	bool evstop;               /**< UA events stopped flag, @deprecated */
+};
+```
+
+```c
+struct call *call = bevent_get_call(event);
+```
+
+### 5.3.4. SIP User Agent object (struct ua)
+
+> github: [baresip](https://github.com/baresip/baresip/tree/main)/[src](https://github.com/baresip/baresip/tree/main/src)/[ua.c](https://github.com/baresip/baresip/blob/main/src/ua.c)
+
+```c
+/** Defines a SIP User Agent object */
+struct ua {
+	MAGIC_DECL                   /**< Magic number for struct ua         */
+	struct le le;                /**< Linked list element                */
+	struct account *acc;         /**< Account Parameters                 */
+	struct list regl;            /**< List of Register clients           */
+	struct list calls;           /**< List of active calls (struct call) */
+	struct pl extensionv[8];     /**< Vector of SIP extensions           */
+	size_t    extensionc;        /**< Number of SIP extensions           */
+	char *cuser;                 /**< SIP Contact username               */
+	char *pub_gruu;              /**< SIP Public GRUU                    */
+	enum presence_status pstat;  /**< Presence Status                    */
+	struct list hdr_filter;      /**< Filter for incoming headers        */
+	struct list custom_hdrs;     /**< List of outgoing headers           */
+	char *ansval;                /**< SIP auto answer value              */
+	struct sa dst;               /**< Current destination address        */
+};
+```
+
+```c
+struct ua *ua = bevent_get_ua(event);
+```
+
+## 5.4. SIP headers
+
+### 5.4.1. custom SIP headers (Send)
 
 ```mermaid
 flowchart LR
@@ -1290,7 +1477,7 @@ if ( 0 != custom_hdrs_add((struct list *)hdrs, "User", "lanka") )
 }
 ```
 
-### 6.3.1. SIP Headers (Receive)
+### 5.4.1. SIP Headers (Receive)
 
 ```mermaid
 flowchart LR
@@ -1381,8 +1568,6 @@ sip_msg_dump(msg);
  */
 const struct sip_hdr *sip_msg_hdr(const struct sip_msg *msg, enum sip_hdrid id)
 ```
-
-#### C. SIP Header ID (perfect hash value)
 
 > github: [re](https://github.com/baresip/re/tree/main)/[include](https://github.com/baresip/re/tree/main/include)/[re_sip.h](https://github.com/baresip/re/blob/main/include/re_sip.h)
 
@@ -1509,7 +1694,7 @@ if (!type_hdr)
 sipsess_estab_handler:1717 - (Content-Type: application/sdp)
 ```
 
-## 6.4. SDP
+## 5.5. SDP
 
 > github: [re](https://github.com/baresip/re/tree/main)/[src](https://github.com/baresip/re/tree/main/src)/[sdp](https://github.com/baresip/re/tree/main/src/sdp)/[msg.c](https://github.com/baresip/re/blob/main/src/sdp/msg.c)
 
@@ -1570,6 +1755,738 @@ flowchart LR
 	phone --> |INCOMING|call_accept
 	phone -.-o |INCOMING|call_answer
 	sipsess_connect --> |OUTGOING|phone
+```
+
+# 6. modules
+
+> baresip 使用 plugin 的方式相當的淋漓盡致，這部分還有待學習。
+
+## 6.0. module_init
+
+> 讀取 config 中的 module ???.so/module_app ???.so（例 stdio.so），使用 dlopen 載入該函式庫，再用 dlsym 獲得  const struct mod_export DECL_EXPORTS(XXX) 的 "export" 位置。然後執行 m->me->init()。
+
+```mermaid
+flowchart LR
+	subgraph main.c[main.c]
+		main
+	end
+	subgraph conf.c[conf.c]
+		conf_modules
+	end
+	subgraph module.c[module.c]
+		module_init
+		module_handler
+		module_app_handler
+		
+		load_module
+		
+		module_init --> |1|module_handler --> load_module
+		module_init --> |2|module_app_handler --> load_module
+	end
+
+	subgraph mod.c[mod.c]
+		mod_load
+	end
+	
+	subgraph dl.c[dl.c]
+		_mod_open
+		_mod_sym
+	end
+	
+	main --> conf_modules --> module_init
+	load_module --> mod_load --> _mod_open --> dlopen
+	mod_load --> |export|_mod_sym --> dlsym
+```
+
+```c
+// baresip/src/module.c
+int module_init(const struct conf *conf)
+{
+	...
+	err = conf_apply(conf, "module", module_handler, &path);
+	...
+	err = conf_apply(conf, "module_app", module_app_handler, &path);
+	...
+}
+```
+
+## 6.1. stdio.so
+
+> 從 STDIN_FILENO 等待按鍵按下；當按鍵觸發後的流程，大致如下。另外常用傳送命令的 cons.so (Console input driver) 和 ctrl_dbus.so (DBus control interface)
+
+> 這邊要注意 stdio 和 cons 有處理 KEYCODE_REL
+
+```config
+module                        stdio.so
+```
+
+> User-Interface (UI) module
+
+```mermaid
+flowchart LR
+	subgraph cmd.c[cmd.c]
+		cmd_process
+		cmd_process_long
+	end
+
+	subgraph ui.c[ui.c]
+		ui_input_key
+		ui_input_long_command
+		ui_input_str
+		ui_input_pl
+		
+		ui_input_str --> ui_input_pl
+	end
+	ui_input_key --> cmd_process
+	ui_input_long_command --> cmd_process_long
+	ui_input_pl --> cmd_process
+
+	subgraph main.c[main.c]
+		main
+	end
+	main --> ui_input_str
+  
+	subgraph stdio.c[stdio.c]
+		ui_fd_handler
+		report_key
+		stdio-timeout[timeout]
+		
+		ui_fd_handler-->report_key
+		ui_fd_handler ..-> |250ms, KEYCODE_REL|stdio-timeout --> report_key
+	end
+	STDIN_FILENO ..-> ui_fd_handler
+	report_key --> ui_input_key
+
+	subgraph cons.c[cons.c]
+		udp_recv
+		tcp_recv_handler
+		cons-timeout[timeout]
+	end
+	udp_recv --> ui_input_key
+	tcp_recv_handler --> ui_input_key
+	cons-timeout --> ui_input_key
+
+	subgraph ctrl_dbus.c[ctrl_dbus.c]
+		command_handler
+	end
+	command_handler --> cmd_process
+	command_handler --> cmd_process_long
+
+	subgraph httpd.c[httpd.c]
+		handle_input
+	end
+	handle_input --> ui_input_long_command
+	handle_input --> ui_input_pl	
+```
+
+```c
+// baresip/include/baresip.h
+/* special keys */
+#define KEYCODE_NONE   (0x00)    /* No key           */
+#define KEYCODE_REL    (0x04)    /* Key was released */
+#define KEYCODE_ESC    (0x1b)    /* Escape key       */
+
+// baresip/modules/cons/cons.c
+static void udp_recv(const struct sa *src, struct mbuf *mb, void *arg)
+{
+	...
+		ui_input_key(baresip_uis(), ch, &pf);
+	...
+}
+
+// baresip/modules/cons/cons.c
+static void tcp_recv_handler(struct mbuf *mb, void *arg)
+{
+	...
+		ui_input_key(baresip_uis(), ch, &pf);
+	...
+}
+
+// baresip/src/ui.c
+/**
+ * Send an input key to the UI subsystem, with a print function for response
+ *
+ * @param uis UI Subsystem
+ * @param key Input character
+ * @param pf  Print function for the response
+ */
+void ui_input_key(struct ui_sub *uis, char key, struct re_printf *pf)
+{
+	if (!uis)
+		return;
+
+	(void)cmd_process(baresip_commands(), &uis->uictx, key, pf, NULL);
+}
+
+```
+
+## 6.2. menu.so
+
+```config
+module_app                    menu.so
+```
+
+### 6.2.1. dial_menu
+
+```c
+// baresip/modules/menu/static_menu.c
+static const struct cmd cmdv[] = {
+	...
+}
+```
+
+#### A. CALL_STATE_IDLE
+
+```bash
+--- Help ---
+                      ESC      Hangup call
+  /100rel ..                   Set 100rel mode
+  /about                       About box
+  /accept             a        Accept incoming call
+  /acceptdir ..                Accept incoming call with audio and videodirection.
+  /addcontact ..               Add a contact
+  /answermode ..               Set answer mode
+  /apistate                    User Agent state
+  /aufileinfo ..               Audio file info
+  /auplay ..                   Switch audio player
+  /ausrc ..                    Switch audio source
+  /callstat           c        Call status
+  /conf_reload                 Reload config file
+  /config                      Print configuration
+  /contact_next       >        Set next contact
+  /contact_prev       <        Set previous contact
+  /contacts           C        List contacts
+  /dial ..            d ..     Dial
+  /dialcontact        D        Dial current contact
+  /dialdir ..                  Dial with audio and videodirection.
+  /dnd ..                      Set Do not Disturb
+  /entransp ..                 Enable/Disable transport
+  /hangup             b        Hangup call
+  /hangupall ..                Hangup all calls with direction
+  /help               h        Help menu
+  /insmod ..                   Load module
+  /listcalls          l        List active calls
+  /loglevel           v        Log level toggle
+  /main                        Main loop debug
+  /memstat            y        Memory status
+  /message ..         M ..     Message current contact
+  /modules                     Module debug
+  /netstat            n        Network debug
+  /options ..         o ..     Options
+  /play ..                     Play audio file
+  /quit               q        Quit
+  /refer ..           R ..     Send REFER outside dialog
+  /reginfo            r        Registration info
+  /rmcontact ..                Remove a contact
+  /rmmod ..                    Unload module
+  /setadelay ..                Set answer delay for outgoing call
+  /setansval ..                Set value for Call-Info/Alert-Info
+  /sipstat            i        SIP debug
+  /sysinfo            s        System info
+  /timers                      Timer debug
+  /tlsissuer                   TLS certificate issuer
+  /tlssubject                  TLS certificate subject
+  /uaaddheader ..              Add custom header to UA
+  /uadel ..                    Delete User-Agent
+  /uadelall ..                 Delete all User-Agents
+  /uafind ..                   Find User-Agent <aor>
+  /uanew ..                    Create User-Agent
+  /uareg ..                    UA register <regint> [index]
+  /uarmheader ..               Remove custom header from UA
+  /uastat             u        UA debug
+  /uuid                        Print UUID
+  /vidsrc ..                   Switch video source
+```
+
+#### B. CALL_STATE_INCOMING
+
+```bash
+--- Help ---
+                        ESC      Hangup call
+  /100rel ..                     Set 100rel mode
+  /about                         About box
+  /accept               a        Accept incoming call
+  /acceptdir ..                  Accept incoming call with audio and videodirection.
+  /addcontact ..                 Add a contact
+  /answermode ..                 Set answer mode
+  /apistate                      User Agent state
+  /atransferabort                Abort attended transfer
+  /atransferexec                 Execute attended transfer
+  /atransferstart ..    T ..     Start attended transfer
+  /aubitrate ..                  Set audio bitrate
+  /audio_debug          A        Audio stream
+  /aufileinfo ..                 Audio file info
+  /auplay ..                     Switch audio player
+  /ausrc ..                      Switch audio source
+  /callfind ..                   Find call <callid>
+  /callstat             c        Call status
+  /conf_reload                   Reload config file
+  /config                        Print configuration
+  /contact_next         >        Set next contact
+  /contact_prev         <        Set previous contact
+  /contacts             C        List contacts
+  /dial ..              d ..     Dial
+  /dialcontact          D        Dial current contact
+  /dialdir ..                    Dial with audio and videodirection.
+  /dnd ..                        Set Do not Disturb
+  /entransp ..                   Enable/Disable transport
+  /hangup               b        Hangup call
+  /hangupall ..                  Hangup all calls with direction
+  /help                 h        Help menu
+  /hold                 x        Call hold
+  /insmod ..                     Load module
+  /line ..              @ ..     Set current call <line>
+  /listcalls            l        List active calls
+  /loglevel             v        Log level toggle
+  /main                          Main loop debug
+  /medialdir ..                  Set local media direction
+  /memstat              y        Memory status
+  /message ..           M ..     Message current contact
+  /modules                       Module debug
+  /mute ..              m ..     Call mute/un-mute
+  /netstat              n        Network debug
+  /options ..           o ..     Options
+  /play ..                       Play audio file
+  /quit                 q        Quit
+  /refer ..             R ..     Send REFER outside dialog
+  /reginfo              r        Registration info
+  /reinvite             I        Send re-INVITE
+  /resume               X        Call resume
+  /rmcontact ..                  Remove a contact
+  /rmmod ..                      Unload module
+  /setadelay ..                  Set answer delay for outgoing call
+  /setansval ..                  Set value for Call-Info/Alert-Info
+  /sipstat              i        SIP debug
+  /sndcode ..                    Send Code
+  /statmode             S        Statusmode toggle
+  /stopringing                   Stop ring tones
+  /sysinfo              s        System info
+  /timers                        Timer debug
+  /tlsissuer                     TLS certificate issuer
+  /tlssubject                    TLS certificate subject
+  /transfer ..          t ..     Transfer call
+  /uaaddheader ..                Add custom header to UA
+  /uadel ..                      Delete User-Agent
+  /uadelall ..                   Delete all User-Agents
+  /uafind ..                     Find User-Agent <aor>
+  /uanew ..                      Create User-Agent
+  /uareg ..                      UA register <regint> [index]
+  /uarmheader ..                 Remove custom header from UA
+  /uastat               u        UA debug
+  /uuid                          Print UUID
+  /video_debug          V        Video stream
+  /videodir ..                   Set video direction
+  /vidsrc ..                     Switch video source
+```
+
+## 6.3. ctrl_dbus.so
+
+> 會自動產生
+> build_xxx/modules/ctrl_dbus/baresipbus.c
+> build_xxx/modules/ctrl_dbus/baresipbus.h
+
+```config
+module_app                    ctrl_dbus.so
+```
+### 6.3.1. method - invoke
+
+| name     | direction | type |
+| -------- | --------- | ---- |
+| command  | in        | s    |
+| response | out       | s    |
+
+```mermaid
+flowchart LR
+	dbus([dbus])
+
+	subgraph baresip
+		subgraph ctrl_dbus.c[ctrl_dbus.c]
+			on_handle_invoke[on_handle_invoke]
+			mqueue_push[mqueue_push]
+			
+			queue_handler[queue_handler]
+			command_handler[command_handler]
+
+			on_handle_invoke --> mqueue_push ..-> queue_handler --> command_handler
+		end
+	end
+
+	dbus <--> on_handle_invoke
+```
+
+```bash
+"a": 
+```
+
+
+
+### 6.3.2. event (signal)
+
+> dbus_id 是另外加上去的，用於設計能在同一台主機上連上多個 SIP。
+
+| name    | direction | type |
+| ------- | --------- | ---- |
+| class   | out       | s    |
+| evtype  | out       | s    |
+| param   | out       | s    |
+| dbus_id | out       | u    |
+
+#### A. Register
+
+> call bevent_register 來註冊 incoming SIP Requests
+
+```mermaid
+flowchart TB
+	subgraph baresip
+		subgraph ctrl_dbus.c[ctrl_dbus.c]
+			ctrl_init[ctrl_init]
+		end
+		subgraph bevent.c[bevent.c]
+			bevent_register[bevent_register]
+		end
+		
+		ctrl_init --> bevent_register
+	end
+```
+
+
+```c
+// baresip/modules/ctrl_dbus/ctrl_dbus.c
+static int ctrl_init(void)
+{
+	...
+	err = bevent_register(event_handler, m_st);
+	...
+}
+
+// baresip/bevent.c
+/**
+ * Register an Event handler
+ *
+ * @param eh  Event handler
+ * @param arg Handler argument
+ *
+ * @return 0 if success, otherwise errorcode
+ */
+int  bevent_register(bevent_h *eh, void *arg)
+```
+
+#### B. Event
+```mermaid
+flowchart LR
+	dbus([dbus])
+
+	subgraph baresip
+		subgraph ctrl_dbus.c[ctrl_dbus.c]
+			event_handler[event_handler]
+			dbus_baresip_emit_event[dbus_baresip_emit_event]
+			
+			event_handler ..-> dbus_baresip_emit_event
+		end
+		
+		subgraph bevent.c[bevent.c]
+			ua_event[ua_event]
+			module_event[module_event]
+			
+			subgraph bevent_emit_base[bevent_emit_base]
+				h[h]
+			end
+			
+			bevent_emit[bevent_emit]
+	
+			bevent_app_emit[bevent_app_emit]
+			bevent_ua_emit[bevent_ua_emit]
+			bevent_call_emit[bevent_call_emit]
+			bevent_sip_msg_emit[bevent_sip_msg_emit]
+
+			module_event ..-> bevent_emit_base
+			bevent_app_emit ..-> bevent_emit
+			bevent_ua_emit ..-> bevent_emit
+			bevent_call_emit ..-> bevent_emit
+			bevent_sip_msg_emit ..-> bevent_emit
+			
+			bevent_emit ..-> bevent_emit_base
+		end
+		
+		h ..-> event_handler
+	end
+	
+	dbus_baresip_emit_event ..-> dbus
+```
+
+```c
+// baresip/bevent.c
+static void bevent_emit_base(struct bevent *event)
+{
+	...
+			ehe->h(event->ev, event, ehe->arg);
+	...
+}
+
+static int bevent_emit(struct bevent *event, const char *fmt, va_list ap)
+{
+	...
+	bevent_emit_base(event);
+	...
+}
+
+/**
+ * Emit an application event
+ *
+ * @param ev   User-agent event
+ * @param arg  Application specific argument (optional)
+ * @param fmt  Formatted arguments
+ * @param ...  Variable arguments
+ *
+ * @return 0 if success, otherwise errorcode
+ */
+int bevent_app_emit(enum ua_event ev, void *arg, const char *fmt, ...)
+{
+	...
+	err = bevent_emit(&event, fmt, ap);
+	...
+}
+
+/**
+ * Emit a User-Agent event
+ *
+ * @param ev   User-Agent event
+ * @param ua   User-Agent
+ * @param fmt  Formatted arguments
+ * @param ...  Variable arguments
+ *
+ * @return 0 if success, otherwise errorcode
+ */
+int bevent_ua_emit(enum ua_event ev, struct ua *ua, const char *fmt, ...)
+{
+	...
+	err = bevent_emit(&event, fmt, ap);
+	...
+}
+
+/**
+ * Emit a Call event
+ *
+ * @param ev    User-Agent event
+ * @param call  Call object
+ * @param fmt   Formatted arguments
+ * @param ...   Variable arguments
+ *
+ * @return 0 if success, otherwise errorcode
+ */
+int bevent_call_emit(enum ua_event ev, struct call *call, const char *fmt, ...)
+{
+	...
+	err = bevent_emit(&event, fmt, ap);
+	...
+}
+
+/**
+ * Emit a SIP message event
+ *
+ * @param ev    User-Agent event
+ * @param msg   SIP message
+ * @param fmt   Formatted arguments
+ * @param ...   Variable arguments
+ *
+ * @return 0 if success, otherwise errorcode
+ */
+int bevent_sip_msg_emit(enum ua_event ev, const struct sip_msg *msg,
+		       const char *fmt, ...)
+{
+	...
+	err = bevent_emit(&event, fmt, ap);
+	...
+}
+```
+
+#### C. log
+
+```log
+e_class: call, e_evtype: CALL_REMOTE_SDP, e_param: {"class":"call","type":"CALL_REMOTE_SDP","accountaor":"sip:1004@192.168.50.9","direction":"incoming","peeruri":"sip:1007@192.168.50.9","localuri":"sip:1004-0x56046c6cd9b0@192.168.50.72","remoteaudiodir":"sendrecv","remotevideodir":"sendrecv","audiodir":"sendrecv","videodir":"sendrecv","localaudiodir":"sendrecv","localvideodir":"sendrecv","param":"offer"}, e_dbus_id: 1
+
+e_class: call, e_evtype: CALL_INCOMING, e_param: {"class":"call","type":"CALL_INCOMING","accountaor":"sip:1004@192.168.50.9","direction":"incoming","peeruri":"sip:1007@192.168.50.9","localuri":"sip:1004-0x56046c6cd9b0@192.168.50.72","id":"1658f6cc-de2e-4487-afeb-44f315cee6d4","remoteaudiodir":"sendrecv","remotevideodir":"sendrecv","audiodir":"sendrecv","videodir":"sendrecv","localaudiodir":"sendrecv","localvideodir":"sendrecv","param":"sip:1007@192.168.50.9"}, e_dbus_id: 1
+
+
+e_class: call, e_evtype: CALL_CLOSED, e_param: {"class":"call","type":"CALL_CLOSED","accountaor":"sip:1004@192.168.50.9","direction":"incoming","peeruri":"sip:1007@192.168.50.9","localuri":"sip:1004-0x56046c6cd9b0@192.168.50.72","id":"1658f6cc-de2e-4487-afeb-44f315cee6d4","remoteaudiodir":"sendrecv","remotevideodir":"sendrecv","audiodir":"sendrecv","videodir":"sendrecv","localaudiodir":"sendrecv","localvideodir":"sendrecv","param":"Rejected by user"}, e_dbus_id: 1
+```
+
+### 6.3.3. message (signal)
+
+> dbus_id 是另外加上去的，用於設計能在同一台主機上連上多個 SIP。
+
+| name    | direction | type |
+| ------- | --------- | ---- |
+| ua      | out       | s    |
+| peer    | out       | s    |
+| ctype   | out       | s    |
+| body    | out       | s    |
+| dbus_id | out       | u    |
+
+#### A. Register
+
+> call message_listen 來註冊 incoming SIP Requests
+```mermaid
+flowchart LR
+	subgraph re
+		subgraph sip[sip.c]
+			sip_listen[sip_listen]
+		end
+	end
+
+	subgraph baresip
+		subgraph ctrl_dbus.c[ctrl_dbus.c]
+			ctrl_init[ctrl_init]
+		end
+		subgraph message.c[message.c]
+			message_listen[message_listen]
+		end
+		
+		ctrl_init --> message_listen
+	end
+
+	message_listen --> sip_listen
+```
+
+
+```c
+// baresip/modules/ctrl_dbus/ctrl_dbus.c
+static int ctrl_init(void)
+{
+	...
+	err = message_listen(baresip_message(), message_handler, m_st);
+	...
+}
+
+// baresip/src/message.c
+/**
+ * Listen to incoming SIP MESSAGE messages
+ *
+ * @param message Messaging subsystem
+ * @param recvh   Message receive handler
+ * @param arg     Handler argument
+ *
+ * @return 0 if success, otherwise errorcode
+ */
+int message_listen(struct message *message,
+		   message_recv_h *recvh, void *arg)
+{
+	...
+		err = sip_listen(&message->sip_lsnr, uag_sip(), true,
+				 request_handler, message);
+	...
+}
+```
+
+```c
+// re/src/sip/sip.c
+/**
+ * Listen for incoming SIP Requests and SIP Responses
+ *
+ * @param lsnrp Pointer to allocated listener
+ * @param sip   SIP stack instance
+ * @param req   True for Request, false for Response
+ * @param msgh  SIP message handler
+ * @param arg   Handler argument
+ *
+ * @return 0 if success, otherwise errorcode
+ */
+int sip_listen(struct sip_lsnr **lsnrp, struct sip *sip, bool req,
+	       sip_msg_h *msgh, void *arg)
+{
+	...
+	lsnr->msgh = msgh;
+	...
+}
+```
+
+#### B. Request
+
+> 雖然註冊接收 incoming SIP Requests，但是排第5順位，在  sip_recv  中如果前面已經處理 ( return TRUE )，基本上是不會到 message。
+>
+> 所以這個程式是做白工。
+
+```mermaid
+flowchart LR
+	subgraph re
+		subgraph transp.c[transp.c]
+			udp_recv_handler
+			tcp_recv_handler
+			subgraph sip_recv
+				msgh
+			end
+
+			udp_recv_handler --> sip_recv
+			tcp_recv_handler --> sip_recv
+		end
+
+		subgraph strans.c[strans.c]
+			stransR[request_handler]
+		end
+
+		subgraph sipeventlisten[sipevent/listen.c]
+			sipeventlistenR[response_handler]
+		end
+
+		subgraph sipsesslisten[sipsess/listen.c]
+			sipsesslistenR[response_handler]
+		end
+	end
+
+	subgraph ctrans.c[ctrans.c]
+		ctransR[response_handler]
+	end
+
+	subgraph baresip
+		subgraph uag.c[uag.c]
+			uagR[response_handler]
+		end
+		subgraph message.c[message.c]
+			messageR[request_handler]
+			subgraph handle_message[handle_message]
+				recvh[recvh]
+			end
+			messageR ..-> handle_message
+		end
+
+		subgraph ctrl_dbus.c[ctrl_dbus.c]
+			ctrl_dbusR[message_handler]
+		end
+		subgraph ctrl_tcp.c[ctrl_tcp.c]
+			ctrl_tcpR[message_handler]
+		end
+		subgraph gtk_mod.c[gtk_mod.c]
+			gtk_modR[message_handler]
+		end
+		subgraph menu.c[menu.c]
+			menuR[message_handler]
+		end
+		recvh ..->  ctrl_dbusR
+		recvh ..->  ctrl_tcpR
+		recvh ..->  gtk_modR
+		recvh ..->  menuR
+  end
+
+	msgh -..-> ctransR
+
+	msgh -..-> |1| stransR
+	msgh -..-> |2| uagR
+	msgh -..-> |3| sipsesslistenR
+	msgh -..-> |4| sipeventlistenR
+	msgh -..-> |5| messageR
+```
+```c
+// re/src/sip/transp.c
+static void sip_recv(struct sip *sip, const struct sip_msg *msg,
+		     size_t start)
+{
+	...
+		if (lsnr->msgh(msg, lsnr->arg))
+		{
+			return;
+		}
+	...
+}
 ```
 
 # Appendix
