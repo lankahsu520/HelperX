@@ -482,6 +482,28 @@ history 10
 echo $HISTFILE
 ```
 
+#### kill - send a signal to a process
+
+```bash
+kill `pidof helloworld`
+
+kill 123
+kill -SIGTERM 123
+
+kill -9 123
+kill -SIGKILL 123
+
+kill -USR1 123
+kill -USR2 123
+```
+
+#### killall - kill processes by name
+
+```bash
+killall helloworld
+killall -SIGTERM helloworld
+```
+
 #### lsof - list open files
 
 ```bash
@@ -524,6 +546,21 @@ function ps-lsof-file()
 $ ps-lsof-pname apache2
 
 $ ps-lsof-file /work
+```
+
+#### mkswap - set up a Linux swap area
+
+```bash
+# 初始化 /dev/sdd 為一個 swap partition
+sudo mkswap /dev/sdd
+```
+
+```bash
+SWAP_FILE="/work/swapfile"
+sudo dd if=/dev/zero of=$SWAP_FILE bs=64M count=16
+
+sudo mkswap $SWAP_FILE
+sudo chmod 0600 $SWAP_FILE
 ```
 
 #### pidof -- find the process ID of a running program.
@@ -664,21 +701,6 @@ $ ps-sort-cpu-mem
    1033   30  0.9  0.0 1795580 00:00:02      43:15 22:00:40 /usr/sbin/mysqld
 ```
 
-#### kill - send a signal to a process
-
-```bash
-kill `pidof helloworld`
-
-kill 123
-kill -SIGTERM 123
-
-kill -9 123
-kill -SIGKILL 123
-
-kill -USR1 123
-kill -USR2 123
-```
-
 #### renice - alter priority of running processes
 
 ```bash
@@ -687,23 +709,6 @@ renice 19 1234
 
 # To increase the priority of Lanka's tasks by +1.
 renice +1 -u lanka
-```
-
-#### killall - kill processes by name
-
-```bash
-killall helloworld
-killall -SIGTERM helloworld
-```
-
-#### shutdown - Halt, power-off or reboot the machine
-
-```bash
-# Power-off the machine (the default).
-sudo shutdown -P 20:00
-
-# Cancel a pending shutdown.
-sudo shutdown -c
 ```
 
 #### screen - screen manager with VT100/ANSI terminal emulation
@@ -769,6 +774,43 @@ $ screen-one
 
 # kill the screen session
 $ screen -S 17543.pts-1.lanka-build20-vbx -X quit 
+```
+
+#### shutdown - Halt, power-off or reboot the machine
+
+```bash
+# Power-off the machine (the default).
+sudo shutdown -P 20:00
+
+# Cancel a pending shutdown.
+sudo shutdown -c
+```
+
+#### swapon, swapoff - enable/disable devices and files for paging and swapping
+
+```bash
+# 啟動
+$ sudo swapon /dev/sdd
+$ swapon -s
+Filename                                Type            Size    Used    Priority
+/swapfile                               file            2097148 0       -2
+/dev/sdd                                partition       134217724       0       -3
+
+# 關閉
+$ sudo swapoff /dev/sdd
+```
+
+```bash
+sudo swapon $SWAP_FILE
+
+sudo swapoff $SWAP_FILE
+```
+
+```bash
+$ sudo vi /etc/fstab
+/dev/sdd none swap defaults 0 0
+
+/work/swapfile none swap sw 0 0
 ```
 
 ## 2.1. [Linux crontab 命令](https://www.runoob.com/linux/linux-comm-crontab.html)
