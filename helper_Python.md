@@ -400,7 +400,7 @@ $ pip list -o | cut -f1 -d' ' | xargs -n1 pip install -U
 $ pip uninstall meson
 ```
 
-#### C. upgrade
+#### C. install / upgrade
 
 ```bash
 $ pip install --upgrade meson
@@ -420,6 +420,22 @@ $ pip install --upgrade pycairo
 $ pip install --upgrade awscli boto3 netifaces
 $ pip install --upgrade pyproject-toml
 $ pip install --upgrade pylint
+```
+
+#### D. show
+
+```bash
+$ pip show meson
+Name: meson
+Version: 1.8.2
+Summary: A high performance build system
+Home-page: https://mesonbuild.com
+Author: Jussi Pakkanen
+Author-email: jpakkane@gmail.com
+License: Apache License, Version 2.0
+Location: /home/lanka/.local/lib/python3.12/site-packages
+Requires:
+Required-by:
 ```
 
 ## 5.3. Packages List
@@ -665,6 +681,10 @@ sudo mv /usr/lib/python${PJ_PYTHON_VER}/EXTERNALLY-MANAGED /usr/lib/python${PJ_P
 > 安裝新版 dblatex_0.3.12py3-2_all.deb
 >
 > https://packages.debian.org/bookworm/dblatex
+
+```bash
+$ sudo dpkg -i dblatex_0.3.12py3-2_all.deb
+```
 
 # III. Glossary
 
