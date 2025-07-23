@@ -17,15 +17,15 @@
 [watchers-image]: https://img.shields.io/github/watchers/lankahsu520/HelperX.svg
 [watchers-url]: https://github.com/lankahsu520/HelperX/watchers
 
-# 0. Overview
+# 1. Overview
 
-## 0.1. 基本認知
+## 1.1. 基本認知
 
 > 為什麼介紹版本控制系統，需要討論這些。
 >
 > 世界就這麼小，身邊就遇到奇葩的人事物。
 
-### 0.1.1. Mind
+### 1.1.1. Mind
 
 ```mermaid
 mindmap
@@ -39,7 +39,7 @@ mindmap
 		分享
 ```
 
-### 0.1.2. 認知扭曲
+### 1.1.2. 認知扭曲
 
 #### A. 版本控制系統只能存放程式碼
 
@@ -100,9 +100,9 @@ mindmap
 
 > 個人是建議，只要個人工作到一個斷點就上傳 codes，而不是等解決某個 bug  或完成整個功能才上傳。
 
-## 0.2. System Environment
+## 1.2. System Environment
 
-### 0.2.1. Install
+### 1.2.1. Install
 
 #### svn
 
@@ -142,6 +142,17 @@ $ git config --global pager.diff false
 
 ```bash
 $ vim ~/.gitconfig
+[user]
+  email = lankahsu@gmail.com
+  name = Lanka Hsu
+[color]
+  ui = auto
+[http]
+  cookiefile = /home/lanka/.gitcookies
+[pager]
+  diff = false
+[core]
+  pager = less -FRSX
 
 $ git config –global user.name "name"
 $ git config –global user.email "email address"
@@ -157,7 +168,7 @@ http.cookiefile=/home/lanka/.gitcookies
 pager.diff=false
 ```
 
-# 1. Repository
+# 2. Repository
 
 #### svn
 
@@ -213,7 +224,7 @@ $ cd HelloWorld
 $ git init
 ```
 
-## 1.1. Branch
+## 2.1. Branch
 
 #### svn cp
 
@@ -281,7 +292,7 @@ $ git clone -b branch2 http://trac-vbx/gitroot/gitroot.git gitroot-branch2
 $ git switch -c hardknott remotes/origin/hardknott
 ```
 
-## 1.2. Tag
+## 2.2. Tag
 
 #### svn cp
 
@@ -307,7 +318,7 @@ $ git tag -d v1.1.0
 $ git push --delete origin v1.1.0
 
 ```
-## 1.3. Git Local Repository
+## 2.3. Git Local Repository
 
 ```bash
 #** 四個狀態 **
@@ -334,9 +345,9 @@ Repository
 >
 > 我們應該把事情簡單化，將 Git 的使用方式同化為  SVN Tracked 和 SVN Untracked。
 
-# 2. General Commands
+# 3. General Commands
 
-## 2.1. Clone a repository into a new directory
+## 3.1. Clone a repository into a new directory
 
 #### svn co
 
@@ -363,7 +374,7 @@ $ git clone -b test http://trac-vbx/gitroot/xbox xbox-test
 git clone -b v3.6.1 --recursive https://github.com/Mbed-TLS/mbedtls.git mbedtls-3.6.1
 ```
 
-## 2.2. Record changes to the repository
+## 3.2. Record changes to the repository
 
 #### svn ci
 
@@ -385,7 +396,7 @@ git commit --amend ./s
 
 ```
 
-## 2.3. Fetch from and integrate with another repository or a local branch
+## 3.3. Fetch from and integrate with another repository or a local branch
 
 #### svn up
 
@@ -399,7 +410,7 @@ $ svn up
 $ git pull
 ```
 
-## 2.4. Add file contents to the index
+## 3.4. Add file contents to the index
 
 #### svn add
 
@@ -413,7 +424,7 @@ $ svn add helloworld.c
 $ git add helloworld.c
 ```
 
-## 2.5. Remove files from the working tree and from the index
+## 3.5. Remove files from the working tree and from the index
 
 #### svn rm
 
@@ -427,7 +438,7 @@ $ svn rm helloworld.c
 $ git rm helloworld.c
 ```
 
-## 2.6. Move an item in a working copy
+## 3.6. Move an item in a working copy
 
 #### svn mv
 
@@ -441,7 +452,7 @@ $ svn mv helloworld.c helloworld_bak.c
 $ git mv helloworld.c helloworld_bak.c
 ```
 
-## 2.7. Copy files and directories in a working copy or repository
+## 3.7. Copy files and directories in a working copy or repository
 
 #### svn cp
 
@@ -454,9 +465,9 @@ $ svn cp helloworld.c helloworld_cp.c
 ```bash
 ```
 
-# 3. Show difference, log
+# 4. Show difference, log
 
-## 3.1. Show the working tree status
+## 4.1. Show the working tree status
 
 #### svn status
 
@@ -476,7 +487,7 @@ $ svn status --no-ignore
 $ git status
 ```
 
-## 3.2. Show changes between commits, commit and working tree
+## 4.2. Show changes between commits, commit and working tree
 
 #### svn diff
 
@@ -503,7 +514,7 @@ $ git show HEAD
 $ git show 366aace
 ```
 
-## 3.3. Show commit logs
+## 4.3. Show commit logs
 
 #### svn log
 
@@ -604,7 +615,7 @@ $ git log --graph --pretty=format:"%C(auto)%h%d%Creset %C(cyan)(%cd)%Creset %C(g
 * 27bdad7 (HEAD -> master, origin/master, origin/HEAD) (2024/05/04 23:00:29) <LankaHsu> update helper_linux.md, 22. usb Hadler
 ```
 
-## 3.4. Ignore Files
+## 4.4. Ignore Files
 
 #### svn:ignore
 
@@ -627,9 +638,9 @@ $ vi .gitignore
 # enter your ignore files
 ```
 
-# 4. Advanced Commands
+# 5. Advanced Commands
 
-## 4.1. Restore working tree files
+## 5.1. Restore working tree files
 
 #### svn revert
 
@@ -670,7 +681,7 @@ $ git restore --staged helloworld_cp.c
 $ git checkout -- *
 ```
 
-## 4.2. Manage set of tracked repositories (change the url of repositorie)
+## 5.2. Manage set of tracked repositories (change the url of repositorie)
 
 #### svn relocate
 
@@ -703,7 +714,7 @@ $ git remote -v
 $ git remote set-url origin http://trac-vbx/gitroot/xbox
 ```
 
-## 4.3. Roll back
+## 5.3. Roll back
 
 ```mermaid
 flowchart LR
@@ -737,7 +748,7 @@ $ git reset HEAD~3
 $ git push -f
 ```
 
-## 4.4. Merge
+## 5.4. Merge
 
 ```mermaid
 ---
@@ -821,7 +832,7 @@ $ git merge --no-ff master
 $ git cherry-pick 122
 ```
 
-## 4.5. Show what revision and author last modified each line of a file
+## 5.5. Show what revision and author last modified each line of a file
 
 #### svn blame
 
@@ -836,9 +847,9 @@ $ svn blame helper_SVNvsGit.md
 $ git blame helper_SVNvsGit.md
 ```
 
-# 5. Server with apache2
+# 6. Server with apache2
 
-## 5.1. apache2
+## 6.1. apache2
 
 #### A. sites-available/*.conf
 
@@ -932,7 +943,7 @@ $ sudo a2enmod env cgi alias rewrite dav dav_svn dav_fs
 $ sudo service apache2 restart
 ```
 
-## 5.2. Git Server
+## 6.2. Git Server
 
 #### A. Add User and Group
 
@@ -962,7 +973,7 @@ $ git clone http://trac-vbx/gitroot/gitroot.git
 $ git config credential.helper store
 ```
 
-## 5.3. SVN Server
+## 6.3. SVN Server
 
 #### A. Add User and Group
 
@@ -1035,11 +1046,11 @@ $ sudo chmod 755 pre-revprop-change
 $ svn propedit svn:log --revprop -r 123
 ```
 
-# 6. Special
+# 7. Special
 
-## 6.1. SVN
+## 7.1. SVN
 
-### 6.1.1. Split / Filter Repository
+### 7.1.1. Split / Filter Repository
 
 #### A. [Chapter 4. Branching and Merging](https://svnbook.red-bean.com/en/1.7/svn.branchmerge.summary.html)
 
@@ -1219,7 +1230,7 @@ svnadmin load --parent-dir svnnew-include < $SVN_DUMP_FILTER_FILE_EXCLUDE
 
 ```
 
-### 6.1.2. externals / submodules
+### 7.1.2. externals / submodules
 
 #### [svn:externals](https://svnbook.red-bean.com/zh/1.6/svn.advanced.externals.html)
 
@@ -1254,7 +1265,7 @@ $ svn propedit svn:externals ./
 # http://trac-vbx/svnhello/trunk/helloworld
 ```
 
-### 6.1.3. propset
+### 7.1.3. propset
 
 > Set *`PROPNAME`* to *`PROPVAL`* on files, directories, or revisions.
 
@@ -1266,7 +1277,7 @@ find * -name "*.bat" | xargs svn propset svn:executable on
 find * -name "*.dll" | xargs svn propset svn:executable on
 ```
 
-### 6.1.4. propdel
+### 7.1.4. propdel
 
 > Remove a property from an item.
 
@@ -1276,9 +1287,9 @@ svn propdel svn:ignore
 svn propdel svn:externals
 ```
 
-## 6.2. Git
+## 7.2. Git
 
-### 6.2.1. prune
+### 7.2.1. prune
 > Prune tracking branches not on the remote
 
 ```mermaid
@@ -1308,7 +1319,7 @@ flowchart LR
 $ git remote prune origin
 ```
 
-### 6.2.2. externals / submodules
+### 7.2.2. externals / submodules
 
 #### A. List all submodules
 
@@ -1383,7 +1394,7 @@ $ git clone --recurse-submodules  <repo>
 
 
 
-# 7. Others ???
+# 8. Others ???
 
 ```bash
 # Cleanup unnecessary files and optimize the local repository
