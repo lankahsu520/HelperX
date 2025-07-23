@@ -151,6 +151,22 @@ sudo service smbd restart
   writable = yes
 ```
 
+> 如果 symbolic links outside of the shared path
+
+```conf
+[global]
+allow insecure wide links = yes
+unix extensions = no
+
+follow symlinks = yes
+wide links = yes
+unix extensions = no
+
+[work]
+path = /work
+
+```
+
 #### C. nfs
 
 ```bash
