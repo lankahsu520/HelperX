@@ -94,7 +94,13 @@
 
 >用 Xiaomi 建構[智慧居家](https://www.mi.com/tw/product-list/smart-device/?cat_id=2546)。
 
-#### C. [helper_Matter.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Matter.md) - Matter helper.
+#### C. [helper_IoT-HomeAssistant.md](https://github.com/lankahsu520/HelperX/blob/master/helper_IoT-HomeAssistant.md) - IoT Home Assistant helper.
+
+>Home Assistant 是一款開源的家庭自動化平台，強調本地控制與隱私保護。由全球熱衷創客與 DIY 愛好者所推動與維護，非常適合在 Raspberry Pi 或本地伺服器上執行。
+>
+>它是一個輔助工具，而是在現有的環境下，整合成一個方便的 UI 環境，讓您能夠輕鬆地管理和控制各種智慧設備，讓它們可以協同工作。
+
+#### D. [helper_Matter.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Matter.md) - Matter helper.
 
 > Matter（以前稱為 Project CHIP，Connected Home over IP）是一種物聯網（IoT）通信協議和平台，致力於促進智能家居設備之間的互操作性和互聯性。
 >
@@ -102,7 +108,7 @@
 >
 > 至於艱深的文件， 只會省略過去。就好像你要使用 OpenSSL 進行加密，知道編譯時怎麼連結，知道如何使用就好，有必要去細究裏面是如何加密嗎。
 
-#### D. [helper_MatterController-chip-tool.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MatterController-chip-tool.md) - Matter Controller helper.
+#### E. [helper_MatterController-chip-tool.md](https://github.com/lankahsu520/HelperX/blob/master/helper_MatterController-chip-tool.md) - Matter Controller helper.
 
 > 因為角色特別吃重，特別將 Matter Controller 從 helper_Matter.md 獨立出來。
 
