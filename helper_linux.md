@@ -2283,6 +2283,20 @@ $ ldconfig -p|grep libmpc
         libmpc.so.3 (libc6,x86-64) => /lib/x86_64-linux-gnu/libmpc.so.3
 ```
 
+#### rpm - RPM Package Manager
+
+```bash
+$ sudo rpm -ivh new-package.rpm
+
+$ sudo rpm -e mplayer
+
+# 測試移除
+$ sudo rpm -e mplayer --test
+
+# 不管相依性
+$ sudo rpm -e mplayer --nodeps
+```
+
 #### snap - Tool to interact with snaps
 
 > 建議使用 apt-get；
