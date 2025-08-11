@@ -45,6 +45,15 @@
 # 2. Start up
 
 ## 2.1. Install
+>  [Installation](https://www.home-assistant.io/installation)
+>
+>  這是官網提供的教學，說它是 install 教學，應該不算。
+>
+>  該內容是要求使用者下載 image 裝在虛擬機上。雖說是給 DIY 愛好者，但是…
+>
+>  - 有人不知什麼是虛擬機。
+>  - 只想在現有系統上執行，少一層虛擬機的耗能。
+>  - 如使用 Raspberry Pi，不想再另外準備一張SDCARD（已經打照好遊戲機，就不能在上面附加嗎？）。
 
 ###  2.1.1. [Raspberry Pi](https://www.home-assistant.io/installation/raspberrypi)
 
