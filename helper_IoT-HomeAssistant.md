@@ -87,6 +87,10 @@
 
 ## 3.1. [Sensibo](https://sensibo.com)
 
+> [Sensibo](https://www.home-assistant.io/integrations/sensibo)
+>
+> The **Sensibo** integration integrates [Sensibo](https://sensibo.com/) devices into Home Assistant.
+
 ### 3.1.1. Install
 
 #### A. Discovered
@@ -115,6 +119,10 @@
 
 ## 3.2. [ONVIF](https://www.onvif.org)
 
+> [ONVIF](https://www.home-assistant.io/integrations/onvif)
+>
+> The ONVIF camera integration allows you to use an [ONVIF](https://www.onvif.org/) Profile S conformant device in Home Assistant. This requires the [`ffmpeg` integration](https://www.home-assistant.io/integrations/ffmpeg/) to be already configured.
+
 ### 3.2.1. Install
 
 #### A. Search Integrations
@@ -142,6 +150,62 @@
 > 其它相關功能，請自行研究
 
 <img src="./images/HomeAssistant0208.png" alt="HomeAssistant0208" style="zoom:33%;" />
+
+## 3.3. Tuya
+
+> [Tuya](https://www.home-assistant.io/integrations/tuya)
+>
+> The Tuya integration integrates all Powered by Tuya devices you have added to the Tuya Smart and Tuya Smart Life apps.
+>
+> All Home Assistant platforms are supported by the Tuya integration, except the lock and remote platform.
+
+> [How to Install Smart Life Integration (Beta)](https://developer.tuya.com/en/docs/iot/Smart_Life_Integration?id=Kd0gk9baikbb7)
+>
+> This topic describes how to install and use the Smart Life integration for Home Assistant.
+
+### 3.3.1. Get User Code
+
+#### A. SmartLife APP
+
+<img src="./images/HomeAssistant0301.png" alt="HomeAssistant0301" style="zoom: 25%;" />
+
+#### B. Setting
+
+<img src="./images/HomeAssistant0302.png" alt="HomeAssistant0302" style="zoom:25%;" />
+
+#### C. Account and Security
+
+<img src="./images/HomeAssistant0303.png" alt="HomeAssistant0303" style="zoom:25%;" />
+
+#### D. User Code
+
+<img src="./images/HomeAssistant0304.png" alt="HomeAssistant0304" style="zoom:25%;" />
+
+### 3.2.2. Install
+
+#### A. Search Integrations
+
+> key in : tuya
+
+<img src="./images/HomeAssistant0305.png" alt="HomeAssistant0305" style="zoom:33%;" />
+
+#### B. Enter your Smart Life or Tuya Smart user code
+
+<img src="./images/HomeAssistant0306.png" alt="HomeAssistant0306" style="zoom: 50%;" />
+
+#### C. Scan QR-code
+
+> Please use `SmartLife APP` scan the QR-code
+
+<img src="./images/HomeAssistant0307.png" alt="HomeAssistant0307" style="zoom:50%;" />
+
+#### D. Configure Tuya devices
+
+<img src="./images/HomeAssistant0308.png" alt="HomeAssistant0308" style="zoom: 50%;" />
+
+### 3.3.3. Overview
+
+<img src="./images/HomeAssistant0309.png" alt="HomeAssistant0309" style="zoom: 33%;" />
 
 # Appendix
 
