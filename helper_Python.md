@@ -146,11 +146,13 @@ $ ll /usr/bin/python*
 
 # --install <link> <name> <path> <priority>
 # /usr/bin/python3
-$ sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 2
-$ sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1
+$ sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 8
+$ sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 10
+$ sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.13 13
 # /usr/bin/python 
-$ sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.8 2
-$ sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.10 1
+$ sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.8 8
+$ sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.10 10
+$ sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.13 13
 
 $ ll /etc/alternatives/python*
 lrwxrwxrwx 1 root root 18  四  24 13:20 /etc/alternatives/python -> /usr/bin/python3.8*
@@ -361,9 +363,38 @@ $ (export PYTHONPATH="/work/python"; python ./helloworld.py)
 
 # 5. Packages
 
-## 5.0. [PyPI – the Python Package Index · PyPI](https://pypi.org)
+## 5.1. [PyPI – the Python Package Index · PyPI](https://pypi.org)
 
-## 5.1. Install packages
+> Find, install and publish Python packages with the Python Package Index
+
+### 5.1.1. Downlaod packages
+
+> 單純的下載
+
+```bash
+$ pip download tuya-device-sharing-sdk==0.2.1
+# --no-deps 不下載依賴 packages
+$ pip download --no-deps meson==1.3.0
+# 預設會下載 wheel (.whl) 檔，而不是 .tar.gz 原始碼包
+# 強制下載 source tarball
+$ pip download --no-deps --no-binary=:all: cmake==4.0.3
+
+$ tree -L 1./
+.
+├── certifi-2025.8.3-py3-none-any.whl
+├── charset_normalizer-3.4.3-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
+├── cmake-4.0.3.tar.gz
+├── idna-3.10-py3-none-any.whl
+├── meson-1.3.0-py3-none-any.whl
+├── paho_mqtt-2.1.0-py3-none-any.whl
+├── requests-2.32.4-py3-none-any.whl
+├── tuya_device_sharing_sdk-0.2.1-py2.py3-none-any.whl
+└── urllib3-2.5.0-py3-none-any.whl
+
+0 directories, 9 files
+```
+
+### 5.1.2. Install packages
 
 ```bash
 $ pip install markdown
@@ -383,7 +414,7 @@ cmake version 3.16.3
 
 ```
 
-## 5.2. Upgrade packages
+### 5.1.4. Upgrade packages
 
 #### A. outdated
 
@@ -438,7 +469,7 @@ Requires:
 Required-by:
 ```
 
-## 5.3. Packages List
+### 5.1.5. Packages List
 
 ```bash
 $ ll /usr/lib/python3/dist-packages
@@ -477,7 +508,7 @@ $ pip list
 >
 > [PyPi]  [Ninja](http://www.ninja-build.org/) is a small build system with a focus on speed.
 
-## 5.4. Fixed Version
+### 5.1.6. Fixed Version
 
 #### A. for Ubuntu 20.04
 
