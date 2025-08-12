@@ -100,11 +100,11 @@
 >
 > The **Sensibo** integration integrates [Sensibo](https://sensibo.com/) devices into Home Assistant.
 
-### 3.1.1. Install
+### 3.1.1. Setup
 
-#### A. Discovered
+#### A.  Search Integrations
 
-> click `Sensibo`
+> key in : Sensibo
 
 <img src="./images/HomeAssistant0102.png" alt="HomeAssistant0102" style="zoom:33%;" />
 
@@ -132,7 +132,7 @@
 >
 > The ONVIF camera integration allows you to use an [ONVIF](https://www.onvif.org/) Profile S conformant device in Home Assistant. This requires the [`ffmpeg` integration](https://www.home-assistant.io/integrations/ffmpeg/) to be already configured.
 
-### 3.2.1. Install
+### 3.2.1. Setup
 
 #### A. Search Integrations
 
@@ -160,67 +160,127 @@
 
 <img src="./images/HomeAssistant0208.png" alt="HomeAssistant0208" style="zoom:33%;" />
 
-## 3.3. Tuya
+## 3.3. Home Assistant Community Store (HACS)
 
-> [Tuya](https://www.home-assistant.io/integrations/tuya)
+> 就是軟體商店。非內建，而且需要與個人的 [GitHub](https://github.com) 帳號綁定（GitHub 不是 open 嗎？）。
+
+> [HACS](https://www.hacs.xyz)
 >
-> The Tuya integration integrates all Powered by Tuya devices you have added to the Tuya Smart and Tuya Smart Life apps.
+> The Home Assistant Community Store (HACS) is a custom integration that provides a UI to manage custom elements in [Home Assistant](https://www.home-assistant.io/).
 >
-> All Home Assistant platforms are supported by the Tuya integration, except the lock and remote platform.
-
-> [How to Install Smart Life Integration (Beta)](https://developer.tuya.com/en/docs/iot/Smart_Life_Integration?id=Kd0gk9baikbb7)
+> What HACS can do:
 >
-> This topic describes how to install and use the Smart Life integration for Home Assistant.
+> - Help you discover new custom elements.
+> - Help you download new custom elements.
+> - Manage (update/remove) custom elements.
+> - Publish your own custom element repository and create shortcuts to repositories or issue trackers.
 
-### 3.3.1. Get User Code
+### 3.3.1. Install
 
-#### A. SmartLife APP
+#### A. Start using HACS
 
-<img src="./images/HomeAssistant0301.png" alt="HomeAssistant0301" style="zoom: 25%;" />
+> https://www.hacs.xyz
 
-#### B. Setting
+<img src="./images/HomeAssistant0401.png" alt="HomeAssistant0401" style="zoom: 33%;" />
 
-<img src="./images/HomeAssistant0302.png" alt="HomeAssistant0302" style="zoom:25%;" />
+#### B. [Download HACS](https://www.hacs.xyz/docs/use/download/download/)
 
-#### C. Account and Security
+<img src="./images/HomeAssistant0402.png" alt="HomeAssistant0402" style="zoom:33%;" />
 
-<img src="./images/HomeAssistant0303.png" alt="HomeAssistant0303" style="zoom:25%;" />
+> 點選後就會有二種方式進行安裝，如果該主機能使用 SSH 或是 TREMINAL，建議使用 `Run the HACS download script`
 
-#### D. User Code
+##### B.1. [OS/Supervised](https://www.hacs.xyz/docs/use/download/download/#to-download-hacs-ossupervised)
 
-<img src="./images/HomeAssistant0304.png" alt="HomeAssistant0304" style="zoom:25%;" />
+> 點選 [my link](https://my.home-assistant.io/redirect/supervisor_addon/?addon=cb646a50_get&repository_url=https%3A%2F%2Fgithub.com%2Fhacs%2Faddons).
 
-### 3.2.2. Install
+<img src="./images/HomeAssistant0403.png" alt="HomeAssistant0403" style="zoom:33%;" />
+
+> 更新主機的 IP:PORT
+
+<img src="./images/HomeAssistant0404.png" alt="HomeAssistant0404" style="zoom:33%;" />
+
+> 之後會跳轉到登入畫面，進行登入後發生
+
+```log
+This redirect is not supported by your Home Assistant installation. It needs either the Home Assistant Operating System or Home Assistant Supervised installation method. For more information, see the documentation.
+```
+
+<img src="./images/HomeAssistant0405.png" alt="HomeAssistant0404" style="zoom:33%;" />
+
+##### B.2. Run the HACS download script
+
+<img src="./images/HomeAssistant0403a.png" alt="HomeAssistant0403a" style="zoom:33%;" />
+
+> 這個要進到作業系統進行操作
+
+```bash
+$ wget -O - https://get.hacs.xyz | bash -
+```
+
+> 它的工作大概如下
+
+```bash
+# 設定檔案存於 /root/.homeassistant
+$ mkdir -p /root/.homeassistant/custom_components
+$ cd /root/.homeassistant/custom_components
+$ wget https://github.com/hacs/integration/releases/latest/download/hacs.zip
+$ unzip hacs.zip -d hacs
+$ rm hacs.zip
+
+$ systemctl restart homeassistant.service
+```
+
+### 3.2.2. Setup
 
 #### A. Search Integrations
 
-> key in : tuya
+> key in : hacs
 
-<img src="./images/HomeAssistant0305.png" alt="HomeAssistant0305" style="zoom:33%;" />
+<img src="./images/HomeAssistant0411.png" alt="HomeAssistant0411" style="zoom: 50%;" />
 
-#### B. Enter your Smart Life or Tuya Smart user code
+#### B. Acknowledge the questions
 
-<img src="./images/HomeAssistant0306.png" alt="HomeAssistant0306" style="zoom: 50%;" />
+<img src="./images/HomeAssistant0412.png" alt="HomeAssistant0412" style="zoom: 33%;" />
 
-#### C. Scan QR-code
+#### C. Get the Key
 
-> Please use `SmartLife APP` scan the QR-code
+> 得到 key 之後，點選 https://github.com/login/device
 
-<img src="./images/HomeAssistant0307.png" alt="HomeAssistant0307" style="zoom:50%;" />
+<img src="./images/HomeAssistant0413.png" alt="HomeAssistant0413" style="zoom: 50%;" />
 
-#### D. Configure Tuya devices
+#### D. Binding with GitHub
 
-<img src="./images/HomeAssistant0308.png" alt="HomeAssistant0308" style="zoom: 50%;" />
+> 登入後，就會進行綁定
+
+<img src="./images/HomeAssistant0414.png" alt="HomeAssistant0414" style="zoom: 33%;" />
+
+> 輸入之前得到的 Key
+
+<img src="./images/HomeAssistant0415.png" alt="HomeAssistant0415" style="zoom: 33%;" />
+
+<img src="./images/HomeAssistant0416.png" alt="HomeAssistant0416" style="zoom: 33%;" />
+
+<img src="./images/HomeAssistant0417.png" alt="HomeAssistant0417" style="zoom: 33%;" />
+
+#### D. Configure HACS
+
+<img src="./images/HomeAssistant0418.png" alt="HomeAssistant0418" style="zoom: 33%;" />
 
 ### 3.3.3. Overview
 
-<img src="./images/HomeAssistant0309.png" alt="HomeAssistant0309" style="zoom: 33%;" />
+> 點選 `HACS`
+
+<img src="./images/HomeAssistant0419.png" alt="HomeAssistant0419" style="zoom: 33%;" />
 
 # Appendix
 
 # I. Study
 
 ## I.1. [Home Assistant 智能家居](https://www.youtube.com/playlist?list=PLhIaxXZ92HbBYk5lXMgL9LEb8PrOqpXml)
+
+## I.2. [2025 Home Assistant 入坑完全指南 – SMART HOME 智慧家庭 EP 7](https://neiltw.com/ultimate-home-assistant-beginners-guide)
+
+## I.3. [Home Assistant 必裝外掛 HACS 安裝步驟詳解 – Home Assistant 手把手教學 EP 17](https://neiltw.com/hacs-install-guide)
 
 # II. Debug
 
