@@ -99,7 +99,7 @@
 ### 2.3.1. Start and Stop
 
 ```bash
-systemctl status homeassistant.service
+systemctl start homeassistant.service
 systemctl stop homeassistant.service
 ```
 
@@ -233,19 +233,19 @@ $ cat /root/.homeassistant/home-assistant.log
 
 #### A. SmartLife APP
 
-<img src="T:/codebase/lankahsu520/HelperX/images/HomeAssistant0301.png" alt="HomeAssistant0301" style="zoom: 25%;" />
+<img src="./images/HomeAssistant0301.png" alt="HomeAssistant0301" style="zoom: 25%;" />
 
 #### B. Setting
 
-<img src="T:/codebase/lankahsu520/HelperX/images/HomeAssistant0302.png" alt="HomeAssistant0302" style="zoom:25%;" />
+<img src="./images/HomeAssistant0302.png" alt="HomeAssistant0302" style="zoom:25%;" />
 
 #### C. Account and Security
 
-<img src="T:/codebase/lankahsu520/HelperX/images/HomeAssistant0303.png" alt="HomeAssistant0303" style="zoom:25%;" />
+<img src="./images/HomeAssistant0303.png" alt="HomeAssistant0303" style="zoom:25%;" />
 
 #### D. User Code
 
-<img src="T:/codebase/lankahsu520/HelperX/images/HomeAssistant0304.png" alt="HomeAssistant0304" style="zoom:25%;" />
+<img src="./images/HomeAssistant0304.png" alt="HomeAssistant0304" style="zoom:25%;" />
 
 ### 3.2.2. Setup
 
@@ -253,25 +253,65 @@ $ cat /root/.homeassistant/home-assistant.log
 
 > key in : tuya
 
-<img src="T:/codebase/lankahsu520/HelperX/images/HomeAssistant0305.png" alt="HomeAssistant0305" style="zoom:33%;" />
+<img src="./images/HomeAssistant0305.png" alt="HomeAssistant0305" style="zoom:33%;" />
 
 #### B. Enter your Smart Life or Tuya Smart user code
 
-<img src="T:/codebase/lankahsu520/HelperX/images/HomeAssistant0306.png" alt="HomeAssistant0306" style="zoom: 50%;" />
+<img src="./images/HomeAssistant0306.png" alt="HomeAssistant0306" style="zoom: 50%;" />
 
 #### C. Scan QR-code
 
 > Please use `SmartLife APP` scan the QR-code
 
-<img src="T:/codebase/lankahsu520/HelperX/images/HomeAssistant0307.png" alt="HomeAssistant0307" style="zoom:50%;" />
+<img src="./images/HomeAssistant0307.png" alt="HomeAssistant0307" style="zoom:50%;" />
 
 #### D. Configure Tuya devices
 
-<img src="T:/codebase/lankahsu520/HelperX/images/HomeAssistant0308.png" alt="HomeAssistant0308" style="zoom: 50%;" />
+<img src="./images/HomeAssistant0308.png" alt="HomeAssistant0308" style="zoom: 50%;" />
 
 ### 3.3.3. Overview
 
-<img src="T:/codebase/lankahsu520/HelperX/images/HomeAssistant0309.png" alt="HomeAssistant0309" style="zoom: 33%;" />
+<img src="./images/HomeAssistant0309.png" alt="HomeAssistant0309" style="zoom: 33%;" />
+
+## 3.4. [Synology NAS](https://www.synology.com)
+
+> [Synology DSM](https://www.home-assistant.io/integrations/synology_dsm)
+>
+> The Synology DSM integration provides access to various statistics from your [Synology NAS](https://www.synology.com/) (*DSM 5.x and higher*), as well as cameras from the [Surveillance Station](https://www.synology.com/surveillance) and will allow to use the [File Station](https://www.synology.com/en-us/dsm/feature/file_sharing) as a backup location.
+
+### 3.4.1. Setup
+
+#### A. Search Integrations
+
+> key in : synology
+
+<img src="./images/HomeAssistant0401.png" alt="HomeAssistant0401" style="zoom: 50%;" />
+
+> 從網路上搜尋到
+
+<img src="./images/HomeAssistant0402.png" alt="HomeAssistant040" style="zoom: 50%;" />
+
+#### B. Login Synology DSM
+
+<img src="./images/HomeAssistant0403.png" alt="HomeAssistant0403" style="zoom: 50%;" />
+
+#### C. Backup location
+
+> 這邊的功用還無從得知，請各位自行理解
+>
+> Shared folder: home
+>
+> Path: ha_backup_home
+
+<img src="./images/HomeAssistant0404.png" alt="HomeAssistant0404" style="zoom:50%;" />
+
+#### D. Created configuration for xxx
+
+<img src="./images/HomeAssistant0405.png" alt="HomeAssistant0405" style="zoom: 50%;" />
+
+### 3.4.2. Overview
+
+<img src="T:/codebase/lankahsu520/HelperX/images/HomeAssistant0406.png" alt="HomeAssistant0406" style="zoom: 33%;" />
 
 # 4. Home Assistant Community Store (HACS)
 
