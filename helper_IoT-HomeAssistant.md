@@ -44,20 +44,28 @@
 
 # 2. Start up
 
-## 2.1. Install
->  [Installation](https://www.home-assistant.io/installation)
->
+## 2.1. [Install](https://www.home-assistant.io/installation)
 >  這是官網提供的教學，說它是 install 教學，應該不算。
 >
 >  該內容是要求使用者下載 image 裝在虛擬機上。雖說是給 DIY 愛好者，但是…
 >
 >  - 有人不知什麼是虛擬機。
->  - 只想在現有系統上執行，少一層虛擬機的耗能。
+>- 只想在現有系統上執行，少一層虛擬機的耗能。
 >  - 如使用 Raspberry Pi，不想再另外準備一張SDCARD（已經打照好遊戲機，就不能在上面附加嗎？）。
 
-###  2.1.1. [Raspberry Pi](https://www.home-assistant.io/installation/raspberrypi)
+> [Installation](https://www.home-assistant.io/installation/)
+>
+> - [Home Assistant Green ](https://support.nabucasa.com/hc/en-us/categories/24638797677853-Home-Assistant-Green)
+> - [Home Assistant Yellow ](https://support.nabucasa.com/hc/en-us/categories/24734575925149-Home-Assistant-Yellow)
+> - [Raspberry Pi](https://www.home-assistant.io/installation/raspberrypi)
+> - [ODROID](https://www.home-assistant.io/installation/odroid)
+> - [Generic x86-64](https://www.home-assistant.io/installation/generic-x86-64)
+> - [Linux](https://www.home-assistant.io/installation/linux)
+> - [macOS](https://www.home-assistant.io/installation/macos)
+> - [Windows](https://www.home-assistant.io/installation/windows)
+> - [Other systems](https://www.home-assistant.io/installation/alternative)
 
-## 2.2. Run
+## 2.2. Showtime
 
 > http://192.168.31.62:8123
 
@@ -86,9 +94,58 @@
 ### 2.2.2. My Home
 <img src="./images/HomeAssistant0006.png" alt="HomeAssistant0006" style="zoom:33%;" />
 
+## 2.3. homeassistant.service
+
+### 2.3.1. Start and Stop
+
+```bash
+systemctl status homeassistant.service
+systemctl stop homeassistant.service
+```
+
+### 2.3.2. Status
+
+```bash
+systemctl start homeassistant.service
+```
+
+```bash
+$  cat /usr/lib/systemd/system/homeassistant.service
+[Unit]
+Description=Home Assistant
+After=network.target
+
+Requires=root.mount
+After=root.mount
+
+[Service]
+Type=simple
+User=homeassistant
+
+PermissionsStartOnly=true
+ExecStartPre=/bin/mkdir -p /root/.homeassistant
+ExecStartPre=/bin/chown homeassistant:homeassistant /root/.homeassistant
+
+ExecStart=/usr/bin/hass --skip-pip -c "/root/.homeassistant"
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+
+### 2.3.3. Log
+
+> 因為這邊的設定目錄是指向 /root/.homeassistant
+
+```bash
+$ cat /root/.homeassistant/home-assistant.log
+```
+
 # 3. Integrations
 
 > 這邊就是大家期待的，綁定手邊的設備，不限定廠商，只要與 Home Assistant 有合作的。
+>
+> 如果在裏面能找到的，就代表官網已經內建，基本上就可以使用！如果有發生錯誤時，請記得去查看 Log。
 
 > Settings -> Devices & services
 
@@ -160,9 +217,67 @@
 
 <img src="./images/HomeAssistant0208.png" alt="HomeAssistant0208" style="zoom:33%;" />
 
-## 3.3. Home Assistant Community Store (HACS)
+## 3.3. [Tuya](https://www.tuya.com)
+
+> [Tuya](https://www.home-assistant.io/integrations/tuya)
+>
+> The Tuya integration integrates all Powered by Tuya devices you have added to the Tuya Smart and Tuya Smart Life apps.
+>
+> All Home Assistant platforms are supported by the Tuya integration, except the lock and remote platform.
+
+> [How to Install Smart Life Integration (Beta)](https://developer.tuya.com/en/docs/iot/Smart_Life_Integration?id=Kd0gk9baikbb7)
+>
+> This topic describes how to install and use the Smart Life integration for Home Assistant.
+
+### 3.3.1. Get User Code
+
+#### A. SmartLife APP
+
+<img src="T:/codebase/lankahsu520/HelperX/images/HomeAssistant0301.png" alt="HomeAssistant0301" style="zoom: 25%;" />
+
+#### B. Setting
+
+<img src="T:/codebase/lankahsu520/HelperX/images/HomeAssistant0302.png" alt="HomeAssistant0302" style="zoom:25%;" />
+
+#### C. Account and Security
+
+<img src="T:/codebase/lankahsu520/HelperX/images/HomeAssistant0303.png" alt="HomeAssistant0303" style="zoom:25%;" />
+
+#### D. User Code
+
+<img src="T:/codebase/lankahsu520/HelperX/images/HomeAssistant0304.png" alt="HomeAssistant0304" style="zoom:25%;" />
+
+### 3.2.2. Setup
+
+#### A. Search Integrations
+
+> key in : tuya
+
+<img src="T:/codebase/lankahsu520/HelperX/images/HomeAssistant0305.png" alt="HomeAssistant0305" style="zoom:33%;" />
+
+#### B. Enter your Smart Life or Tuya Smart user code
+
+<img src="T:/codebase/lankahsu520/HelperX/images/HomeAssistant0306.png" alt="HomeAssistant0306" style="zoom: 50%;" />
+
+#### C. Scan QR-code
+
+> Please use `SmartLife APP` scan the QR-code
+
+<img src="T:/codebase/lankahsu520/HelperX/images/HomeAssistant0307.png" alt="HomeAssistant0307" style="zoom:50%;" />
+
+#### D. Configure Tuya devices
+
+<img src="T:/codebase/lankahsu520/HelperX/images/HomeAssistant0308.png" alt="HomeAssistant0308" style="zoom: 50%;" />
+
+### 3.3.3. Overview
+
+<img src="T:/codebase/lankahsu520/HelperX/images/HomeAssistant0309.png" alt="HomeAssistant0309" style="zoom: 33%;" />
+
+# 4. Home Assistant Community Store (HACS)
 
 > 就是軟體商店。非內建，而且需要與個人的 [GitHub](https://github.com) 帳號綁定（GitHub 不是 open 嗎？）。
+>
+> 如果知道 Home Assistant 的運作方式，其實就可以跳過帳號綁定這步驟。
 
 > [HACS](https://www.hacs.xyz)
 >
@@ -175,41 +290,47 @@
 > - Manage (update/remove) custom elements.
 > - Publish your own custom element repository and create shortcuts to repositories or issue trackers.
 
-### 3.3.1. Install
+## 4.1. Install HACS
 
-#### A. Start using HACS
+### 4.1.1. Start using HACS
 
 > https://www.hacs.xyz
+>
+> 點選 `Start using HACS`
 
-<img src="./images/HomeAssistant0401.png" alt="HomeAssistant0401" style="zoom: 33%;" />
+<img src="./images/HomeAssistant4001.png" alt="HomeAssistant4001" style="zoom: 33%;" />
 
-#### B. [Download HACS](https://www.hacs.xyz/docs/use/download/download/)
+### 4.1.2. [Download HACS](https://www.hacs.xyz/docs/use/download/download/)
 
-<img src="./images/HomeAssistant0402.png" alt="HomeAssistant0402" style="zoom:33%;" />
+> 點選 `Download HACS`
+
+<img src="./images/HomeAssistant4002.png" alt="HomeAssistant4002" style="zoom:33%;" />
 
 > 點選後就會有二種方式進行安裝，如果該主機能使用 SSH 或是 TREMINAL，建議使用 `Run the HACS download script`
 
-##### B.1. [OS/Supervised](https://www.hacs.xyz/docs/use/download/download/#to-download-hacs-ossupervised)
+#### A. [OS/Supervised](https://www.hacs.xyz/docs/use/download/download/#to-download-hacs-ossupervised)
 
-> 點選 [my link](https://my.home-assistant.io/redirect/supervisor_addon/?addon=cb646a50_get&repository_url=https%3A%2F%2Fgithub.com%2Fhacs%2Faddons).
+> 點選 `my link.`
 
-<img src="./images/HomeAssistant0403.png" alt="HomeAssistant0403" style="zoom:33%;" />
+<img src="./images/HomeAssistant4003.png" alt="HomeAssistant4003" style="zoom:33%;" />
 
-> 更新主機的 IP:PORT
+> 更新自己主機的 IP:PORT
 
-<img src="./images/HomeAssistant0404.png" alt="HomeAssistant0404" style="zoom:33%;" />
+<img src="./images/HomeAssistant4005.png" alt="HomeAssistant4005" style="zoom:33%;" />
 
-> 之後會跳轉到登入畫面，進行登入後發生
+> 之後會跳轉到登入畫面。
 
-```log
-This redirect is not supported by your Home Assistant installation. It needs either the Home Assistant Operating System or Home Assistant Supervised installation method. For more information, see the documentation.
-```
+>  如果發生以下狀況，就是無法使用此方式，請至下章節繼續。
+>
+>  ```log
+>  This redirect is not supported by your Home Assistant installation. It needs either the Home Assistant Operating System or Home Assistant Supervised installation method. For more information, see the documentation.
+>  ```
 
-<img src="./images/HomeAssistant0405.png" alt="HomeAssistant0404" style="zoom:33%;" />
+<img src="./images/HomeAssistant4006.png" alt="HomeAssistant4006" style="zoom:33%;" />
 
-##### B.2. Run the HACS download script
+#### B. Run the HACS download script
 
-<img src="./images/HomeAssistant0403a.png" alt="HomeAssistant0403a" style="zoom:33%;" />
+<img src="./images/HomeAssistant4004.png" alt="HomeAssistant4004" style="zoom:33%;" />
 
 > 這個要進到作業系統進行操作
 
@@ -230,47 +351,59 @@ $ rm hacs.zip
 $ systemctl restart homeassistant.service
 ```
 
-### 3.2.2. Setup
+### 4.1.2. Setup
 
 #### A. Search Integrations
 
 > key in : hacs
 
-<img src="./images/HomeAssistant0411.png" alt="HomeAssistant0411" style="zoom: 50%;" />
+<img src="./images/HomeAssistant4011.png" alt="HomeAssistant4011" style="zoom: 50%;" />
 
 #### B. Acknowledge the questions
 
-<img src="./images/HomeAssistant0412.png" alt="HomeAssistant0412" style="zoom: 33%;" />
+<img src="./images/HomeAssistant4012.png" alt="HomeAssistant4012" style="zoom: 33%;" />
 
 #### C. Get the Key
 
 > 得到 key 之後，點選 https://github.com/login/device
 
-<img src="./images/HomeAssistant0413.png" alt="HomeAssistant0413" style="zoom: 50%;" />
+<img src="./images/HomeAssistant4013.png" alt="HomeAssistant4013" style="zoom: 50%;" />
 
 #### D. Binding with GitHub
 
 > 登入後，就會進行綁定
 
-<img src="./images/HomeAssistant0414.png" alt="HomeAssistant0414" style="zoom: 33%;" />
+<img src="./images/HomeAssistant4014.png" alt="HomeAssistant4014" style="zoom: 33%;" />
 
 > 輸入之前得到的 Key
 
-<img src="./images/HomeAssistant0415.png" alt="HomeAssistant0415" style="zoom: 33%;" />
+<img src="./images/HomeAssistant4015.png" alt="HomeAssistant4015" style="zoom: 33%;" />
 
-<img src="./images/HomeAssistant0416.png" alt="HomeAssistant0416" style="zoom: 33%;" />
+<img src="./images/HomeAssistant4016.png" alt="HomeAssistant4016" style="zoom: 33%;" />
 
-<img src="./images/HomeAssistant0417.png" alt="HomeAssistant0417" style="zoom: 33%;" />
+<img src="./images/HomeAssistant4017.png" alt="HomeAssistant4017" style="zoom: 33%;" />
 
 #### D. Configure HACS
 
-<img src="./images/HomeAssistant0418.png" alt="HomeAssistant0418" style="zoom: 33%;" />
+<img src="./images/HomeAssistant4018.png" alt="HomeAssistant4018" style="zoom: 33%;" />
 
-### 3.3.3. Overview
+### 4.1.3. Overview
 
 > 點選 `HACS`
 
-<img src="./images/HomeAssistant0419.png" alt="HomeAssistant0419" style="zoom: 33%;" />
+<img src="./images/HomeAssistant4019.png" alt="HomeAssistant4019" style="zoom: 33%;" />
+
+## 4.2. custom_components
+
+> 因為這邊的設定目錄是指向 /root/.homeassistant
+
+```bash
+$ tree -L 1 /root/.homeassistant/custom_components
+/root/.homeassistant/custom_components
+`-- hacs
+
+2 directories, 0 files
+```
 
 # Appendix
 
@@ -283,6 +416,20 @@ $ systemctl restart homeassistant.service
 ## I.3. [Home Assistant 必裝外掛 HACS 安裝步驟詳解 – Home Assistant 手把手教學 EP 17](https://neiltw.com/hacs-install-guide)
 
 # II. Debug
+
+## II.1. No module named `xxxx`
+
+```log
+2025-08-13 00:54:18.784 WARNING (MainThread) [homeassistant.bootstrap] Skipping pip installation of required modules. This may cause issues
+2025-08-13 00:54:50.902 ERROR (MainThread) [homeassistant.config_entries] Error occurred loading flow for integration xiaomi_miio: No module named 'miio'
+```
+
+```bash
+# 使用 pip 安裝
+$ pip install python-miio
+# 使用 pip 安裝特定版本
+$ pip install python-miio==0.5.12
+```
 
 # III. Glossary
 
