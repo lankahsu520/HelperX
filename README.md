@@ -158,11 +158,15 @@
 
 ### 1.1.6. helper_Version Control Systems
 
-#### A. [helper_GitHub.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitHub.md) - GitHub helper.
+#### A. [helper_DevTool-Trac.md](https://github.com/lankahsu520/HelperX/blob/master/helper_DevTool-Trac.md)  - Trac helper.
+
+> 一個很不錯的管理平台，不過因為版本過舊，已經沒辦法在新作業系統安裝。
+
+#### B. [helper_GitHub.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitHub.md) - GitHub helper.
 
 > 善用免費 git 空間。
 
-#### B. [helper_GitLabandCICD.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitLabandCICD.md) - GitLab helper.
+#### C. [helper_GitLabandCICD.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitLabandCICD.md) - GitLab helper.
 
 > CI/CD is useful ? Please make sure that you aren't a low-level programmer, system integration developer or embedded engineer.
 >
@@ -170,7 +174,7 @@
 >
 > 這時 CI/CD 就是一個很不錯的方法。
 
-#### C. [helper_SVNvsGit.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SVNvsGit.md) - SVN vs. Git helper.
+#### D. [helper_SVNvsGit.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SVNvsGit.md) - SVN vs. Git helper.
 
 > SVN、Git 都是很好的版本控管工具，當然市面上不止這兩種。只要選擇方便性即可。
 >
