@@ -158,7 +158,11 @@
 
 ### 1.1.6. helper_Version Control Systems
 
-#### A. [helper_DevTool-Trac.md](https://github.com/lankahsu520/HelperX/blob/master/helper_DevTool-Trac.md)  - Trac helper.
+#### A. [helper_VCS-SCM-Manager.md](https://github.com/lankahsu520/HelperX/blob/master/helper_VCS-SCM-Manager.md)  - SCM-Manager helper.
+
+> 一個很不錯的管理平台，安裝容易。
+
+#### A. [helper_VCS-Trac.md](https://github.com/lankahsu520/HelperX/blob/master/helper_VCS-Trac.md)  - Trac helper.
 
 > 一個很不錯的管理平台，不過因為版本過舊，已經沒辦法在新作業系統安裝。
 
