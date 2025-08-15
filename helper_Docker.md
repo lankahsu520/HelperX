@@ -22,7 +22,8 @@
 ## 1.1. Install 
 
 ```bash
-$ sudo apt-get install docker.io
+$ sudo apt-get install -y docker.io
+$ sudo apt-get install -y docker-compose-v2
 
 $ service docker status
 
