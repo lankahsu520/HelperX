@@ -129,6 +129,8 @@ $ sudo add-apt-repository ppa:deadsnakes/ppa
 ```bash
 $ sudo apt install -y python3.10-full
 $ sudo apt install -y python3.10-*
+
+$ sudo apt install -y python3.14-full
 ```
 
 ### 3.2.2. Use update-alternatives
@@ -145,14 +147,19 @@ $ ll /usr/bin/python2*
 $ ll /usr/bin/python*
 
 # --install <link> <name> <path> <priority>
+# priority 越大則優先
 # /usr/bin/python3
 $ sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 8
 $ sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 10
+$ sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 12
 $ sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.13 13
+$ sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.14 14
 # /usr/bin/python 
 $ sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.8 8
 $ sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.10 10
+$ sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.12 12
 $ sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.13 13
+$ sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.14 14
 
 $ ll /etc/alternatives/python*
 lrwxrwxrwx 1 root root 18  四  24 13:20 /etc/alternatives/python -> /usr/bin/python3.8*
@@ -230,6 +237,74 @@ pip 24.0 from /home/lanka/.local/lib/python3.10/site-packages/pip (python 3.10)
 
 $ virtualenv --version
 virtualenv 20.26.0 from /home/lanka/.local/lib/python3.10/site-packages/virtualenv/__init__.py
+```
+
+## 3.4. PEP 668
+
+```bash
+$ pip install --upgrade pip
+error: externally-managed-environment
+
+× This environment is externally managed
+╰─> To install Python packages system-wide, try apt install
+    python3-xyz, where xyz is the package you are trying to
+    install.
+
+    If you wish to install a non-Debian-packaged Python package,
+    create a virtual environment using python3 -m venv path/to/venv.
+    Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make
+    sure you have python3-full installed.
+
+    If you wish to install a non-Debian packaged Python application,
+    it may be easiest to use pipx install xyz, which will manage a
+    virtual environment for you. Make sure you have pipx installed.
+
+    See /usr/share/doc/python3.12/README.venv for more information.
+
+note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.
+hint: See PEP 668 for the detailed specification.
+```
+
+### 3.4.1. pipx
+
+```bash
+$ sudo apt-get --yes install pipx
+$ pipx ensurepath
+```
+
+```bash
+$ pip install --upgrade yt-dlp
+
+$ tree -L 2 ~/.local/bin/
+/home/lanka/.local/bin/
+└── yt-dlp -> /home/lanka/.local/share/pipx/venvs/yt-dlp/bin/yt-dlp
+
+1 directory, 1 file
+
+# 如果 pipx install yt-dlp，才會在 venvs/yt-dlp
+$ tree -L 2 ~/.local/share/pipx/
+/home/lanka/.local/share/pipx/
+├── shared
+│   ├── bin
+│   ├── include
+│   ├── lib
+│   ├── lib64 -> lib
+│   └── pyvenv.cfg
+└── venvs
+    └── yt-dlp
+
+8 directories, 1 file
+
+$ tree -L 2 ~/.local/state/
+/home/lanka/.local/state/
+├── pipx
+│   └── log
+└── wireplumber
+    └── restore-stream
+
+4 directories, 1 file
+
+$ pipx uninstall yt-dlp
 ```
 
 # 4. Run helloworld.py
