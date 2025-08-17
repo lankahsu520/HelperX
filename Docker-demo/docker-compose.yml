@@ -1,0 +1,8 @@
+
+services:
+  demo:
+    image: lanka520
+    build: .
+    container_name: hello-demo
+    ports:
+      - "9981:80"

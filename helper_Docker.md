@@ -227,39 +227,66 @@ flowchart LR
 
 ```
 
-#### A. docker build
+```bash
+$ tree -L 1 Docker-demo/
+Docker-demo/
+├── dbusX.conf
+├── docker-compose.yml
+├── Dockerfile
+└── supervisord.conf
+
+0 directories, 4 files
+```
+
+#### A. docker build and run
 
 ```bash
 # Build an image from a Dockerfile
-$ export DOCKER_REPOSITORY="ubuntu"
-$ export DOCKER_TAG="22.04v1"
-
-$ docker build -t="$DOCKER_REPOSITORY:$DOCKER_TAG" .
-
-# Put Dockerfile in the same folder
-$ ll
-total 12
-drwxr-xr-x  2 lanka lanka 4096 Feb 18 08:44 ./
-drwxrwxr-x 16 lanka lanka 4096 Apr 21 11:03 ../
--rwxr--r--  1 lanka lanka  522 Feb 18 08:44 Dockerfile*
-$ docker build -t="ubuntu:22.04v1" ./
-$ docker build -t="ubuntu:20.04v1" ./
+$ cd Docker-demo
+$ export DOCKER_REPOSITORY="lanka520"
+#$ export DOCKER_TAG="00.01"
+$ docker build \
+ -t="$DOCKER_REPOSITORY" \
+ .
 
 $ docker images
 REPOSITORY   TAG       IMAGE ID       CREATED         SIZE
-ubuntu       22.04v1   d41a1bf4ee25   5 seconds ago   3.57GB
-ubuntu       22.04     df5de72bdb3b   6 days ago      77.8MB
+lanka520     latest    ad3fec3ee0b5   2 seconds ago   285MB
 
-$ docker run -ti $DOCKER_REPOSITORY:$DOCKER_TAG /bin/bash
-$ docker run -ti ubuntu:22.04v1 /bin/bash
-$ docker run -ti d41a1bf4ee25 /bin/bash
+# HOST port: 9981
+# Container port: 80
+$ docker run \
+ -d \
+ --name hello-lanka520 \
+ -p 9981:80 \
+ demo
 
-# HOST port: 9982
-# Container port: 9981
-$ docker run -p 9982:9981 -ti d41a1bf4ee25
+$ docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS                                   NAMES
+60011bc64401   lanka520  "/usr/bin/supervisor…"   54 seconds ago   Up 53 seconds   0.0.0.0:9981->80/tcp, :::9981->80/tcp   hello-lanka520
+```
+
+#### B. docker compose
+
+> 讀取 docker-compose.yml 裏設定的參數後建立 image 並且 run
+
+```bash
+$ cd Docker-demo
+$ cat docker-compose.yml
+
+services:
+  demo:
+    image: lanka520
+    build: .
+    container_name: hello-demo
+    ports:
+      - "9981:80"
+
+$ docker compose up -d --build
 ```
 
 ## 3.3. Save/Load Image
+
 ```mermaid
 flowchart LR
 	TAR[ubuntu-$DOCKER_REPOSITORY-$DOCKER_TAG.tar]

@@ -7,7 +7,7 @@ RUN apt-get install \
             supervisor \
             apache2 \
             rsyslog \
-            dbus
+            dbus \
             -y
 
 RUN apt-get clean
@@ -22,7 +22,7 @@ WORKDIR /work
 # dbus
 RUN mkdir -p /run/dbus \
     && dbus-uuidgen > /etc/machine-id
-COPY umt.conf /etc/dbus-1/system.d
+COPY dbusX.conf /etc/dbus-1/system.d
 
 # apache2
 # CMD ["apachectl", "-D", "FOREGROUND"]
