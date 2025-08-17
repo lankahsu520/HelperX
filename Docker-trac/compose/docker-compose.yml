@@ -1,0 +1,19 @@
+
+services:
+  trac:
+    image: trac520
+    build:
+      context: .
+      args:
+        MYPROJECT_ADMIN: lanka
+        MYPROJECT_ADMIN_PASS: 123456
+        MYPROJECT_TRACDIR: /var/trac
+        MYPROJECT_NAME: lanka520
+    container_name: hello-trac
+    volumes:
+      - ../conf:/var/trac/conf
+      - ../repositories:/var/trac/repositories
+      - ../sites-available/trac.conf:/etc/apache2/sites-available/trac.conf
+      - ../sites-available/svn.conf:/etc/apache2/sites-available/svn.conf
+    ports:
+      - "9981:80"
