@@ -10,9 +10,15 @@ svn123.hidden = false
 svn123.type = svn
 svn123.url = svn123
 
+git123.dir = /var/trac/repositories/git123
+git123.hidden = false
+git123.sync_per_request = true
+git123.type = git
+git123.url = git123
+
 [account-manager]
-force_passwd_change = true
-htpasswd_file = /var/trac/conf/.htpasswd
+force_passwd_change = false
+htpasswd_file = /var/trac/auth/.htpasswd
 htpasswd_hash_type = crypt
 password_store = HtPasswdStore
 #password_store = SvnServePasswordStore
@@ -191,7 +197,7 @@ min_query_length = 3
 extensions = 
 
 [svn]
-authz_file = /var/trac/conf/authz
+authz_file = /var/trac/auth/authz
 authz_module_name = 
 
 [ticket]
@@ -212,7 +218,7 @@ max_comment_size = 262144
 max_description_size = 262144
 max_summary_size = 262144
 preserve_newlines = default
-restrict_owner = disabled
+restrict_owner = enabled
 workflow = ConfigurableTicketWorkflow
 
 [ticket-workflow]
@@ -274,7 +280,7 @@ jquery_location =
 jquery_ui_location = 
 jquery_ui_theme_location = 
 never_obfuscate_mailto = disabled
-permission_policies = ReadonlyWikiPolicy,DefaultPermissionPolicy,LegacyAttachmentPolicy
+permission_policies = AuthzSourcePolicy,DefaultPermissionPolicy,LegacyAttachmentPolicy
 permission_store = DefaultPermissionStore
 request_filters = 
 resizable_textareas = enabled

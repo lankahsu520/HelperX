@@ -13,3 +13,10 @@ viewers =
 @releaser = 
 @viewers = 
 
+[git:/]
+@administrators = rw
+@developers = 
+@newbie = 
+@releaser = 
+@viewers = 
+

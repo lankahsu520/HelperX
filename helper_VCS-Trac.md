@@ -23,6 +23,12 @@
 >
 > <font color="red">有試過在 Ubuntu 20.04 以後的版本安裝過，始終沒有成功過！最終停在 Ubuntu 18.04。最主要的原因是支援的 Python 版本過舊。</font>
 
+> 為什麼堅持使用Trac
+>
+> - Range diff
+> - 同個畫面可以瀏覽所有的 repositories
+> - 
+
 > [ChatGPT] Trac 是什麼
 >
 > - **Trac** 是一個開源、輕量級的 **專案管理與缺陷追蹤系統（Issue Tracker / Project Management Tool）**，最初是為軟體專案設計的。它同時整合了 **版本控制瀏覽、Wiki、Timeline**，適合需要簡單、直接管理程式碼專案的團隊。
@@ -282,34 +288,7 @@ $ service apache2 reload
 
 ### 2.1.2. Install  trac with docker
 
-#### A. Check Files
-
-```bash
-$ tree -L 3 Docker-trac/
-Docker-trac/
-├── compose
-│   ├── dbusX.conf
-│   ├── docker-compose.yml
-│   ├── Dockerfile
-│   ├── supervisord.conf
-│   └── trac_banner.png
-├── conf
-│   ├── authz
-│   ├── org
-│   │   ├── trac.ini
-│   │   └── trac.ini.sample
-│   ├── trac.ini
-│   └── trac.ini.sample
-├── repositories
-│   └── svn-create-repo.sh
-└── sites-available
-    ├── svn.conf
-    └── trac.conf
-
-5 directories, 13 files
-```
-
-#### B. Build and Run
+#### A. Build and Run
 
 > 會用到的參數有
 >
@@ -319,38 +298,65 @@ Docker-trac/
 > MYPROJECT_NAME: lanka520
 
 ```bash
-$ cd Docker-trac/compose
+# 個人習慣放在 /work
+$ cp -avr Docker-trac /work/trac
+$ cd /work/trac
+$ tree -L 2 ./
+./
+├── auth
+│   └── authz
+├── compose
+│   ├── dbusX.conf
+│   ├── docker-compose.yml
+│   ├── Dockerfile-1.2
+│   ├── supervisord.conf
+│   └── trac_banner.png
+├── conf
+├── conf-sample
+│   └── trac.ini
+├── repositories
+│   └── svn-create-repo.sh
+└── sites-available
+    ├── svn.conf
+    └── trac.conf
+
+7 directories, 10 files
+
+# 設定管理者帳號和密碼
+$ MYPROJECT_ADMIN=lanka
+$ MYPROJECT_ADMIN_PASS=123456
+$ htpasswd -b -c auth/.htpasswd $MYPROJECT_ADMIN $MYPROJECT_ADMIN_PASS
+
+$ cd compose
 $ docker compose up -d --build
 $ docker images
-REPOSITORY   TAG       IMAGE ID       CREATED         SIZE
-trac520      latest    1e1ca31269c9   5 seconds ago   611MB
+REPOSITORY               TAG       IMAGE ID       CREATED              SIZE
+trac520                  latest    6d0210261d91   About a minute ago   611MB
 
 $ docker ps
-CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS                                   NAMES
-a8509207be1d   trac520   "/usr/bin/supervisor…"   18 seconds ago   Up 16 seconds   0.0.0.0:9981->80/tcp, :::9981->80/tcp   hello-trac
+CONTAINER ID   IMAGE                    COMMAND                  CREATED              STATUS                PORTS                                       NAMES
+4a3aa760362e   trac520                  "/usr/bin/supervisor…"   About a minute ago   Up About a minute     0.0.0.0:9981->80/tcp, [::]:9981->80/tcp     hello-trac
 ```
 
-#### C. Create an SVN repostory
+#### b. Create an SVN repostory
 
 > 這邊建議進入 container 後再建立，因為有 db 版本的問題
 
 ```bash
 $ docker exec -it hello-trac /bin/bash
 
-root@a8509207be1d:/# REPO_NAME=svn123
-root@a8509207be1d:/# cd /var/trac/repositories; ./svn-create-repo.sh $REPO_NAME
-root@a8509207be1d:/var/trac/repositories# tree -L 2 ./
-./
-├── svn123
-│   ├── conf
-│   ├── db
-│   ├── format
-│   ├── hooks
-│   ├── locks
-│   └── README.txt
-└── svn-create-repo.sh
+root@4a3aa760362e:/# REPO_NAME=svn123
+root@4a3aa760362e:/# cd /var/trac/repositories; ./svn-create-repo.sh $REPO_NAME
+root@4a3aa760362e:/var/trac/repositories# tree -L 1 $REPO_NAME
+svn123/
+├── conf
+├── db
+├── format
+├── hooks
+├── locks
+└── README.txt
 
-5 directories, 3 files
+4 directories, 2 files
 ```
 
 ```bash
@@ -358,7 +364,110 @@ cat /var/log/apache2/access.log
 cat /var/log/apache2/error.log
 ```
 
-## 2.6. Showtime
+#### B. Create an GIT repostory
+
+```bash
+root@61819b799ee2:/# REPO_NAME=git123
+root@61819b799ee2:/# cd /var/trac/repositories; ./git-create-repo.sh $REPO_NAME
+root@61819b799ee2:/var/trac/repositories# tree -L 1 $REPO_NAME
+git123
+├── branches
+├── config
+├── description
+├── HEAD
+├── hooks
+├── info
+├── objects
+└── refs
+
+5 directories, 3 files
+```
+
+### 2.1.3. Configuration
+
+> 大置的佈局如下
+
+```mermaid
+flowchart LR
+	subgraph Container[Container - Ubuntu 18.04]
+		Trac[Trac<br>/var/trac]
+
+		svn123[svn123<br>/var/trac/repositories/svn123]
+		
+		git123[git123<br>/var/trac/repositories/git123]
+	end
+
+```
+
+> 相關的設定請見以下的檔案
+
+#### A. trac.ini
+
+```bash
+# 可以看到要管理的 repositories
+
+[repositories]
+.alias = svn123
+.sync_per_request = true
+
+svn123.dir = /var/trac/repositories/svn123
+svn123.hidden = false
+#svn123.sync_per_request = true
+svn123.type = svn
+svn123.url = svn123
+
+git123.dir = /var/trac/repositories/git123
+git123.hidden = false
+git123.sync_per_request = true
+git123.type = git
+git123.url = git123
+```
+
+#### B. Apache - svn.conf
+
+```bash
+<Location /svn123>
+  DAV svn
+  SVNPath /var/trac/repositories/svn123
+  AuthType Basic
+  AuthName "SVN Repository - /svn123"
+  AuthUserFile /var/trac/auth/.htpasswd
+  AuthzSVNAccessFile /var/trac/auth/authz
+  Require valid-user
+</Location>
+
+```
+
+#### C. Apache - git.conf
+
+```bash
+SetEnv GIT_PROJECT_ROOT /var/trac/repositories
+SetEnv GIT_HTTP_EXPORT_ALL
+
+ScriptAlias /git /usr/lib/git-core/git-http-backend/
+
+Alias /git /var/trac/repositories
+<Directory /usr/lib/git-core>
+  Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+  AllowOverride None
+  Require all granted
+</Directory>
+
+<Directory /var/trac/repositories>
+  Options Indexes FollowSymLinks MultiViews
+  AllowOverride None
+  Require all granted
+</Directory>
+
+<Location /git/git123>
+  AuthType Basic
+  AuthName "Git Repository - /git123"
+  AuthUserFile /var/trac/auth/.htpasswd
+  Require valid-user
+</Location>
+```
+
+## 2.2. Showtime
 
 > http://127.0.0.1:80/trac
 
@@ -366,141 +475,112 @@ cat /var/log/apache2/error.log
 >
 > http://127.0.0.1:9981/trac
 
-<img src="./images/VCS-Trac0001.png" alt="VCS-Trac0001" style="zoom: 50%;" />
+<img src="./images/VCS-Trac0001.png" alt="VCS-Trac0001" style="zoom: 33%;" />
 
-### 2.6.1. Log
+## 2.3. Features
+
+### 2.3.1. Clone repositories on Host
+
+#### A. svn
+
+```bash
+$ cd /tmp
+$ svn co http://127.0.0.1:9981/svn123
+$ cd svn123
+$ echo "Hello trac" > README.md
+$ svn add README.md
+$ svn ci ./
+```
+
+#### B. git
+
+```bash
+$ cd /tmp
+$ git clone http://127.0.0.1:9981/git/git123
+$ cd git123
+$ echo "Hello git" > README.md
+$ git add README.md
+$ git commit ./
+$ git push
+```
+
+### 2.3.2. Browse Source
+
+#### A. All repositories
+
+> 可以一次瀏覽所有的 repositories；這在其它管理工具很少見到。
+
+<img src="./images/VCS-Trac0002.png" alt="VCS-Trac0002" style="zoom: 33%;" />
+
+#### B. Range diff
+
+> 很多管理工具不支援此功能
+
+<img src="./images/VCS-Trac0003.png" alt="VCS-Trac0003" style="zoom: 33%;" />
+
+### 2.3.3. Timeline
+
+> 可以很簡單的知道所有的流水帳。
+>
+> 如果依管理角度，訊息簡單、直接，沒有花俏的畫面。其它管理工具都太複雜，有時還要點選n個畫面。
+
+<img src="./images/VCS-Trac0003.png" alt="VCS-Trac0003" style="zoom: 33%;" />
+
+## 2.4. Command Reference
+
+### 2.5.1. Log
 
 ```bash
 cat /var/trac/log/trac.log
 
 cat /var/log/apache2/access.log
 cat /var/log/apache2/error.log
-
 ```
 
-### 2.6.2. trac-admin
+### 2.4.2. trac-admin
 
 ```bash
 trac-admin /var/trac repository list
-
+# 將 repository-svn123 加入
 trac-admin /var/trac repository add svn123 /var/trac/repositories/svn123 svn
+
+# 如果 repository-svn123 與 trac 非同步時，記得
 trac-admin /var/trac repository resync 'svn123'
 
+# 查看 trac 的權限狀況
+trac-admin /var/trac permission list
+
+pip install --upgrade Trac
+trac-admin /var/trac upgrade
+trac-admin /var/trac wiki upgrade
 ```
 
-### 2.6.3. docker
+### 2.4.3. apache
 
 ```bash
+a2ensite svn.conf
+a2ensite git.conf
+a2ensite trac.conf
+service apache2 reload
+
+cat /var/log/apache2/access.log
+cat /var/log/apache2/error.log
+
+cat /etc/apache2/sites-available/trac.conf
+cat /etc/apache2/sites-available/svn.conf
+```
+
+### 2.4.4. docker
+
+```bash
+#build image
 docker compose up -d --build
 
+# enter container-hello-trac
 docker exec -it hello-trac /bin/bash
 
+# remove docker-trac520
 docker-stopall; docker-rmexited; sleep 1; docker-rmimage trac520
-```
-
-
-
-# 3. Repositories
-
-```mermaid
-flowchart LR
-	subgraph Host[Host - Ubuntu 18.04]
-		Trac[Trac<br>/work/trac]
-
-		svnopt[svnopt - /work_svnopt/svnopt]
-
-		svnxbox[svnxbox - /work_xbox/svnxbox]
-		
-		gitroot[gitroot - /work_gitroot/gitroot.git]
-	end
-
-```
-
-## 3.1. Add Repositories
-
-#### A. trac.ini
-
-```bash
-$ sudo vi /work/trac/conf/trac.ini
-[repositories]
-.alias = svnxbox
-.sync_per_request = true
-
-svnxbox.dir = /work_xbox/svnxbox/
-svnxbox.hidden = false
-svnxbox.sync_per_request = true
-svnxbox.type = svn
-svnxbox.url = http://127.0.0.1/svnxbox
-
-svnopt.dir = /work_svnopt/svnopt
-svnopt.hidden = false
-svnopt.sync_per_request = true
-svnopt.type = svn
-svnopt.url = http://127.0.0.1/svnopt
-```
-
-#### B. Apache - svn.conf
-
-```bash
-$ sudo vi /etc/apache2/sites-available/svn.conf
-<Location /svnxbox>
-  DAV svn
-  SVNPath /work_xbox/svnxbox
-  AuthType Basic
-  AuthName "SVN Repository - /svnxbox"
-  AuthUserFile /work/trac/.htpasswd
-  AuthzSVNAccessFile /work/trac/conf/authz
-  Require valid-user
-</Location>
-<Location /svnopt>
-  DAV svn
-  SVNPath /work_svnopt/svnopt
-  AuthType Basic
-  AuthName "SVN Repository - /svnopt"
-  AuthUserFile /work/trac/.htpasswd
-  AuthzSVNAccessFile /work/trac/conf/authz
-  Require valid-user
-</Location>
-```
-
-#### C. Apache - git.conf
-
-```bash
-$ sudo vi /etc/apache2/sites-available/git.conf
-SetEnv GIT_PROJECT_ROOT /work_gitroot
-SetEnv GIT_HTTP_EXPORT_ALL
-
-ScriptAlias /gitroot /usr/lib/git-core/git-http-backend/
-
-Alias /gitroot /work_gitroot
-<Directory /usr/lib/git-core>
-  Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
-  AllowOverride None
-  Require all granted
-</Directory>
-<Directory /work_gitroot>
-  Options Indexes FollowSymLinks MultiViews
-  AllowOverride None
-  Require all granted
-</Directory>
-
-<Location /gitroot/gitroot.git>
-  AuthType Basic
-  AuthName "Git Repository - /gitroot"
-  #AuthUserFile /work_gitroot/authz
-  AuthUserFile /work/trac/.htpasswd
-  Require valid-user
-</Location>
-```
-
-## 3.2. Download Repositories
-
-```bash
-# svn
-$ svn co http://127.0.0.1/svnopt
-
-# git
-$ git clone http://127.0.0.1/gitroot/gitroot.git
 ```
 
 # Footnote
@@ -540,44 +620,6 @@ sudo apt update
 sudo apt-get remove libapache2-mod-python libapache2-mod-wsgi
 sudo apt-get build-dep libapache2-mod-python libapache2-mod-wsgi
 ```
-
-## II.2. Trac Upgrade
-
-```bash
-sudo pip install --upgrade Trac
-sudo trac-admin /work/trac upgrade
-sudo trac-admin /work/trac wiki upgrade
-```
-
-## II.3. repository resync
-
-```bash
-sudo trac-admin /work/trac repository resync 'svnxbox'
-sudo trac-admin /work/trac repository resync 'svnopt'
-
-sudo service apache2 restart
-```
-
-## II.4. ModuleNotFoundError: No module named 'svn'
-
-```bash
-cat /var/trac/log/trac.log
-
-$ apt-get install -y python-subversion
-apt-get install -y libapache2-mod-wsgi-py3
-
-apt-cache search svn | grep python3
-apt-get install -y python3-svn
-apt-get install -y python3-vcstools
-
-
-python3 - <<'EOF'
-from svn import fs, repos, core, delta
-print("SVN Python bindings OK:", core.SVN_VER_MAJOR, core.SVN_VER_MINOR)
-EOF
-```
-
-
 
 # III. Glossary
 

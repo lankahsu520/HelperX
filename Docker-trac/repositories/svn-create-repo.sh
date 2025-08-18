@@ -20,5 +20,5 @@ chown -R www-data: ${SVN_DIR}/${REPO_NAME}
 chmod -R 775 ${SVN_DIR}/${REPO_NAME}
 chmod -R 777 ${SVN_DIR}/${REPO_NAME}/db
 
-echo "Git repository '${REPO_NAME}' created in ${SVN_DIR}/${REPO_NAME}"
+echo "SVN repository '${REPO_NAME}' created in ${SVN_DIR}/${REPO_NAME}"
 

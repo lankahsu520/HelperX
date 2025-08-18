@@ -4,6 +4,7 @@ services:
     image: trac520
     build:
       context: .
+      dockerfile: Dockerfile-1.2
       args:
         MYPROJECT_ADMIN: lanka
         MYPROJECT_ADMIN_PASS: 123456
@@ -11,9 +12,11 @@ services:
         MYPROJECT_NAME: lanka520
     container_name: hello-trac
     volumes:
-      - ../conf:/var/trac/conf
+      - ../auth:/var/trac/auth
+      - ../conf/trac.ini-1.2:/var/trac/conf/trac.ini
       - ../repositories:/var/trac/repositories
       - ../sites-available/trac.conf:/etc/apache2/sites-available/trac.conf
       - ../sites-available/svn.conf:/etc/apache2/sites-available/svn.conf
+      - ../sites-available/git.conf:/etc/apache2/sites-available/git.conf
     ports:
       - "9981:80"

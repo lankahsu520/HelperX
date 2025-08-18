@@ -78,6 +78,13 @@ RUN trac-admin $MYPROJECT_TRACDIR permission add $MYPROJECT_ADMIN TRAC_ADMIN
 RUN trac-admin $MYPROJECT_TRACDIR permission add @viewers LOG_VIEW FILE_VIEW WIKI_VIEW WIKI_CREATE WIKI_MODIFY SEARCH_VIEW REPORT_VIEW REPORT_SQL_VIEW
 RUN trac-admin $MYPROJECT_TRACDIR permission add @viewers TICKET_VIEW TICKET_CREATE TICKET_MODIFY BROWSER_VIEW TIMELINE_VIEW CHANGESET_VIEW ROADMAP_VIEW MILESTONE_VIEW
 
+# 移除 anonymous 的權限 BROWSER_VIEW 和 FILE_VIEW
+RUN trac-admin /var/trac permission remove anonymous BROWSER_VIEW
+RUN trac-admin /var/trac permission remove anonymous FILE_VIEW
+
+#RUN trac-admin $MYPROJECT_TRACDIR permission add authenticated BROWSER_VIEW
+#RUN trac-admin $MYPROJECT_TRACDIR permission add authenticated FILE_VIEW
+
 # 安裝 PLUGIN
 ENV PJ_PYTHON_BIN=python
 ENV PJ_PYTHON_VER=2.7
