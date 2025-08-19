@@ -1101,7 +1101,7 @@ $ ./svndumpsanitizer --help
 
 ```bash
 export SVN_NAME_SRC=svn
-export SVN_DUMP_SOURCE_FILE="./dump_svn_20220822"
+export SVN_DUMP_SOURCE_FILE="./dump-svn-all"
 
 svnadmin dump $SVN_NAME_SRC > $SVN_DUMP_SOURCE_FILE
 ```
@@ -1117,7 +1117,7 @@ export SVN_DUMP_FILTER="$SVN_DUMP_FILTER trunk/xbox"
 ###### A.2.3. include/exclude
 
 ```bash
-export SVN_DUMP_FILTER_FILE_INCLUDE="./dump_svn_20220822include"
+export SVN_DUMP_FILTER_FILE_INCLUDE="./dump-svn-include-xbox"
 
 ./svndumpsanitizer \
 	--infile $SVN_DUMP_SOURCE_FILE \
@@ -1128,7 +1128,7 @@ export SVN_DUMP_FILTER_FILE_INCLUDE="./dump_svn_20220822include"
 ```
 
 ```bash
-export SVN_DUMP_FILTER_FILE_EXCLUDE="./dump_svn_20220822exclude"
+export SVN_DUMP_FILTER_FILE_EXCLUDE="./dump-svn-exclude-xbox"
 
 ./svndumpsanitizer \
 	--infile $SVN_DUMP_SOURCE_FILE \
@@ -1159,7 +1159,7 @@ flowchart LR
 ```
 
 ```bash
-export SVN_DUMP_FILTER_FILE_INCLUDE="./dump_svn_20220822include"
+export SVN_DUMP_FILTER_FILE_INCLUDE="./dump-svn-include-xbox"
 export SVN_NAME_DST=svnnew-include
 
 svnadmin create $SVN_NAME_DST
@@ -1190,7 +1190,7 @@ flowchart LR
 ```
 
 ```bash
-export SVN_DUMP_FILTER_FILE_EXCLUDE="./dump_svn_20220822exclude"
+export SVN_DUMP_FILTER_FILE_EXCLUDE="./dump-svn-exclude-xbox"
 export SVN_NAME_DST=svnnew-exclude
 
 svnadmin create $SVN_NAME_DST
@@ -1750,3 +1750,4 @@ function git-checkoutb()
 
 > [HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
 
+du

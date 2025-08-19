@@ -55,7 +55,7 @@ RUN pip install \
 
 # 建立 Trac 目錄
 RUN mkdir -p /var/trac
-VOLUME ["/var/trac/conf"]
+#VOLUME ["/var/trac/conf"]
 
 #ENV MYPROJECT_TRACDIR=/var/trac
 ARG MYPROJECT_TRACDIR
