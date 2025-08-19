@@ -51,7 +51,7 @@ up_fn()
 
 run_fn()
 {
-	eval_fn "${FUNCNAME[0]}:${LINENO}" "docker compose up $DOCKER_NAME -d bash"
+	eval_fn "${FUNCNAME[0]}:${LINENO}" "docker compose up $DOCKER_NAME -d"
 	return 0
 
 }
