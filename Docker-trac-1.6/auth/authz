@@ -1,0 +1,22 @@
+
+[groups]
+administrators = lanka
+developers = lanka
+newbie = mary
+releaser = lanka
+viewers =
+
+[svn123:/]
+@administrators = rw
+@developers = 
+@newbie = 
+@releaser = 
+@viewers = 
+
+[git:/]
+@administrators = rw
+@developers = 
+@newbie = 
+@releaser = 
+@viewers = 
+

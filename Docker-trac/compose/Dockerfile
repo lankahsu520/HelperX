@@ -24,9 +24,6 @@ RUN apt-get install \
             libapache2-mod-python \
             libapache2-mod-svn \
             -y
-#            libapache2-mod-wsgi \
-#            python3-svn \
-
 
 RUN apt-get install \
             locales \
@@ -40,16 +37,16 @@ RUN apt-get clean
 RUN apt-get autoclean
 RUN apt-get autoremove --purge
 
-#RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.8 8 \
-#    && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 8
-
 # dash -> bash
 RUN cd /bin && rm sh; ln -s bash sh
 
 #WORKDIR /work
 
+# for python 3.12
+#ENV PIP_668=--break-system-packages
 # 安裝 Trac 1.2.4
 RUN pip install \
+            ${PIP_668} \
             trac==1.2.4
 
 # 建立 Trac 目錄
@@ -62,8 +59,8 @@ ARG MYPROJECT_TRACDIR
 ARG MYPROJECT_NAME
 
 RUN trac-admin $MYPROJECT_TRACDIR initenv $MYPROJECT_NAME sqlite:db/trac.db
-#RUN trac-admin $MYPROJECT_TRACDIR deploy $MYPROJECT_TRACDIR
-#RUN chmod ugo+x /var/www/cgi-bin/*
+#RUN trac-admin $MYPROJECT_TRACDIR deploy $MYPROJECT_TRACDIR/www
+#RUN chmod ugo+x $MYPROJECT_TRACDIR/www/cgi-bin/*
 
 # 設定使用者帳號和密碼
 #ENV MYPROJECT_ADMIN=lanka
@@ -87,7 +84,20 @@ RUN trac-admin /var/trac permission remove anonymous FILE_VIEW
 
 # 安裝 PLUGIN
 ENV PJ_PYTHON_BIN=python
+#ubuntu:18.04
 ENV PJ_PYTHON_VER=2.7
+
+#ENV PJ_PYTHON_BIN=python3
+#ubuntu:20.04
+#ENV PJ_PYTHON_VER=3.8
+# ubuntu:22.04 
+#ENV PJ_PYTHON_VER=3.10
+# ubuntu:24.04 
+#ENV PJ_PYTHON_VER=3.12
+
+#RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.8 8 \
+#    && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 8
+
 RUN svn co https://trac-hacks.org/svn/accountmanagerplugin/tags/acct_mgr-0.5.0 /tmp/acct_mgr \
     && cd /tmp/acct_mgr && $PJ_PYTHON_BIN setup.py bdist_egg \
     && cp dist/*.egg /usr/local/lib/python${PJ_PYTHON_VER}/dist-packages/ \
@@ -121,40 +131,11 @@ RUN chmod -R 775 $MYPROJECT_TRACDIR
 
 # 啟用 Apache WSGI
 #RUN a2enmod wsgi
+RUN a2dissite 000-default
 RUN a2enmod python
 # enable Apache mod_env, mod_cgi, mod_alias, mod_rewrite, ... modules
 RUN a2enmod env cgi alias rewrite dav dav_fs
 RUN a2enmod dav_svn
-
-# 建立 Apache 設定
-#RUN cat > "/etc/apache2/sites-available/trac.conf" <<EOF
-#  <Location /trac>
-#    SetHandler mod_python
-#    PythonInterpreter main_interpreter
-#    PythonHandler trac.web.modpython_frontend
-#    PythonOption TracEnv /var/trac
-#    PythonOption TracEnvParentDir /var/trac
-#    PythonOption TracUriRoot /trac
-#    # PythonOption TracEnvIndexTemplate /var/trac/templates/index-template.html
-#    PythonOption TracLocale en_US.UTF8
-#    PythonOption PYTHON_EGG_CACHE /tmp
-#    PythonDebug on
-#    Order allow,deny
-#    Allow from all
-#  </Location>
-#EOF
-
-#RUN cat > "/etc/apache2/sites-available/svn.conf" <<EOF
-#<Location /svn123>
-#  DAV svn
-#  SVNPath /var/trac/repositories/svn123
-#  AuthType Basic
-#  AuthName "SVN Repository - /svn123"
-#  AuthUserFile /var/trac/conf/.htpasswd
-#  AuthzSVNAccessFile /var/trac/conf/authz
-#  Require valid-user
-#</Location>
-#EOF
 
 # enable the trac site configuration
 #RUN a2ensite trac.conf

@@ -15,6 +15,7 @@ services:
       - ../auth:/var/trac/auth
       - ../conf/trac.ini:/var/trac/conf/trac.ini
       - ../repositories:/var/trac/repositories
+      - ../sites-available/trac.wsgi:/var/trac/www/trac.wsgi
       - ../sites-available/trac.conf:/etc/apache2/sites-available/trac.conf
       - ../sites-available/svn.conf:/etc/apache2/sites-available/svn.conf
       - ../sites-available/git.conf:/etc/apache2/sites-available/git.conf

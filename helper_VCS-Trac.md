@@ -89,7 +89,7 @@ flowchart LR
 > - [setuptools](https://pypi.org/project/setuptools), version > 5.6
 > - [Jinja2](https://pypi.org/project/Jinja2), version >= 2.9.3
 
-## 2.1. Install
+## 2.1. Install Trac on Host
 
 ### 2.1.1. Step by Step
 
@@ -163,6 +163,8 @@ viewers =
 ```
 
 #### C. [Plugin](https://trac.edgewall.org/wiki/PluginList)
+
+> [Plugins for Trac 1.6.x](https://trac-hacks.org/wiki/1.6)
 
 ```bash
 #** Plugin **
@@ -286,104 +288,13 @@ $ sudo service apache2 restart
 $ service apache2 reload
 ```
 
-### 2.1.2. Install  trac with docker
+## 2.2. Install [Trac](https://pypi.org/project/Trac) with docker
 
-#### A. Build and Run
-
-> 會用到的參數有
+> trac1.2.4 : [Docker-trac](https://github.com/lankahsu520/HelperX/tree/master/Docker-trac)
 >
-> MYPROJECT_ADMIN: lanka
-> MYPROJECT_ADMIN_PASS: 123456
-> MYPROJECT_TRACDIR: /var/trac
-> MYPROJECT_NAME: lanka520
+> trac1.6 : [Docker-trac-1.6](https://github.com/lankahsu520/HelperX/tree/master/Docker-trac-1.6)
 
-```bash
-# 個人習慣放在 /work
-$ cp -avr Docker-trac /work/trac
-$ cd /work/trac
-$ tree -L 2 ./
-./
-├── auth
-│   └── authz
-├── compose
-│   ├── dbusX.conf
-│   ├── docker-compose.yml
-│   ├── Dockerfile-1.2
-│   ├── supervisord.conf
-│   └── trac_banner.png
-├── conf
-├── conf-sample
-│   └── trac.ini
-├── repositories
-│   └── svn-create-repo.sh
-└── sites-available
-    ├── svn.conf
-    └── trac.conf
-
-7 directories, 10 files
-
-# 設定管理者帳號和密碼
-$ MYPROJECT_ADMIN=lanka
-$ MYPROJECT_ADMIN_PASS=123456
-$ htpasswd -b -c auth/.htpasswd $MYPROJECT_ADMIN $MYPROJECT_ADMIN_PASS
-
-$ cd compose
-$ docker compose up -d --build
-$ docker images
-REPOSITORY               TAG       IMAGE ID       CREATED              SIZE
-trac520                  latest    6d0210261d91   About a minute ago   611MB
-
-$ docker ps
-CONTAINER ID   IMAGE                    COMMAND                  CREATED              STATUS                PORTS                                       NAMES
-4a3aa760362e   trac520                  "/usr/bin/supervisor…"   About a minute ago   Up About a minute     0.0.0.0:9981->80/tcp, [::]:9981->80/tcp     hello-trac
-```
-
-#### b. Create an SVN repostory
-
-> 這邊建議進入 container 後再建立，因為有 db 版本的問題
-
-```bash
-$ docker exec -it hello-trac /bin/bash
-
-root@4a3aa760362e:/# REPO_NAME=svn123
-root@4a3aa760362e:/# cd /var/trac/repositories; ./svn-create-repo.sh $REPO_NAME
-root@4a3aa760362e:/var/trac/repositories# tree -L 1 $REPO_NAME
-svn123/
-├── conf
-├── db
-├── format
-├── hooks
-├── locks
-└── README.txt
-
-4 directories, 2 files
-```
-
-```bash
-cat /var/log/apache2/access.log
-cat /var/log/apache2/error.log
-```
-
-#### B. Create an GIT repostory
-
-```bash
-root@61819b799ee2:/# REPO_NAME=git123
-root@61819b799ee2:/# cd /var/trac/repositories; ./git-create-repo.sh $REPO_NAME
-root@61819b799ee2:/var/trac/repositories# tree -L 1 $REPO_NAME
-git123
-├── branches
-├── config
-├── description
-├── HEAD
-├── hooks
-├── info
-├── objects
-└── refs
-
-5 directories, 3 files
-```
-
-### 2.1.3. Configuration
+### 2.1.2. Configuration
 
 > 大置的佈局如下
 
@@ -440,6 +351,10 @@ git123.url = git123
 
 #### C. Apache - git.conf
 
+> - Trac 沒有內建 Git access 控制。
+> - Trac 對 Git 的支援是「唯讀的 repository 瀏覽」（`Browse Source` 功能），
+>    並不會管理 push 權限或 repo ACL。
+
 ```bash
 SetEnv GIT_PROJECT_ROOT /var/trac/repositories
 SetEnv GIT_HTTP_EXPORT_ALL
@@ -467,6 +382,105 @@ Alias /git /var/trac/repositories
 </Location>
 ```
 
+### 2.2.2. Build and Run
+
+#### A. docker compose
+
+> 會用到的參數有
+>
+> MYPROJECT_ADMIN: lanka
+> MYPROJECT_ADMIN_PASS: 123456
+> MYPROJECT_TRACDIR: /var/trac
+> MYPROJECT_NAME: lanka520
+
+```bash
+# 個人習慣放在 /work
+$ cp -avr Docker-trac /work/trac
+$ cd /work/trac
+$ tree -L 2 ./
+./
+├── auth
+│   └── authz
+├── compose
+│   ├── dbusX.conf
+│   ├── docker-compose.yml
+│   ├── Dockerfile
+│   ├── supervisord.conf
+│   └── trac_banner.png
+├── conf
+│   ├── sample
+│   └── trac.ini
+├── repositories
+│   ├── git-create-repo.sh
+│   └── svn-create-repo.sh
+└── sites-available
+    ├── git.conf
+    ├── svn.conf
+    └── trac.conf
+
+7 directories, 12 files
+
+# 設定管理者帳號和密碼
+$ MYPROJECT_ADMIN=lanka
+$ MYPROJECT_ADMIN_PASS=123456
+$ htpasswd -b -c auth/.htpasswd $MYPROJECT_ADMIN $MYPROJECT_ADMIN_PASS
+
+$ cd compose
+$ docker compose up trac -d --build
+$ docker images
+REPOSITORY               TAG       IMAGE ID       CREATED              SIZE
+trac520                  latest    6d0210261d91   About a minute ago   611MB
+
+$ docker ps
+CONTAINER ID   IMAGE                    COMMAND                  CREATED              STATUS                PORTS                                       NAMES
+4a3aa760362e   trac520                  "/usr/bin/supervisor…"   About a minute ago   Up About a minute     0.0.0.0:9981->80/tcp, [::]:9981->80/tcp     hello-trac
+```
+
+#### b. Create an SVN repostory
+
+> 這邊建議進入 container 後再建立，因為有 db 版本的問題
+
+```bash
+$ docker exec -it hello-trac /bin/bash
+
+root@4a3aa760362e:/# REPO_NAME=svn123
+root@4a3aa760362e:/# cd /var/trac/repositories; ./svn-create-repo.sh $REPO_NAME
+root@4a3aa760362e:/var/trac/repositories# tree -L 1 $REPO_NAME
+svn123/
+├── conf
+├── db
+├── format
+├── hooks
+├── locks
+└── README.txt
+
+4 directories, 2 files
+```
+
+```bash
+cat /var/log/apache2/access.log
+cat /var/log/apache2/error.log
+```
+
+#### B. Create an GIT repostory
+
+```bash
+root@61819b799ee2:/# REPO_NAME=git123
+root@61819b799ee2:/# cd /var/trac/repositories; ./git-create-repo.sh $REPO_NAME
+root@61819b799ee2:/var/trac/repositories# tree -L 1 $REPO_NAME
+git123
+├── branches
+├── config
+├── description
+├── HEAD
+├── hooks
+├── info
+├── objects
+└── refs
+
+5 directories, 3 files
+```
+
 ## 2.2. Showtime
 
 > http://127.0.0.1:80/trac
@@ -486,10 +500,15 @@ Alias /git /var/trac/repositories
 ```bash
 $ cd /tmp
 $ svn co http://127.0.0.1:9981/svn123
-$ cd svn123
-$ echo "Hello trac" > README.md
-$ svn add README.md
-$ svn ci ./
+# my host: svn24-vbx.local
+$ svn co http://svn24-vbx.local:9981/svn123
+
+cd svn123
+echo "Hello trac" > README.md
+svn add README.md
+svn ci -m "svn add README.md" ./
+svn cp README.md README-cpy.md
+svn ci -m "svn cp README.md -> README-cpy.md" ./
 ```
 
 #### B. git
@@ -497,11 +516,17 @@ $ svn ci ./
 ```bash
 $ cd /tmp
 $ git clone http://127.0.0.1:9981/git/git123
-$ cd git123
-$ echo "Hello git" > README.md
-$ git add README.md
-$ git commit ./
-$ git push
+# my host: svn24-vbx.local
+$ git clone http://svn24-vbx.local:9981/git/git123
+
+cd git123
+echo "Hello git" > README.md
+git add README.md
+git commit -m  "git add README.md" ./
+cp README.md README-cpy.md
+git add README-cpy.md
+git commit -m  "git add README-cpy.md" ./
+git push
 ```
 
 ### 2.3.2. Browse Source
@@ -535,6 +560,9 @@ cat /var/trac/log/trac.log
 
 cat /var/log/apache2/access.log
 cat /var/log/apache2/error.log
+
+tail -f /var/log/apache2/access.log &
+tail -f /var/log/apache2/error.log &
 ```
 
 ### 2.4.2. trac-admin
@@ -566,6 +594,9 @@ service apache2 reload
 cat /var/log/apache2/access.log
 cat /var/log/apache2/error.log
 
+cat /var/log/apache2/trac_error.log
+cat /var/log/apache2/trac_access.log
+
 cat /etc/apache2/sites-available/trac.conf
 cat /etc/apache2/sites-available/svn.conf
 ```
@@ -575,6 +606,8 @@ cat /etc/apache2/sites-available/svn.conf
 ```bash
 #build image
 docker compose up -d --build
+
+docker compose up trac -d --build
 
 # enter container-hello-trac
 docker exec -it hello-trac /bin/bash
