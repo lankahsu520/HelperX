@@ -59,7 +59,7 @@ run_fn()
 exec_fn()
 {
 	#eval_fn "${FUNCNAME[0]}:${LINENO}" "docker exec -it $DOCKER_CONTAINER /bin/bash"
-	eval_fn "${FUNCNAME[0]}:${LINENO}" "docker compose exec $DOCKER_CONTAINER bash"
+	eval_fn "${FUNCNAME[0]}:${LINENO}" "docker compose exec $DOCKER_NAME bash"
 
 	return 0
 }
