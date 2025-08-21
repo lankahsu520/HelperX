@@ -22,12 +22,14 @@
 > 用於管理 Git、SVN Repository 等。
 >
 > <font color="red">有試過在 Ubuntu 20.04 以後的版本安裝過，始終沒有成功過！最終停在 Ubuntu 18.04。最主要的原因是支援的 Python 版本過舊。</font>
+>
+> 經過 ChatGPT 的幫助，成功建立 Docker image (ubuntu:24.04 + Trac==1.6)。
 
-> 為什麼堅持使用Trac
+> 為什麼堅持使用Trac （排除 wiki 和 ticket )
 >
 > - Range diff
 > - 同個畫面可以瀏覽所有的 repositories
-> - 
+> - 簡單
 
 > [ChatGPT] Trac 是什麼
 >
@@ -481,7 +483,9 @@ git123
 5 directories, 3 files
 ```
 
-## 2.2. Showtime
+# 3. Showtime
+
+## 3.1. Mainpage
 
 > http://127.0.0.1:80/trac
 
@@ -491,11 +495,13 @@ git123
 
 <img src="./images/VCS-Trac0001.png" alt="VCS-Trac0001" style="zoom: 33%;" />
 
-## 2.3. Features
+## 3.2. Clone repositories on Host
 
-### 2.3.1. Clone repositories on Host
+> <font color="red">為什麼要安裝  Version Control System，就是要對程式碼進行管理和存取。</font>
 
-#### A. svn
+> 網路上的教學和官網，都沒有指導大家如何 clone sources，像是連結網址。
+
+### 3.2.1. svn
 
 ```bash
 $ cd /tmp
@@ -511,7 +517,21 @@ svn cp README.md README-cpy.md
 svn ci -m "svn cp README.md -> README-cpy.md" ./
 ```
 
-#### B. git
+### 3.2.2. git
+
+> [ChatGPT]
+>
+> **Trac 沒有內建 Git access 控制**。
+>
+> Trac 對 Git 的支援是「唯讀的 repository 瀏覽」（`Browse Source` 功能），
+>  並不會管理 push 權限或 repo ACL。
+>
+> Git 的存取控制必須靠 **外部機制**（例如：
+>
+> - **SSH key** + Linux 檔案權限
+> - **gitolite**
+> - **Gerrit**
+> - 或者自己寫 `pre-receive` hook）
 
 ```bash
 $ cd /tmp
@@ -529,92 +549,27 @@ git commit -m  "git add README-cpy.md" ./
 git push
 ```
 
-### 2.3.2. Browse Source
+## 3.3. Browse Source
 
-#### A. All repositories
+### 3.3.1. All repositories
 
 > 可以一次瀏覽所有的 repositories；這在其它管理工具很少見到。
 
 <img src="./images/VCS-Trac0002.png" alt="VCS-Trac0002" style="zoom: 33%;" />
 
-#### B. Range diff
+### 3.3.2. Range diff
 
 > 很多管理工具不支援此功能
 
 <img src="./images/VCS-Trac0003.png" alt="VCS-Trac0003" style="zoom: 33%;" />
 
-### 2.3.3. Timeline
+### 3.3.3. Timeline
 
 > 可以很簡單的知道所有的流水帳。
 >
 > 如果依管理角度，訊息簡單、直接，沒有花俏的畫面。其它管理工具都太複雜，有時還要點選n個畫面。
 
 <img src="./images/VCS-Trac0003.png" alt="VCS-Trac0003" style="zoom: 33%;" />
-
-## 2.4. Command Reference
-
-### 2.5.1. Log
-
-```bash
-cat /var/trac/log/trac.log
-
-cat /var/log/apache2/access.log
-cat /var/log/apache2/error.log
-
-tail -f /var/log/apache2/access.log &
-tail -f /var/log/apache2/error.log &
-```
-
-### 2.4.2. trac-admin
-
-```bash
-trac-admin /var/trac repository list
-# 將 repository-svn123 加入
-trac-admin /var/trac repository add svn123 /var/trac/repositories/svn123 svn
-
-# 如果 repository-svn123 與 trac 非同步時，記得
-trac-admin /var/trac repository resync 'svn123'
-
-# 查看 trac 的權限狀況
-trac-admin /var/trac permission list
-
-pip install --upgrade Trac
-trac-admin /var/trac upgrade
-trac-admin /var/trac wiki upgrade
-```
-
-### 2.4.3. apache
-
-```bash
-a2ensite svn.conf
-a2ensite git.conf
-a2ensite trac.conf
-service apache2 reload
-
-cat /var/log/apache2/access.log
-cat /var/log/apache2/error.log
-
-cat /var/log/apache2/trac_error.log
-cat /var/log/apache2/trac_access.log
-
-cat /etc/apache2/sites-available/trac.conf
-cat /etc/apache2/sites-available/svn.conf
-```
-
-### 2.4.4. docker
-
-```bash
-#build image
-docker compose up -d --build
-
-docker compose up trac -d --build
-
-# enter container-hello-trac
-docker exec -it hello-trac /bin/bash
-
-# remove docker-trac520
-docker-stopall; docker-rmexited; sleep 1; docker-rmimage trac520
-```
 
 # Footnote
 
@@ -657,6 +612,73 @@ sudo apt-get build-dep libapache2-mod-python libapache2-mod-wsgi
 # III. Glossary
 
 # IV. Tool Usage
+
+## IV.1. Command Reference
+
+### IV.1.1. Log
+
+```bash
+cat /var/trac/log/trac.log
+
+cat /var/log/apache2/access.log
+cat /var/log/apache2/error.log
+
+tail -f /var/log/apache2/access.log &
+tail -f /var/log/apache2/error.log &
+```
+
+### IV.1.2. trac-admin
+
+```bash
+trac-admin /var/trac repository list
+# 將 repository-svn123 加入
+trac-admin /var/trac repository add svn123 /var/trac/repositories/svn123 svn
+
+# 如果 repository-svn123 與 trac 非同步時，記得
+trac-admin /var/trac repository resync 'svn123'
+# 移除
+trac-admin /var/trac repository remove 'svn123'
+
+# 查看 trac 的權限狀況
+trac-admin /var/trac permission list
+
+pip install --upgrade Trac
+trac-admin /var/trac upgrade
+trac-admin /var/trac wiki upgrade
+```
+
+### IV.1.3. apache
+
+```bash
+a2ensite svn.conf
+a2ensite git.conf
+a2ensite trac.conf
+service apache2 reload
+
+cat /var/log/apache2/access.log
+cat /var/log/apache2/error.log
+
+cat /var/log/apache2/trac_error.log
+cat /var/log/apache2/trac_access.log
+
+cat /etc/apache2/sites-available/trac.conf
+cat /etc/apache2/sites-available/svn.conf
+```
+
+### IV.1.4. docker
+
+```bash
+#build image
+docker compose up -d --build
+
+docker compose up trac -d --build
+
+# enter container-hello-trac
+docker exec -it hello-trac /bin/bash
+
+# remove docker-trac520
+docker-stopall; docker-rmexited; sleep 1; docker-rmimage trac520
+```
 
 # Author
 

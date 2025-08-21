@@ -97,28 +97,36 @@ ENV PJ_PYTHON_BIN=python3
 # ubuntu:22.04 
 #ENV PJ_PYTHON_VER=3.10
 # ubuntu:24.04 
-ENV PJ_PYTHON_VER=3.12
+#ENV PJ_PYTHON_VER=3.12
 
-#RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.8 8 \
-#    && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 8
+RUN PJ_PYTHON_VER=`python3 -c 'import sys; print("{0[0]}.{0[1]}".format(sys.version_info))'` \
+    && update-alternatives --install /usr/bin/python python /usr/bin/python${PJ_PYTHON_VER} 12 \
+    && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python${PJ_PYTHON_VER} 12 \
+    && ln -s /usr/local/lib/python${PJ_PYTHON_VER} /usr/local/lib/python3
 
 RUN svn co https://trac-hacks.org/svn/accountmanagerplugin/tags/acct_mgr-0.6.0 /tmp/acct_mgr \
     && cd /tmp/acct_mgr && $PJ_PYTHON_BIN setup.py bdist_egg \
-    && cp dist/*.egg /usr/local/lib/python${PJ_PYTHON_VER}/dist-packages/ \
+    && cp dist/*.egg /usr/local/lib/python3/dist-packages/ \
     && mkdir -p $MYPROJECT_TRACDIR/plugins \
     && cp dist/*.egg $MYPROJECT_TRACDIR/plugins
 
 RUN svn co https://trac-hacks.org/svn/tracwysiwygplugin/0.12 /tmp/tracwysiwygplugin \
     && cd /tmp/tracwysiwygplugin && $PJ_PYTHON_BIN setup.py bdist_egg \
-    && cp dist/*.egg /usr/local/lib/python${PJ_PYTHON_VER}/dist-packages/ \
+    && cp dist/*.egg /usr/local/lib/python3/dist-packages/ \
     && mkdir -p $MYPROJECT_TRACDIR/plugins \
     && cp dist/*.egg $MYPROJECT_TRACDIR/plugins
 
 RUN svn co https://trac-hacks.org/svn/svnauthzadminplugin/1.0 /tmp/svnauthzadminplugin \
     && cd /tmp/svnauthzadminplugin && $PJ_PYTHON_BIN setup.py bdist_egg \
-    && cp dist/*.egg /usr/local/lib/python${PJ_PYTHON_VER}/dist-packages/ \
+    && cp dist/*.egg /usr/local/lib/python3/dist-packages/ \
     && mkdir -p $MYPROJECT_TRACDIR/plugins \
     && cp dist/*.egg $MYPROJECT_TRACDIR/plugins
+
+RUN svn co https://trac-hacks.org/svn/tracpygit2plugin/trunk /tmp/tracpygit2plugin \
+    && cd /tmp/tracpygit2plugin && pip install ./ $PIP_668
+
+RUN svn co https://trac-hacks.org/svn/logviewerplugin/trunk /tmp/logviewerplugin \
+    && cd /tmp/logviewerplugin && pip install ./ $PIP_668
 
 RUN cp $MYPROJECT_TRACDIR/VERSION $MYPROJECT_TRACDIR/conf
 RUN cp $MYPROJECT_TRACDIR/VERSION $MYPROJECT_TRACDIR/db
