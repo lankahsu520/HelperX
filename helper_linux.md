@@ -985,9 +985,10 @@ ps -aux | grep helloworld | grep -v grep
 
 # replace ABC with 123
 grep -rl 'ABC' . | xargs sed -i 's/ABC/123/g'
+grep -rl 'ABC' . | xargs sed -i  's|ABC|123|g'
+# 排除 .svn 目錄
+grep -rl 'ABC' . --exclude-dir=.svn | xargs sed -i  's|ABC|123|g'
 
-# replace ABC with 123
-grep -rl 'ABC' . | xargs sed -i.bak 's/ABC/123/g'
 ```
 
 ```bash
