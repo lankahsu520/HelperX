@@ -520,6 +520,9 @@ $ pip install --upgrade wheel setuptools launchpadlib six
 # upgrade pycairo
 
 $ sudo apt-get install libgirepository1.0-dev libcairo2-dev
+# pygobject fail, 請試著安裝
+$ sudo apt-get install libgirepository-2.0-dev
+
 $ pip install --upgrade six
 $ pip install --upgrade pygobject
 $ pip install --upgrade pycairo
@@ -790,6 +793,12 @@ sudo mv /usr/lib/python${PJ_PYTHON_VER}/EXTERNALLY-MANAGED /usr/lib/python${PJ_P
 
 ```bash
 $ sudo dpkg -i dblatex_0.3.12py3-2_all.deb
+```
+
+## II.14. Package python-3.13 was not found in the pkg-config search path.
+
+```bash
+$  sudo apt-get install python3.13-dev
 ```
 
 # III. Glossary
