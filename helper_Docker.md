@@ -437,7 +437,40 @@ $ docker exec -ti 2ea0d23f30cf ls -al /
 $ docker inspect 2ea0d23f30cf
 ```
 
-## 4.6. Others
+## 4.6. volume
+
+#### A. docker volume ls
+
+> 查看 volume
+
+```bash
+$ docker volume ls
+DRIVER    VOLUME NAME
+local     3043254d5d977059218cccf029346e531143d235c9da3cca3f527526a4c2f730
+local     gitlab-runner-config
+local     scm-home
+```
+
+#### B. docker volume rm
+
+> 刪除 volume
+
+```bash
+$ docker volume rm scm-home
+```
+
+#### C. docker volume prune
+
+> 清掉沒用的 volume
+
+```bash
+$ docker volume prune
+WARNING! This will remove anonymous local volumes not used by at least one container.
+Are you sure you want to continue? [y/N] Y
+Total reclaimed space: 0B
+```
+
+## 4.7. Others
 
 #### A. docker commit
 
