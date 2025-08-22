@@ -62,9 +62,7 @@ flowchart LR
 
 ```
 
-## 2.1. Insall
-
-### 2.1.1. [Install scm-manager with docker](https://scm-manager.org/docs/latest/en/installation/docker)
+## 2.1. [Install scm-manager with docker](https://scm-manager.org/docs/latest/en/installation/docker)
 
 #### A. docker run
 
@@ -117,51 +115,51 @@ $ docker logs $SCM_DOCKER_NAME
 $ docker exec -it $SCM_DOCKER_NAME /bin/bash
 ```
 
-## 2.2. Showtime
+# 3. Showtime
 
 > http://127.0.0.1:8080/scm/
 >
 > Startup Token: 請見前一章節
 
-### 2.2.1. Administration Account
+## 3.1. Administration Account
 
 <img src="./images/SCM-Manager0001.png" alt="SCM-Manager0001" style="zoom:33%;" />
 
-### 2.2.2. Plugin Sets
+## 3.2. Plugin Sets
 
 <img src="./images/SCM-Manager0002.png" alt="SCM-Manager0002" style="zoom:33%;" />
 
-### 2.2.3. Login
+## 3.3. Login
 
 <img src="./images/SCM-Manager0003.png" alt="SCM-Manager0003" style="zoom:33%;" />
 
-### 2.2.4. mySCM
+## 3.4. mySCM
 
 <img src="./images/SCM-Manager0004.png" alt="SCM-Manager0004" style="zoom:33%;" />
 
 
 
-# 3. Repository
+# 4. Repository
 
-## 3.1. Add Repository
+## 4.1. Add Repository
 
-### 3.1.1. Create a new repository
+### 4.1.1. Create a new repository
 
 <img src="./images/SCM-Manager0301.png" alt="SCM-Manager0301" style="zoom:33%;" />
 
-### 3.1.2. Information
+### 4.1.2. Information
 
 <img src="./images/SCM-Manager0302.png" alt="SCM-Manager0302" style="zoom:33%;" />
 
-### 3.1.3. List
+### 4.1.3. List
 
 <img src="./images/SCM-Manager0303.png" alt="SCM-Manager0303" style="zoom:33%;" />
 
-### 3.1.4. Repository
+### 4.1.4. Repository
 
 <img src="./images/SCM-Manager0304.png" alt="SCM-Manager0304" style="zoom:33%;" />
 
-### 3.1.5. Files
+### 4.1.5. Files
 
 ```mermaid
 flowchart LR
@@ -230,7 +228,7 @@ $ tree -L 4 /work/scm/repositories
 
 ```
 
-### 3.1.6. Clone
+### 4.1.6. Clone
 
 ```bash
 $ svn checkout http://192.168.50.54:8080/scm/repo/lanka/demo
@@ -246,9 +244,9 @@ demo/
 2 directories, 1 file
 ```
 
-## 3.2. Import existing repository
+## 4.2. Import existing repository
 
-### 3.2.1. Import SVN repository (Not export from SCM)
+### 4.2.1. Import SVN repository (Not export from SCM)
 
 ```mermaid
 flowchart LR
