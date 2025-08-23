@@ -336,8 +336,8 @@ open-vm-tools-desktop
 
 ## II.2. Unable to access GRUB after update
 
-> 當更新系統後，發生無法正常開機而進入Memtest。
->
+> 當更新系統後，發生無法正常開機而進入Memtest86+。
+
 > 這時要準備`安裝光碟 (Live CD)`，`Try Ubuntu`，開始 `terminal`
 
 ```bash
@@ -346,15 +346,20 @@ open-vm-tools-desktop
 sudo mount /dev/sda2 /mnt
 # 如果有 EFI
 sudo mount /dev/sda1 /mnt/boot/efi
+
+# 綁定必要的系統目錄
 for i in /dev /dev/pts /proc /sys; do sudo mount --bind $i /mnt$i; done
 
+# chroot 進入系統
 sudo chroot /mnt
 
 # 這邊可以看到 i386-pc or x86_64-efi
-ll  /mnt/usr/lib/grub
+[ ! -d /mnt/usr/lib/grub/i386-pc ] && echo "UEFI mode" || echo "BIOS mode"
+# or
+[ -d /mnt/sys/firmware/efi ] && echo "UEFI mode" || echo "BIOS mode"
 
 # BIOS-based
-grub-install --target=i386-pc --bootloader-id=ubuntu
+grub-install --target=i386-pc /dev/sda
 # or
 # UEFI systems
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=ubuntu
@@ -369,8 +374,6 @@ exit
 # 重新開機
 sudo reboot
 ```
-
-
 
 # III. Glossary
 
