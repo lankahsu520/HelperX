@@ -336,7 +336,9 @@ open-vm-tools-desktop
 
 ## II.2. Unable to access GRUB after update
 
-> 當更新系統後，發生無法正常開機，進入Memtest 時
+> 當更新系統後，發生無法正常開機而進入Memtest。
+>
+> 這時要準備`安裝光碟 (Live CD)`，`Try Ubuntu`，開始 `terminal`
 
 ```bash
 # lsblk 查看 ubuntu 裝在那顆硬碟
