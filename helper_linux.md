@@ -560,7 +560,14 @@ sudo mkswap /dev/sdd
 
 ```bash
 SWAP_FILE="/work/swapfile"
-sudo dd if=/dev/zero of=$SWAP_FILE bs=64M count=16
+
+# 64 MiB * 16 = 1 GB
+# 64 MiB * 32 = 2 GB
+# 64 MiB * 64 = 4 GB
+# 64 MiB * 128 = 8 GB
+sudo dd if=/dev/zero of=$SWAP_FILE bs=64M count=128
+# or
+sudo fallocate -l 8G ${SWAP_FILE}
 
 sudo mkswap $SWAP_FILE
 sudo chmod 0600 $SWAP_FILE
@@ -801,6 +808,16 @@ Filename                                Type            Size    Used    Priority
 
 # 關閉
 $ sudo swapoff /dev/sdd
+
+$ swapon --show --bytes
+NAME      TYPE              SIZE USED PRIO
+/swapfile file        2147479552    0   -2
+/dev/sdd  partition 137438949376    0   -3
+
+$ swapon --show
+NAME      TYPE      SIZE USED PRIO
+/swapfile file        2G   0B   -2
+/dev/sdd  partition 128G   0B   -3
 ```
 
 ```bash
@@ -810,6 +827,7 @@ sudo swapoff $SWAP_FILE
 ```
 
 ```bash
+# 系統開機時就自動啟動
 $ sudo vi /etc/fstab
 /dev/sdd none swap defaults 0 0
 
