@@ -334,6 +334,42 @@ open-vm-tools-desktop
 
 ```
 
+## II.2. Unable to access GRUB after update
+
+> 當更新系統後，發生無法正常開機，進入Memtest 時
+
+```bash
+# lsblk 查看 ubuntu 裝在那顆硬碟
+
+sudo mount /dev/sda2 /mnt
+# 如果有 EFI
+sudo mount /dev/sda1 /mnt/boot/efi
+for i in /dev /dev/pts /proc /sys; do sudo mount --bind $i /mnt$i; done
+
+sudo chroot /mnt
+
+# 這邊可以看到 i386-pc or x86_64-efi
+ll  /mnt/usr/lib/grub
+
+# BIOS-based
+grub-install --target=i386-pc --bootloader-id=ubuntu
+# or
+# UEFI systems
+grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=ubuntu
+
+grub-install /dev/sda
+
+update-grub
+
+# 跳離
+exit
+
+# 重新開機
+sudo reboot
+```
+
+
+
 # III. Glossary
 
 # IV. Tool Usage
