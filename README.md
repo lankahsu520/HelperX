@@ -158,19 +158,11 @@
 
 ### 1.1.6. helper_Version Control Systems
 
-#### A. [helper_VCS-SCM-Manager.md](https://github.com/lankahsu520/HelperX/blob/master/helper_VCS-SCM-Manager.md)  - SCM-Manager helper.
-
-> 一個很不錯的管理平台，安裝容易。
-
-#### A. [helper_VCS-Trac.md](https://github.com/lankahsu520/HelperX/blob/master/helper_VCS-Trac.md)  - Trac helper.
-
-> 一個很不錯的管理平台，不過因為版本過舊，已經沒辦法在新作業系統安裝。
-
-#### B. [helper_GitHub.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitHub.md) - GitHub helper.
+#### A. [helper_VCS-GitHub.md](https://github.com/lankahsu520/HelperX/blob/master/helper_VCS-GitHub.md) - GitHub helper.
 
 > 善用免費 git 空間。
 
-#### C. [helper_GitLabandCICD.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GitLabandCICD.md) - GitLab helper.
+#### B. [helper_VCS-GitLabandCICD.md](https://github.com/lankahsu520/HelperX/blob/master/helper_VCS-GitLabandCICD.md) - GitLab helper.
 
 > CI/CD is useful ? Please make sure that you aren't a low-level programmer, system integration developer or embedded engineer.
 >
@@ -178,7 +170,11 @@
 >
 > 這時 CI/CD 就是一個很不錯的方法。
 
-#### D. [helper_SVNvsGit.md](https://github.com/lankahsu520/HelperX/blob/master/helper_SVNvsGit.md) - SVN vs. Git helper.
+#### C. [helper_VCS-SCM-Manager.md](https://github.com/lankahsu520/HelperX/blob/master/helper_VCS-SCM-Manager.md)  - SCM-Manager helper.
+
+> 一個很不錯的管理平台，安裝容易。
+
+#### D. [helper_VCS-SVNvsGit.md](https://github.com/lankahsu520/HelperX/blob/master/helper_VCS-SVNvsGit.md) - SVN vs. Git helper.
 
 > SVN、Git 都是很好的版本控管工具，當然市面上不止這兩種。只要選擇方便性即可。
 >
@@ -197,6 +193,10 @@
 >蘭卡無語…
 >
 >沒有良好的習慣，又沒有能力解決衝突。真的只能找網路編輯，這也是一個“work around”。
+
+#### E. [helper_VCS-Trac.md](https://github.com/lankahsu520/HelperX/blob/master/helper_VCS-Trac.md)  - Trac helper.
+
+> 一個很不錯的管理平台，已安裝至 1.6。
 
 ### 1.1.7. helper_Virtual Machine
 
