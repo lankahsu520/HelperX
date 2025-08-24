@@ -863,9 +863,11 @@ $ git blame helper_SVNvsGit.md
 
 # 6. Server with apache2
 
-## 6.1. apache2
+> 請見 [helper_VCS-Trac.md](https://github.com/lankahsu520/HelperX/blob/master/helper_VCS-Trac.md)
 
-#### A. sites-available/*.conf
+## ~~6.1. apache2~~
+
+#### ~~A. sites-available/*.conf~~
 
 ```bash
 # enable the svn site configuration
@@ -885,7 +887,7 @@ $ systemctl reload apache2
 
 ```
 
-##### A.1. [git.conf](./SVNvsGit/git.conf)
+##### ~~A.1. [git.conf](./SVNvsGit/git.conf)~~
 
 ```conf
 	SetEnv GIT_PROJECT_ROOT /work_gitroot
@@ -920,7 +922,7 @@ $ systemctl reload apache2
 	</Location>
 ```
 
-##### A.2. [svn.conf](./SVNvsGit/svn.conf)
+##### ~~A.2. [svn.conf](./SVNvsGit/svn.conf)~~
 
 ```conf
 	<Location /svnroot>
@@ -934,13 +936,13 @@ $ systemctl reload apache2
 	</Location>
 ```
 
-#### B. ports.conf
+#### ~~B. ports.conf~~
 
 ```bash
 $ sudo vi /etc/apache2/ports.conf
 ```
 
-#### C. enable Apache modules
+#### ~~C. enable Apache modules~~
 
 ```bash
 $ sudo apt-get install libapache2-mod-python
@@ -951,15 +953,15 @@ $ sudo a2enmod env cgi alias rewrite dav dav_svn dav_fs
 
 ```
 
-#### D. restart apache2
+#### ~~D. restart apache2~~
 
 ```bash
 $ sudo service apache2 restart
 ```
 
-## 6.2. Git Server
+## ~~6.2. Git Server~~
 
-#### A. Add User and Group
+#### ~~A. Add User and Group~~
 
 ```bash
 $ sudo addgroup git
@@ -967,7 +969,7 @@ $ sudo usermod -G git -a www-data
 $ sudo usermod -G git -a lanka
 ```
 
-#### B. Create Repository - [git-create-repo.sh](./SVNvsGit/git-create-repo.sh)
+#### ~~B. Create Repository - [git-create-repo.sh](./SVNvsGit/git-create-repo.sh)~~
 
 ```bash
 $ cd /work_gitroot
@@ -978,7 +980,7 @@ drwxrwxr-x  7 www-data git    4096 十一 28 14:56 gitroot.git/
 # Please make sure group is git
 ```
 
-#### C.  git clone
+#### ~~C.  git clone~~
 
 ```bash
 $ git clone http://trac-vbx/gitroot/gitroot.git
@@ -987,9 +989,9 @@ $ git clone http://trac-vbx/gitroot/gitroot.git
 $ git config credential.helper store
 ```
 
-## 6.3. SVN Server
+## ~~6.3. SVN Server~~
 
-#### A. Add User and Group
+#### ~~A. Add User and Group~~
 
 ```bash
 $ sudo addgroup subversion
@@ -997,7 +999,7 @@ $ sudo usermod -G subversion -a www-data
 $ sudo usermod -G subversion -a lanka
 ```
 
-#### B. Create Repository - [svn-create-repo.sh](./SVNvsGit/svn-create-repo.sh)
+#### ~~B. Create Repository - [svn-create-repo.sh](./SVNvsGit/svn-create-repo.sh)~~
 
 ```bash
 $ cd /work_svnroot
@@ -1007,7 +1009,7 @@ drwxrwxr-x  7 www-data www-data 4096 十一 28 17:05 svnroot/
 
 ```
 
-#### C. Authz
+#### ~~C. Authz~~
 
 ```bash
 $ sudo vi /work_svnroot/authz
@@ -1033,7 +1035,7 @@ viewers =
 @viewers =
 ```
 
-#### D. pre-revprop-change
+#### ~~D. pre-revprop-change~~
 
 ```bash
 $ cd /work_svnroot/svnroot/hooks
@@ -1405,8 +1407,6 @@ $ git pull --recurse-submodules
 # clone and pull submodules with recurse mode
 $ git clone --recurse-submodules  <repo>
 ```
-
-
 
 # 8. Others ???
 
