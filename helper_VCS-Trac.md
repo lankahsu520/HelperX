@@ -93,17 +93,47 @@ flowchart LR
 
 ## 2.1. Install Trac on Host
 
-### 2.1.1. Step by Step
-
 > 大致的命令如下，適用於
 >
->  Ubuntu 18.04 LTS
+> Ubuntu 18.04 LTS
 >
 > Python 2.7
 >
 > Trac 1.2.4
 
-#### A. initenv
+> 大置的佈局如下
+>
+> Ubuntu 18.04 LTS
+>
+> Python 2.7
+>
+> Trac 1.2.4
+```mermaid
+flowchart LR
+	subgraph Host[Host - Ubuntu 18.04]
+		Trac[Working Directory<br>/work/trac]
+        svn123[svn123<br>/work/trac/repositories/svn123]
+
+        git123[git123<br>/work/trac/repositories/git123]
+
+		apache
+	end
+```
+
+```bash
+$ cd /work/trac
+$ tree -L 2 ./
+./
+├── conf
+│   ├── .htpasswd
+│   ├── authz
+│   └── trac.ini
+└─── repositories
+    ├── svn123
+    └── git123
+```
+
+### 2.1.1. initenv
 
 ```bash
 $ sudo apt-get install trac
@@ -124,47 +154,7 @@ sudo cp $MYPROJECT_TRACDIR/VERSION $MYPROJECT_TRACDIR/plugins
 sudo cp $MYPROJECT_TRACDIR/VERSION $MYPROJECT_TRACDIR/templates
 ```
 
-#### B. authz
-
-```bash
-#** 新增使用者帳號 **
-$ htpasswd -c $MYPROJECT_TRACDIR/.htpasswd $MYPROJECT_ADMIN
-$ cat $MYPROJECT_TRACDIR/conf/.htpasswd
-
-#** 設定管理者帳號 **
-$ trac-admin $MYPROJECT_TRACDIR permission add $MYPROJECT_ADMIN TRAC_ADMIN
-
-$ sudo vi $MYPROJECT_TRACDIR/conf/authz
-[groups]
-administrators = lanka
-developers = lanka
-newbie = mary
-releaser = lanka
-viewers =
-
-[svnxbox:/]
-@administrators = rw
-@developers =
-@newbie =
-@releaser =
-@viewers =
-
-[svnopt:/]
-@administrators = rw
-@developers =
-@newbie =
-@releaser =
-@viewers =
-
-[gitroot:/]
-@administrators = rw
-@developers =
-@newbie =
-@releaser =
-@viewers =
-```
-
-#### C. [Plugin](https://trac.edgewall.org/wiki/PluginList)
+### 2.1.2. [Plugin](https://trac.edgewall.org/wiki/PluginList)
 
 > [Plugins for Trac 1.6.x](https://trac-hacks.org/wiki/1.6)
 
@@ -198,12 +188,67 @@ svn co https://trac-hacks.org/svn/svnauthzadminplugin/1.0 /tmp/svnauthzadminplug
     && mkdir -p $MYPROJECT_TRACDIR/plugins \
     && cp dist/*.egg $MYPROJECT_TRACDIR/plugins
 
+$ sudo chown -R www-data: $MYPROJECT_TRACDIR
+$ sudo chmod -R 775 $MYPROJECT_TRACDIR
 ```
 
-#### D. trac.ini
+### 2.1.3. Configuration
+
+#### A. authz
+
+> 設定 svn repostory 的存取權限
+
+```bash
+#** 新增使用者帳號 **
+$ htpasswd -c $MYPROJECT_TRACDIR/conf/.htpasswd $MYPROJECT_ADMIN
+$ cat $MYPROJECT_TRACDIR/conf/.htpasswd
+
+#** 設定管理者帳號 **
+$ trac-admin $MYPROJECT_TRACDIR permission add $MYPROJECT_ADMIN TRAC_ADMIN
+
+$ sudo vi $MYPROJECT_TRACDIR/conf/authz
+[groups]
+administrators = lanka
+developers = lanka
+newbie = mary
+releaser = lanka
+viewers =
+
+[svn123:/]
+@administrators = rw
+@developers =
+@newbie =
+@releaser =
+@viewers =
+
+[git123:/]
+@administrators = rw
+@developers =
+@newbie =
+@releaser =
+@viewers =
+```
+
+#### B. trac.ini
 
 ```bash
 $ sudo vi $MYPROJECT_TRACDIR/conf/trac.ini
+
+[repositories]
+.alias = svn123
+.sync_per_request = true
+
+svn123.dir = /work/trac/repositories/svn123
+svn123.hidden = false
+#svn123.sync_per_request = true
+svn123.type = svn
+svn123.url = svn123
+
+git123.dir = /work/trac/repositories/git123
+git123.hidden = false
+git123.sync_per_request = true
+git123.type = git
+git123.url = git123
 
 [ticket]
 restrict_owner = enabled
@@ -253,7 +298,127 @@ $ sudo chown -R www-data: $MYPROJECT_TRACDIR
 $ sudo chmod -R 775 $MYPROJECT_TRACDIR
 ```
 
-#### E. Apache - trac.conf
+### 2.1.4. Create the repositories
+
+#### A. an SVN repostory
+
+> 這邊建議進入 container 後再建立，因為有 db 版本的問題
+
+```bash
+$ docker exec -it hello-trac /bin/bash
+
+$ REPO_NAME=svn123
+$ cd /work/trac/repositories
+$ ./svn-create-repo.sh $REPO_NAME
+$ tree -L 1 $REPO_NAME
+svn123/
+├── conf
+├── db
+├── format
+├── hooks
+├── locks
+└── README.txt
+
+4 directories, 2 files
+```
+
+```bash
+cat /var/log/apache2/access.log
+cat /var/log/apache2/error.log
+```
+
+#### B. an GIT repostory
+
+```bash
+$ REPO_NAME=git123
+$ cd /work/trac/repositories
+$ ./git-create-repo.sh $REPO_NAME
+$ tree -L 1 $REPO_NAME
+git123
+├── branches
+├── config
+├── description
+├── HEAD
+├── hooks
+├── info
+├── objects
+└── refs
+
+5 directories, 3 files
+```
+
+### 2.1.5. Apache setup
+
+#### A. svn.conf
+
+>對應到的 svn repository
+
+```bash
+$ sudo vi /etc/apache2/sites-available/svn.conf
+
+<Location /svn123>
+  DAV svn
+  SVNPath /work/trac/repositories/svn123
+  AuthType Basic
+  AuthName "SVN Repository - /svn123"
+  AuthUserFile /work/trac/auth/.htpasswd
+  AuthzSVNAccessFile /work/trac/auth/authz
+  Require valid-user
+</Location>
+
+# enable the svn site configuration
+$ sudo a2ensite svn.conf
+```
+
+#### B. git.conf
+
+> 對應到的 git repository
+
+> [ChatGPT]
+>
+> **Trac 沒有內建 Git access 控制**。
+>
+> Trac 對 Git 的支援是「唯讀的 repository 瀏覽」（`Browse Source` 功能），
+> 並不會管理 push 權限或 repo ACL。
+>
+> Git 的存取控制必須靠 **外部機制**（例如：
+>
+> - **SSH key** + Linux 檔案權限
+> - **gitolite**
+> - **Gerrit**
+> - 或者自己寫 `pre-receive` hook）
+
+```bash
+SetEnv GIT_PROJECT_ROOT /work/trac/repositories
+SetEnv GIT_HTTP_EXPORT_ALL
+
+ScriptAlias /git /usr/lib/git-core/git-http-backend/
+
+Alias /git /work/trac/repositories
+<Directory /usr/lib/git-core>
+  Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+  AllowOverride None
+  Require all granted
+</Directory>
+
+<Directory /work/trac/repositories>
+  Options Indexes FollowSymLinks MultiViews
+  AllowOverride None
+  Require all granted
+</Directory>
+
+<Location /git/git123>
+  AuthType Basic
+  AuthName "Git Repository - /git123"
+  AuthUserFile /work/trac/auth/.htpasswd
+  Require valid-user
+</Location>
+
+# enable the git site configuration
+$ sudo a2ensite git.conf
+```
+
+#### C. trac.conf
 
 ```bash
 $ sudo vi /etc/apache2/sites-available/trac.conf
@@ -296,104 +461,23 @@ $ service apache2 reload
 >
 > trac1.6 : [Docker-trac-1.6](https://github.com/lankahsu520/HelperX/tree/master/Docker-trac-1.6)
 
-### 2.1.2. Configuration
-
 > 大置的佈局如下
-
 ```mermaid
 flowchart LR
-	subgraph Container[Container - Ubuntu 18.04]
-		Trac[Trac<br>/var/trac]
-
-		svn123[svn123<br>/var/trac/repositories/svn123]
+	subgraph Host[Host - Ubuntu 18.04]
+		subgraph Trac[Working Directory<br>/work/trac]
 		
-		git123[git123<br>/var/trac/repositories/git123]
+		end
+        subgraph Container[Container - Ubuntu 18.04]
+            TracDocker[Trac<br>/var/trac]
+
+            svn123[svn123<br>/var/trac/repositories/svn123]
+
+            git123[git123<br>/var/trac/repositories/git123]
+        end
 	end
 
 ```
-
-> 相關的設定請見以下的檔案
-
-#### A. trac.ini
-
-```bash
-# 可以看到要管理的 repositories
-
-[repositories]
-.alias = svn123
-.sync_per_request = true
-
-svn123.dir = /var/trac/repositories/svn123
-svn123.hidden = false
-#svn123.sync_per_request = true
-svn123.type = svn
-svn123.url = svn123
-
-git123.dir = /var/trac/repositories/git123
-git123.hidden = false
-git123.sync_per_request = true
-git123.type = git
-git123.url = git123
-```
-
-#### B. Apache - svn.conf
-
-```bash
-<Location /svn123>
-  DAV svn
-  SVNPath /var/trac/repositories/svn123
-  AuthType Basic
-  AuthName "SVN Repository - /svn123"
-  AuthUserFile /var/trac/auth/.htpasswd
-  AuthzSVNAccessFile /var/trac/auth/authz
-  Require valid-user
-</Location>
-
-```
-
-#### C. Apache - git.conf
-
-> - Trac 沒有內建 Git access 控制。
-> - Trac 對 Git 的支援是「唯讀的 repository 瀏覽」（`Browse Source` 功能），
->    並不會管理 push 權限或 repo ACL。
-
-```bash
-SetEnv GIT_PROJECT_ROOT /var/trac/repositories
-SetEnv GIT_HTTP_EXPORT_ALL
-
-ScriptAlias /git /usr/lib/git-core/git-http-backend/
-
-Alias /git /var/trac/repositories
-<Directory /usr/lib/git-core>
-  Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
-  AllowOverride None
-  Require all granted
-</Directory>
-
-<Directory /var/trac/repositories>
-  Options Indexes FollowSymLinks MultiViews
-  AllowOverride None
-  Require all granted
-</Directory>
-
-<Location /git/git123>
-  AuthType Basic
-  AuthName "Git Repository - /git123"
-  AuthUserFile /var/trac/auth/.htpasswd
-  Require valid-user
-</Location>
-```
-
-### 2.2.2. Build and Run
-
-#### A. docker compose
-
-> 會用到的參數有
->
-> MYPROJECT_ADMIN: lanka
-> MYPROJECT_ADMIN_PASS: 123456
-> MYPROJECT_TRACDIR: /var/trac
-> MYPROJECT_NAME: lanka520
 
 ```bash
 # 個人習慣放在 /work
@@ -421,12 +505,35 @@ $ tree -L 2 ./
     └── trac.conf
 
 7 directories, 12 files
+```
 
+### 2.2.1. Configuration
+
+> 相關的設定如 2.1. Install Trac on Host 介紹，裏面的目錄略作修正
+
+#### A. .htpasswd
+
+> 需要建立管理者帳號和密碼
+
+```bash
 # 設定管理者帳號和密碼
 $ MYPROJECT_ADMIN=lanka
 $ MYPROJECT_ADMIN_PASS=123456
 $ htpasswd -b -c auth/.htpasswd $MYPROJECT_ADMIN $MYPROJECT_ADMIN_PASS
+```
 
+### 2.2.2. Build and Run
+
+#### A. docker compose
+
+> 會用到的參數如下以，請修改
+>
+> MYPROJECT_ADMIN: lanka
+> MYPROJECT_ADMIN_PASS: 123456
+> MYPROJECT_TRACDIR: /var/trac
+> MYPROJECT_NAME: lanka520
+
+```bash
 $ cd compose
 $ docker compose up trac -d --build
 $ docker images
@@ -436,51 +543,6 @@ trac520                  latest    6d0210261d91   About a minute ago   611MB
 $ docker ps
 CONTAINER ID   IMAGE                    COMMAND                  CREATED              STATUS                PORTS                                       NAMES
 4a3aa760362e   trac520                  "/usr/bin/supervisor…"   About a minute ago   Up About a minute     0.0.0.0:9981->80/tcp, [::]:9981->80/tcp     hello-trac
-```
-
-#### b. Create an SVN repostory
-
-> 這邊建議進入 container 後再建立，因為有 db 版本的問題
-
-```bash
-$ docker exec -it hello-trac /bin/bash
-
-root@4a3aa760362e:/# REPO_NAME=svn123
-root@4a3aa760362e:/# cd /var/trac/repositories; ./svn-create-repo.sh $REPO_NAME
-root@4a3aa760362e:/var/trac/repositories# tree -L 1 $REPO_NAME
-svn123/
-├── conf
-├── db
-├── format
-├── hooks
-├── locks
-└── README.txt
-
-4 directories, 2 files
-```
-
-```bash
-cat /var/log/apache2/access.log
-cat /var/log/apache2/error.log
-```
-
-#### B. Create an GIT repostory
-
-```bash
-root@61819b799ee2:/# REPO_NAME=git123
-root@61819b799ee2:/# cd /var/trac/repositories; ./git-create-repo.sh $REPO_NAME
-root@61819b799ee2:/var/trac/repositories# tree -L 1 $REPO_NAME
-git123
-├── branches
-├── config
-├── description
-├── HEAD
-├── hooks
-├── info
-├── objects
-└── refs
-
-5 directories, 3 files
 ```
 
 # 3. Showtime
@@ -519,20 +581,6 @@ svn ci -m "svn cp README.md -> README-cpy.md" ./
 
 ### 3.2.2. git
 
-> [ChatGPT]
->
-> **Trac 沒有內建 Git access 控制**。
->
-> Trac 對 Git 的支援是「唯讀的 repository 瀏覽」（`Browse Source` 功能），
->  並不會管理 push 權限或 repo ACL。
->
-> Git 的存取控制必須靠 **外部機制**（例如：
->
-> - **SSH key** + Linux 檔案權限
-> - **gitolite**
-> - **Gerrit**
-> - 或者自己寫 `pre-receive` hook）
-
 ```bash
 $ cd /tmp
 $ git clone http://127.0.0.1:9981/git/git123
@@ -565,9 +613,9 @@ git push
 
 ### 3.3.3. Timeline
 
-> 可以很簡單的知道所有的流水帳。
+> 可以很簡單的知道所有的流水帳。如果依管理角度，訊息簡單、直接，沒有花俏的畫面。
 >
-> 如果依管理角度，訊息簡單、直接，沒有花俏的畫面。其它管理工具都太複雜，有時還要點選n個畫面。
+> 其它管理工具都太複雜，有時還要點選n個畫面。
 
 <img src="./images/VCS-Trac0003.png" alt="VCS-Trac0003" style="zoom: 33%;" />
 
