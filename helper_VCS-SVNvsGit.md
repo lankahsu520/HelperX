@@ -108,11 +108,17 @@ mindmap
 
 > 個人是建議，只要個人工作到一個斷點就上傳 codes，而不是等解決某個 bug  或完成整個功能才上傳。
 
-### 1.1.3. git 致命傷
+### 1.1.3. 致命傷
+
+#### A. git
 
 > git 的 **Commit Hash** 沒辦法很快的分辨先後順序。
 >
 > 在不查看系統的情況下，是無法知道目前的版本已經解決某個問題。
+
+#### B. svn
+
+> 如果不小心把密碼放入，想從記錄中完全移除就得使用 svnadmin dump，這就等於要放棄原有的 repository，建立新的 repository。
 
 ## 1.2. System Environment
 
