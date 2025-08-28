@@ -108,23 +108,25 @@ mindmap
 
 > 個人是建議，只要個人工作到一個斷點就上傳 codes，而不是等解決某個 bug  或完成整個功能才上傳。
 
-### 1.1.3. 致命傷
+## 1.2. 致命傷
 
-#### A. git
+> git、svn 都是市面常見，而且剛好一個是分散式，而另一個是集中式。
 
-> git 的 **Commit Hash** 沒辦法很快的分辨先後順序。
->
-> 在不查看系統的情況下，是無法知道目前的版本已經解決某個問題。
-
-#### B. svn
+### 1.2.1. svn
 
 > 如果不小心把密碼放入，想從記錄中完全移除就得使用 svnadmin dump，這就等於要放棄原有的 repository，建立新的 repository。
 
-## 1.2. System Environment
+> 要能連上 Server 才能查看 diff、log 等。
 
-### 1.2.1. Install
+### 1.2.2. git
 
-#### svn
+> 從 git 的 `Commit Hash` 沒辦法很快分辨更動的先後順序。在不查看系統的情況下，是無法知道目前的版本已經解決某個問題。
+
+> git branch 的存取控制權，算是沒有。也因此沒辦法單獨提取某個 branch
+
+## 1.3. Install
+
+### 1.3.1 svn
 
 ```bash
 # install subversion-tools
@@ -136,7 +138,7 @@ $ sudo apt-get --yes install subversion-tools
 $ export SVN_EDITOR=vim
 ```
 
-#### git
+### 1.3.2. git
 
 ```bash
 # install git
@@ -190,7 +192,9 @@ pager.diff=false
 
 # 2. Repository
 
-#### svn
+## 2.1. Main
+
+### 2.1.1. svn
 
 ```mermaid
 flowchart LR
@@ -209,8 +213,10 @@ flowchart LR
 	SVN-Tracked --> |revert|SVN-Tracked
 	SVN-Tracked --> |revert|SVN-Untracked
 ```
+
 > SVN：沒有所謂的 Local Repository。需要一個 SVN Server 擺放 Repository。
-#### git
+
+### 2.1.1. git
 
 ```mermaid
 flowchart LR
@@ -236,7 +242,9 @@ flowchart LR
 	Git-Remote --> |pull|Git-Local
   Git-Remote --> |clone|Git-Local
 ```
+
 > Git：分別存在 Remote Repository 和 Local Repository。
+
 ```bash
 # Create an empty Git repository or reinitialize an existing one
 $ mkdir HelloWorld
@@ -244,7 +252,7 @@ $ cd HelloWorld
 $ git init
 ```
 
-## 2.1. Branch
+## 2.2. Branch
 
 #### svn cp
 
@@ -312,7 +320,7 @@ $ git clone -b branch2 http://trac-vbx/gitroot/gitroot.git gitroot-branch2
 $ git switch -c hardknott remotes/origin/hardknott
 ```
 
-## 2.2. Tag
+## 2.3. Tag
 
 #### svn cp
 
@@ -338,7 +346,7 @@ $ git tag -d v1.1.0
 $ git push --delete origin v1.1.0
 
 ```
-## 2.3. Git Local Repository
+## 2.4. Git Local Repository
 
 ```bash
 #** 四個狀態 **
@@ -355,13 +363,13 @@ Repository
 		$ git reset --hard HEAD
 ```
 
-### 注意！注意！注意！
+#### A. 注意！注意！注意！
 
 > 從上可以知道 Git 有四個狀態，感覺上管理的很有制度，但是如果 Working <--> Staging 變動過多，就算只有“你”一位修改人員，之後 commit、push 和 pull時，也會發生衝突！
 >
 > 所以要小心！再小心！
 
-> 另外 Git 使用中有所謂的 Index，這個反而會讓使用者有困擾。
+> 另外 Git 使用中有所謂的 `Index`，這個反而會讓使用者有困擾。
 >
 > 我們應該把事情簡單化，將 Git 的使用方式同化為  SVN Tracked 和 SVN Untracked。
 
@@ -1769,5 +1777,3 @@ function git-checkoutb()
 # License
 
 > [HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
-
-du
