@@ -19,6 +19,8 @@
 
 # 1. File Handler
 
+## 1.1. General Commands
+
 #### cd  - change the working directory
 
 ```bash
@@ -92,7 +94,7 @@ pwd
 
 ```
 
-## 1.1 Copy
+## 1.2. Copy
 
 #### cp - copy files and directories
 
@@ -163,7 +165,7 @@ function ssh-pass123()
 }
 ```
 
-## 1.2. Remove
+## 1.3. Remove
 
 #### rm - remove files or directories
 
@@ -181,7 +183,7 @@ rmdir -v /work/codebase/xbox
 
 
 
-## 1.3. [Linux chmod命令](https://www.runoob.com/linux/linux-comm-chmod.html)  and [Linux chown 命令](https://www.runoob.com/linux/linux-comm-chown.html)
+## 1.4. [Linux chmod命令](https://www.runoob.com/linux/linux-comm-chmod.html)  and [Linux chown 命令](https://www.runoob.com/linux/linux-comm-chown.html)
 
 #### chmod - change file mode bits
 
@@ -201,7 +203,7 @@ chown -R root.root *
 
 ```
 
-## 1.4. Reader
+## 1.5. Reader
 
 #### cat - concatenate files and print on the standard output
 
@@ -280,7 +282,7 @@ tail -f /var/log/syslog
 
 ```
 
-## 1.5. Compare
+## 1.6. Compare
 
 #### diff - compare files line by line
 
@@ -306,7 +308,7 @@ function diffX()
 patch -p1 < configure_fixes.patch
 ```
 
-## 1.6. Finder
+## 1.7. Finder
 
 #### find - search for files in a directory hierarchy
 
@@ -457,6 +459,8 @@ which find
 
 # 2. Task Handler
 
+## 2.1. General Commands
+
 #### fuser - identify processes using files or sockets
 
 ```bash
@@ -483,28 +487,6 @@ history
 history 10
 
 echo $HISTFILE
-```
-
-#### kill - send a signal to a process
-
-```bash
-kill `pidof helloworld`
-
-kill 123
-kill -SIGTERM 123
-
-kill -9 123
-kill -SIGKILL 123
-
-kill -USR1 123
-kill -USR2 123
-```
-
-#### killall - kill processes by name
-
-```bash
-killall helloworld
-killall -SIGTERM helloworld
 ```
 
 #### lsof - list open files
@@ -551,6 +533,139 @@ $ ps-lsof-pname apache2
 $ ps-lsof-file /work
 ```
 
+#### ps-pmap - report memory map of a process
+
+```bash
+function ps-pmap()
+{
+	HINT="Usage: ${FUNCNAME[0]} <pid>"
+	PID1=$1
+
+	if [ ! -z "${PID1}" ]; then
+		DO_COMMAND="(sudo pmap -xp ${PID1})"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
+```
+
+```bash
+$ ps-pmap 1102
+```
+
+#### renice - alter priority of running processes
+
+```bash
+# ID1234, to set priority as 19
+renice 19 1234
+
+# To increase the priority of Lanka's tasks by +1.
+renice +1 -u lanka
+```
+
+#### screen - screen manager with VT100/ANSI terminal emulation
+
+> 當建立一個 ssh 連線後，想將一個 task 放入 background 執行，且不會因為 ssh 斷線而結束。
+>
+> 這時可以借用 screen
+
+> [screen 使用教學](https://hackmd.io/@jimmy801/linux_screen)
+>
+> [GNU screen 應用手記](https://datahunter.org/screen)
+
+```bash
+$ sudo apt install -y screen
+$ vi ~/.screenrc
+startup_message off
+vbell off
+
+defutf8 on
+defencoding utf8
+encoding utf8 utf8
+defscrollback 100000
+defshell -bash
+
+# sho status bar
+caption always "%3n %t%? @%u%?%? [%h]%?%=%c"
+
+$ vi ~/.bashrc
+# add the last line
+[ ! -z "$STY" ] && export PS1='[screen] \u@\h:\w\$ '
+```
+
+```bash
+# create a screen
+$ screen
+
+# ** in a screen **
+# run a task, 不建議放入background
+$ task_123
+
+# detach the screen without disturbing it
+Ctrl + A, Then press D
+
+# detach the screen then kill it
+Ctrl + A, Then press K
+
+# logout and  kill it
+Ctrl + D
+[screen is terminating]
+```
+
+```bash
+$ screen -list
+There is a screen on:
+        17543.pts-1.lanka-build20-vbx      (01/08/25 09:11:24)     (Detached)
+1 Socket in /run/screen/S-lanka.
+
+# resumes a detached screen session
+$ screen -r 17543.pts-1.lanka-build20-vbx
+# or
+$ alias screen-one="screen -r `screen -list | grep Detached | awk -F ' ' '{print $1}'`"
+$ screen-one
+
+# kill the screen session
+$ screen -S 17543.pts-1.lanka-build20-vbx -X quit 
+```
+
+#### shutdown - Halt, power-off or reboot the machine
+
+```bash
+# Power-off the machine (the default).
+sudo shutdown -P 20:00
+
+# Cancel a pending shutdown.
+sudo shutdown -c
+```
+
+## 2.2. [Linux crontab 命令](https://www.runoob.com/linux/linux-comm-crontab.html)
+
+```bash
+# 編輯
+crontab -e
+
+crontab -l
+
+# 刪除自已所有的排程工作，在使用前一定要特別的注意哦…因為一不小心就全刪除了。
+crontab -r
+
+crontab -e -u lanka
+
+sudo systemctl status cron.service
+sudo systemctl enable cron.service
+```
+
+```bash
+# at bootup, wait 20 seconds
+@reboot sleep 20 && helloworld
+
+# every hour
+0 * * * * /bin/util_123
+```
+
+## 2.3. swap area
+
 #### mkswap - set up a Linux swap area
 
 ```bash
@@ -573,31 +688,83 @@ sudo mkswap $SWAP_FILE
 sudo chmod 0600 $SWAP_FILE
 ```
 
+#### swapon, swapoff - enable/disable devices and files for paging and swapping
+
+```bash
+# 啟動
+$ sudo swapon /dev/sdd
+$ swapon -s
+Filename                                Type            Size    Used    Priority
+/swapfile                               file            2097148 0       -2
+/dev/sdd                                partition       134217724       0       -3
+
+# 關閉
+$ sudo swapoff /dev/sdd
+
+$ swapon --show --bytes
+NAME      TYPE              SIZE USED PRIO
+/swapfile file        2147479552    0   -2
+/dev/sdd  partition 137438949376    0   -3
+
+$ swapon --show
+NAME      TYPE      SIZE USED PRIO
+/swapfile file        2G   0B   -2
+/dev/sdd  partition 128G   0B   -3
+```
+
+```bash
+sudo swapon $SWAP_FILE
+
+sudo swapoff $SWAP_FILE
+```
+
+```bash
+# 系統開機時就自動啟動
+$ sudo vi /etc/fstab
+/dev/sdd none swap defaults 0 0
+
+/work/swapfile none swap sw 0 0
+```
+
+## 2.4. Process ID
+
+#### kill - send a signal to a process
+
+```bash
+kill `pidof helloworld`
+
+kill helloworld
+kill -SIGTERM helloworld
+
+kill -9 helloworld
+kill -SIGKILL helloworld
+
+kill -USR1 helloworld
+kill -USR2 helloworld
+```
+
+#### killall - kill processes by name
+
+```bash
+killall helloworld
+killall -SIGTERM helloworld
+```
+
+#### pgrep, pkill - look up or signal processes based on name and other attributes
+
+```bash
+pgrep helloworld
+
+# lanka 啟動的 helloworld
+pgrep -u lanka helloworld
+
+pkill -USR2 helloworld
+```
+
 #### pidof -- find the process ID of a running program.
 
 ```bash
 pidof helloworld
-```
-
-#### ps-pmap - report memory map of a process
-
-```bash
-function ps-pmap()
-{
-	HINT="Usage: ${FUNCNAME[0]} <pid>"
-	PID1=$1
-
-	if [ ! -z "${PID1}" ]; then
-		DO_COMMAND="(sudo pmap -xp ${PID1})"
-		eval-it "$DO_COMMAND"
-	else
-		echo $HINT
-	fi
-}
-```
-
-```bash
-$ ps-pmap 1102
 ```
 
 #### ps - report a snapshot of the current processes.
@@ -711,154 +878,9 @@ $ ps-sort-cpu-mem
    1033   30  0.9  0.0 1795580 00:00:02      43:15 22:00:40 /usr/sbin/mysqld
 ```
 
-#### renice - alter priority of running processes
-
-```bash
-# ID1234, to set priority as 19
-renice 19 1234
-
-# To increase the priority of Lanka's tasks by +1.
-renice +1 -u lanka
-```
-
-#### screen - screen manager with VT100/ANSI terminal emulation
-
-> 當建立一個 ssh 連線後，想將一個 task 放入 background 執行，且不會因為 ssh 斷線而結束。
->
-> 這時可以借用 screen
-
-> [screen 使用教學](https://hackmd.io/@jimmy801/linux_screen)
->
-> [GNU screen 應用手記](https://datahunter.org/screen)
-
-```bash
-$ sudo apt install -y screen
-$ vi ~/.screenrc
-startup_message off
-vbell off
-
-defutf8 on
-defencoding utf8
-encoding utf8 utf8
-defscrollback 100000
-defshell -bash
-
-# sho status bar
-caption always "%3n %t%? @%u%?%? [%h]%?%=%c"
-
-$ vi ~/.bashrc
-# add the last line
-[ ! -z "$STY" ] && export PS1='[screen] \u@\h:\w\$ '
-```
-
-```bash
-# create a screen
-$ screen
-
-# ** in a screen **
-# run a task, 不建議放入background
-$ task_123
-
-# detach the screen without disturbing it
-Ctrl + A, Then press D
-
-# detach the screen then kill it
-Ctrl + A, Then press K
-
-# logout and  kill it
-Ctrl + D
-[screen is terminating]
-```
-
-```bash
-$ screen -list
-There is a screen on:
-        17543.pts-1.lanka-build20-vbx      (01/08/25 09:11:24)     (Detached)
-1 Socket in /run/screen/S-lanka.
-
-# resumes a detached screen session
-$ screen -r 17543.pts-1.lanka-build20-vbx
-# or
-$ alias screen-one="screen -r `screen -list | grep Detached | awk -F ' ' '{print $1}'`"
-$ screen-one
-
-# kill the screen session
-$ screen -S 17543.pts-1.lanka-build20-vbx -X quit 
-```
-
-#### shutdown - Halt, power-off or reboot the machine
-
-```bash
-# Power-off the machine (the default).
-sudo shutdown -P 20:00
-
-# Cancel a pending shutdown.
-sudo shutdown -c
-```
-
-#### swapon, swapoff - enable/disable devices and files for paging and swapping
-
-```bash
-# 啟動
-$ sudo swapon /dev/sdd
-$ swapon -s
-Filename                                Type            Size    Used    Priority
-/swapfile                               file            2097148 0       -2
-/dev/sdd                                partition       134217724       0       -3
-
-# 關閉
-$ sudo swapoff /dev/sdd
-
-$ swapon --show --bytes
-NAME      TYPE              SIZE USED PRIO
-/swapfile file        2147479552    0   -2
-/dev/sdd  partition 137438949376    0   -3
-
-$ swapon --show
-NAME      TYPE      SIZE USED PRIO
-/swapfile file        2G   0B   -2
-/dev/sdd  partition 128G   0B   -3
-```
-
-```bash
-sudo swapon $SWAP_FILE
-
-sudo swapoff $SWAP_FILE
-```
-
-```bash
-# 系統開機時就自動啟動
-$ sudo vi /etc/fstab
-/dev/sdd none swap defaults 0 0
-
-/work/swapfile none swap sw 0 0
-```
-
-## 2.1. [Linux crontab 命令](https://www.runoob.com/linux/linux-comm-crontab.html)
-
-```bash
-crontab -e
-
-crontab -l
-
-# 刪除自已所有的排程工作，在使用前一定要特別的注意哦…因為一不小心就全刪除了。
-crontab -r
-
-crontab -e -u lanka
-
-sudo systemctl status cron.service
-sudo systemctl enable cron.service
-```
-
-```bash
-# at bootup
-@reboot sleep 20 && helloworld
-
-# every hour
-0 * * * * /bin/util_123
-```
-
 # 3. Disk Handler
+
+## 3.1. General Commands
 
 #### df - report file system disk space usage
 
@@ -893,12 +915,6 @@ function free-folder()
 e2fsck -f /dev/sdd1
 ```
 
-#### gparted - GNOME Partition Editor for manipulating disk partitions.
-
-```bash
-gparted
-```
-
 #### lsblk - list block devices
 
 ```bash
@@ -907,12 +923,6 @@ function mount-disk()
 	DO_COMMAND="(lsblk -o model,name,fstype,size,label,mountpoint)"
 	eval-it "$DO_COMMAND"
 }
-```
-
-#### mke2fs - create an ext2/ext3/ext4 filesystem
-
-```bash
-sudo mke2fs /dev/sdb1
 ```
 
 #### ncdu - NCurses Disk Usage
@@ -933,7 +943,104 @@ e2fsck -f /dev/sdd1
 uuidgen | xargs tune2fs /dev/sdd1 -U
 ```
 
+## 3.2. Disk Partition
+
+#### cfdisk - display or manipulate a disk partition table
+
+> ASCII / TUI (Text-based UI) 的分割工具
+
+```bash
+sudo cfdisk
+```
+
+#### fdisk - manipulate disk partition table
+
+```bash
+sudo fdisk
+```
+
+#### gparted - GNOME Partition Editor for manipulating disk partitions
+
+> 圖形化介面
+
+```bash
+gparted
+```
+
+#### mke2fs - create an ext2/ext3/ext4 filesystem
+
+```bash
+sudo mke2fs /dev/sdb1
+```
+
+#### mkfs.jffs2 - Create a JFFS2 file system image from directory
+
+```bash
+sudo apt install -y mtd-utils
+
+cat /proc/mtd
+
+mkdir jffs2
+mkfs.jffs2 -d jffs2 -o jffs2.img
+flash_erase /dev/mtd/2
+cp ./jffs2.img /dev/mtd/2
+
+sudo mount -t jffs2 /dev/mtdblock/2 ./jffs2
+```
+
+## 3.3. Mount Handler
+
+#### mount - mount a filesystem
+
+```bash
+mkdir -p /tmp/sdk;
+mount -t nfs -o tcp,nolock,nosuid,rsize=1024,wsize=1024 192.168.0.92:/work/codebase /tmp/sdk
+
+mkdir -p /tmp/sdk;mount.nfs4 192.168.0.92:/work/codebase /tmp/sdk
+
+mount -t cifs -o username=lanka,password=lanka520 //192.168.0.92/work /mnt/smb
+
+mount -t jffs2 /dev/mtdblock2 /mnt/mtd
+
+mount -t smbfs -o username=lanka,password=lanka520 //192.168.10.5/work /mnt/smb
+
+mount -t vfat -o codepage=950 iocharset=utf8 /dev/ide/host0/bus0/target1/disc /mnt/CF
+mount -t vfat -o iocharset=big5 -o codepage=950  /dev/ide/host0/bus0/target1/lun0/part1 /mnt/CF
+mount -t vfat -o iocharset=big5 -o codepage=unicode  /dev/ide/host0/bus0/target1/lun0/part1 /mnt/CF
+mount -t vfat /dev/ide/host0/bus0/target1/lun0/part1 /mnt/CF
+mount -t vfat /dev/mmcblk0p1 /mnt/CF
+```
+
+```bash
+dd if=/dev/zero of=test8mb.img bs=4k count=2048
+mkfs.ext4 test8mb.img
+sudo mount -o loop -w test8mb.img
+sudo mount test8mb.img ./ext4
+```
+
+```bash
+sudo mount -a
+```
+
+#### umount - unmount file systems
+
+```bash
+umount /mnt/CF
+```
+
+## 3.4. Store Files
+
+#### /etc/fstab
+
+> 開機自動掛載
+
+```bash
+sudo vi /etc/fstab
+```
+
 # 4. String Handler
+
+## 4.1. General Commands
 
 ```bash
 $ export HELLO_WORLD="Hello World"
@@ -1044,85 +1151,6 @@ $ grep-include '*.md' grep-inc
 helper_linux.md:748:function grep-include()
 ```
 
-#### integer checker
-
-```bash
-[[ $ABC == ?(-)+([0-9]) ]] && echo "$ABC is an integer"
-[[ $ABC == ?(-)+([:digit:]) ]] && echo "$ABC is an integer"
-
-function is-integer()
-{
-	HINT="Usage: ${FUNCNAME[0]} <string>"
-	STR1="$1"
-
-	RE='^[+-]?[0-9]+([0-9]+)?$'
-	if [ ! -z "${STR1}" ]; then
-		[[ ${STR1} =~ ${RE} ]] && echo "$STR1 is an integer" && return 0
-		echo "$STR1 isn't an integer" && return 1
-	else
-		echo $HINT
-		return 1
-	fi
-}
-```
-
-```bash
-$ is-integer "abc"; echo [$?]
-abc isn't an integer
-[1]
-$ is-integer "1234"; echo [$?]
-1234 is an integer
-[0]
-$ is-integer "1234.12"; echo [$?]
-1234.12 isn't an integer
-[1]
-$ is-integer "-1234"; echo [$?]
--1234 is an integer
-[0]
-$ is-integer "+1234"; echo [$?]
-+1234 is an integer
-[0]
-```
-
-#### number checker
-
-```bash
-[ ! -z "${ABC##*[!0-9.]*}" ] && echo "is a number" || echo "is not a number";
-
-function is-number()
-{
-	HINT="Usage: ${FUNCNAME[0]} <string>"
-	STR1="$1"
-
-	RE='^[+-]?[0-9]+([.][0-9]+)?$'
-	if [ ! -z "${STR1}" ]; then
-		[[ ${STR1} =~ ${RE} ]] && echo "$STR1 is an number" && return 0
-		echo "$STR1 isn't an number" && return 1
-	else
-		echo $HINT
-		return 1
-	fi
-}
-```
-
-```bash
-$ is-number "abc"; echo [$?]
-abc isn't an number
-[1]
-$ is-number "1234"; echo [$?]
-1234 is an number
-[0]
-$ is-number "1234.12"; echo [$?]
-1234.12 is an number
-[0]
-$ is-number "-1234"; echo [$?]
--1234 is an number
-[0]
-$ is-number "+1234"; echo [$?]
-+1234 is an number
-[0]
-```
-
 #### trim
 
 ```bash
@@ -1214,17 +1242,255 @@ sed --follow-symlinks "s|PJ_BUILD_DIR|d" *.conf
 INPUT_ARY=($(echo "$INPUT_TXT" | tr "," "\n"))
 ```
 
-# 5. User Handler
+## 4.2. Type check
 
-#### ac -  print statistics about users' connect time
+#### integer checker
 
 ```bash
-# 檢視每位使用者的連線時間
-ac -p
+[[ $ABC == ?(-)+([0-9]) ]] && echo "$ABC is an integer"
+[[ $ABC == ?(-)+([:digit:]) ]] && echo "$ABC is an integer"
 
-# 檢視每天的連線時間
-ac -d
+function is-integer()
+{
+	HINT="Usage: ${FUNCNAME[0]} <string>"
+	STR1="$1"
+
+	RE='^[+-]?[0-9]+([0-9]+)?$'
+	if [ ! -z "${STR1}" ]; then
+		[[ ${STR1} =~ ${RE} ]] && echo "$STR1 is an integer" && return 0
+		echo "$STR1 isn't an integer" && return 1
+	else
+		echo $HINT
+		return 1
+	fi
+}
 ```
+
+```bash
+$ is-integer "abc"; echo [$?]
+abc isn't an integer
+[1]
+$ is-integer "1234"; echo [$?]
+1234 is an integer
+[0]
+$ is-integer "1234.12"; echo [$?]
+1234.12 isn't an integer
+[1]
+$ is-integer "-1234"; echo [$?]
+-1234 is an integer
+[0]
+$ is-integer "+1234"; echo [$?]
++1234 is an integer
+[0]
+```
+
+#### number checker
+
+```bash
+[ ! -z "${ABC##*[!0-9.]*}" ] && echo "is a number" || echo "is not a number";
+
+function is-number()
+{
+	HINT="Usage: ${FUNCNAME[0]} <string>"
+	STR1="$1"
+
+	RE='^[+-]?[0-9]+([.][0-9]+)?$'
+	if [ ! -z "${STR1}" ]; then
+		[[ ${STR1} =~ ${RE} ]] && echo "$STR1 is an number" && return 0
+		echo "$STR1 isn't an number" && return 1
+	else
+		echo $HINT
+		return 1
+	fi
+}
+```
+
+```bash
+$ is-number "abc"; echo [$?]
+abc isn't an number
+[1]
+$ is-number "1234"; echo [$?]
+1234 is an number
+[0]
+$ is-number "1234.12"; echo [$?]
+1234.12 is an number
+[0]
+$ is-number "-1234"; echo [$?]
+-1234 is an number
+[0]
+$ is-number "+1234"; echo [$?]
++1234 is an number
+[0]
+```
+
+# 5. Shell script Handler
+
+## 5.1. General Commands
+
+#### alias - define or display aliases
+
+```bash
+alias ll="ls -alF"
+alias la="ls -A"
+alias l="ls -CF"
+
+unalias la
+```
+
+#### command - execute a simple command
+
+```bash
+$ command -v ls
+alias ls='ls --color=auto'
+
+$ command -V ls
+ls is aliased to `ls --color=auto'
+```
+
+#### man - an interface to the system reference manuals
+
+```bash
+man ls
+```
+
+#### parallel - build and execute shell command lines from standard input in parallel
+
+> 平行處理
+
+```bash
+$ sudo apt install -y parallel
+$ seq 0 100 | parallel -j 10 '. ~/.bash_aliases; echo "==> {}"'
+```
+
+#### seq - print a sequence of numbers
+
+```bash
+$ seq 1 3
+1
+2
+3
+$ seq 1 2 10
+1
+3
+5
+7
+9
+```
+
+#### set - set or unset options and positional parameters
+
+```bash
+set -e：在命令返回非零退出狀態碼時自動退出 shell。這意味著，如果命令返回一個錯誤，腳本將會立即停止運行，而不會繼續執行下去。
+set -o pipefail：在使用管道連接多個命令時，如果其中任何一個命令失敗，則整個管道返回失敗。預設情況下，管道只返回最後一個命令的退出狀態碼。使用 set -o pipefail 可以使管道的退出狀態碼反映所有命令的退出狀態。
+```
+
+#### unset - unset values and attributes of variables and functions
+
+```bash
+export BOSS=lanka
+unset BOSS
+
+helloworld_fn ()
+{
+}
+unset -f helloworld_fn
+```
+
+#### type - write a description of command type
+
+```bash
+$ type ls
+ls is aliased to `ls --color=auto'
+```
+
+#### xargs - build and execute command lines from standard input
+
+```bash
+ls | xargs cat
+
+$ cd HelperX/mqtt; ls | xargs -t -I {}  cat {}
+cat mqttPub.sh
+...
+cat mqttSub.sh
+...
+```
+
+## 5.2. User function
+
+#### eval-it
+
+> 把字串當成命令執行
+
+```bash
+#sh -c "$DO_COMMAND"
+function eval-it()
+{
+	DO_COMMAND="$*"
+	echo "[${DO_COMMAND}]"
+	eval ${DO_COMMAND}
+}
+```
+
+```bash
+$ eval-it "echo 123"
+[echo 123]
+123
+```
+
+#### eval-loop
+
+```bash
+function eval-loop()
+{
+	HINT="Usage: ${FUNCNAME[0]} <min> <max> \"<commands>\""
+
+	MIN1="$1"
+	MAX2="$2"
+	COMMAND3="$3"
+
+	if [ ! -z "$COMMAND3" ]; then
+		for i in `seq ${MIN1} ${MAX2}`
+		do
+						#echo "Welcome $i !!!"
+						eval-it "${COMMAND3}$i"
+		done
+	else
+		echo -e $HINT
+	fi
+}
+```
+
+```bash
+$ eval-loop 0 2 "echo "
+[echo 0]
+0
+[echo 1]
+1
+[echo 2]
+2
+```
+
+#### now_fn
+
+> 回傳現在時間
+
+```bash
+now_fn()
+{
+	NOW_t=`date +"%Y%m%d%H%M%S"`
+	return $NOW_t
+}
+```
+
+```bash
+$ now_fn
+$ echo $NOW_t
+20231229092235
+```
+
+# 6. User Handler
+
+## 6.1. General Commands
 
 #### gpasswd - administer /etc/group and /etc/gshadow
 
@@ -1260,25 +1526,6 @@ lanka : lanka adm cdrom sudo dip plugdev lpadmin lxd sambashare docker
 ```bash
 $ id lanka
 uid=1000(lanka) gid=1000(lanka) groups=1000(lanka),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),120(lpadmin),131(lxd),132(sambashare),142(docker)
-```
-
-#### last, lastb - show a listing of last logged in users
-
-```bash
-last -aiF -30
-```
-
-#### lastcomm -  print out information about previously executed commands
-
-```bash
-# 程序歷史清單
-lastcomm --forwards
-```
-
-#### lastlog - reports the most recent login of all users or of a given user
-
-```bash
-lastlog
 ```
 
 #### newgrp - log in to a new group
@@ -1394,6 +1641,45 @@ pikachu:x:1003:1003::/work/pikachu:/bin/sh
 $ sudo usermod -aG sudo pikachu
 ```
 
+#### whoami - print effective userid
+
+```bash
+$ sudo cat /etc/shadow
+$ sudo cat /etc/shadow | grep lanka
+lanka:lanka520:19276:0:99999:7:::
+```
+
+## 6.2. Monitor user
+
+#### ac -  print statistics about users' connect time
+
+```bash
+# 檢視每位使用者的連線時間
+ac -p
+
+# 檢視每天的連線時間
+ac -d
+```
+
+#### last, lastb - show a listing of last logged in users
+
+```bash
+last -aiF -30
+```
+
+#### lastcomm -  print out information about previously executed commands
+
+```bash
+# 程序歷史清單
+lastcomm --forwards
+```
+
+#### lastlog - reports the most recent login of all users or of a given user
+
+```bash
+lastlog
+```
+
 #### users - print the user names of users currently logged in to the current host
 
 ```bash
@@ -1417,7 +1703,7 @@ $ who
 lanka    pts/0        2024-07-31 08:34 (192.168.56.1)
 ```
 
-#### whoami - print effective userid
+## 6.3. Store Files
 
 ```bash
 $ whoami
@@ -1459,7 +1745,9 @@ $ sudo cat /etc/shadow | grep lanka
 lanka:lanka520:19276:0:99999:7:::
 ```
 
-# 6. Log Handler
+# 7. Log Handler
+
+## 7.1. General Commands
 
 #### logger - enter messages into the system log
 
@@ -1474,6 +1762,8 @@ lanka:lanka520:19276:0:99999:7:::
 ```bash
 logread -f -e helloworld 2>/dev/null
 ```
+
+## 7.2. Store Files
 
 #### /var/log/syslog
 
@@ -1548,39 +1838,80 @@ Then restart rsyslog and your service.
 $ systemctl restart rsyslog
 ```
 
-# 7. Mount Handler
-
-#### mount - mount a filesystem
-
-```bash
-mkdir -p /tmp/sdk;
-mount -t nfs -o tcp,nolock,nosuid,rsize=1024,wsize=1024 192.168.0.92:/work/codebase /tmp/sdk
-
-mkdir -p /tmp/sdk;mount.nfs4 192.168.0.92:/work/codebase /tmp/sdk
-
-mount -t cifs -o username=lanka,password=lanka520 //192.168.0.92/work /mnt/smb
-
-mount -t jffs2 /dev/mtdblock2 /mnt/mtd
-
-mount -t smbfs -o username=lanka,password=lanka520 //192.168.10.5/work /mnt/smb
-
-mount -t vfat -o codepage=950 iocharset=utf8 /dev/ide/host0/bus0/target1/disc /mnt/CF
-mount -t vfat -o iocharset=big5 -o codepage=950  /dev/ide/host0/bus0/target1/lun0/part1 /mnt/CF
-mount -t vfat -o iocharset=big5 -o codepage=unicode  /dev/ide/host0/bus0/target1/lun0/part1 /mnt/CF
-mount -t vfat /dev/ide/host0/bus0/target1/lun0/part1 /mnt/CF
-mount -t vfat /dev/mmcblk0p1 /mnt/CF
-```
-
-```bash
-dd if=/dev/zero of=test8mb.img bs=4k count=2048
-mkfs.ext4 test8mb.img
-sudo mount -o loop -w test8mb.img
-sudo mount test8mb.img ./ext4
-```
-
 # 8. Network Handler
 
+## 8.1. General Commands
+
 #### avahi-browse - Browse for mDNS/DNS-SD services using the Avahi daemon
+
+```bash
+$ ip link show
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 08:00:27:33:73:52 brd ff:ff:ff:ff:ff:ff
+3: enp0s8: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 08:00:27:33:1b:19 brd ff:ff:ff:ff:ff:ff
+4: enp0s9: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 08:00:27:7a:52:5b brd ff:ff:ff:ff:ff:ff
+5: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default
+    link/ether 02:42:c6:06:04:0f brd ff:ff:ff:ff:ff:ff
+
+$ ip link show enp0s3
+```
+
+#### brctl - ethernet bridge administration
+
+```bash
+ifconfig eth2.2 down
+brctl addbr br1
+ifconfig br1 up
+brctl addif br1 eth2.1
+ifconfig eth2.2 0.0.0.0
+ifconfig br1 up
+```
+
+#### ifconfig - configure a network interface
+
+```bash
+ifconfig -a
+
+ifconfig eth0
+
+# mtu
+sudo ifconfig enp0s3 mtu 9000
+
+IFACE=ra0
+MYMASK=`ifconfig $IFACE | awk '/netmask/{ print $4;}'`
+
+MAC_ADDR=$(ifconfig $IFACE | grep 'HWaddr' | awk -F ' ' '{print $NF}')
+MAC_ADDR=$(ifconfig $IFACE | grep 'ether' | awk -F ' ' '{print $2}')
+
+MYBR="br9"
+MYIP=192.168.0.99
+
+sudo ifconfig $MYBR hw ether $MAC_ADDR
+sudo ifconfig $IFACE down
+sudo ifconfig $IFACE 0.0.0.0 up
+sudo ifconfig $MYBR $MYIP netmask $MYMASK
+sudo ifconfig $IFACE 0.0.0.0
+```
+
+```bash
+function ifconfig-mac()
+{
+	HINT="Usage: ${FUNCNAME[0]} <iface>"
+	IFACE="$1"
+
+	if [ ! -z "$IFACE" ]; then
+		MAC_ADDR=$(ifconfig $IFACE | grep 'ether' | awk -F ' ' '{print $2}' | sed s'|:||g')
+		MAC_ADDR=${MAC_ADDR^^}
+		echo $MAC_ADDR
+	else
+		echo $HINT
+	fi
+}
+```
 
 ```bash
 function avahi-123()
@@ -1639,48 +1970,6 @@ function avahi-print()
 }
 ```
 
-#### ifconfig - configure a network interface
-
-```bash
-ifconfig -a
-
-ifconfig eth0
-
-# mtu
-sudo ifconfig enp0s3 mtu 9000
-
-IFACE=ra0
-MYMASK=`ifconfig $IFACE | awk '/netmask/{ print $4;}'`
-
-MAC_ADDR=$(ifconfig $IFACE | grep 'HWaddr' | awk -F ' ' '{print $NF}')
-MAC_ADDR=$(ifconfig $IFACE | grep 'ether' | awk -F ' ' '{print $2}')
-
-MYBR="br9"
-MYIP=192.168.0.99
-
-sudo ifconfig $MYBR hw ether $MAC_ADDR
-sudo ifconfig $IFACE down
-sudo ifconfig $IFACE 0.0.0.0 up
-sudo ifconfig $MYBR $MYIP netmask $MYMASK
-sudo ifconfig $IFACE 0.0.0.0
-```
-
-```bash
-function ifconfig-mac()
-{
-	HINT="Usage: ${FUNCNAME[0]} <iface>"
-	IFACE="$1"
-
-	if [ ! -z "$IFACE" ]; then
-		MAC_ADDR=$(ifconfig $IFACE | grep 'ether' | awk -F ' ' '{print $2}' | sed s'|:||g')
-		MAC_ADDR=${MAC_ADDR^^}
-		echo $MAC_ADDR
-	else
-		echo $HINT
-	fi
-}
-```
-
 #### ifdata - get network interface info without parsing ifconfig output
 
 ```bash
@@ -1730,18 +2019,6 @@ $ ip link show
 $ ip link show enp0s3
 ```
 
-#### nc - arbitrary TCP and UDP connections and listens
-
-> client and server
-
-```bash
-# server
-$ nc -l -p 12345
-
-# client
-$ nc 127.0.0.1 12345
-```
-
 #### nslookup - query Internet name servers interactively
 
 ```bash
@@ -1767,20 +2044,14 @@ route add -net 192.168.0.0 netmask 255.255.255.0 ra0
 route del -net 192.168.0.0 netmask 255.255.255.0 ra0
 ```
 
-#### socat - Multipurpose relay (SOcket CAT)
+#### vconfig - VLAN (802.1q) configuration program
 
 ```bash
-# a TCP server, echo mode
-$ socat TCP-LISTEN:12345,fork EXEC:/bin/cat
+vconfig add eth2 3
+ifconfig eth2.3 up
 ```
 
-#### umount - unmount file systems
-
-```bash
-umount /mnt/CF
-```
-
-## 8.1. ARP
+## 8.2. ARP
 
 #### arping - sends arp and/or ip pings to a given host
 
@@ -1800,15 +2071,14 @@ arp -n
 arp -a
 ```
 
-## 8.2. iftop - display bandwidth usage on an interface by host
+## 8.3. Network State
+
+#### iftop - display bandwidth usage on an interface by host
 
 ```bash
 sudo apt-get install iftop
 sudo iftop
-
 ```
-
-## 8.3. Network State
 
 #### ss - another utility to investigate sockets
 
@@ -1925,24 +2195,35 @@ iwpriv ra0 set WPAPSK="lanka520"
 iwpriv ra0 set SSID="lanka-FF:FF"
 ```
 
-## 8.5. Bridge
+## 8.5. Client and Server
 
-#### brctl - ethernet bridge administration
+#### [iperf](https://iperf.fr) - perform network throughput tests
 
 ```bash
-ifconfig eth2.2 down
-brctl addbr br1
-ifconfig br1 up
-brctl addif br1 eth2.1
-ifconfig eth2.2 0.0.0.0
-ifconfig br1 up
+# run in server mode
+iperf -s
+
+# run in client mode, connecting to host
+iperf -c 192.168.0.92
 ```
 
-#### vconfig - VLAN (802.1q) configuration program
+#### nc - arbitrary TCP and UDP connections and listens
+
+> client and server
 
 ```bash
-vconfig add eth2 3
-ifconfig eth2.3 up
+# server
+$ nc -l -p 12345
+
+# client
+$ nc 127.0.0.1 12345
+```
+
+#### socat - Multipurpose relay (SOcket CAT)
+
+```bash
+# a TCP server, echo mode
+$ socat TCP-LISTEN:12345,fork EXEC:/bin/cat
 ```
 
 ## 8.6. udhcpc
@@ -1953,17 +2234,9 @@ udhcpc -i br1 -s /sbin/udhcpc.sh -p /var/run/udhcpc.pid
 udhcpc -i ra0 -s /sbin/udhcpc.sh -p /var/run/udhcpc.pid
 ```
 
-## 8.7. [iperf](https://iperf.fr) - perform network throughput tests
-
-```bash
-# run in server mode
-iperf -s
-
-# run in client mode, connecting to host
-iperf -c 192.168.0.92
-```
-
 # 9. Datetime Handler
+
+## 9.1. General Commands
 
 #### date - print or set the system date and time
 
@@ -1974,6 +2247,28 @@ date +"%Y%m%d %T"
 date +"%Y%m%d %H%M%S"
 
 date +%s
+```
+
+#### locale - get locale-specific information
+
+```bash
+$ sudo vi /etc/default/locale
+#  File generated by update-locale
+LANG="en_US.UTF-8"
+LC_NUMERIC="en_US.UTF-8"
+LC_TIME="en_US.UTF-8"
+LC_MONETARY="en_US.UTF-8"
+LC_PAPER="en_US.UTF-8"
+LC_NAME="en_US.UTF-8"
+LC_ADDRESS="en_US.UTF-8"
+LC_TELEPHONE="en_US.UTF-8"
+LC_MEASUREMENT="en_US.UTF-8"
+LC_IDENTIFICATION="en_US.UTF-8"
+
+$ sudo locale-gen en_US.UTF-8
+$ sudo update-locale LC_ALL=en_US.UTF-8
+
+$ sudo update-locale LC_TIME=\"en_US.UTF-8\"
 ```
 
 #### ntpdate - set the date and time via NTP
@@ -1987,7 +2282,7 @@ export TZ="GMT-08:00"
 echo "GMT-08:00" > /etc/TZ
 ```
 
-## 9.1. Timezone
+## 9.2. Timezone
 
 ```bash
 cat /etc/timezone
@@ -2016,7 +2311,30 @@ $ timedatectl list-timezones
 $ sudo timedatectl set-timezone Asia/Taipei
 ```
 
-# 10. Service Handler
+# 10. Editor
+
+## 10.1. General Commands
+
+#### nano - Nano's ANOther editor, inspired by Pico
+
+```bash
+nano
+```
+
+#### vim / vi - a programmer's text editor
+
+> 請參考 [helper_vi.md](https://github.com/lankahsu520/HelperX/blob/master/helper_vi.md) - vi/vim helper.
+
+> [~/.vimrc](https://github.com/lankahsu520/HelperX/blob/master/linux/.vimrc)
+
+```bash
+vi 123
+vim 123
+```
+
+# 11. Service Handler
+
+## 11.1. General Commands
 
 #### journalctl - Query the systemd journal
 
@@ -2062,6 +2380,8 @@ $ service apache2 restart
 ```
 
 #### supervisor - monitor and control a number of processes on UNIX-like operating systems
+
+> 當管理超過 1000 個 process 時，反應速度會變慢，有時會卡頓。
 
 > minfds: 系統可用的 **file descriptors (檔案描述符)** 數量。
 >
@@ -2243,55 +2563,25 @@ TriggeredBy: ● snapd.socket
              └─33262 /usr/lib/snapd/snapd
 ```
 
-# 11. Debug Handler
+## 11.2. Store Files
 
-#### valgrind - a suite of tools for debugging and profiling programs
+#### /etc/init.d/*
 
-```bash
-valgrind --tool=memcheck --leak-check=full --show-reachable=yes -s ./demo_000
+#### /etc/supervisor/supervisord.conf
 
-sudo -E valgrind --tool=memcheck --leak-check=full --show-reachable=yes ./ir_daemon -d 2 -s /mnt -i eth0
-```
+#### /etc/supervisor/conf.d/*.conf
 
-```bash
-function valgrind-ex()
-{
-	HINT="Usage: ${FUNCNAME[0]} <prog-and-args>..."
-	PROG_AND_ARGS="$*"
+#### /lib/systemd/system/*
 
-	#echo "PROG_AND_ARGS=$PROG_AND_ARGS"
-	if [ ! -z "$PROG_AND_ARGS" ]; then
-		DO_COMMAND="(valgrind --tool=memcheck --leak-check=full --show-reachable=yes -s $PROG_AND_ARGS)"
-		eval-it "$DO_COMMAND"
-	else
-		echo $HINT
-	fi
-}
-```
-```bash
-$ valgrind-ex ./demo_000
-[(valgrind --tool=memcheck --leak-check=full --show-reachable=yes -s ./demo_000)]
-==9900== Memcheck, a memory error detector
-==9900== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==9900== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==9900== Command: ./demo_000
-==9900==
-[9900/9900] app_loop:46 - (TAG: demo_000, pid: 9900)
-[9900/9900] app_loop:50 - (cksum: 1398)
-[9900/9900] app_loop:52 - (cksum: 22044)
-[9900/9900] main:156 - Bye-Bye !!!
-==9900==
-==9900== HEAP SUMMARY:
-==9900==     in use at exit: 0 bytes in 0 blocks
-==9900==   total heap usage: 1,820 allocs, 1,820 frees, 529,152 bytes allocated
-==9900==
-==9900== All heap blocks were freed -- no leaks are possible
-==9900==
-==9900== For lists of detected and suppressed errors, rerun with: -s
-==9900== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-```
+#### /usr/lib/systemd/system/*
+
+#### /usr/lib/systemd/user/*
+
+#### /etc/systemd/system/*
 
 # 12. Package Handler
+
+## 12.1. General Commands
 
 #### apt-get - APT package handling utility -- command-line interface
 
@@ -2370,14 +2660,6 @@ ii  linux-image-generic-hwe-20.04                 5.15.0.117.127~20.04.1        
 ii  virtualbox-guest-dkms-hwe                     6.1.50-dfsg-1~ubuntu1.20.04.1               all          x86 virtualization solution - guest addition module source for dkms
 ```
 
-#### ldconfig - configure dynamic linker run-time bindings
-
-```bash
-$ ldconfig -p|grep libmpc
-        libmpcdec.so.6 (libc6,x86-64) => /lib/x86_64-linux-gnu/libmpcdec.so.6
-        libmpc.so.3 (libc6,x86-64) => /lib/x86_64-linux-gnu/libmpc.so.3
-```
-
 #### rpm - RPM Package Manager
 
 ```bash
@@ -2412,7 +2694,283 @@ sudo systemctl disable snapd
 sudo systemctl disable snapd.seeded.service
 ```
 
+## 12.2. Archive Files
+
+#### gzip, gunzip, zcat - compress or expand files
+
+```bash
+# decompress
+gzip -d helloworld.gz
+gzip -dk helloworld.gz
+
+gunzip helloworld.gz
+
+# compress
+$ gzip -k helper_vi.md
+$ ll helper_vi.md*
+-rwxrwxr-x 1 lanka lanka 4155  八   6 08:15 helper_vi.md*
+-rwxrwxr-x 1 lanka lanka 1872  八   6 08:15 helper_vi.md.gz*
+
+```
+
+#### tar - an archiving utility
+
+```bash
+tar -zcvf helloworld.tar.gz helloworld
+tar -zxvf helloworld.tar.gz
+
+cat helloworld.tar.gz | openssl enc -aes-256-cbc -e > helloworld.tar.gz.enc
+cat helloworld.tar.gz.enc | openssl enc -aes-256-cbc -d > helloworld.tar.gz
+```
+
+#### unzip - list, test and extract compressed files in a ZIP archive
+
+```bash
+unzip helloworld.zip
+```
+
+#### uuidgen - create a new UUID value
+
+```bash
+$ uuidgen
+a9d92443-354b-47aa-a216-e60bbf73a94c
+```
+
+#### zip - package and compress (archive) files
+
+```bash
+zip -r helloworld.zip helloworld
+```
+
+## 12.3. Object dependencies
+
+#### file - determine file type
+
+```bash
+$ file ./libssl.so
+./libssl.so: symbolic link to libssl.so.1.1
+
+$ file /bin/curl
+/bin/curl: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=96cc5c71a0343e9de8f3574c90dee265ccae1201, for GNU/Linux 3.2.0, stripped
+```
+
+#### ldconfig - configure dynamic linker run-time bindings
+
+```bash
+$ ldconfig -p|grep libmpc
+        libmpcdec.so.6 (libc6,x86-64) => /lib/x86_64-linux-gnu/libmpcdec.so.6
+        libmpc.so.3 (libc6,x86-64) => /lib/x86_64-linux-gnu/libmpc.so.3
+```
+
+#### ldd - print shared object dependencies
+
+```bash
+$ ldd ./libssl.so
+./libssl.so: /lib/x86_64-linux-gnu/libcrypto.so.1.1: version `OPENSSL_1_1_1k' not found (required by ./libssl.so)
+        linux-vdso.so.1 (0x00007fb5abc33000)
+        libcrypto.so.1.1 => /lib/x86_64-linux-gnu/libcrypto.so.1.1 (0x00007fb5ab8a2000)
+        libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007fb5ab87f000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fb5ab68d000)
+        libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007fb5ab687000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007fb5abc35000)
+```
+
+#### nm - list symbols from object files
+
+```bash
+$ nm ./libssl.so
+0000000000030720 t add_ca_name
+000000000004ab30 t add_custom_ext_intern
+000000000004acc0 t add_old_custom_ext.constprop.0
+00000000000759e0 r application_traffic.23486
+                 U ASN1_ANY_it@@OPENSSL_1_1_0
+                 U ASN1_item_d2i@@OPENSSL_1_1_0
+                 U ASN1_item_free@@OPENSSL_1_1_0
+                 U ASN1_item_i2d@@OPENSSL_1_1_0
+...
+```
+
+#### objdump - display information from object files
+
+```bash
+$ objdump -x ./libssl.so
+
+$ objdump -T ./libssl.so
+
+$ objdump -p ./libssl.so
+```
+
+#### readelf - display information about ELF files
+
+```bash
+$ readelf -d ./libssl.so
+
+Dynamic section at offset 0x8cd40 contains 33 entries:
+  Tag        Type                         Name/Value
+ 0x0000000000000001 (NEEDED)             Shared library: [libcrypto.so.1.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+ 0x000000000000000e (SONAME)             Library soname: [libssl.so.1.1]
+ 0x0000000000000010 (SYMBOLIC)           0x0
+ 0x000000000000001d (RUNPATH)            Library runpath: [/work/rootfs/lib]
+...
+```
+
+## 12.4. pkg-config
+
+```bash
+$ pkg-config --version
+0.29.1
+```
+
+#### --list-all
+
+> 列出所有的函式庫
+
+```bash
+$ pkg-config --list-all | grep gstreamer
+gstreamer-gl-1.0               GStreamer OpenGL Plugins Libraries - Streaming media framework, OpenGL plugins libraries
+gstreamer-plugins-base-1.0     GStreamer Base Plugins Libraries - Streaming media framework, base plugins libraries
+gstreamer-tag-1.0              GStreamer Tag Library - Tag base classes and helper functions
+gstreamer-1.0                  GStreamer - Streaming media framework
+gstreamer-sdp-1.0              GStreamer SDP Library - SDP helper functions
+gstreamer-controller-1.0       GStreamer controller - Dynamic parameter control for GStreamer elements
+gstreamer-base-1.0             GStreamer base classes - Base classes for GStreamer elements
+gstreamer-pbutils-1.0          GStreamer Base Utils Library - General utility functions
+gstreamer-check-1.0            GStreamer check unit testing - Unit testing helper library for GStreamer modules
+gstreamer-video-1.0            GStreamer Video Library - Video base classes and helper functions
+gstreamer-riff-1.0             GStreamer RIFF Library - RIFF helper functions
+gstreamer-allocators-1.0       GStreamer Allocators Library - Allocators implementation
+gstreamer-fft-1.0              GStreamer FFT Library - FFT implementation
+gstreamer-audio-1.0            GStreamer Audio library - Audio helper functions and base classes
+gstreamer-app-1.0              GStreamer Application Library - Helper functions and base classes for application integration
+gstreamer-net-1.0              GStreamer networking library - Network-enabled GStreamer plug-ins and clocking
+gstreamer-rtsp-1.0             GStreamer RTSP Library - RTSP base classes and helper functions
+gstreamer-rtp-1.0              GStreamer RTP Library - RTP base classes and helper functions
+```
+
+#### --exists
+
+> 確定該函式庫是否存在
+
+```bash
+$ pkg-config --exists gstreamer-1.0 && echo "yes" || echo "no"
+yes
+```
+
+#### --cflags
+
+> 連結該函式庫的 CFLAGS
+
+```bash
+$ pkg-config --cflags gstreamer-1.0
+-pthread -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include
+```
+
+#### --libs
+
+> 連結該函式庫的 LDFLAGS
+
+```bash
+$ pkg-config --libs gstreamer-1.0
+-lgstreamer-1.0 -lgobject-2.0 -lglib-2.0
+```
+
+#### --modversion
+
+> 秀出該函式庫版本號
+
+```bash
+$ pkg-config --modversion gstreamer-1.0
+1.16.3
+
+$ pkg-config 'gstreamer-1.0 >= 1.17' && echo "yes" || echo "no"
+no
+$ pkg-config 'gstreamer-1.0 >= 1.16' && echo "yes" || echo "no"
+yes
+```
+
+#### --print-requires
+
+> 引用該函式庫將需要 depend on ...
+
+```bash
+$ pkg-config --print-requires gstreamer-1.0
+glib-2.0
+gobject-2.0
+```
+
+#### pkg-find
+
+```bash
+function pkg-find()
+{
+	HINT="Usage: ${FUNCNAME[0]} <file>"
+	FILE1=$1
+
+	if [ ! -z "$FILE1" ]; then
+		pkg-config --list-all | grep ${FILE1}
+	else
+		echo $HINT
+	fi
+}
+```
+
+```bash
+$ pkg-find openssl
+openssl                             OpenSSL - Secure Sockets Layer and cryptography libraries and tools
+libevent_openssl                    libevent_openssl - libevent_openssl adds openssl-based TLS support to libevent
+```
+
+#### pkg-config-ex
+
+```bash
+function pkg-config-ex()
+{
+	HINT="Usage: ${FUNCNAME[0]} <files>"
+	FILES="$*"
+
+	if [ ! -z "$FILES" ]; then
+		for FILE in ${FILES}; do
+		(
+			DO_COMMAND="pkg-config --variable pc_path pkg-config"
+			eval-it "$DO_COMMAND"
+
+			DO_COMMAND="pkg-config --cflags ${FILE}"
+			eval-it "$DO_COMMAND"
+
+			DO_COMMAND="pkg-config --libs ${FILE}"
+			eval-it "$DO_COMMAND"
+
+			DO_COMMAND="pkg-config --modversion ${FILE}"
+			eval-it "$DO_COMMAND"
+
+			DO_COMMAND="pkg-config --print-requires ${FILE}"
+			eval-it "$DO_COMMAND"
+		)
+		done
+	else
+		echo $HINT
+	fi
+}
+```
+
+```bash
+$ pkg-config-ex openssl
+[pkg-config --cflags openssl]
+
+[pkg-config --libs openssl]
+-lssl -lcrypto
+[pkg-config --modversion openssl]
+1.1.1f
+[pkg-config --print-requires openssl]
+libssl
+libcrypto
+```
+
 # 13. System Handler
+
+## 13.1. General Commands
 
 #### free - Display amount of free and used memory in the system
 
@@ -2547,6 +3105,15 @@ x86_64
 $ uname -r
 5.15.0-117-generic
 ```
+
+#### uptime - Tell how long the system has been running
+
+```bash
+$ uptime
+ 16:28:03 up  3:58,  2 users,  load average: 0.00, 0.00, 0.00
+```
+
+## 13.2. Store Files
 
 #### /proc/cpuinfo
 
@@ -2896,19 +3463,59 @@ sudo apt install -y lynis
 lynis show version
 ```
 
-# 15. MTD Handler
+# 15. Debug Handler
+
+## 15.1. General Commands
+
+#### valgrind - a suite of tools for debugging and profiling programs
 
 ```bash
-sudo apt install -y mtd-utils
+$ sudo apt-get --yes install valgrind
+```
 
-cat /proc/mtd
+```bash
+valgrind --tool=memcheck --leak-check=full --show-reachable=yes -s ./demo_000
 
-mkdir jffs2
-mkfs.jffs2 -d jffs2 -o jffs2.img
-flash_erase /dev/mtd/2
-cp ./jffs2.img /dev/mtd/2
+sudo -E valgrind --tool=memcheck --leak-check=full --show-reachable=yes ./ir_daemon -d 2 -s /mnt -i eth0
+```
 
-sudo mount -t jffs2 /dev/mtdblock/2 ./jffs2
+```bash
+function valgrind-ex()
+{
+	HINT="Usage: ${FUNCNAME[0]} <prog-and-args>..."
+	PROG_AND_ARGS="$*"
+
+	#echo "PROG_AND_ARGS=$PROG_AND_ARGS"
+	if [ ! -z "$PROG_AND_ARGS" ]; then
+		DO_COMMAND="(valgrind --tool=memcheck --leak-check=full --show-reachable=yes -s $PROG_AND_ARGS)"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
+```
+
+```bash
+$ valgrind-ex ./demo_000
+[(valgrind --tool=memcheck --leak-check=full --show-reachable=yes -s ./demo_000)]
+==9900== Memcheck, a memory error detector
+==9900== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==9900== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==9900== Command: ./demo_000
+==9900==
+[9900/9900] app_loop:46 - (TAG: demo_000, pid: 9900)
+[9900/9900] app_loop:50 - (cksum: 1398)
+[9900/9900] app_loop:52 - (cksum: 22044)
+[9900/9900] main:156 - Bye-Bye !!!
+==9900==
+==9900== HEAP SUMMARY:
+==9900==     in use at exit: 0 bytes in 0 blocks
+==9900==   total heap usage: 1,820 allocs, 1,820 frees, 529,152 bytes allocated
+==9900==
+==9900== All heap blocks were freed -- no leaks are possible
+==9900==
+==9900== For lists of detected and suppressed errors, rerun with: -s
+==9900== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 ```
 
 # 16. Virus Handler
@@ -3041,55 +3648,9 @@ DatabaseMirror database.clamav.net
 $ cat  /var/log/clamav/freshclam.log
 ```
 
-# 17. Archive Handler
+# 17. Power Handler
 
-#### gzip, gunzip, zcat - compress or expand files
-
-```bash
-# decompress
-gzip -d helloworld.gz
-gzip -dk helloworld.gz
-
-gunzip helloworld.gz
-
-# compress
-$ gzip -k helper_vi.md
-$ ll helper_vi.md*
--rwxrwxr-x 1 lanka lanka 4155  八   6 08:15 helper_vi.md*
--rwxrwxr-x 1 lanka lanka 1872  八   6 08:15 helper_vi.md.gz*
-
-```
-
-#### tar - an archiving utility
-
-```bash
-tar -zcvf helloworld.tar.gz helloworld
-tar -zxvf helloworld.tar.gz
-
-cat helloworld.tar.gz | openssl enc -aes-256-cbc -e > helloworld.tar.gz.enc
-cat helloworld.tar.gz.enc | openssl enc -aes-256-cbc -d > helloworld.tar.gz
-```
-
-#### unzip - list, test and extract compressed files in a ZIP archive
-
-```bash
-unzip helloworld.zip
-```
-
-#### uuidgen - create a new UUID value
-
-```bash
-$ uuidgen
-a9d92443-354b-47aa-a216-e60bbf73a94c
-```
-
-#### zip - package and compress (archive) files
-
-```bash
-zip -r helloworld.zip helloworld
-```
-
-# 18 Power Handler
+## 17.1. General Commands
 
 #### acpi - Shows battery status and other ACPI information
 
@@ -3168,440 +3729,9 @@ Daemon:
   critical-action: HybridSleep
 ```
 
-# 19. Others Handler
+# 18. usb Handler
 
-#### alias - define or display aliases
-
-```bash
-alias ll="ls -alF"
-alias la="ls -A"
-alias l="ls -CF"
-
-unalias la
-```
-
-#### command - execute a simple command
-
-```bash
-$ command -v ls
-alias ls='ls --color=auto'
-
-$ command -V ls
-ls is aliased to `ls --color=auto'
-```
-
-#### locale - get locale-specific information
-
-```bash
-$ sudo vi /etc/default/locale
-#  File generated by update-locale
-LANG="en_US.UTF-8"
-LC_NUMERIC="en_US.UTF-8"
-LC_TIME="en_US.UTF-8"
-LC_MONETARY="en_US.UTF-8"
-LC_PAPER="en_US.UTF-8"
-LC_NAME="en_US.UTF-8"
-LC_ADDRESS="en_US.UTF-8"
-LC_TELEPHONE="en_US.UTF-8"
-LC_MEASUREMENT="en_US.UTF-8"
-LC_IDENTIFICATION="en_US.UTF-8"
-
-$ sudo locale-gen en_US.UTF-8
-$ sudo update-locale LC_ALL=en_US.UTF-8
-
-$ sudo update-locale LC_TIME=\"en_US.UTF-8\"
-```
-
-#### man - an interface to the system reference manuals
-
-```bash
-man ls
-```
-
-#### parallel - build and execute shell command lines from standard input in parallel
-
-> 平行處理
-
-```bash
-$ sudo apt install -y parallel
-$ seq 0 100 | parallel -j 10 '. ~/.bash_aliases; echo "==> {}"'
-```
-
-#### seq - print a sequence of numbers
-
-```bash
-$ seq 1 3
-1
-2
-3
-$ seq 1 2 10
-1
-3
-5
-7
-9
-```
-
-#### set - set or unset options and positional parameters
-
-```bash
-set -e：在命令返回非零退出狀態碼時自動退出 shell。這意味著，如果命令返回一個錯誤，腳本將會立即停止運行，而不會繼續執行下去。
-set -o pipefail：在使用管道連接多個命令時，如果其中任何一個命令失敗，則整個管道返回失敗。預設情況下，管道只返回最後一個命令的退出狀態碼。使用 set -o pipefail 可以使管道的退出狀態碼反映所有命令的退出狀態。
-```
-
-#### unset - unset values and attributes of variables and functions
-
-```bash
-export BOSS=lanka
-unset BOSS
-
-helloworld_fn ()
-{
-}
-unset -f helloworld_fn
-```
-
-#### type - write a description of command type
-
-```bash
-$ type ls
-ls is aliased to `ls --color=auto'
-```
-
-#### xargs - build and execute command lines from standard input
-
-```bash
-ls | xargs cat
-
-$ cd HelperX/mqtt; ls | xargs -t -I {}  cat {}
-cat mqttPub.sh
-...
-cat mqttSub.sh
-...
-```
-
-# 19. Editor
-
-#### vim / vi - a programmer's text editor
-
-> 請參考 [helper_vi.md](https://github.com/lankahsu520/HelperX/blob/master/helper_vi.md) - vi/vim helper.
-
-> [~/.vimrc](https://github.com/lankahsu520/HelperX/blob/master/linux/.vimrc)
-
-```bash
-vi 123
-vim 123
-```
-
-# 20. Shell Scripts
-
-#### eval-it
-
-> 把字串當成命令執行
-
-```bash
-#sh -c "$DO_COMMAND"
-function eval-it()
-{
-	DO_COMMAND="$*"
-	echo "[${DO_COMMAND}]"
-	eval ${DO_COMMAND}
-}
-```
-
-```bash
-$ eval-it "echo 123"
-[echo 123]
-123
-```
-
-#### eval-loop
-
-```bash
-function eval-loop()
-{
-	HINT="Usage: ${FUNCNAME[0]} <min> <max> \"<commands>\""
-
-	MIN1="$1"
-	MAX2="$2"
-	COMMAND3="$3"
-
-	if [ ! -z "$COMMAND3" ]; then
-		for i in `seq ${MIN1} ${MAX2}`
-		do
-						#echo "Welcome $i !!!"
-						eval-it "${COMMAND3}$i"
-		done
-	else
-		echo -e $HINT
-	fi
-}
-```
-
-```bash
-$ eval-loop 0 2 "echo "
-[echo 0]
-0
-[echo 1]
-1
-[echo 2]
-2
-```
-
-#### now_fn
-
-> 回傳現在時間
-
-```bash
-now_fn()
-{
-	NOW_t=`date +"%Y%m%d%H%M%S"`
-	return $NOW_t
-}
-```
-
-```bash
-$ now_fn
-$ echo $NOW_t
-20231229092235
-```
-
-# 21. Shared object
-
-## 21.1. Object dependencies
-
-#### file - determine file type
-
-```bash
-$ file ./libssl.so
-./libssl.so: symbolic link to libssl.so.1.1
-
-$ file /bin/curl
-/bin/curl: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=96cc5c71a0343e9de8f3574c90dee265ccae1201, for GNU/Linux 3.2.0, stripped
-```
-
-#### ldd - print shared object dependencies
-
-```bash
-$ ldd ./libssl.so
-./libssl.so: /lib/x86_64-linux-gnu/libcrypto.so.1.1: version `OPENSSL_1_1_1k' not found (required by ./libssl.so)
-        linux-vdso.so.1 (0x00007fb5abc33000)
-        libcrypto.so.1.1 => /lib/x86_64-linux-gnu/libcrypto.so.1.1 (0x00007fb5ab8a2000)
-        libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007fb5ab87f000)
-        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fb5ab68d000)
-        libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007fb5ab687000)
-        /lib64/ld-linux-x86-64.so.2 (0x00007fb5abc35000)
-```
-
-#### nm - list symbols from object files
-
-```bash
-$ nm ./libssl.so
-0000000000030720 t add_ca_name
-000000000004ab30 t add_custom_ext_intern
-000000000004acc0 t add_old_custom_ext.constprop.0
-00000000000759e0 r application_traffic.23486
-                 U ASN1_ANY_it@@OPENSSL_1_1_0
-                 U ASN1_item_d2i@@OPENSSL_1_1_0
-                 U ASN1_item_free@@OPENSSL_1_1_0
-                 U ASN1_item_i2d@@OPENSSL_1_1_0
-...
-```
-
-#### objdump - display information from object files
-
-```bash
-$ objdump -x ./libssl.so
-
-$ objdump -T ./libssl.so
-
-$ objdump -p ./libssl.so
-```
-
-#### readelf - display information about ELF files
-
-```bash
-$ readelf -d ./libssl.so
-
-Dynamic section at offset 0x8cd40 contains 33 entries:
-  Tag        Type                         Name/Value
- 0x0000000000000001 (NEEDED)             Shared library: [libcrypto.so.1.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.0]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
- 0x000000000000000e (SONAME)             Library soname: [libssl.so.1.1]
- 0x0000000000000010 (SYMBOLIC)           0x0
- 0x000000000000001d (RUNPATH)            Library runpath: [/work/rootfs/lib]
-...
-```
-
-## 21.2. pkg-config
-
-```bash
-$ pkg-config --version
-0.29.1
-```
-
-#### --list-all
-
-> 列出所有的函式庫
-
-```bash
-$ pkg-config --list-all | grep gstreamer
-gstreamer-gl-1.0               GStreamer OpenGL Plugins Libraries - Streaming media framework, OpenGL plugins libraries
-gstreamer-plugins-base-1.0     GStreamer Base Plugins Libraries - Streaming media framework, base plugins libraries
-gstreamer-tag-1.0              GStreamer Tag Library - Tag base classes and helper functions
-gstreamer-1.0                  GStreamer - Streaming media framework
-gstreamer-sdp-1.0              GStreamer SDP Library - SDP helper functions
-gstreamer-controller-1.0       GStreamer controller - Dynamic parameter control for GStreamer elements
-gstreamer-base-1.0             GStreamer base classes - Base classes for GStreamer elements
-gstreamer-pbutils-1.0          GStreamer Base Utils Library - General utility functions
-gstreamer-check-1.0            GStreamer check unit testing - Unit testing helper library for GStreamer modules
-gstreamer-video-1.0            GStreamer Video Library - Video base classes and helper functions
-gstreamer-riff-1.0             GStreamer RIFF Library - RIFF helper functions
-gstreamer-allocators-1.0       GStreamer Allocators Library - Allocators implementation
-gstreamer-fft-1.0              GStreamer FFT Library - FFT implementation
-gstreamer-audio-1.0            GStreamer Audio library - Audio helper functions and base classes
-gstreamer-app-1.0              GStreamer Application Library - Helper functions and base classes for application integration
-gstreamer-net-1.0              GStreamer networking library - Network-enabled GStreamer plug-ins and clocking
-gstreamer-rtsp-1.0             GStreamer RTSP Library - RTSP base classes and helper functions
-gstreamer-rtp-1.0              GStreamer RTP Library - RTP base classes and helper functions
-```
-
-#### --exists
-
-> 確定該函式庫是否存在
-
-```bash
-$ pkg-config --exists gstreamer-1.0 && echo "yes" || echo "no"
-yes
-```
-
-#### --cflags
-
-> 連結該函式庫的 CFLAGS
-
-```bash
-$ pkg-config --cflags gstreamer-1.0
--pthread -I/usr/include/gstreamer-1.0 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include
-```
-
-#### --libs
-
-> 連結該函式庫的 LDFLAGS
-
-```bash
-$ pkg-config --libs gstreamer-1.0
--lgstreamer-1.0 -lgobject-2.0 -lglib-2.0
-```
-
-#### --modversion
-
-> 秀出該函式庫版本號
-
-```bash
-$ pkg-config --modversion gstreamer-1.0
-1.16.3
-
-$ pkg-config 'gstreamer-1.0 >= 1.17' && echo "yes" || echo "no"
-no
-$ pkg-config 'gstreamer-1.0 >= 1.16' && echo "yes" || echo "no"
-yes
-```
-
-#### --print-requires
-
-> 引用該函式庫將需要 depend on ...
-
-```bash
-$ pkg-config --print-requires gstreamer-1.0
-glib-2.0
-gobject-2.0
-```
-
-#### pkg-find
-
-```bash
-function pkg-find()
-{
-	HINT="Usage: ${FUNCNAME[0]} <file>"
-	FILE1=$1
-
-	if [ ! -z "$FILE1" ]; then
-		pkg-config --list-all | grep ${FILE1}
-	else
-		echo $HINT
-	fi
-}
-```
-
-```bash
-$ pkg-find openssl
-openssl                             OpenSSL - Secure Sockets Layer and cryptography libraries and tools
-libevent_openssl                    libevent_openssl - libevent_openssl adds openssl-based TLS support to libevent
-```
-
-#### pkg-config-ex
-
-```bash
-function pkg-config-ex()
-{
-	HINT="Usage: ${FUNCNAME[0]} <files>"
-	FILES="$*"
-
-	if [ ! -z "$FILES" ]; then
-		for FILE in ${FILES}; do
-		(
-			DO_COMMAND="pkg-config --variable pc_path pkg-config"
-			eval-it "$DO_COMMAND"
-
-			DO_COMMAND="pkg-config --cflags ${FILE}"
-			eval-it "$DO_COMMAND"
-
-			DO_COMMAND="pkg-config --libs ${FILE}"
-			eval-it "$DO_COMMAND"
-
-			DO_COMMAND="pkg-config --modversion ${FILE}"
-			eval-it "$DO_COMMAND"
-
-			DO_COMMAND="pkg-config --print-requires ${FILE}"
-			eval-it "$DO_COMMAND"
-		)
-		done
-	else
-		echo $HINT
-	fi
-}
-```
-
-```bash
-$ pkg-config-ex openssl
-[pkg-config --cflags openssl]
-
-[pkg-config --libs openssl]
--lssl -lcrypto
-[pkg-config --modversion openssl]
-1.1.1f
-[pkg-config --print-requires openssl]
-libssl
-libcrypto
-```
-
-# 22. usb Handler
-
-```bash
-$ ll /sys/bus/usb/devices/
-total 0
-drwxr-xr-x 2 root root 0  五   4 15:50 ./
-drwxr-xr-x 4 root root 0  五   4 15:50 ../
-lrwxrwxrwx 1 root root 0  五   4 15:50 1-0:1.0 -> ../../../devices/pci0000:00/0000:00:0c.0/usb1/1-0:1.0/
-lrwxrwxrwx 1 root root 0  五   4 15:50 1-1 -> ../../../devices/pci0000:00/0000:00:0c.0/usb1/1-1/
-lrwxrwxrwx 1 root root 0  五   4 15:50 1-1:1.0 -> ../../../devices/pci0000:00/0000:00:0c.0/usb1/1-1/1-1:1.0/
-lrwxrwxrwx 1 root root 0  五   4 18:29 1-2 -> ../../../devices/pci0000:00/0000:00:0c.0/usb1/1-2/
-lrwxrwxrwx 1 root root 0  五   4 18:29 1-2:1.0 -> ../../../devices/pci0000:00/0000:00:0c.0/usb1/1-2/1-2:1.0/
-lrwxrwxrwx 1 root root 0  五   4 15:50 2-0:1.0 -> ../../../devices/pci0000:00/0000:00:0c.0/usb2/2-0:1.0/
-lrwxrwxrwx 1 root root 0  五   4 15:50 usb1 -> ../../../devices/pci0000:00/0000:00:0c.0/usb1/
-lrwxrwxrwx 1 root root 0  五   4 15:50 usb2 -> ../../../devices/pci0000:00/0000:00:0c.0/usb2/
-```
+## 18.1. General Commands
 
 #### lsusb - list USB devices
 
@@ -3680,12 +3810,31 @@ $ usb-mount
 /dev/bus/usb/002/001;1D6B:0003;;Linux_5.15.0-105-generic_xhci-hcd_xHCI_Host_Controller_0000:00:0c.0;
 ```
 
-# 23. Multimedia Handler
+## 18.2. Store Files
 
-## 23.1. GStreamer
+#### /sys/bus/usb/devices/*
+
+```bash
+$ ll /sys/bus/usb/devices/
+total 0
+drwxr-xr-x 2 root root 0  五   4 15:50 ./
+drwxr-xr-x 4 root root 0  五   4 15:50 ../
+lrwxrwxrwx 1 root root 0  五   4 15:50 1-0:1.0 -> ../../../devices/pci0000:00/0000:00:0c.0/usb1/1-0:1.0/
+lrwxrwxrwx 1 root root 0  五   4 15:50 1-1 -> ../../../devices/pci0000:00/0000:00:0c.0/usb1/1-1/
+lrwxrwxrwx 1 root root 0  五   4 15:50 1-1:1.0 -> ../../../devices/pci0000:00/0000:00:0c.0/usb1/1-1/1-1:1.0/
+lrwxrwxrwx 1 root root 0  五   4 18:29 1-2 -> ../../../devices/pci0000:00/0000:00:0c.0/usb1/1-2/
+lrwxrwxrwx 1 root root 0  五   4 18:29 1-2:1.0 -> ../../../devices/pci0000:00/0000:00:0c.0/usb1/1-2/1-2:1.0/
+lrwxrwxrwx 1 root root 0  五   4 15:50 2-0:1.0 -> ../../../devices/pci0000:00/0000:00:0c.0/usb2/2-0:1.0/
+lrwxrwxrwx 1 root root 0  五   4 15:50 usb1 -> ../../../devices/pci0000:00/0000:00:0c.0/usb1/
+lrwxrwxrwx 1 root root 0  五   4 15:50 usb2 -> ../../../devices/pci0000:00/0000:00:0c.0/usb2/
+```
+
+# 19. Multimedia Handler
+
+## 19.1. GStreamer
 > 請參考 [helper_GStreamer.md](https://github.com/lankahsu520/HelperX/blob/master/helper_GStreamer.md) - GStreamer helper.
 
-## 23.2. [streamlink](https://pypi.org/project/streamlink/)
+## 19.2. [streamlink](https://pypi.org/project/streamlink/)
 > extracts streams from various services and pipes them into a video player of choice
 
 ```bash
@@ -3767,7 +3916,7 @@ $ streamlink-info https://www.youtube.com/watch?v=ikrasYUi3kM
 error: This plugin does not support protected videos, try youtube-dl instead
 ```
 
-## 23.3. [yt-dlp](https://pypi.org/project/yt-dlp/)
+## 19.3. [yt-dlp](https://pypi.org/project/yt-dlp/)
 
 > [output-template](https://github.com/yt-dlp/yt-dlp#output-template)
 
@@ -3924,9 +4073,9 @@ $ yt-dlp -f 140+133 "https://www.youtube.com/watch?v=a_9_38JpdYU" -o 20240527084
 $ yt-dlp -f 140 "https://www.youtube.com/watch?v=a_9_38JpdYU" -o 20240527084746
 ```
 
-# 24. Application
+# 20. Application
 
-## 24.1. Opera
+## 20.1. Opera
 
 ```bash
 $ sudo sh -c 'echo "deb [arch=amd64] https://deb.opera.com/opera-stable/ stable non-free" > /etc/apt/sources.list.d/opera-stable.list'
