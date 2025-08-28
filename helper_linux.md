@@ -2044,13 +2044,89 @@ function systemctl-journal()
 
 #### service - run a System V init script
 
+> - 舊的 SysVinit 時代使用的工具。
+> -  本質上只是呼叫 `/etc/init.d/<service>` 腳本。
+
 ```bash
-service --status-all
-service apache2 status
-service apache2 restart
+$ service --status-all
+ [ + ]  acct
+ [ + ]  acpid
+ [ - ]  alsa-utils
+ [ - ]  anacron
+ [ + ]  apache2
+...
+
+$ ll /etc/init.d/
+$ service apache2 status
+$ service apache2 restart
+```
+
+#### supervisor - monitor and control a number of processes on UNIX-like operating systems
+
+> minfds: 系統可用的 **file descriptors (檔案描述符)** 數量。
+>
+> 對應 ulimit -n
+>
+> 因為每個程式可能會開 socket、pipe、log 檔，fd 不夠會導致 supervisor 自己或子進程失敗。
+
+> minprocs: 系統允許的 **最大 process 數量**（per user process limit）。
+>
+> 對應 ulimit -u
+>
+> 避免啟動後因為 process slot ( cat /proc/sys/kernel/pid_max )不夠，spawn child 全部失敗。
+
+```bash
+$ sudo apt-get --yes install supervisor
+$ pip install --upgrade supervisor
+$ supervisord  --version
+
+# 新增 group - supervisor
+# 將使用者加入 supervisor
+$ sudo groupadd supervisor
+$ sudo usermod -aG supervisor `whoami`
+
+# 指定 chown group - supervisor
+$ sudo vi /etc/supervisor/supervisord.conf
+[unix_http_server]
+chmod=0770
+chown=root:supervisor
+[supervisord]
+minfds=1048576
+minprocs=1048576
+[include]
+files = /etc/supervisor/conf.d/*.conf /work/IoT/supervisor/*.conf
+
+$ sudo systemctl restart supervisor
+
+$ vi /work/IoT/supervisor/uv123.conf
+[program:uv123-0001]
+command=/work/rootfs/bin/uv_123
+priority=10
+autostart=true
+autorestart=true
+startretries=1
+stdout_syslog=true
+stderr_syslog=true
+
+[program:uv123-0002]
+command=/work/rootfs/bin/uv_123
+priority=10
+autostart=true
+autorestart=true
+startretries=1
+stdout_syslog=true
+stderr_syslog=true
+
+# 重新載入
+$ supervisorctl reread
+$ supervisorctl update
 ```
 
 #### systemctl - Control the systemd system and service manager
+
+> - 屬於 `systemd`，現代 Linux（Ubuntu 16.04+、CentOS 7+、Debian 8+）的標準 init system。
+> - 它操作的是 **unit files**（通常在 `/lib/systemd/system/` 或 `/etc/systemd/system/`）。
+> - 提供更多功能（啟動順序、依賴管理、重啟策略、日誌整合…）。
 
 ```bash
 systemctl list-units
@@ -2058,17 +2134,17 @@ systemctl is-enabled apache2.service
 systemctl is-active apache2.service
 systemctl restart apache2.service
 
-sudo systemctl status sshd
-sudo systemctl start sshd
-sudo systemctl enable sshd
-sudo systemctl disable sshd
-sudo systemctl stop sshd
-sudo systemctl kill sshd
-sudo systemctl restart sshd
+systemctl status sshd
+systemctl start sshd
+systemctl enable sshd
+systemctl disable sshd
+systemctl stop sshd
+systemctl kill sshd
+systemctl restart sshd
 
 systemctl cat sshd
 
-sudo systemctl status dbus.service
+systemctl status dbus.service
 ```
 
 ```bash
@@ -2091,7 +2167,7 @@ function systemctl-ex()
 	COMMAND2=$2
 
 	if [ ! -z "$SERVICE1" ] && [ ! -z "$COMMAND2" ]; then
-		DO_COMMAND="(sudo systemctl $COMMAND2 $SERVICE1)"
+		DO_COMMAND="(systemctl $COMMAND2 $SERVICE1)"
 		eval-it "$DO_COMMAND"
 	else
 		echo [${FUNCNAME[0]} $SERVICE1 $COMMAND2]
