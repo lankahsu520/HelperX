@@ -3334,7 +3334,7 @@ echo 1 > /proc/sys/vm/overcommit_memory
 echo 2 > /proc/sys/vm/overcommit_memory
 ```
 
-#### [/proc/[pid]/statm](/proc/[pid]/statm)
+#### /proc/[pid]/statm
 
 >Provides information about memory usage, measured in pages.
 >
@@ -3349,6 +3349,110 @@ echo 2 > /proc/sys/vm/overcommit_memory
 >| lrs      | number of pages of library<br>(always 0 on 2.6)              |
 >| drs      | number of pages of data/stack<br>(including libs; broken, includes library text) |
 >| dt       | number of dirty pages<br>(always 0 on 2.6)                   |
+
+#### /proc/[pid]/status
+
+> [ChatGPT]
+>
+> **VmSize**: `494720 kB`
+>
+> - **虛擬記憶體總量 (Virtual Memory Size)**
+> - 包含程式可使用的所有虛擬記憶體區塊（程式碼區、堆積區、共享庫、mmap 檔案、stack…），不代表真的佔用實體記憶體。
+> - 這個值比較大很正常，因為 Linux 會把很多「可用的空間」都算進去。
+>
+> **VmRSS**: `8752 kB`
+>
+> - **常駐記憶體大小 (Resident Set Size)**
+> - 代表真的放在 **實體記憶體 (RAM)** 裡的頁面數量，不包含 swap。
+> - 這才是真正佔用 RAM 的部分。
+>
+> **VmData**: `152536 kB`
+>
+> - **Heap (資料區)**
+> - 包含程式 `malloc/new` 動態配置的記憶體。
+> - 這是觀察程式是否「記憶體洩漏 (memory leak)」的重點欄位。
+>
+> **VmStk**: `216 kB`
+>
+> - **Stack (堆疊區)**
+> - 每個 thread 都會有 stack，用來存放函數呼叫鏈上的區域變數、return address。
+> - 這個數值通常不大，除非程式遞迴太深或 stack overflow。
+>
+> **VmExe**: `64 kB`
+>
+> - **可執行程式碼區 (Text segment)**
+> - 存放程式本身的二進位指令碼 (compiled instructions)。
+> - 通常不大。
+>
+> **VmLib**: `9140 kB`
+>
+> - **動態函式庫 (Shared Libraries)**
+> - 像 libc、libpthread、OpenSSL 之類的共享庫映射到記憶體的大小。
+> - 每個程式可能會有幾 MB 到幾十 MB 不等。
+
+```bash
+$ cat /proc/57724/status
+Name:   helloworld
+Umask:  0002
+State:  S (sleeping)
+Tgid:   57724
+Ngid:   0
+Pid:    57724
+PPid:   57714
+TracerPid:      0
+Uid:    1000    1000    1000    1000
+Gid:    1000    1000    1000    1000
+FDSize: 64
+Groups: 4 20 24 25 27 29 30 44 46 117 118 1000 1001
+NStgid: 57724
+NSpid:  57724
+NSpgid: 57317
+NSsid:  770
+VmPeak:   494720 kB
+VmSize:   494720 kB
+VmLck:         0 kB
+VmPin:         0 kB
+VmHWM:     31196 kB
+VmRSS:      8752 kB
+RssAnon:            3556 kB
+RssFile:            5196 kB
+RssShmem:              0 kB
+VmData:   152536 kB
+VmStk:       216 kB
+VmExe:        64 kB
+VmLib:      9140 kB
+VmPTE:       168 kB
+VmSwap:    17952 kB
+HugetlbPages:          0 kB
+CoreDumping:    0
+THP_enabled:    1
+Threads:        8
+SigQ:   0/15323
+SigPnd: 0000000000000000
+ShdPnd: 0000000000000000
+SigBlk: 0000000000000000
+SigIgn: 0000000000003001
+SigCgt: 0000000180004a02
+CapInh: 0000000000000000
+CapPrm: 0000000000000000
+CapEff: 0000000000000000
+CapBnd: 000001ffffffffff
+CapAmb: 0000000000000000
+NoNewPrivs:     0
+Seccomp:        0
+Seccomp_filters:        0
+Speculation_Store_Bypass:       vulnerable
+SpeculationIndirectBranch:      always enabled
+Cpus_allowed:   3
+Cpus_allowed_list:      0-1
+Mems_allowed:   00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000001
+Mems_allowed_list:      0
+voluntary_ctxt_switches:        36654
+nonvoluntary_ctxt_switches:     439
+
+```
+
+
 
 # 14. Security Handler
 
