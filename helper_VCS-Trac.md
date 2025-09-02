@@ -158,6 +158,16 @@ sudo cp $MYPROJECT_TRACDIR/VERSION $MYPROJECT_TRACDIR/templates
 
 > [Plugins for Trac 1.6.x](https://trac-hacks.org/wiki/1.6)
 
+| NAME                                                         | DESC                                               |
+| ------------------------------------------------------------ | -------------------------------------------------- |
+| [AccountManagerPlugin](https://trac-hacks.org/wiki/AccountManagerPlugin) | Manage Trac user accounts                          |
+| [TracWysiwygPlugin](https://trac-hacks.org/wiki/TracWysiwygPlugin) | Trac Wiki WYSIWYG Editor                           |
+| [SvnAuthzAdminPlugin](https://trac-hacks.org/wiki/SvnAuthzAdminPlugin) | Authz File Administration                          |
+| [TracPygit2Plugin](https://trac-hacks.org/wiki/TracPygit2Plugin) | Pygit2 integration for Git repository on Trac 1.6+ |
+| [LogViewerPlugin](https://trac-hacks.org/wiki/LogViewerPlugin) | View the trac.log file via the web frontend        |
+| [WikiAutoCompletePlugin](https://trac-hacks.org/wiki/WikiAutoCompletePlugin) | Autocomplete wiki syntax                           |
+| [TracDragDropPlugin](https://trac-hacks.org/wiki/TracDragDropPlugin) | Drag-and-Drop attachments in Trac                  |
+
 ```bash
 #** Plugin **
 # 這裏就會失敗

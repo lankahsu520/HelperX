@@ -128,6 +128,12 @@ RUN svn co https://trac-hacks.org/svn/tracpygit2plugin/trunk /tmp/tracpygit2plug
 RUN svn co https://trac-hacks.org/svn/logviewerplugin/trunk /tmp/logviewerplugin \
     && cd /tmp/logviewerplugin && pip install ./ $PIP_668
 
+RUN svn co https://trac-hacks.org/svn/wikiautocompleteplugin/trunk /tmp/wikiautocompleteplugin \
+    && cd /tmp/wikiautocompleteplugin && pip install ./ $PIP_668
+
+RUN svn co https://trac-hacks.org/svn/tracdragdropplugin/0.12 /tmp/tracdragdropplugin \
+    && cd /tmp/tracdragdropplugin && pip install ./ $PIP_668
+
 #RUN git clone https://github.com/trac-hacks/trac-readme-plugin.git /tmp/trac-readme-plugin \
 #    && cd /tmp/trac-readme-plugin && $PJ_PYTHON_BIN setup.py bdist_egg \
 #    && cp dist/*.egg /usr/local/lib/python3/dist-packages/ \
