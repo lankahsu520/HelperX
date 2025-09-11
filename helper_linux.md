@@ -2696,6 +2696,12 @@ sudo systemctl disable snapd.seeded.service
 
 ## 12.2. Archive Files
 
+#### bzip2, bunzip2 - a block-sorting file compressor
+
+```bash
+bzip2 -d -f core-image-base-raspberrypi3.wic.bz2
+```
+
 #### gzip, gunzip, zcat - compress or expand files
 
 ```bash
@@ -2710,7 +2716,6 @@ $ gzip -k helper_vi.md
 $ ll helper_vi.md*
 -rwxrwxr-x 1 lanka lanka 4155  八   6 08:15 helper_vi.md*
 -rwxrwxr-x 1 lanka lanka 1872  八   6 08:15 helper_vi.md.gz*
-
 ```
 
 #### tar - an archiving utility
@@ -2740,6 +2745,57 @@ a9d92443-354b-47aa-a216-e60bbf73a94c
 
 ```bash
 zip -r helloworld.zip helloworld
+```
+
+#### zstd - zstd, zstdmt, unzstd, zstdcat - Compress or decompress .zst files
+
+```bash
+$ unzstd imx-image-core-imx8mm-lpddr4-evk.rootfs.wic.zst
+$ ll imx-image-core-imx8mm-lpddr4-evk.rootfs.wic
+-rw-r--r-- 1 lanka lanka 4059004928 Sep 10 08:50 imx-image-core-imx8mm-lpddr4-evk.rootfs.wic
+```
+
+```bash
+$ fdisk -l  imx-image-core-imx8mm-lpddr4-evk.rootfs.wic
+Disk imx-image-core-imx8mm-lpddr4-evk.rootfs.wic: 3.8 GiB, 4059163648 bytes, 7928054 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x076c4a2a
+
+Device                                       Boot  Start     End Sectors  Size Id Type
+imx-image-core-imx8mm-lpddr4-evk.rootfs.wic1 *     16384  540671  524288  256M  c W95 FAT32 (LBA)
+imx-image-core-imx8mm-lpddr4-evk.rootfs.wic2      540672 7928053 7387382  3.5G 83 Linux
+
+# 276824064=540672*512
+$ sudo mkdir -p /tmp/wic
+$ sudo mount -o loop,offset=276824064 imx-image-core-imx8mm-lpddr4-evk.rootfs.wic /tmp/wic
+$ tree -L 1 /tmp/wic/
+/tmp/wic/
+├── bin -> usr/bin
+├── boot
+├── dev
+├── etc
+├── home
+├── lib -> usr/lib
+├── lost+found
+├── media
+├── mnt
+├── proc
+├── root
+├── run
+├── sbin -> usr/sbin
+├── srv
+├── sys
+├── tmp
+├── unit_tests
+├── usr
+└── var
+
+19 directories, 0 files
+
+$ sudo umount /tmp/wic
 ```
 
 ## 12.3. Object dependencies
