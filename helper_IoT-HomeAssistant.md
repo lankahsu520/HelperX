@@ -475,6 +475,38 @@ $ pip install python-miio==0.5.12
 
 # IV. Tool Usage
 
+## IV.1. [hass](https://www.home-assistant.io/docs/tools/hass) Usage
+
+```bash
+$ hass -h
+usage: hass [-h] [--version] [-c path_to_config_dir] [--recovery-mode] [--debug] [--open-ui] [--skip-pip |
+            --skip-pip-packages package_names] [-v] [--log-rotate-days LOG_ROTATE_DAYS] [--log-file LOG_FILE] [--log-no-color]
+            [--script ...] [--ignore-os-check]
+
+Home Assistant: Observe, Control, Automate.
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  -c, --config path_to_config_dir
+                        Directory that contains the Home Assistant configuration
+  --recovery-mode       Start Home Assistant in recovery mode
+  --debug               Start Home Assistant in debug mode
+  --open-ui             Open the webinterface in a browser
+  --skip-pip            Skips pip install of required packages on startup
+  --skip-pip-packages package_names
+                        Skip pip install of specific packages on startup
+  -v, --verbose         Enable verbose logging to file.
+  --log-rotate-days LOG_ROTATE_DAYS
+                        Enables daily log rotation and keeps up to the specified days
+  --log-file LOG_FILE   Log file to write to. If not set, CONFIG/home-assistant.log is used
+  --log-no-color        Disable color logs
+  --script ...          Run one of the embedded scripts
+  --ignore-os-check     Skips validation of operating system
+
+If restart is requested, exits with code 100
+```
+
 # Author
 
 > Created and designed by [Lanka Hsu](lankahsu@gmail.com).
