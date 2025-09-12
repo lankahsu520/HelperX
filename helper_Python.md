@@ -526,7 +526,7 @@ $ sudo apt-get install libgirepository-2.0-dev
 $ pip install --upgrade six
 $ pip install --upgrade pygobject
 $ pip install --upgrade pycairo
-$ pip install --upgrade awscli boto3 netifaces
+$ pip install --upgrade boto3 netifaces
 $ pip install --upgrade pyproject-toml
 $ pip install --upgrade pylint
 ```

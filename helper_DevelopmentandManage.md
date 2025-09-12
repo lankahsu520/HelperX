@@ -200,7 +200,7 @@
 
 ```mermaid
 mindmap
-	管理
+	root((管理))
 		人
 			成員 L
 			成員 M
@@ -228,7 +228,7 @@ mindmap
 >
 ```mermaid
 mindmap
-	成員 L + 慾望
+	root((成員 L + 慾望))
 			成員 M + 慾望
 				時間
 				物
@@ -354,7 +354,7 @@ mindmap
 
 ```mermaid
 mindmap
-	方法論
+	root((方法論))
 		效率-快 / 時間-短
 		市場-大 / 客戶-多
 		分工 / 能力分配

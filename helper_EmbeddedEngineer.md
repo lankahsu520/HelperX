@@ -513,7 +513,7 @@ sequenceDiagram
 
 ```mermaid
 mindmap
-	Platform
+	root((Platform))
 		Bootloader
 			BIOS
 				UEFI
@@ -550,7 +550,7 @@ mindmap
 
 ```mermaid
 mindmap
-	Platform
+	root((Platform))
 		SDK
 		System integration
 			Yocto

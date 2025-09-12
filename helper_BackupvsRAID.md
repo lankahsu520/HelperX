@@ -42,7 +42,7 @@
 
 ```mermaid
 mindmap
-	RAID
+	root((RAID))
 		存取速度
 		容錯或重建
 		自動化
@@ -65,7 +65,7 @@ mindmap
 
 ```mermaid
 mindmap
-	Fail
+	root((Fail))
 		如何發現錯誤
 			寫入
 			讀取

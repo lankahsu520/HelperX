@@ -26,7 +26,7 @@
 
 ```mermaid
 mindmap
-	IoT
+	root((IoT))
 		廠牌
 			小米
 			Apple

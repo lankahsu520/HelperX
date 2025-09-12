@@ -1405,7 +1405,7 @@ sequenceDiagram
 
 ```mermaid
 mindmap
-	Root
+	root((Root))
 		1.
 			1.1.
 			1.2.
@@ -1424,7 +1424,7 @@ mindmap
 
 ```
 mindmap
-	Root
+	root((Root))
 		1.
 			1.1.
 			1.2.
@@ -1444,7 +1444,7 @@ mindmap
 ### 5.4.2. Different shapes
 ```mermaid
 mindmap
-	Root
+	root((Root))
 		Square[Square]
 		Rounded(Rounded square)
 		Circle((Circle))
@@ -1455,7 +1455,7 @@ mindmap
 ```
 ```
 mindmap
-	Root
+	root((Root))
 		Square[Square]
 		Rounded(Rounded square)
 		Circle((Circle))
@@ -1475,7 +1475,7 @@ mindmap
 
 ```mermaid
 mindmap
-	Root
+	root((Root))
 		book["fa-book"]
 		::icon(fa fa-book)
 
@@ -1488,7 +1488,7 @@ mindmap
 
 ```
 mindmap
-	Root
+	root((Root))
 		book["fa-book"]
 		::icon(fa fa-book)
 
