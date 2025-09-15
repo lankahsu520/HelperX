@@ -86,6 +86,12 @@ $ ./wsdiscovery_123 -d 4
 
 >  **HTTP 層的帳密**（例如 Basic/Digest、用來保護整個 HTTP endpoint 的認證）和 **ONVIF 的 WS-Security UsernameToken**（SOAP 內的 `UsernameToken`）是**兩個不同的認證層**，它們可以是同一組帳號，也可以是完全不同的帳號/密碼，端點可以要求任一層或同時要求兩層。
 
+```bash
+$ curl -u ${USER}:${PASSWORD}
+
+$ curl --digest -u ${USER}:${PASSWORD}
+```
+
 ## 2.2. URI
 
 ### 2.2.1. [ODM - ONVIF Device Manager](https://sourceforge.net/projects/onvifdm)
@@ -217,8 +223,6 @@ $ ./onvif_client_123 -d3 -i 192.168.50.21 -p 80 -u admin -s admin -e "/onvif/dev
 
 > 假設我們用 wsdiscovery 找到相對應的 camera IP 時，我們也可以用 cURL 進行操作
 
-### 3.3.1. General Command
-
 #### A. Download [utilx9](https://github.com/lankahsu520/utilx9)
 
 ```bash
@@ -262,35 +266,6 @@ ONVIF_AUTH="-auth"
 
 ```bash
 $ ./onvif_client.sh
-```
-
-### 3.3.2. HTTP AUTH vs. ONVIF AUTH
-
-> 因為 ONVIF 是架在 HTTP上的，所以有可能需要兩組帳密
-
-#### A. HTTP AUTH
-
-```bash
-$ curl -u ${USER}:${PASSWORD}
-
-$ curl --digest -u ${USER}:${PASSWORD}
-```
-
-#### B. ONVIF AUTH
-
-##### B.1.  GetNetworkInterfaces
-
-```xml
-	<SOAP-ENV:Header>
-		<Security SOAP-ENV:mustUnderstand="1" xmlns="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
-			<UsernameToken>
-				<Created xmlns="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">2022-11-22T11:09:55.000Z</Created>
-				<Nonce EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary">stDcAKnbTydYuMRDCp1P7PKnzM0=</Nonce>
-				<Username>admin</Username>
-				<Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest">NV2fNdYtLbdUXftNXCssA4yc79Q=</Password>
-			</UsernameToken>
-		</Security>
-	</SOAP-ENV:Header>
 ```
 
 # 4. Wireshark filter
