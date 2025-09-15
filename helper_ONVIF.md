@@ -17,7 +17,8 @@
 [watchers-image]: https://img.shields.io/github/watchers/lankahsu520/HelperX.svg
 [watchers-url]: https://github.com/lankahsu520/HelperX/watchers
 
-# 1. wsdiscovery to find camera
+# 1. Discover onvif camera
+> **WS-Discovery** 全名 **Web Services Dynamic Discovery**，是微軟主導的一個標準，用來在 **區域網路 (LAN)** 裡 **自動搜尋服務或裝置** 的協定。
 
 ```mermaid
 flowchart LR
@@ -29,7 +30,17 @@ flowchart LR
 	ubuntu <--> |multicast<br>239.255.255.250:3702| router
 ```
 
-## 1.1. wsdiscovery_123
+## 1.1. [ODM - ONVIF Device Manager](https://sourceforge.net/projects/onvifdm)
+
+> 免費的第三方ONVIF協議測試工具；安裝完就可以快速的搜尋和操作。
+>
+> 按下 `Refresh` 自動搜尋網路
+
+![ONVIF0001](./images/ONVIF0001.png)
+
+## 1.2. wsdiscovery_123
+
+> 這是本人的作品，請至 [lankahsu520](https://github.com/lankahsu520)/**[utilx9](https://github.com/lankahsu520/utilx9)**
 
 ```bash
 $ ./wsdiscovery_123 -d 4
@@ -69,31 +80,45 @@ $ ./wsdiscovery_123 -d 4
 
 ```
 
+# 2. ONVIF access point
+
+## 2.1. UsernameToken
+
+>  **HTTP 層的帳密**（例如 Basic/Digest、用來保護整個 HTTP endpoint 的認證）和 **ONVIF 的 WS-Security UsernameToken**（SOAP 內的 `UsernameToken`）是**兩個不同的認證層**，它們可以是同一組帳號，也可以是完全不同的帳號/密碼，端點可以要求任一層或同時要求兩層。
+
+## 2.2. URI
+
+### 2.2.1. [ODM - ONVIF Device Manager](https://sourceforge.net/projects/onvifdm)
+
+> Device List 中選定 camera 進行連結，點選 `Identification` 就可以看到 URI。
+
 ![ONVIF0001](./images/ONVIF0001.png)
 
-# 2. ONVIF Info (You must have)
-
-#### A. URI
+### 2.2.2. wsdiscovery_123
 
 ```bash
 [501487/501488] wsd_ProbeMatches_cb:54 - (XAddrs: http://192.168.50.21/onvif/device_service)
 ```
 
-#### B. name and passowrd
-
-# 3. ONVIF Client ask camera 
+# 3. ONVIF Client 
 
 ```mermaid
 flowchart LR
 	camera[camera]
 	win10[ONVIF Device Manage v2.2.250]
-	ubuntu[wsdiscovery_123]
+	ubuntu[onvif_client_123]
 	
 	win10 <--> |ONVIF,http/soap| camera
 	ubuntu <--> |ONVIF,http/soap| camera
 ```
 
-## 3.1. onvif_client_123
+## 3.1. [ODM - ONVIF Device Manager](https://sourceforge.net/projects/onvifdm)
+
+![ONVIF0001](./images/ONVIF0001.png)
+
+## 3.2. onvif_client_123
+
+> 這是本人的作品，請至 [lankahsu520](https://github.com/lankahsu520)/**[utilx9](https://github.com/lankahsu520/utilx9)**
 
 ```bash
 $ ./onvif_client_123 --help
@@ -110,7 +135,6 @@ Usage: onvif_client
 Version: 0x01004000, 2589, 1668517373, lanka, 1668607007
 Example:
   onvif_client -i 192.168.50.239 -p 80 -u admin -s hahahaha
-
 ```
 
 #### A. run
@@ -187,75 +211,62 @@ $ ./onvif_client_123 -d3 -i 192.168.50.21 -p 80 -u admin -s admin -e "/onvif/dev
 [503117/503118] qtask_GetSnapshotUri:471 - GetSnapshotUri (snapshot_uri: http://192.168.50.21/onvifsnapshot/media_service/snapshot?channel=1&subtype=0)
 [503117/503118] onvif_GetSnapshot:284 - (http_req.log: Download Ok !!! (snapshot.jpg, 191307 bytes, 108758.000 bytes/sec, total: 1.760 secs))
 [503117/503118] qtask_GetSnapshotUri:475 - GetSnapshot ok !!! (gid:769.0, snapshot.jpg)
-
 ```
 
-# 4. Test with curl
+## 3.3. cURL
 
-## 4.1. General Command
+> 假設我們用 wsdiscovery 找到相對應的 camera IP 時，我們也可以用 cURL 進行操作
 
-#### A. git pull utilx9
+### 3.3.1. General Command
 
-#### B. update your *.xml
-
-##### B.1. GetProfiles.xml: without AUTH
-
-```xml
-<?xml version='1.0' encoding='utf-8'?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://www.w3.org/2003/05/soap-envelope" xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:trt="http://www.onvif.org/ver10/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
-	<SOAP-ENV:Body>
-		<trt:GetProfiles/>
-	</SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
-```
-
-##### B.2. GetProfiles-auth.xml: with AUTH
-
-```xml
-Created: {ONVIF_XML_CREATED}
-Nonce: {ONVIF_XML_NONCE}
-Username: {ONVIF_XML_USERNAME}
-Password: {ONVIF_XML_PASSWORD}
-```
-
-```xml
-<?xml version='1.0' encoding='utf-8'?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://www.w3.org/2003/05/soap-envelope" xmlns:tds="http://www.onvif.org/ver10/device/wsdl" xmlns:trt="http://www.onvif.org/ver10/media/wsdl" xmlns:tt="http://www.onvif.org/ver10/schema">
-	<SOAP-ENV:Body>
-		<trt:GetProfiles/>
-	</SOAP-ENV:Body>
-	<SOAP-ENV:Header>
-		<Security SOAP-ENV:mustUnderstand="1" xmlns="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
-			<UsernameToken>
-				<Created xmlns="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">{ONVIF_XML_CREATED}</Created>
-				<Nonce EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary">{ONVIF_XML_NONCE}</Nonce>
-				<Username>{ONVIF_XML_USERNAME}</Username>
-				<Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest">{ONVIF_XML_PASSWORD}</Password>
-			</UsernameToken>
-		</Security>
-	</SOAP-ENV:Header>
-</SOAP-ENV:Envelope>
-```
-#### C. update onvif_client.sh
+#### A. Download [utilx9](https://github.com/lankahsu520/utilx9)
 
 ```bash
+$ git clone https://github.com/lankahsu520/utilx9.git
+```
+
+#### B. update onvif_client.sh
+
+> 這邊我們用 GetProfiles 為範本。GetProfiles-auth.xml 是需要帳號和密碼，而 GetProfiles.xml 就不用帳號和密碼。
+
+```bash
+$ cd xml
+$ tree -L 1 ./
+./
+├── GetProfiles-auth.xml
+├── GetProfiles.xml
+├── GetSnapshotUri.xml
+├── onvif_client.sh
+└── onvif_pass-fixed.sh
+
+0 directories, 5 files
+
+# 記得變更以下的資料
+$ vi onvif_client.sh
 USER=admin
 PASSWORD=admin
 
 ONVIF_URL="http://192.168.50.21/onvif/media_service"
 ONVIF_ACTION="GetProfiles"
 ONVIF_AUTH="-auth"
-
 ```
 
 #### D. run
 
+> 執行 onvif_client.sh 後，會自動產生 GetProfiles-auth-req.xml，並且更改以下的資料
+>
+> Created: {ONVIF_XML_CREATED}
+> Nonce: {ONVIF_XML_NONCE}
+> Username: {ONVIF_XML_USERNAME}
+> Password: {ONVIF_XML_PASSWORD}
+
 ```bash
 $ ./onvif_client.sh
-
 ```
 
-## 4.2. HTTP AUTH vs. ONVIF AUTH
+### 3.3.2. HTTP AUTH vs. ONVIF AUTH
+
+> 因為 ONVIF 是架在 HTTP上的，所以有可能需要兩組帳密
 
 #### A. HTTP AUTH
 
@@ -280,18 +291,13 @@ $ curl --digest -u ${USER}:${PASSWORD}
 			</UsernameToken>
 		</Security>
 	</SOAP-ENV:Header>
-
 ```
 
-
-
-## 4.3. Wireshark filter
+# 4. Wireshark filter
 
 ```bash
 (ip.dst == 192.168.50.21) && (tcp.port == 80 ) && http
 ```
-
-
 
 # Appendix
 
