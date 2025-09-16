@@ -323,7 +323,6 @@ $ docker images
 REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
 ubuntu       22.04v1   d41a1bf4ee25   11 minutes ago   3.57GB
 ubuntu       22.04     df5de72bdb3b   6 days ago       77.8MB
-
 ```
 
 ## 3.4. Remove Image
@@ -347,12 +346,80 @@ $ docker image tag ubuntu:20.04 ubuntu-cpy:20.04
 
 # 4. Container Handler
 
-## 4.1. Remove Container
+## 4.1. attach
+
+> Attach local standard input, output, and error streams to a running container
+>
+> Run Image -> Leave Container -> Return Container (attach)
+
+```bash
+$ docker ps -a
+CONTAINER ID   IMAGE              COMMAND       CREATED          STATUS         PORTS              NAMES
+89356a72e018   ecr-ubuntu:20.04   "/bin/bash"   19 minutes ago   Up 6 minutes   80/tcp, 9981/tcp   nostalgic_dirac
+
+$ docker attach 89356a72e018
+```
+
+## 4.2. commit
+
+> Create a new image from a container's changes
+>
+> 將目前 container 另存成 image
+
+```bash
+$ docker commit 2ea0d23f30cf ubuntu:22.04v2
+```
+
+## 4.3. cp
+
+> Copy files/folders between a container and the local filesystem
+
+```bash
+$ docker cp -a README.md ac52ddefee1f:/work
+$ docker cp -a helloworld ac52ddefee1f:/work
+```
+
+## 4.4. exec
+
+> Execute a command in a running container
+
+```bash
+$ docker exec -ti 2ea0d23f30cf ls -al /
+```
+
+## 4.5. Export/Import
+
+#### A. docker export
+
+> Export a container's filesystem as a tar archive
+
+```bash
+$ docker export ae96128535e6 > ubuntu.tar
+```
+
+#### B. docker import
+
+> Import the contents from a tarball to create a filesystem image
+
+```bash
+$ docker import ubuntu.tar - ubuntu:22.04v1
+```
+
+## 4.6. inspect
+
+> Return low-level information on Docker objects
+
+```bash
+$ docker inspect 2ea0d23f30cf
+```
+
+## 4.7. Remove Container
 
 #### A. docker rm
 
+> Remove one or more containers
+
 ```bash
-# Remove one or more containers
 $ docker rm ae96128535e6
 $ docker rm 661547b99e14
 $ docker rm 0e78d531b441
@@ -367,7 +434,6 @@ $ docker rm $(docker ps --filter status=exited -q)
 $ docker container prune
 WARNING! This will remove all stopped containers.
 Are you sure you want to continue? [y/N] y
-
 ```
 
 ```bash
@@ -379,65 +445,56 @@ WARNING! This will remove:
   - all dangling build cache
 
 Are you sure you want to continue? [y/N] y
-
 ```
 
-## 4.2. Export/Import
-
-#### A. docker export
-
-```bash
-# Export a container's filesystem as a tar archive
-$ docker export ae96128535e6 > ubuntu.tar
-
-```
-
-#### B. docker import
-
-```bash
-# Import the contents from a tarball to create a filesystem image
-$ docker import ubuntu.tar - ubuntu:22.04v1
-
-```
-
-## 4.3. Start/Stop
+## 4.8. start, stop / restart
 
 #### A. docker start
 
-```bash
-# Start one or more stopped containers
-$ docker start ae96128535e6
+> Start one or more stopped containers
 
+```bash
+$ docker start ae96128535e6
 ```
 
 #### B. docker stop
 
+> Stop one or more running containers
+
 ```bash
-# Stop one or more running containers
 $ docker stop ae96128535e6
-
 ```
 
-## 4.4. Exec
+#### C. docker restart
 
-#### A. docker exec
+> Restart one or more containers
 
 ```bash
-# Run a command in a running container
-$ docker exec -ti 2ea0d23f30cf ls -al /
-
+$ docker restart ae96128535e6
 ```
 
-## 4.5. State
+# 5. Docker Container and Host Handler
 
-#### A. docker inspect
+## 5.1. Manage networks
+
+#### A. docker network ls
 
 ```bash
-# Return low-level information on Docker objects
-$ docker inspect 2ea0d23f30cf
+$ docker network ls
+NETWORK ID     NAME              DRIVER    SCOPE
+79d12e5c8b19   bridge            bridge    local
+4306d8f51bc3   compose_default   bridge    local
+bc0b0e7cc59b   host              host      local
+d2cea0e32a15   none              null      local
 ```
 
-## 4.6. volume
+#### B. docker network rm
+
+```bash
+$ docker network rm 4306d8f51bc3
+```
+
+## 5.2. Manage volumes
 
 #### A. docker volume ls
 
@@ -468,64 +525,6 @@ $ docker volume prune
 WARNING! This will remove anonymous local volumes not used by at least one container.
 Are you sure you want to continue? [y/N] Y
 Total reclaimed space: 0B
-```
-
-## 4.7. Others
-
-#### A. docker commit
-
-```bash
-# Create a new image from a container's changes
-$ docker commit 2ea0d23f30cf ubuntu:22.04v2
-```
-
-#### B. docker attach
-
-> Attach local standard input, output, and error streams to a running container
-
-```bash
-$ docker ps -a
-CONTAINER ID   IMAGE              COMMAND       CREATED          STATUS         PORTS              NAMES
-89356a72e018   ecr-ubuntu:20.04   "/bin/bash"   19 minutes ago   Up 6 minutes   80/tcp, 9981/tcp   nostalgic_dirac
-
-$ docker attach 89356a72e018
-```
-
-# 5. Docker Container Files Handler
-
-## 5.1. Copy files/folders
-
-#### A. docker cp
-
-```bash
-$ docker cp -a README.md ac52ddefee1f:/work
-$ docker cp -a helloworld ac52ddefee1f:/work
-
-```
-
-# 6. Test Case
-
-## 6.1. Run Image -> Leave Container -> Return Container (attach)
-
-```bash
-$ docker-images
-REPOSITORY   TAG       IMAGE ID       CREATED        SIZE
-123          latest    0ae48a4b087c   3 months ago   8.03GB
-ubuntu       22.04     df5de72bdb3b   3 months ago   77.8MB
-ubuntu       20.04     3bc6e9f30f51   3 months ago   72.8MB
-
-# Run Image:123, 0ae48a4b087c
-$ docker run -ti 0ae48a4b087c
-
-In Container: 15948ab15718
-Ctrl+P, Ctrl+Q 
-
-$ docker ps
-CONTAINER ID   IMAGE          COMMAND   CREATED          STATUS          PORTS     NAMES
-15948ab15718   0ae48a4b087c   "bash"    10 minutes ago   Up 10 minutes             heuristic_yalow
-
-$ docker attach 15948ab15718
-
 ```
 
 # 7. Virtual Machine vs. Container
