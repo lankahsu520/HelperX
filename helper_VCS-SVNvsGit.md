@@ -494,6 +494,14 @@ $ svn cp helloworld.c helloworld_cp.c
 ```bash
 ```
 
+## 3.8. List references in a remote repository
+
+#### git ls-remote
+
+```bash
+$ git ls-remote https://github.com/lankahsu520/utilx9.git
+```
+
 # 4. Show difference, log
 
 ## 4.1. Show the working tree status
