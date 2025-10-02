@@ -399,6 +399,8 @@ $ sudo a2ensite svn.conf
 > - 或者自己寫 `pre-receive` hook）
 
 ```bash
+$ sudo vi /etc/apache2/sites-available/git.conf
+
 SetEnv GIT_PROJECT_ROOT /work/trac/repositories
 SetEnv GIT_HTTP_EXPORT_ALL
 
