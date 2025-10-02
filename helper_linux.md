@@ -664,6 +664,13 @@ sudo systemctl enable cron.service
 0 * * * * /bin/util_123
 ```
 
+```bash
+# 查詢 log
+$ tail -f /var/log/syslog | grep --line-buffered cron
+
+$ grep cron /var/log/syslog
+```
+
 ## 2.3. swap area
 
 #### mkswap - set up a Linux swap area
@@ -3073,6 +3080,17 @@ $ sudo snap install htop
 
 $ sudo apt install -y htop
 $ htop
+```
+
+#### lsb_release - print distribution-specific information
+
+```bash
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description:    Ubuntu 20.04.6 LTS
+Release:        20.04
+Codename:       focal
 ```
 
 #### lshw - list hardware
