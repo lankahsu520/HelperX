@@ -42,19 +42,18 @@
 
 > Xiaomi Home Integration is an integrated component of Home Assistant supported by Xiaomi official. It allows you to use Xiaomi IoT smart devices in Home Assistant.
 
-# 2. Start up
+# 2. [Install](https://www.home-assistant.io/installation)
 
-## 2.1. [Install](https://www.home-assistant.io/installation)
->  這是官網提供的教學，說它是 install 教學，應該不算。
+> 裏面的教學跳來跳去，感覺是要讓人迷惑其中，最後搞清楚文章是重複再重複，探討的就2~3個版本。
 >
->  該內容是要求使用者下載 image 裝在虛擬機上。雖說是給 DIY 愛好者，但是…
->
->  - 有人不知什麼是虛擬機。
->- 只想在現有系統上執行，少一層虛擬機的耗能。
->  - 如使用 Raspberry Pi，不想再另外準備一張SDCARD（已經打照好遊戲機，就不能在上面附加嗎？）。
+> 最近幾年（今年為 2025）的變動很大，建議直接用最新版不要管舊版本，遇到不能用的 compoments 就是 compoments 本身的問題，大多是 compoments 沒有跟著升級，不然就是 compoments 用了一些特殊套件造成的。
 
-> [Installation](https://www.home-assistant.io/installation/)
+> 官網提供的教學，說它是 install 教學，應該不算。所有內容導向是要求使用者下載 image 裝在虛擬機或主機上。雖說是給 DIY 愛好者的發展環境，但是…
 >
+> - 有人不知什麼是虛擬機。
+> - 只想在現有系統上執行，少一層虛擬機的耗能。
+> - 原使用 Raspberry Pi，不想再另外準備一張SDCARD（已經打照好遊戲機，就不能在上面附加嗎？）。
+
 > - [Home Assistant Green ](https://support.nabucasa.com/hc/en-us/categories/24638797677853-Home-Assistant-Green)
 > - [Home Assistant Yellow ](https://support.nabucasa.com/hc/en-us/categories/24734575925149-Home-Assistant-Yellow)
 > - [Raspberry Pi](https://www.home-assistant.io/installation/raspberrypi)
@@ -65,83 +64,142 @@
 > - [Windows](https://www.home-assistant.io/installation/windows)
 > - [Other systems](https://www.home-assistant.io/installation/alternative)
 
-## 2.2. Showtime
+## 2.1. [About installation types](https://www.home-assistant.io/installation/#about-installation-types)
 
-> http://192.168.31.62:8123
+> - **Home Assistant Operating System**: An embedded, minimalistic operating system designed to run the Home Assistant ecosystem on single board computers (like the Home Assistant Green or a Raspberry Pi) or Virtual Machines. It is the most convenient option in terms of installation and maintenance and it supports add-ons. Home Assistant Operating System is the recommended installation type for most users.
+> - **Home Assistant Container:** Container-based installation of Home Assistant. You need to bring your own system (such as Linux) with container orchestration (like Docker), and manually handle updates. Home Assistant Container installations don’t have access to add-ons.
 
-### 2.2.1. Main
+|                                                              | HA OS | Container |
+| :----------------------------------------------------------: | :---: | --------- |
+| [Automations](https://www.home-assistant.io/docs/automation) |   ✔   | ✔         |
+|    [Dashboards](https://www.home-assistant.io/dashboards)    |   ✔   | ✔         |
+|  [Integrations](https://www.home-assistant.io/integrations)  |   ✔   | ✔         |
+|       [Add-ons](https://www.home-assistant.io/addons)        |   ✔   | ✖         |
+|  [Blueprints](https://www.home-assistant.io/docs/blueprint)  |   ✔   | ✔         |
+|                      One-click updates                       |   ✔   | ✖         |
+| [Backups](https://www.home-assistant.io/common-tasks/general/#backups) |   ✔   | ✔         |
+
+## 2.2. Deprecated installation types
+
+> Home Assistant used to offer two additional installation types for advanced users: **Home Assistant Core** and **Home Assistant Supervised**. These two methods are now [deprecated and no longer recommended for new users](https://www.home-assistant.io/blog/2025/05/22/deprecating-core-and-supervised-installation-methods-and-32-bit-systems/).
+>
+> - **Home Assistant Supervised:** Manual installation of the Supervisor.
+> - **Home Assistant Core:** Manual installation using Python virtual environment.
+
+## 2.3. Others
+
+> 因為本人開始的學習方向是讓 NXP i.MX 8M Mini 上跑 Home Assistant（請見 [helper_Yocto-HomeAssistant.md](https://github.com/lankahsu520/CrossCompilationX/blob/master/helper_Yocto-HomeAssistant.md)），而不是去玩 Home Assistant，查詢官方文件對於這方面的著墨少之又少，最後都是詢問ChatGPT。
+
+# 3. Showtime
+
+> 預設連結網址
+>
+> http://homeassistant.local:8123
+
+## 3.1. Main
 
 <img src="./images/HomeAssistant0001.png" alt="HomeAssistant0001" style="zoom:33%;" />
 
-### 2.2.2. CREATE MY SMART HOME
+## 3.2. CREATE MY SMART HOME
 
 #### A. Create user
 
-<img src="./images/HomeAssistant0002.png" alt="HomeAssistant0002" style="zoom:33%;" />
+<img src="./images/HomeAssistant0001a.png" alt="HomeAssistant0001a" style="zoom:33%;" />
 
 #### B. Home location
 
-<img src="./images/HomeAssistant0003.png" alt="HomeAssistant0003" style="zoom:33%;" />
+<img src="./images/HomeAssistant0001b.png" alt="HomeAssistant0001b" style="zoom:33%;" />
 
 #### C. Help us help you
 
-<img src="./images/HomeAssistant0004.png" alt="HomeAssistant0004" style="zoom:33%;" />
+<img src="./images/HomeAssistant0001c.png" alt="HomeAssistant0001c" style="zoom:33%;" />
 
 #### D. We found compatible devices!
 
-<img src="./images/HomeAssistant0005.png" alt="HomeAssistant0005" style="zoom:33%;" />
+<img src="./images/HomeAssistant0001d.png" alt="HomeAssistant0001d" style="zoom:33%;" />
 
-### 2.2.2. My Home
-<img src="./images/HomeAssistant0006.png" alt="HomeAssistant0006" style="zoom:33%;" />
+## 3.3. My Home
+<img src="./images/HomeAssistant0002.png" alt="HomeAssistant0002" style="zoom:33%;" />
 
-## 2.3. homeassistant.service
+## 3.4. Hostname
 
-### 2.3.1. Start and Stop
+> Settings -> System -> Network
 
-```bash
-systemctl start homeassistant.service
-systemctl stop homeassistant.service
+<img src="./images/HomeAssistant0004.png" alt="HomeAssistant0004" style="zoom:33%;" />
+
+> key in : `lanka520-home`, then click `Save`
+>
+> 重新開機就可以用
+>
+> http://lanka520-home.local:8123
+
+<img src="./images/HomeAssistant0004a.png" alt="HomeAssistant0004a" style="zoom:33%;" />
+
+# 4. [Add-ons](https://www.home-assistant.io/addons)
+
+> 不見得每個版本都有此項目，相關差異請見
+>
+> 2.1. [About installation types](https://www.home-assistant.io/installation/#about-installation-types)
+
+<img src="./images/HomeAssistant1000.png" alt="HomeAssistant1000" style="zoom:33%;" />
+
+## 4.1. Open SSH
+
+#### A. Advanced mode - On
+
+> 點選左下角的個人帳號 -> General -> User settings
+
+> 開啟 Advanced mode
+
+<img src="./images/HomeAssistant1003.png" alt="HomeAssistant1003" style="zoom:33%;" />
+
+#### B. Add-on store
+
+> Settings -> Add-ons -> Add-on store
+
+<img src="./images/HomeAssistant1003a.png" alt="HomeAssistant1003a" style="zoom:33%;" />
+
+<img src="./images/HomeAssistant1003b.png" alt="HomeAssistant1003b" style="zoom:33%;" />
+
+> key in : `ssh`
+
+<img src="./images/HomeAssistant1003c.png" alt="HomeAssistant1003c" style="zoom:33%;" />
+
+#### C. Install Terminal & SSH
+
+<img src="./images/HomeAssistant1003d.png" alt="HomeAssistant1003d" style="zoom:33%;" />
+
+> - [x] Autoupdate
+>
+> - [x] Show in sidebar
+>
+> click `Start`
+
+<img src="./images/HomeAssistant1003e.png" alt="HomeAssistant1003e" style="zoom:33%;" />
+
+<img src="./images/HomeAssistant1003f.png" alt="HomeAssistant1003f" style="zoom:33%;" />
+
+#### D. Configuration
+
+##### D.1. Options
+
+```yaml
+authorized_keys: []
+password: "123456"
+apks: []
+server:
+  tcp_forwarding: false
 ```
 
-### 2.3.2. Status
+##### D.2. Network
 
-```bash
-systemctl start homeassistant.service
-```
+> Change the ports on your host that are exposed by the add-on
+>
+> SSH Port: 22
 
-```bash
-$  cat /usr/lib/systemd/system/homeassistant.service
-[Unit]
-Description=Home Assistant
-After=network.target
+<img src="./images/HomeAssistant1003g.png" alt="HomeAssistant1003g" style="zoom:33%;" />
 
-Requires=root.mount
-After=root.mount
-
-[Service]
-Type=simple
-User=homeassistant
-
-PermissionsStartOnly=true
-ExecStartPre=/bin/mkdir -p /root/.homeassistant
-ExecStartPre=/bin/chown homeassistant:homeassistant /root/.homeassistant
-
-ExecStart=/usr/bin/hass --skip-pip -c "/root/.homeassistant"
-Restart=on-failure
-
-[Install]
-WantedBy=multi-user.target
-```
-
-### 2.3.3. Log
-
-> 因為這邊的設定目錄是指向 /root/.homeassistant
-
-```bash
-$ cat /root/.homeassistant/home-assistant.log
-```
-
-# 3. Integrations
+# 5. Integrations
 
 > 這邊就是大家期待的，綁定手邊的設備，不限定廠商，只要與 Home Assistant 有合作的。
 >
@@ -151,13 +209,13 @@ $ cat /root/.homeassistant/home-assistant.log
 
 <img src="./images/HomeAssistant0101.png" alt="HomeAssistant0101" style="zoom:33%;" />
 
-## 3.1. [Sensibo](https://sensibo.com)
+## 5.1. [Sensibo](https://sensibo.com)
 
 > [Sensibo](https://www.home-assistant.io/integrations/sensibo)
 >
 > The **Sensibo** integration integrates [Sensibo](https://sensibo.com/) devices into Home Assistant.
 
-### 3.1.1. Setup
+### 5.1.1. Setup
 
 #### A.  Search Integrations
 
@@ -179,17 +237,17 @@ $ cat /root/.homeassistant/home-assistant.log
 
 <img src="./images/HomeAssistant0104.png" alt="HomeAssistant0104" style="zoom: 50%;" />
 
-### 3.1.2. Overview
+### 5.1.2. Overview
 
 <img src="./images/HomeAssistant0105.png" alt="HomeAssistant0105" style="zoom:33%;" />
 
-## 3.2. [ONVIF](https://www.onvif.org)
+## 5.2. [ONVIF](https://www.onvif.org)
 
 > [ONVIF](https://www.home-assistant.io/integrations/onvif)
 >
 > The ONVIF camera integration allows you to use an [ONVIF](https://www.onvif.org/) Profile S conformant device in Home Assistant. This requires the [`ffmpeg` integration](https://www.home-assistant.io/integrations/ffmpeg/) to be already configured.
 
-### 3.2.1. Setup
+### 5.2.1. Setup
 
 #### A. Search Integrations
 
@@ -211,13 +269,13 @@ $ cat /root/.homeassistant/home-assistant.log
 
 <img src="./images/HomeAssistant0206.png" alt="HomeAssistant0207" style="zoom:50%;" />
 
-### 3.1.2. Overview
+### 5.2.2. Overview
 
 > 其它相關功能，請自行研究
 
 <img src="./images/HomeAssistant0208.png" alt="HomeAssistant0208" style="zoom:33%;" />
 
-## 3.3. [Tuya](https://www.tuya.com)
+## 5.3. [Tuya](https://www.tuya.com)
 
 > [Tuya](https://www.home-assistant.io/integrations/tuya)
 >
@@ -229,7 +287,7 @@ $ cat /root/.homeassistant/home-assistant.log
 >
 > This topic describes how to install and use the Smart Life integration for Home Assistant.
 
-### 3.3.1. Get User Code
+### 5.3.1. Get User Code
 
 #### A. SmartLife APP
 
@@ -247,7 +305,7 @@ $ cat /root/.homeassistant/home-assistant.log
 
 <img src="./images/HomeAssistant0304.png" alt="HomeAssistant0304" style="zoom:25%;" />
 
-### 3.2.2. Setup
+### 5.3.2. Setup
 
 #### A. Search Integrations
 
@@ -269,17 +327,17 @@ $ cat /root/.homeassistant/home-assistant.log
 
 <img src="./images/HomeAssistant0308.png" alt="HomeAssistant0308" style="zoom: 50%;" />
 
-### 3.3.3. Overview
+### 5.3.3. Overview
 
 <img src="./images/HomeAssistant0309.png" alt="HomeAssistant0309" style="zoom: 33%;" />
 
-## 3.4. [Synology NAS](https://www.synology.com)
+## 5.4. [Synology NAS](https://www.synology.com)
 
 > [Synology DSM](https://www.home-assistant.io/integrations/synology_dsm)
 >
 > The Synology DSM integration provides access to various statistics from your [Synology NAS](https://www.synology.com/) (*DSM 5.x and higher*), as well as cameras from the [Surveillance Station](https://www.synology.com/surveillance) and will allow to use the [File Station](https://www.synology.com/en-us/dsm/feature/file_sharing) as a backup location.
 
-### 3.4.1. Setup
+### 5.4.1. Setup
 
 #### A. Search Integrations
 
@@ -309,11 +367,11 @@ $ cat /root/.homeassistant/home-assistant.log
 
 <img src="./images/HomeAssistant0405.png" alt="HomeAssistant0405" style="zoom: 50%;" />
 
-### 3.4.2. Overview
+### 5.4.2. Overview
 
 <img src="T:/codebase/lankahsu520/HelperX/images/HomeAssistant0406.png" alt="HomeAssistant0406" style="zoom: 33%;" />
 
-# 4. Home Assistant Community Store (HACS)
+# 6. Home Assistant Community Store (HACS)
 
 > 就是軟體商店。非內建，而且需要與個人的 [GitHub](https://github.com) 帳號綁定（GitHub 不是 open 嗎？）。
 >
@@ -330,9 +388,9 @@ $ cat /root/.homeassistant/home-assistant.log
 > - Manage (update/remove) custom elements.
 > - Publish your own custom element repository and create shortcuts to repositories or issue trackers.
 
-## 4.1. Install HACS
+## 6.1. Install HACS
 
-### 4.1.1. Start using HACS
+### 6.1.1. Start using HACS
 
 > https://www.hacs.xyz
 >
@@ -340,7 +398,7 @@ $ cat /root/.homeassistant/home-assistant.log
 
 <img src="./images/HomeAssistant4001.png" alt="HomeAssistant4001" style="zoom: 33%;" />
 
-### 4.1.2. [Download HACS](https://www.hacs.xyz/docs/use/download/download/)
+### 6.1.2. [Download HACS](https://www.hacs.xyz/docs/use/download/download/)
 
 > 點選 `Download HACS`
 
@@ -391,7 +449,7 @@ $ rm hacs.zip
 $ systemctl restart homeassistant.service
 ```
 
-### 4.1.2. Setup
+### 6.1.3. Setup
 
 #### A. Search Integrations
 
@@ -427,13 +485,13 @@ $ systemctl restart homeassistant.service
 
 <img src="./images/HomeAssistant4018.png" alt="HomeAssistant4018" style="zoom: 33%;" />
 
-### 4.1.3. Overview
+### 6.1.4. Overview
 
 > 點選 `HACS`
 
 <img src="./images/HomeAssistant4019.png" alt="HomeAssistant4019" style="zoom: 33%;" />
 
-## 4.2. custom_components
+## 6.2. custom_components
 
 > 因為這邊的設定目錄是指向 /root/.homeassistant
 
@@ -443,6 +501,82 @@ $ tree -L 1 /root/.homeassistant/custom_components
 `-- hacs
 
 2 directories, 0 files
+```
+
+# 7. Special commands
+
+## 7.1. NXP i.MX 8M Mini
+
+> 因為一開始的安裝是在 NXP i.MX 8M Mini 上
+
+```bash
+$ cat /etc/os-release
+ID=fsl-imx-wayland
+NAME="NXP i.MX Release Distro"
+VERSION="6.12-walnascar (walnascar)"
+VERSION_ID=6.12-walnascar
+VERSION_CODENAME="walnascar"
+PRETTY_NAME="NXP i.MX Release Distro 6.12-walnascar (walnascar)"
+CPE_NAME="cpe:/o:openembedded:fsl-imx-wayland:6.12-walnascar"
+```
+
+### 7.1.1. homeassistant.service
+
+#### A. Start and Stop
+
+```bash
+systemctl start homeassistant.service
+systemctl stop homeassistant.service
+```
+
+#### B. Status
+
+```bash
+systemctl start homeassistant.service
+```
+
+```bash
+$  cat /usr/lib/systemd/system/homeassistant.service
+[Unit]
+Description=Home Assistant
+After=network.target
+
+Requires=root.mount
+After=root.mount
+
+[Service]
+Type=simple
+User=homeassistant
+
+PermissionsStartOnly=true
+ExecStartPre=/bin/mkdir -p /root/.homeassistant
+ExecStartPre=/bin/chown homeassistant:homeassistant /root/.homeassistant
+
+ExecStart=/usr/bin/hass --skip-pip -c "/root/.homeassistant"
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+
+#### C. Log
+
+> 因為這邊的設定目錄是指向 /root/.homeassistant
+
+```bash
+$ cat /root/.homeassistant/home-assistant.log
+```
+
+## 7.2. haos_ova-16.2.vdi
+
+```bash
+$ cat /etc/os-release
+NAME="Alpine Linux"
+ID=alpine
+VERSION_ID=3.22.1
+PRETTY_NAME="Alpine Linux v3.22"
+HOME_URL="https://alpinelinux.org/"
+BUG_REPORT_URL="https://gitlab.alpinelinux.org/alpine/aports/-/issues"
 ```
 
 # Appendix
