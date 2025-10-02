@@ -527,6 +527,10 @@ Are you sure you want to continue? [y/N] Y
 Total reclaimed space: 0B
 ```
 
+## 5.3. Leave Docker Container
+
+> Ctrl + P   然後   Ctrl + Q
+
 # 7. Virtual Machine vs. Container
 
 >[ChatGPT] Docker 和 Virtual Machine  的差別
