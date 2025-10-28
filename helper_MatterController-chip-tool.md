@@ -86,12 +86,53 @@ $ tree -L 4 ~/snap/chip-tool/
 # 2. Operate in three modes
 
 > [--paa-trust-store-path]:
->   Path to directory holding PAA certificate information.  Can be absolute or relative to the current working directory.
+> Path to directory holding PAA certificate information.  Can be absolute or relative to the current working directory.
 >
-> [production/paa-root-certs](https://github.com/project-chip/connectedhomeip/tree/master/credentials/production/paa-root-certs): 如果要與市面上販售之設備進行配對，請將檔案放入指定之目錄
+> [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[credentials](https://github.com/project-chip/connectedhomeip/tree/master/credentials)/[production/paa-root-certs](https://github.com/project-chip/connectedhomeip/tree/master/credentials/production/paa-root-certs): <font color="red">如果要與市面上販售之設備進行配對，請將檔案放入指定之目錄。</font>
 >
+> [connectedhomeip](https://github.com/project-chip/connectedhomeip/tree/master)/[credentials](https://github.com/project-chip/connectedhomeip/tree/master/credentials)/[development](https://github.com/project-chip/connectedhomeip/tree/master/credentials/development)/[paa-root-certs](https://github.com/project-chip/connectedhomeip/tree/master/credentials/development/paa-root-certs): 開發測試用
+
+> 以下看看就好，理論很美好，現實很骨感。
+>
+> 案例，手邊有一台 Matter GW，聽信 Matter 亙連亙通，購入新設備（有 CSA 認證），結果還是不能亙通，有可能只因為 Matter GW 沒有該設備的 PAA/DAC。這時就只能選擇退貨此新設備！
+>
+> [ChatGPT]
+>
+> Matter（原本叫 CHIP）的 **PAA / DAC 驗證機制**，很多人第一次看都會以為它是「在廠商之間故意設的門檻」，但實際上它存在的目的是 **確保裝置身份真實且可追溯**，而不是「防止跨廠商互通」。
+>
+> ------
+>
+> ## 🔑 為什麼 Matter 要有 PAA / DAC 機制？
+>
+> Matter 的設計是「任何認證過的廠商裝置，都能在同一個 fabric 上無縫協作」。
+>  但這會帶來一個風險：
+>
+> - 如果沒有驗證機制，那任何人都可以做一個假裝是「燈泡」的裝置，植入惡意韌體，然後加入網路。
+> - 這樣就等於 **任何人都能造假裝置**，網路安全會完全崩潰。
+>
+> 所以 CSA（Connectivity Standards Alliance）要求：
+>
+> 1. **每個裝置都要有一組 DAC（Device Attestation Certificate）**
+>    - 硬體廠商在出廠時，給每顆晶片燒錄一組憑證。
+> 2. **DAC 必須鏈接到一個 PAA（Product Attestation Authority）**
+>    - 這個 PAA 由 CSA 或廠商註冊並受信任。
+> 3. **Controller（像 chip-tool、Home Assistant、Google Home、Alexa）會驗證 DAC 的真實性**
+>    - 用的就是 PAA Trust Store。
+>
+> ------
+>
+> ## 🔍 為什麼要「paa-trust-store-path」？
+>
+> 因為 controller 需要一份「信任的根目錄」來驗證 DAC。
+>
+> - 在 **開發環境**：用 CSA 提供的測試 PAA cert（例如 SDK 內建的 `credentials/development/paa-root-certs/`）。
+> - 在 **產品環境**：要用 CSA 官方發的 PAA cert，或者有些情況用到自有 PAA（比如你自己要做白牌設備）。
+>
+> 這就是 `--paa-trust-store-path` 的作用：
+>  👉 讓 controller 知道「我該相信哪些 PAA cert」，這樣它才能正確驗證裝置的身分。
+
 > [--storage-directory]:
->   Directory to place chip-tool's storage files in.  Defaults to $TMPDIR, with fallback to /tmp
+> Directory to place chip-tool's storage files in.  Defaults to $TMPDIR, with fallback to /tmp
 
 ## 2.1. Single-command mode (default)
 
@@ -285,6 +326,71 @@ $ chip-tool interactive server --port 9002 --storage-directory /work/IoT/matter/
 ```bash
 $ chip-tool interactive start --storage-directory /work/IoT/matter/chip-tool --trace_file /tmp/chip-tool-123.log --paa-trust-store-path /work/IoT/matter/paa-root-certs
 ```
+
+## 3.0. Preface
+
+> 先搞清楚 Matter pairing 時使用的 code。
+
+### 3.0.1. Codes
+
+#### A. Setup PIN Code
+
+> 都說很重要，<font color="red">手邊的設備，沒有一台有印出</font>。
+
+> [ChatGPT]
+>
+> - **格式**：8 位數字（例如 `20202021`）
+> - **來源**：每台裝置出廠時就有一組 PIN，通常印在裝置外殼或包裝上。
+> - **用途**：
+>   - 配對時用來驗證 Controller 與裝置之間的連線，確保你是合法擁有者。
+>   - 這是 **必需品**，因為不論是用 QR Code 還是 Manual Code，本質上最後還是需要 PIN Code。
+> - **特點**：
+>   - 類似「密碼」，最基本的安全憑證。
+>   - 在「OnNetwork pairing」或「Commissioning Window」時也要用。
+>
+> 👉 可以說 **PIN Code 是核心，其他兩種 Code 都是它的表現形式**。
+
+#### B. Setup QR Code
+
+> 包含很多訊息，常用在設備還沒有如入任何 Matter 網路。
+>
+> 有可能設備預設只有 Bluetooth 傳輸，掃描 QR Code 後，手機傳送 Wi-Fi SSID 和 password，等資料給設備來進行配對。
+
+> [ChatGPT]
+>
+> - **格式**：一個 QR Code 圖片。
+> - **內容**：不只包含 **PIN Code**， **PIN Code+ Discriminator + Vendor/Product Info + Flow **
+>   - Discriminator (裝置區分碼，讓 Controller 能在多裝置中找到對的那個)
+>   - Vendor ID, Product ID
+>   - Commissioning Flow (是否需要特別流程)
+>   - Setup PIN Code
+> - **用途**：
+>   - 使用者只要掃描 QR Code，Controller 就能獲取 **所有必要資訊**，自動完成裝置配對。
+> - **特點**：
+>   - **使用者最方便的方式**。
+>   - 適合一般消費者（只需要掃碼）。
+>
+> 👉 **QR Code = PIN Code + 額外的裝置資訊**。
+
+#### C. Manual Pairing Code
+
+> 常用於可以手動輸入時使用。
+
+> [ChatGPT]
+>
+> - **格式**：通常是 11~12 位數字（例如 `34970112332`）。
+> - **內容**：跟 QR Code 一樣，也包含 **PIN Code + Discriminator + 其他資訊**，只是用文字數字方式表達。
+> - **用途**：
+>   - 在裝置沒有 QR Code 的情況下，使用者可以手動輸入這組數字來完成配對。
+> - **特點**：
+>   - **QR Code 的文字替代品**。
+>   - 適合沒有攝影機的 Controller（例如 CLI 工具、智慧音箱）。
+
+### 3.0.2. paa-root-certs
+
+> <font color="red">如果是使用`測試Server`和`測試設備`時，可以省略這個，但是如果要與市售的設備進行配對，一定要加上這個！</font>不知網路上的教學為什麼完全不提及這個重要性。
+>
+> [production/paa-root-certs](https://github.com/project-chip/connectedhomeip/tree/master/credentials/production/paa-root-certs): <font color="red">如果要與市面上販售之設備進行配對，請將檔案放入指定之目錄</font>
 
 ## 3.1. [⚑] any
 
