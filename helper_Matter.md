@@ -2556,7 +2556,9 @@ $ ./linux/out/rootnode_onofflight_bbs1b7IaOV
 
 #### C. [Matter](https://developers.home.google.com/matter/get-started)
 
-#### D.  [Matter Standards Service](https://www.graniteriverlabs.com/zh-tw/matter-standard-csa-compliance-service)
+#### D. [Matter Standards Service](https://www.graniteriverlabs.com/zh-tw/matter-standard-csa-compliance-service)
+
+#### E. [Matter SDK Coverage Report](https://matter-build-automation.ue.r.appspot.com/)
 
 ## I.2. 一些介紹
 
