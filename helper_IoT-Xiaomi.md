@@ -72,10 +72,17 @@ flowchart LR
 
 ```
 
+# 3. Tools
 
-# 3. miiocli
+> 因為之後的操作都與 device ID and TOKEN 有關，所以需要先連上 Xiaomi cloud 後鍵入使用者帳號和密碼，查詢相關 devices 訊息。
+>
+> 另外這些資料比較私密，請一定要好好保管。
+
+## 3.1. miiocli
 
 > This library (and its accompanying cli tool, `miiocli`) can be used to control devices using Xiaomi's [miIO](https://github.com/OpenMiHome/mihome-binary-protocol/blob/master/doc/PROTOCOL.md) and MIoT protocols.
+
+> miiocli 在取得 TOKEN 的功能無法使用，但是其它操作算是正常。
 
 > GitHub - [python-miio](https://github.com/rytilahti/python-miio)
 >
@@ -84,39 +91,18 @@ flowchart LR
 ```bash
 $ pip install --upgrade python-miio
 
-# genericmiot
+# or install from GitHub
 $ pip install git+https://github.com/rytilahti/python-miio.git
 ```
 
-## 3.0. cloud
-
->因為之後的操作都與 device ID and TOKEN 有關，所以需要先連上 Xiaomi cloud 後鍵入使用者帳號和密碼，查詢相關 devices 訊息。
->
->另外這些資料比較私密，請一定要好好保管。
-
-### 3.0.1. Token
-
-#### A. miiocli cloud
-
 ```bash
-function xiaomi-cloud()
-{
-	ARGS="$*"
-
-	DO_COMMAND="(miiocli cloud ${ARGS})"
-	eval-it "$DO_COMMAND"
-}
-```
-
-```bash
-$ xiaomi-cloud
-[(miiocli cloud )]
+$ miiocli cloud
 Username: 
 Password: 
 ...
 ```
 
-#### B. Xiaomi-cloud-tokens-extractor
+## 3.2. Xiaomi-cloud-tokens-extractor
 
 > 這邊另外提供一個方式去抓取 token。
 
@@ -124,25 +110,100 @@ Password:
 
 ```bash
 $ git clone https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor
-
-$ cd Xiaomi-cloud-tokens-extractor
-$ python3 token_extractor.py
-Username (email or user ID):
-Password:
-
-Server (one of: cn, de, us, ru, tw, sg, in, i2) Leave empty to check all available:
-tw
-
-Logging in...
-Logged in.
-
-Devices found for server "tw" @ home "12345678901":
-...
 ```
 
-### 3.0.1. IP and Token
+```bash
+$ cd Xiaomi-cloud-tokens-extractor
+$ python3 token_extractor.py
+
+                               Xiaomi Cloud
+___ ____ _  _ ____ _  _ ____    ____ _  _ ___ ____ ____ ____ ___ ____ ____
+ |  |  | |_/  |___ |\ | [__     |___  \/   |  |__/ |__| |     |  |  | |__/
+ |  |__| | \_ |___ | \| ___]    |___ _/\_  |  |  \ |  | |___  |  |__| |  \
+                                                        by Piotr Machowski
+
+
+Please select a way to log in:
+ p - using password
+ q - using QR code
+p/q: u
+p/q: p
+
+Username (email, phone number or user ID):
+?????????
+Password (not displayed for privacy reasons):
+
+
+Logging in...
+
+Captcha verification required.
+Image URL: http://127.0.0.1:31415
+Enter captcha as shown in the image (case-sensitive):
+H25K2
+
+Two factor authentication required, please provide the code from the email.
+
+2FA Code:
+??????
+
+Logged in.
+
+Select server (one of: cn, de, us, ru, tw, sg, in, i2; Leave empty to check all available):
+tw
+
+
+Devices found for server "tw" @ home "12345678901":
+   ---------
+   NAME:     除溼機
+   ID:       blt.1.1fbq82lkh4c00
+   BLE KEY:  不告訴你
+   MAC:      A4:C1:38:FA:1F:ED
+   TOKEN:    不告訴你
+   MODEL:    miaomiaoce.sensor_ht.t2
+   ---------
+   NAME:     夜燈
+   ID:       blt.1.1frs78aht4c00
+   BLE KEY:  不告訴你
+   MAC:      D4:F0:EA:A3:66:46
+   TOKEN:    不告訴你
+   MODEL:    yeelink.light.nl1
+   ---------
+   NAME:     18號冰箱
+   ID:       blt.1.1jm6eee2p4k01
+   BLE KEY:  不告訴你
+   MAC:      A4:C1:38:4D:45:26
+   TOKEN:    不告訴你
+   MODEL:    miaomiaoce.sensor_ht.t2
+   ---------
+
+
+Press ENTER to finish
+```
+
+# 4. alias and function
+
+> 建立別名和函式，方便後面使用
 
 ```bash
+#******************************************************************************
+#** Xiaomi **
+#******************************************************************************
+function xiaomi-cloud()
+{
+	ARGS="$*"
+
+	DO_COMMAND="(miiocli cloud ${ARGS})"
+	eval-it "$DO_COMMAND"
+}
+
+function xiaomi-discover()
+{
+	ARGS="$*"
+
+	DO_COMMAND="(miiocli discover ${ARGS})"
+	eval-it "$DO_COMMAND"
+}
+
 function xiaomi-device-ip()
 {
 	IP1="$1"
@@ -203,80 +264,7 @@ function xiaomi-device-which()
 		echo "XIAOMI_GENERICMIOT=${XIAOMI_GENERICMIOT}"
 	fi
 }
-```
 
-```bash
-$ xiaomi-device-ip 192.168.0.28
-$ xiaomi-device-token 12345678901234567890123456789012
-$ xiaomi-device-id 987654321
-
-# or
-$ xiaomi-device-which 192.168.0.28 12345678901234567890123456789012 987654321
-```
-
-## 3.1. discover
-
-> Discover devices using both handshake and mdns methods.
-
-```bash
-$ miiocli discover --help
-Usage: miiocli discover [OPTIONS]
-
-  Discover devices using both handshake and mdns methods.
-
-Options:
-  --mdns / --no-mdns
-  --handshake / --no-handshake
-  --network TEXT
-  --timeout INTEGER
-  --help                        Show this message and exit.
-```
-
-```bash
-function xiaomi-discover()
-{
-	ARGS="$*"
-
-	DO_COMMAND="(miiocli discover ${ARGS})"
-	eval-it "$DO_COMMAND"
-}
-```
-
-```bash
-$ xiaomi-discover
-[(miiocli discover )]
-INFO:miio.miioprotocol:Sending discovery to <broadcast> with timeout of 5s..
-INFO:miio.miioprotocol:  IP 192.168.0.30 (ID: 52099230) - token: b'ffffffffffffffffffffffffffffffff'
-INFO:miio.miioprotocol:  IP 192.168.0.33 (ID: 52099633) - token: b'ffffffffffffffffffffffffffffffff'
-INFO:miio.miioprotocol:  IP 192.168.0.32 (ID: 52099832) - token: b'ffffffffffffffffffffffffffffffff'
-INFO:miio.miioprotocol:  IP 192.168.0.23 (ID: 52099523) - token: b'ffffffffffffffffffffffffffffffff'
-INFO:miio.miioprotocol:  IP 192.168.0.26 (ID: 52099626) - token: b'ffffffffffffffffffffffffffffffff'
-INFO:miio.miioprotocol:  IP 192.168.0.29 (ID: 52099c29) - token: b'ffffffffffffffffffffffffffffffff'
-INFO:miio.miioprotocol:  IP 192.168.0.28 (ID: 52099b28) - token: b'ffffffffffffffffffffffffffffffff'
-INFO:miio.miioprotocol:  IP 192.168.0.31 (ID: 52099231) - token: b'ffffffffffffffffffffffffffffffff'
-INFO:miio.miioprotocol:Discovery done
-INFO:miio.discovery:Discovering devices with mDNS for 5 seconds..
-```
-
-## 3.2. device
-
-```bash
-$ miiocli device --help
-Usage: miiocli device [OPTIONS] COMMAND [ARGS]...
-
-Options:
-  --ip TEXT     [required]
-  --token TEXT  [required]
-  --model TEXT
-  --help        Show this message and exit.
-
-Commands:
-  info             Get (and cache) miIO protocol information from the...
-  raw_command      Send a raw command to the device.
-  test_properties  Helper to test device properties.
-```
-
-```bash
 function xiaomi-endpoint-piid()
 {
 	PIID1="$1"
@@ -338,11 +326,7 @@ function xiaomi-device-helper()
 	DO_COMMAND="(miiocli device ${ARGS})"
 	eval-it "$DO_COMMAND"
 }
-```
 
-### 3.2.1. device info
-
-```bash
 function xiaomi-device-info()
 {
 	HINT="Usage: ${FUNCNAME[0]} [ip] [token]"
@@ -368,38 +352,7 @@ function xiaomi-device-info()
 		echo $HINT
 	fi
 }
-```
 
-```bash
-$ xiaomi-device-info
-[(miiocli device --ip 192.168.0.28 --token 12345678901234567890123456789012 info)]
-Running command info
-Model: qmi.plug.tw02
-Hardware version: ESP32C3
-Firmware version: 1.0.6
-Supported using: GenericMiot
-Command: miiocli genericmiot --ip 192.168.0.28 --token 12345678901234567890123456789012
-Supported by genericmiot: True
---------------------------------------------------
-XIAOMI_SIID=2
-XIAOMI_PIID=1
-XIAOMI_MODEL=qmi.plug.tw02
-XIAOMI_GENERICMIOT=True
-```
-
-#### A. [Xiaomi Smart Plug 2](https://home.miot-spec.com/s/qmi.plug.tw02)
-
-> siid: 2
->
-> piid: 1
-
-![Xiaomi_qmi.plug.tw02](./images/Xiaomi_qmi.plug.tw02.png)
-
-### 3.2.2. device raw_command
-
-#### A. get_properties
-
-```bash
 function xiaomi-device-raw-get()
 {
 	HINT="Usage: ${FUNCNAME[0]} [ip] [token] [id] [siid] [piid]"
@@ -420,18 +373,7 @@ function xiaomi-device-raw-get()
 		echo $HINT
 	fi
 }
-```
 
-```bash
-$ xiaomi-device-raw-get
-[(miiocli device --ip 192.168.0.28 --token 12345678901234567890123456789012 raw_command get_properties "[{'did': '987654321', 'siid': 2, 'piid': 1 }]")]
-Running command raw_command
-[{'did': '987654321', 'siid': 2, 'piid': 1, 'code': 0, 'value': True}]
-```
-
-#### B. set_properties
-
-```bash
 function xiaomi-device-raw-set()
 {
 	HINT="Usage: ${FUNCNAME[0]} <value> [ip] [token] [id]"
@@ -464,21 +406,120 @@ function xiaomi-device-raw-setfalse()
 }
 ```
 
-##### B.1. turn on the device
+# 5. Commands
+
+> 雖然 miiocli 無法取得 TOKEN，但是還是可以使用它來操做。
+
+## 5.1. discover
+
+> Discover devices using both handshake and mdns methods.
+
+> 列出有 Network IP 的設備
+
+```bash
+$ xiaomi-discover
+[(miiocli discover )]
+INFO:miio.miioprotocol:Sending discovery to <broadcast> with timeout of 5s..
+INFO:miio.miioprotocol:  IP 192.168.0.30 (ID: 52099230) - token: b'ffffffffffffffffffffffffffffffff'
+INFO:miio.miioprotocol:  IP 192.168.0.33 (ID: 52099633) - token: b'ffffffffffffffffffffffffffffffff'
+INFO:miio.miioprotocol:  IP 192.168.0.32 (ID: 52099832) - token: b'ffffffffffffffffffffffffffffffff'
+INFO:miio.miioprotocol:  IP 192.168.0.23 (ID: 52099523) - token: b'ffffffffffffffffffffffffffffffff'
+INFO:miio.miioprotocol:  IP 192.168.0.26 (ID: 52099626) - token: b'ffffffffffffffffffffffffffffffff'
+INFO:miio.miioprotocol:  IP 192.168.0.29 (ID: 52099c29) - token: b'ffffffffffffffffffffffffffffffff'
+INFO:miio.miioprotocol:  IP 192.168.0.28 (ID: 52099b28) - token: b'ffffffffffffffffffffffffffffffff'
+INFO:miio.miioprotocol:  IP 192.168.0.31 (ID: 52099231) - token: b'ffffffffffffffffffffffffffffffff'
+INFO:miio.miioprotocol:Discovery done
+INFO:miio.discovery:Discovering devices with mDNS for 5 seconds..
+```
+
+## 5.2. device info
+
+### 5.2.1. [Xiaomi Miot Spec: 小米/米家产品库](https://miot-spec.com/)
+
+> https://home.miot-spec.com
+
+![Xiaomi0001](./images/Xiaomi0001.png)
+
+### 5.2.2. miiocli device
+
+> 得到該設備的相關訊息
+
+```bash
+# 先選定特定 device
+$ xiaomi-device-ip 192.168.0.28
+$ xiaomi-device-token 12345678901234567890123456789012
+$ xiaomi-device-id 987654321
+
+# or
+$ xiaomi-device-which 192.168.0.28 12345678901234567890123456789012 987654321
+```
+
+```bash
+$ xiaomi-device-info
+[(miiocli device --ip 192.168.0.28 --token 12345678901234567890123456789012 info)]
+Running command info
+Model: qmi.plug.tw02
+Hardware version: ESP32C3
+Firmware version: 1.0.6
+Supported using: GenericMiot
+Command: miiocli genericmiot --ip 192.168.0.28 --token 12345678901234567890123456789012
+Supported by genericmiot: True
+--------------------------------------------------
+XIAOMI_SIID=2
+XIAOMI_PIID=1
+XIAOMI_MODEL=qmi.plug.tw02
+XIAOMI_GENERICMIOT=True
+```
+
+### 5.2.3. XIAOMI_MODEL - [Xiaomi Smart Plug 2](https://home.miot-spec.com/s/qmi.plug.tw02)
+
+> XIAOMI_MODEL=qmi.plug.tw02
+
+![Xiaomi0002](./images/Xiaomi0002.png)
+
+> 點選進入查看，此為 Plug；
+>
+> 因為只是要操作開/關，請先記得 siid 和 piid
+| siid | piid | status |
+| ---- | ---- | ------ |
+| 2    | 1    |        |
+
+![Xiaomi-qmi.plug.tw02](./images/Xiaomi-qmi.plug.tw02.png)
+
+## 5.3. device raw_command
+
+### 5.3.1. get_properties
+
+```bash
+$ xiaomi-device-raw-get
+XIAOMI_MODEL=qmi.plug.tw02
+XIAOMI_GENERICMIOT=True
+[(miiocli device --ip 192.168.0.28 --token 12345678901234567890123456789012 raw_command get_properties "[{'did': '987654321', 'siid': 2, 'piid': 1 }]")]
+Running command raw_command
+[{'did': '987654321', 'siid': 2, 'piid': 1, 'code': 0, 'value': True}]
+```
+
+### 5.3.2. set_properties
+
+#### A. turn on the device
 
 ```bash
 # turn on the device
 $ xiaomi-device-raw-settrue
+XIAOMI_MODEL=qmi.plug.tw02
+XIAOMI_GENERICMIOT=True
 [(miiocli device --ip 192.168.0.28 --token 12345678901234567890123456789012 raw_command set_properties "[{'did': '987654321', 'siid': 2, 'piid': 1, 'value':True }]")]
 Running command raw_command
 [{'did': '987654321', 'siid': 2, 'piid': 1, 'code': 0}]
 ```
 
-##### B.2. turn off the device
+#### B. turn off the device
 
 ```bash
 # turn off the device
 $ xiaomi-device-raw-setfalse
+XIAOMI_MODEL=qmi.plug.tw02
+XIAOMI_GENERICMIOT=True
 [(miiocli device --ip 192.168.0.28 --token 12345678901234567890123456789012 raw_command set_properties "[{'did': '987654321', 'siid': 2, 'piid': 1, 'value':False }]")]
 Running command raw_command
 [{'did': '987654321', 'siid': 2, 'piid': 1, 'code': 0}]
