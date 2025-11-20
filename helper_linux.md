@@ -2087,22 +2087,18 @@ sudo apt-get install iftop
 sudo iftop
 ```
 
-#### ss - another utility to investigate sockets
+#### iptraf - Interactive Colorful IP LAN Monitor
 
 ```bash
-function port-listen()
-{
-	HINT="Usage: ${FUNCNAME[0]} <port>"
-	WATCH_PORT="$1"
+sudo apt-get install iptraf
+sudo iptraf-ng
+```
 
-	#echo "WATCH_PORT=$WATCH_PORT"
-	if [ ! -z "$WATCH_PORT" ]; then
-		DO_COMMAND="(ss -tnul | grep -E 'LISTEN|UNCONN' | grep $WATCH_PORT)"
-		eval-it "$DO_COMMAND"
-	else
-		echo $HINT
-	fi
-}
+#### nethogs - Net top tool grouping bandwidth per process
+
+```bash
+sudo apt install nethogs
+sudo nethogs enp0s3
 ```
 
 #### netstat - Print network connections, routing tables, interface statistics, masquerade connections, and multicast memberships
@@ -2140,6 +2136,24 @@ sudo nmap -sU localhost
 
 # 查看SIP
 nmap -v -sV localhost -p 5060
+```
+
+#### ss - another utility to investigate sockets
+
+```bash
+function port-listen()
+{
+	HINT="Usage: ${FUNCNAME[0]} <port>"
+	WATCH_PORT="$1"
+
+	#echo "WATCH_PORT=$WATCH_PORT"
+	if [ ! -z "$WATCH_PORT" ]; then
+		DO_COMMAND="(ss -tnul | grep -E 'LISTEN|UNCONN' | grep $WATCH_PORT)"
+		eval-it "$DO_COMMAND"
+	else
+		echo $HINT
+	fi
+}
 ```
 
 #### swconfig - openwrt
@@ -3034,6 +3048,13 @@ libcrypto
 # 13. System Handler
 
 ## 13.1. General Commands
+
+#### bpytop - Linux/OSX/FreeBSD resource monitor
+
+```bash
+sudo snap install bpytop
+bpytop
+```
 
 #### free - Display amount of free and used memory in the system
 
