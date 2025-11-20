@@ -149,6 +149,32 @@ $ cd HelperX
 $ git remote set-url origin https://lankahsu520:ghp_e8DfhkewlDgfjwefohmfGofklj23sfljohfF@github.com/lankahsu520/HelperX.git
 ```
 
+# 2. [GitHub Sponsors accounts](https://github.com/sponsors/accounts)
+
+> 設定 GitHub Sponsors
+
+> 原本考慮到沒有薪水入帳後，是否能得到 sponsor 的贊助來過生活。但是一直過不了心裏的坎，最後還是選擇取消開啟此功能。
+
+## 2.1. Get sponsored
+
+> 請登入
+>
+> https://github.com/sponsors/accounts
+>
+> 按下 `Get sponsored`
+
+![GitHub_sponsors01](./images/GitHub_sponsors01.png)
+
+## 2.2. Bank account
+
+### 2.2.1. My country - Taiwan
+
+> 很不幸的 Taiwan 並未支援。
+
+> Your region is not supported. You can use an account with a [fiscal host](https://docs.github.com/sponsors/receiving-sponsorships-through-github-sponsors/using-a-fiscal-host-to-receive-github-sponsors-payouts) or sign up to be notified when Sponsors supports your region.
+
+![GitHub_sponsors02](./images/GitHub_sponsors02.png)
+
 # Appendix
 
 # I. Study
