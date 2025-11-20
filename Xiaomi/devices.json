@@ -1,0 +1,34 @@
+[
+  {
+    "NAME": "桌燈",
+    "ID": "987654321",
+    "MAC": "C4:93:BB:F1:9E:EC",
+    "IP": "192.168.0.28",
+    "TOKEN": "12345678901234567890123456789012",
+    "MODEL": "qmi.plug.tw02"
+  },
+  {
+    "NAME": "除溼機",
+    "ID": "blt.1.1111111111111",
+    "BLE KEY": "不告訴你",
+    "MAC": "A4:C1:38:FA:1F:ED",
+    "TOKEN": "不告訴你",
+    "MODEL": "miaomiaoce.sensor_ht.t2"
+  },
+  {
+    "NAME": "夜燈",
+    "ID": "blt.1.2222222222222",
+    "BLE KEY": "不告訴你",
+    "MAC": "D4:F0:EA:A3:66:46",
+    "TOKEN": "不告訴你",
+    "MODEL": "yeelink.light.nl1"
+  },
+  {
+    "NAME": "18號冰箱",
+    "ID": "blt.1.3333333333333",
+    "BLE KEY": "不告訴你",
+    "MAC": "A4:C1:38:4D:45:26",
+    "TOKEN": "不告訴你",
+    "MODEL": "miaomiaoce.sensor_ht.t2"
+  }
+]

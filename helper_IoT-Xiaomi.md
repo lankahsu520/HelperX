@@ -154,22 +154,29 @@ tw
 
 Devices found for server "tw" @ home "12345678901":
    ---------
+   NAME:     桌燈
+   ID:       987654321
+   MAC:      C4:93:BB:F1:9E:EC
+   IP:       192.168.0.28
+   TOKEN:    12345678901234567890123456789012
+   MODEL:    qmi.plug.tw02
+   ---------
    NAME:     除溼機
-   ID:       blt.1.1fbq82lkh4c00
+   ID:       blt.1.1111111111111
    BLE KEY:  不告訴你
    MAC:      A4:C1:38:FA:1F:ED
    TOKEN:    不告訴你
    MODEL:    miaomiaoce.sensor_ht.t2
    ---------
    NAME:     夜燈
-   ID:       blt.1.1frs78aht4c00
+   ID:       blt.1.2222222222222
    BLE KEY:  不告訴你
    MAC:      D4:F0:EA:A3:66:46
    TOKEN:    不告訴你
    MODEL:    yeelink.light.nl1
    ---------
    NAME:     18號冰箱
-   ID:       blt.1.1jm6eee2p4k01
+   ID:       blt.1.3333333333333
    BLE KEY:  不告訴你
    MAC:      A4:C1:38:4D:45:26
    TOKEN:    不告訴你
@@ -178,6 +185,61 @@ Devices found for server "tw" @ home "12345678901":
 
 
 Press ENTER to finish
+```
+
+## 3.3. [xiaomi2json.sh](https://github.com/lankahsu520/HelperX/blob/master/Xiaomi/xiaomi2json.sh)
+
+> 單純的把設備清單整理成表單
+
+> 請先將設備清單存入 devices.txt
+
+```bash
+$ tree -L 1 ./
+./
+├── xiaomi2json.sh
+└── devices.txt
+
+0 directories, 2 files
+
+$ cat devices.txt
+   ---------
+   NAME:     桌燈
+   ID:       987654321
+   MAC:      C4:93:BB:F1:9E:EC
+   IP:       192.168.0.28
+   TOKEN:    12345678901234567890123456789012
+   MODEL:    qmi.plug.tw02
+   ---------
+   NAME:     除溼機
+   ID:       blt.1.1111111111111
+   BLE KEY:  不告訴你
+   MAC:      A4:C1:38:FA:1F:ED
+   TOKEN:    不告訴你
+   MODEL:    miaomiaoce.sensor_ht.t2
+   ---------
+   NAME:     夜燈
+   ID:       blt.1.2222222222222
+   BLE KEY:  不告訴你
+   MAC:      D4:F0:EA:A3:66:46
+   TOKEN:    不告訴你
+   MODEL:    yeelink.light.nl1
+   ---------
+   NAME:     18號冰箱
+   ID:       blt.1.3333333333333
+   BLE KEY:  不告訴你
+   MAC:      A4:C1:38:4D:45:26
+   TOKEN:    不告訴你
+   MODEL:    miaomiaoce.sensor_ht.t2
+   ---------
+```
+
+```bash
+$ ./xiaomi2json.sh
+IP            TOKEN                             ID                   MODEL
+192.168.0.28  12345678901234567890123456789012  987654321            qmi.plug.tw02
+null          不告訴你                          blt.1.1111111111111  miaomiaoce.sensor_ht.t2
+null          不告訴你                          blt.1.2222222222222  yeelink.light.nl1
+null          不告訴你                          blt.1.3333333333333  miaomiaoce.sensor_ht.t2
 ```
 
 # 4. alias and function
@@ -471,7 +533,9 @@ XIAOMI_MODEL=qmi.plug.tw02
 XIAOMI_GENERICMIOT=True
 ```
 
-### 5.2.3. XIAOMI_MODEL - [Xiaomi Smart Plug 2](https://home.miot-spec.com/s/qmi.plug.tw02)
+### 5.2.3. XIAOMI_MODEL
+
+#### A. [Xiaomi Smart Plug 2](https://home.miot-spec.com/s/qmi.plug.tw02)
 
 > XIAOMI_MODEL=qmi.plug.tw02
 
@@ -480,11 +544,21 @@ XIAOMI_GENERICMIOT=True
 > 點選進入查看，此為 Plug；
 >
 > 因為只是要操作開/關，請先記得 siid 和 piid
+
+
 | siid | piid | status |
 | ---- | ---- | ------ |
 | 2    | 1    |        |
 
 ![Xiaomi-qmi.plug.tw02](./images/Xiaomi-qmi.plug.tw02.png)
+
+#### B. 小米米家蓝牙温湿度计2
+
+> XIAOMI_MODEL=miaomiaoce.sensor_ht.t2
+
+![Xiaomi0003](./images/Xiaomi0003.png)
+
+![Xiaomi-miaomiaoce.sensor_ht.t2](./images/Xiaomi-miaomiaoce.sensor_ht.t2.png)
 
 ## 5.3. device raw_command
 
