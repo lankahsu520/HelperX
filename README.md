@@ -287,15 +287,15 @@
 >
 > <font color="red">平常寫程式有良好的習慣，如注意 alloc、free，給初值，使用驗證過的函數等，加上幾行 Debug message(s) ，解決 Compile Errors and Warnings，就能處理至少 95%上的問題。</font>
 
-### 2.1.6. [helper_gdb-GCCDebug.md](https://github.com/lankahsu520/HelperX/blob/master/helper_gdb-GCCDebug.md) - GCC Debug helper.
+### 2.1.7. [helper_gdb-GCCDebug.md](https://github.com/lankahsu520/HelperX/blob/master/helper_gdb-GCCDebug.md) - GCC Debug helper.
 
 > 會寫 c 程式碼，也要學習相關的 debug  工具。
 
-### 2.1.7. [helper_Python.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Python.md) - Python helper.
+### 2.1.8. [helper_Python.md](https://github.com/lankahsu520/HelperX/blob/master/helper_Python.md) - Python helper.
 
 > 不討論如何撰寫 Python 的程式，而是當使用或變動系統的 Python 時，可能發生的問題。
 
-### 2.1.8. [helper_valgrind.md](https://github.com/lankahsu520/HelperX/blob/master/helper_valgrind) - valgrind helper.
+### 2.1.9. [helper_valgrind.md](https://github.com/lankahsu520/HelperX/blob/master/helper_valgrind) - valgrind helper.
 
 > <font color="red">平常寫程式有良好的習慣 ! 再以 valgrind 進行輔助，維持軟體品質。</font>
 
