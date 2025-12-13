@@ -1590,6 +1590,20 @@ function sudo-pass123()
 }
 ```
 
+> sudo NoPassWD 不用輸入密碼設定
+
+```bash
+# 將允許 GROUP-sudo 下的成員都不用輸入密碼
+$ sudo visudo
+# replace
+#%sudo   ALL=(ALL:ALL) ALL
+%sudo   ALL=(ALL:ALL) NOPASSWD:ALL
+
+# 將允許 USER-lanka 不用輸入密碼
+$ sudo visudo
+lanka ALL=(ALL) NOPASSWD: ALL
+```
+
 #### useradd - create a new user or update default new user information
 
 ```bash
