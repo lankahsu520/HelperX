@@ -321,21 +321,17 @@
 
 > Provide examples for make, cmake, meson and gn.
 
-#### A. [Kconfig-123](https://github.com/lankahsu520/makeXcmakeXmesonXgn/tree/main/Kconfig-123)
+### 2.2.6. [KconfigX](https://github.com/lankahsu520/KconfigX)
 
->當編譯系統時，總是會遇到的。
+>當編譯系統時，總是會遇到的，如 `make menuconfig`。
 
-### 2.2.6. [pythonX9](https://github.com/lankahsu520/pythonX9)
+### 2.2.7. [pythonX9](https://github.com/lankahsu520/pythonX9)
 
 > pythonX9 provides simple APIs - class, debug api, queue/stack api, multicast server/client, state machine api, sysinfo api.
 
-### 2.2.7. [RPiP9](https://github.com/lankahsu520/RPiP9)
+### 2.2.8. [RPiP9](https://github.com/lankahsu520/RPiP9)
 
 > RPiP9 把 Raspberry Pi 上常見的模組搜集而成。
-
-### 2.2.8. [usbHunter](https://github.com/lankahsu520/usbHunter)
-
-> usbHunter is an application that checks usb plugged and unplugged.
 
 ### 2.2.9. [utilx9](https://github.com/lankahsu520/utilx9)
 
@@ -363,7 +359,7 @@
 >
 > 「你沒有限制編輯軟體…」聽到這個我是馬上“黃人”問號（現在不能說黑人問號，我講我自己總行吧）？身為一位嵌入式工程師，有的人用 vi，有的人用 Notepad++ 等。一套編輯軟體只要用的順手就好，那裏來的問題。有可能發生問題的部分常在開發 MCU，可我們的主力是 Linux 環境也。 
 
-### 3.1.2.  [helper_ESPandFreeRTOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_FreeRTOS.md) - ESP and FreeRTOS helper.
+### 3.1.2. [helper_ESPandFreeRTOS.md](https://github.com/lankahsu520/HelperX/blob/master/helper_ESPandFreeRTOS.md) - ESP and FreeRTOS helper.
 
 ### 3.1.3. [helper_UnifySDKandGeckoSDK.md](https://github.com/lankahsu520/HelperX/blob/master/helper_UnifySDKandGeckoSDK.md) - UnifySDK and GeckoSDK helper.
 
@@ -379,9 +375,19 @@
 
 #### B. [helper_OpenWrt-RaspberryPi3.md](https://github.com/lankahsu520/CrossCompilationX/blob/master/helper_OpenWrt-RaspberryPi3.md) - helper_OpenWrt-RaspberryPi3 helper
 
-#### C. [helper_Yocto.md](https://github.com/lankahsu520/CrossCompilationX/blob/master/helper_Yocto.md) - helper_Yocto helper
+### 3.2.2. [cookerX](https://github.com/lankahsu520/cookerX)
 
-#### D. [helper_Yocto-RaspberryPi3.md](https://github.com/lankahsu520/CrossCompilationX/blob/master/helper_Yocto-RaspberryPi3.md) - helper_Yocto-RaspberryPi3 helper
+> cookerX is depend on Yocto Cooker. 
+
+#### A. [helper_Yocto.md](https://github.com/lankahsu520/cookerX/blob/main/helper_Yocto.md) - helper_Yocto helper
+
+#### B. [helper_Yocto-NXP-8MMINILPD4-EVKB.md](https://github.com/lankahsu520/cookerX/blob/main/helper_Yocto-NXP-8MMINILPD4-EVKB.md) - NXP-8MMINI helper
+
+#### C. [helper_Yocto-meta-HomeAssistant.md](https://github.com/lankahsu520/cookerX/blob/main/helper_Yocto-meta-HomeAssistant.md) - meta-HomeAssistant helper
+
+#### D. [helper_Yocto-meta-NXP-Matter.md](https://github.com/lankahsu520/cookerX/blob/main/helper_Yocto-meta-NXP-Matter.md) - meta-NXP-Matter helper
+
+#### E. [helper_Yocto-meta-RAUC.md](https://github.com/lankahsu520/cookerX/blob/main/helper_Yocto-meta-RAUC.md)  - meta-RAUC helper
 
 # 4. Be A Cloud Services Collaborator 
 ## 4.1. Amazon(AWS)
