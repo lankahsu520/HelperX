@@ -175,6 +175,32 @@ $ git remote set-url origin https://lankahsu520:ghp_e8DfhkewlDgfjwefohmfGofklj23
 
 ![GitHub_sponsors02](./images/GitHub_sponsors02.png)
 
+# 3. Managing repositories
+
+## 3.1. Deleting a repository
+
+> Select the repository - usbHunter
+>
+> `Settings` -> `General`
+
+![GitHub_delete01](./images/GitHub_delete01.png)
+
+> `Danger Zone` -> `Delete this repository`
+
+![GitHub_delete02](./images/GitHub_delete02.png)
+
+> 按下 `I want to delete this repository`
+
+![GitHub_delete03](./images/GitHub_delete03.png)
+
+> 閱讀警示，並按下 `I have read and understand these effects`
+
+![GitHub_delete04](./images/GitHub_delete04.png)
+
+> 在提示框輸入相對應的字串，並按下 `Delete this repository`。
+
+![GitHub_delete05](./images/GitHub_delete05.png)
+
 # Appendix
 
 # I. Study
