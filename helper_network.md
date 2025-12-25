@@ -122,11 +122,6 @@ flowchart LR
 | 家用路由器廣播       | SSDP + mDNS                    |
 | 工控設備（PLC, HMI） | WS-Discovery, PROFINET, OPC UA |
 
-# Footnote
-
-[^1]:
-[^2]:
-
 # Appendix
 
 # I. Study

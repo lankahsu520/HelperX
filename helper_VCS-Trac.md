@@ -631,11 +631,6 @@ git push
 
 <img src="./images/VCS-Trac0003.png" alt="VCS-Trac0003" style="zoom: 33%;" />
 
-# Footnote
-
-[^1]:
-[^2]:
-
 # Appendix
 
 # I. Study

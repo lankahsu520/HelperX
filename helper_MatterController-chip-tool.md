@@ -3535,11 +3535,6 @@ chip-tool pairing code 2 30330221131 --paa-trust-store-path /work/IoT/matter/paa
 >>> pairing unpair 3
 ```
 
-# Footnote
-
-[^1]:
-[^2]:
-
 # Appendix
 
 # I. Study

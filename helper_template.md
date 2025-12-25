@@ -33,11 +33,6 @@
 
 > Topic C
 
-# Footnote
-
-[^1]:
-[^2]:
-
 # Appendix
 
 # I. Study
@@ -55,4 +50,11 @@
 # License
 
 > [HelperX](https://github.com/lankahsu520/HelperX) is available under the BSD-3-Clause license. See the LICENSE file for more info.
+
+# Footnote
+
+[^1]: 
+[^2]: 
+
+
 

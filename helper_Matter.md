@@ -2531,11 +2531,6 @@ $ ./linux/out/rootnode_onofflight_bbs1b7IaOV
 
 # ??? [Coverage](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/BUILDING.md#coverage)
 
-# Footnote
-
-[^1]:
-[^2]:
-
 # Appendix
 
 # I. Study
