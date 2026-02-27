@@ -1,4 +1,4 @@
-# RetroPie
+# [RetroPie](https://retropie.org.uk)
 
 [![](https://img.shields.io/badge/Powered%20by-lankahsu%20-brightgreen.svg)](https://github.com/lankahsu520/HelperX)
 [![GitHub license][license-image]][license-url]
@@ -20,7 +20,7 @@
 
 # 1. [RetroPie](https://retropie.org.uk)
 
-> 是一個基於 Linux 的開源軟體套件，專為 Raspberry Pi（樹莓派）單板電腦設計，用於將其轉變為復古遊戲模擬器。它整合了 EmulationStation 前端界面與 RetroArch 模擬器，支援超過 80 種舊遊戲平台（如 NES、PlayStation、大型電玩等），讓用戶能輕鬆 DIY 懷舊遊戲機。 
+> RetroPie 是一個基於 Linux 的開源軟體套件，專為 Raspberry Pi（樹莓派）單板電腦設計，用於將其轉變為復古遊戲模擬器。它整合了 EmulationStation 前端界面與 RetroArch 模擬器，支援超過 80 種舊遊戲平台（如 NES、PlayStation、大型電玩等），讓用戶能輕鬆 DIY 懷舊遊戲機。 
 
 > 手邊多餘的 Raspberry Pi，讓它有發揮的空間。
 
@@ -113,7 +113,7 @@ $ cd /bin/; sudo rm sh; sudo ln -s bash sh
 
 ## 4.2. RETROPIE SETUP
 
-> 透過遊戲介面選擇相關設定外，也可以使用命令列進行操作
+> 外，也可以使用命令列進行操作
 >
 > `Configuration / tools` / `scraper` 這個用於建立遊戲的清單。
 
@@ -161,6 +161,39 @@ M Download Marguees (Enabled)
 /opt/retropie/configs/all/emulationstation/downloaded_images
 ```
 
+#### B. usbromservice
+
+> 當初使用的 MicroSD 容量不夠時，如何透過外部硬碟載入遊戲。usb 記得 format 成 FAT32，然後建立目錄 `retropie-mount`，並將 roms 放入即可。
+
+> 如果要使用此功能，記得插上usb 後要重新開機。
+
+```bash
+$ tree
+.
++--- System Volume Information
+|   +--- WPSettings.dat
+|   +--- IndexerVolumeGuid
++--- retropie-mount
+|   +--- roms
+|   |   +--- pcengine
+|   |   |   +--- Bonk III - Bonk's Big Adventure (USA).zip
+|   |   |   +--- NEKKETSU KOUKOU DODGEBALL BU - PC BANGAI HEN (JAPAN).zip
+|   |   |   +--- Super Mario Bros (J) [p1].zip
+|   |   |   +--- gamelist.xml
+|   |   |   +--- media
+|   |   |   |   +--- images
+|   |   |   |   |   +--- Bonk III - Bonk's Big Adventure (USA).png
+|   |   |   |   |   +--- NEKKETSU KOUKOU DODGEBALL BU - PC BANGAI HEN (JAPAN).png
+|   |   |   |   |   +--- Super Mario Bros (J) [p1].png
+|   |   |   |   +--- screenshottitle
+|   |   |   |   |   +--- Bonk III - Bonk's Big Adventure (USA).png
+|   |   |   |   |   +--- NEKKETSU KOUKOU DODGEBALL BU - PC BANGAI HEN (JAPAN).png
+|   |   |   |   |   +--- Super Mario Bros (J) [p1].png
+|   |   |   |   +--- videos
+|   |   |   |   |   +--- Bonk III - Bonk's Big Adventure (USA).mp4
+|   |   |   |   |   +--- NEKKETSU KOUKOU DODGEBALL BU - PC BANGAI HEN (JAPAN).mp4
+```
+
 ## 4.3. [RetroArch](https://retropie.org.uk/docs/RetroArch/)
 
 > 裏面的設定很多，只要記得幾個重要的
@@ -186,6 +219,24 @@ input_player5_analog_dpad_mode = "1"
 input_player6_analog_dpad_mode = "1"
 input_player7_analog_dpad_mode = "1"
 input_player8_analog_dpad_mode = "1"
+```
+
+### 4.3.2. Full screen
+
+> `RetroArch` -> `Settings` -> `Video` -> `Scaling` -> `Aspect Ratio` -> `Fullscreen`
+
+> 之後記得存檔
+>
+> `RetroArch` -> `Configuration File `-> `Save Current Configuration`
+
+```bash
+$ sudo nano /opt/retropie/configs/all/retroarch.cfg
+video_fullscreen = "true"
+video_force_aspect = "true"
+
+video_scale = "3"
+video_scale_integer = "false"
+video_scale_integer_overscale = "false"
 ```
 
 # 5. roms
@@ -227,6 +278,19 @@ $ ll ~/RetroPie/roms/nes
 
 ```bash
 $ ll ~/RetroPie/roms/pcengine
+```
+
+# 6. emulationstation
+
+> 這個就是主程式
+
+```bash
+$ ps -aux | grep emulationstation
+pi         563  0.0  0.3   7672  2776 tty1     S+   05:27   0:00 /bin/bash /usr/bin/emulationstation
+pi         568  0.0  0.3   7672  2868 tty1     S+   05:27   0:00 /bin/sh /opt/retropie/supplementary/emulationstation/emulationstation.sh
+pi         571 21.9 21.8 346760 166824 tty1    Sl+  05:27   1:25 /opt/retropie/supplementary/emulationstation/emulationstation
+pi         958  0.0  0.0   7344   564 pts/0    S+   05:34   0:00 grep --color=auto emulationstation
+
 ```
 
 # Appendix
