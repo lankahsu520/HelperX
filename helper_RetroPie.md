@@ -113,7 +113,7 @@ $ cd /bin/; sudo rm sh; sudo ln -s bash sh
 
 ## 4.2. RETROPIE SETUP
 
-> 外，也可以使用命令列進行操作
+> 透過遊戲介面選擇相關設定外，也可以使用命令列進行操作
 >
 > `Configuration / tools` / `scraper` 這個用於建立遊戲的清單。
 
@@ -163,9 +163,11 @@ M Download Marguees (Enabled)
 
 #### B. usbromservice
 
-> 當初使用的 MicroSD 容量不夠時，如何透過外部硬碟載入遊戲。usb 記得 format 成 FAT32，然後建立目錄 `retropie-mount`，並將 roms 放入即可。
+> 當初使用的 MicroSD 容量不夠時，可以透過外部硬碟載入遊戲。
+>
+> usb 記得 format 成 FAT32，然後建立目錄 `retropie-mount`，並將 roms 放入即可。
 
-> 如果要使用此功能，記得插上usb 後要重新開機。
+> 記得插上usb 後要重新開機。
 
 ```bash
 $ tree
