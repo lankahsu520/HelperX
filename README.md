@@ -475,6 +475,14 @@
 
 > It will only tell you how to publish the program to Lambda, invoke your application on Lambda or run on local.
 
+# 5. Be A Game Player
+
+## 5.1. Emulation
+
+### 5.1.1. [helper_RetroPie.md](https://github.com/lankahsu520/HelperX/blob/master/helper_RetroPie.md) - RetroPie helper.
+
+> RetroPie 是一個基於 Linux 的開源軟體套件，專為 Raspberry Pi（樹莓派）單板電腦設計，用於將其轉變為復古遊戲模擬器。它整合了 EmulationStation 前端界面與 RetroArch 模擬器，支援超過 80 種舊遊戲平台（如 NES、PlayStation、大型電玩等），讓用戶能輕鬆 DIY 懷舊遊戲機。 
+
 # Author
 
 > Created and designed by [Lanka Hsu](lankahsu@gmail.com).
