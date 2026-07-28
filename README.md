@@ -64,6 +64,10 @@
 >
 > 說實話，看了一說明，它們都是用一些“不利理解”的名詞去解譯名詞。建議直接去操作 MCP Server 後，反推回來是怎麼回事。
 
+#### C. helper_Stock.md - Stock trading helper.
+
+> 現在可以透過與 AI 溝通，獲取股票的相關資訊。
+
 ### 1.1.2. helper_Development
 
 #### A. [helper_BackupvsRAID.md](https://github.com/lankahsu520/HelperX/blob/master/helper_BackupvsRAID.md) - Backup vs. RAID helper.
