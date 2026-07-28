@@ -303,6 +303,15 @@ pi         958  0.0  0.0   7344   564 pts/0    S+   05:34   0:00 grep --color=au
 
 # II. Debug
 
+## II.1. Err:3 http://raspbian.raspberrypi.org/raspbian buster Release
+
+```bash
+$ sudo nano /etc/apt/sources.list
+# replace http://raspbian.raspberrypi.org/raspbian https://legacy.raspbian.org/raspbian/
+#deb http://raspbian.raspberrypi.org/raspbian/ buster main contrib non-free rpi
+deb https://legacy.raspbian.org/raspbian/ buster main contrib non-free rpi
+```
+
 # III. Glossary
 
 # IV. Tool Usage
