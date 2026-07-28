@@ -100,6 +100,18 @@ flowchart LR
 
 ```
 
+> 這邊要選擇適合自已硬體的版本。[[維基百科] macOS version history](https://en.wikipedia.org/wiki/MacOS_version_history)
+
+|                           Version                           | Name                                                         | [Darwin](https://en.wikipedia.org/wiki/Darwin_(operating_system))<br/>version | Release date       | Version |
+| :---------------------------------------------------------: | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------ | ------- |
+| [macOS 10.15](https://en.wikipedia.org/wiki/MacOS_Catalina) | [Catalina](https://en.wikipedia.org/wiki/Santa_Catalina_Island_(California)) | 19                                                           | October 7, 2019    | 10.15.8 |
+|   [macOS 11](https://en.wikipedia.org/wiki/MacOS_Big_Sur)   | [Big Sur](https://en.wikipedia.org/wiki/Big_Sur)             | 20                                                           | November 12, 2020  | 11.7.11 |
+|  [macOS 12](https://en.wikipedia.org/wiki/MacOS_Monterey)   | [Monterey](https://en.wikipedia.org/wiki/Monterey_Bay)       | 21                                                           | October 25, 2021   | 12.7.6  |
+|   [macOS 13](https://en.wikipedia.org/wiki/MacOS_Ventura)   | [Ventura](https://en.wikipedia.org/wiki/Ventura,_California) | 22                                                           | October 24, 2022   | 13.7.8  |
+|   [macOS 14](https://en.wikipedia.org/wiki/MacOS_Sonoma)    | [Sonoma](https://en.wikipedia.org/wiki/Sonoma,_California)   | 23                                                           | September 26, 2023 | 14.8.5  |
+|   [macOS 15](https://en.wikipedia.org/wiki/MacOS_Sequoia)   | [Sequoia](https://en.wikipedia.org/wiki/Sequoia_National_Forest) | 24                                                           | September 16, 2024 | 15.7.5  |
+|    [macOS 26](https://en.wikipedia.org/wiki/MacOS_Tahoe)    | [Tahoe](https://en.wikipedia.org/wiki/Lake_Tahoe)            | 25                                                           | September 15, 2025 | 26.4    |
+
 #### A. [macOS 12 Monterey 系統安裝 USB 隨身碟製作與重灌教學](https://applealmond.com/posts/123180)
 
 >照著網頁說明，下載 macOS 12 Monterey 安裝檔。
@@ -273,7 +285,7 @@ sudo port install youtube-dl
 
 # I. Study
 
-### I.1. [比较Fink, macports 和 homebrew](https://www.iteye.com/blog/tetsu-1507524)
+## I.1. [比较Fink, macports 和 homebrew](https://www.iteye.com/blog/tetsu-1507524)
 
 # II. Debug
 
